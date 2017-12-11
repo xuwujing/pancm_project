@@ -1,4 +1,4 @@
-package com.pancm.test.hdfs;
+package com.pancm.test.hdfsTest;
 
 import java.net.URI;
 import java.net.URISyntaxException;

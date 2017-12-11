@@ -1,4 +1,4 @@
-package com.pancm.test.spark;
+package com.pancm.test.sparkTest;
 
 import java.util.ArrayList;
 import java.util.List;

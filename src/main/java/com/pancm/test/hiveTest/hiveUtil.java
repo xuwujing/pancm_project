@@ -32,54 +32,46 @@ public class hiveUtil {
 	}
 
 	public synchronized static Connection getConnection() {
-		if (null == connection) {
-			try {
+		try {
+		if (null == connection||connection.isClosed()) {
 			    connection = DriverManager.getConnection("jdbc:hive2://192.169.0.23:10000", "root", "123456");
-			} catch (SQLException e) {
+			}
+		}catch (SQLException e) {
 				System.out.println("获取数据库连接失败！");
 				 e.printStackTrace();
 			}
-		}
+		
 		return connection;
 	}
 
-	public synchronized static boolean closeConnetion() {
-		try {
-			if (null != connection) {
-				connection.close();
-			}
-		} catch (Exception e) {
-			System.out.println("关闭数据库连接失败！");
-			e.printStackTrace();
-		}
-		return true;
-	}
 	
-	public static void select(String tableName){
-		String str="select * from "+tableName+";";
-		ResultSet rs=null;
-		try {
-			if(stmt==null||stmt.isClosed()){
+	
+	
+	/**
+	 * 通过sql进行查询
+	 * @param sql
+	 */
+    public static void find(String sql) {
+    	try {
+			if(null==connection||connection.isClosed()){
 				stmt=getConnection().createStatement();
+				//设置使用spark引擎
+//				 boolean resHivePropertyTest = stmt
+//				            .execute("set hive.execution.engine=mr");
+//				  System.out.println(resHivePropertyTest);
 			}
-			rs=stmt.executeQuery(str);
-		   List list = convertList(rs);
-		   System.out.println("数据库总计数据:"+list.size());
+			rs=stmt.executeQuery(sql);
+	        List list=convertList(rs);
+	        System.out.println("查询结果:"+list);
 		} catch (SQLException e) {
+			System.out.println("查询失败");
 			e.printStackTrace();
 		}finally{
 			close();
-		}
-	}
-	
-	 //查询
-    public static void find(String sql) throws SQLException {
-        ps = connection.prepareStatement(sql);
-        rs = ps.executeQuery();
-        while (rs.next()) {
-            System.out.println(rs.getObject(1) + "---" + rs.getObject(2));
-        }
+		}      
     }
+    
+
 	
 	
 	   public static void close() {
@@ -96,8 +88,8 @@ public class hiveUtil {
 	            if (connection != null) {
 	                connection.close();
 	            }
-	           System.out.println("连接关闭！");
 	        } catch (SQLException e) {
+	        	 System.out.println("数据库连接关闭失败！");
 	            e.printStackTrace();
 	            System.exit(1);
 	        }
@@ -112,7 +104,7 @@ public class hiveUtil {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static List convertList(ResultSet rs) throws SQLException {
-        if(null==rs){
+        if(null==rs||rs.isClosed()){
         	return null;
         }
 		List list = new ArrayList();

@@ -8,4 +8,4 @@
  * @author pancm
  * @date 2017年11月24日
  */
-package com.pancm.test.spark;
+package com.pancm.test.sparkTest;

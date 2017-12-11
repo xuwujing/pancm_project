@@ -1,4 +1,4 @@
-package com.pancm.test.hdfs;
+package com.pancm.test.hdfsTest;
 
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
