@@ -700,7 +700,9 @@ public final class MyTools {
 	    js.put("QWe", "dd");
 	    js.put("aa", "bb");
 	   System.out.println(changeKey(js));
-	    
+	     
+		System.out.println("long TO String"+longTime2StringTime(32472115200L));   
+		System.out.println("long TO String"+longTime2StringTime(1513330097L));   
 	    
 	}
 	

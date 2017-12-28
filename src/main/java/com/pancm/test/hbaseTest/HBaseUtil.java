@@ -214,7 +214,27 @@ public class HBaseUtil {
 			close();
 		}
 	}
-
+	
+	/**
+	 * 数据删除 
+	 * @param tableName 表名
+	 * @param rowKey	行健
+	 * @return
+	 */
+    public static void delete(String tableName, String rowKey) {
+    	delete(tableName,rowKey,"","");
+    }
+	
+	/**
+	 * 数据删除 
+	 * @param tableName 表名
+	 * @param rowKey	行健
+	 * @param family	列族
+	 * @return
+	 */
+    public static void delete(String tableName, String rowKey, String family) {
+    	delete(tableName,rowKey,family,"");
+    }
 	
 	/**
 	 * 数据删除 
