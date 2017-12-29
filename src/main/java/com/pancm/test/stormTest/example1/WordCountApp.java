@@ -1,4 +1,6 @@
-package com.pancm.test.stormTest;
+package com.pancm.test.stormTest.example1;
+
+
 
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
@@ -6,13 +8,16 @@ import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.utils.Utils;
 
-
+import com.pancm.test.stormTest.example1.ReportBolt;
+import com.pancm.test.stormTest.example1.SentenceSpout;
+import com.pancm.test.stormTest.example1.SplitSentenceBolt;
+import com.pancm.test.stormTest.example1.WordCountBolt;
 
 /**
  * 实现单词计数topology
  *
  */
-public class App 
+public class WordCountApp 
 {
     private static final String SENTENCE_SPOUT_ID = "sentence-spout";
     private static final String SPLIT_BOLT_ID = "split-bolt";
@@ -22,7 +27,7 @@ public class App
 
     public static void main( String[] args ) //throws Exception
     {
-        System.out.println( "Hello World!" );
+        //System.out.println( "Hello World!" );
         //实例化spout和bolt
 
         SentenceSpout spout = new SentenceSpout();
@@ -65,9 +70,9 @@ public class App
         Config config = new Config();//Config类是一个HashMap<String,Object>的子类，用来配置topology运行时的行为
         //设置worker数量
         //config.setNumWorkers(2);
+        //本地提交
         LocalCluster cluster = new LocalCluster();
 
-        //本地提交
         cluster.submitTopology(TOPOLOGY_NAME, config, builder.createTopology());
 
         Utils.sleep(10000);

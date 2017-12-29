@@ -8,4 +8,4 @@
  * @author pancm
  * @date 2017年12月29日
  */
-package com.pancm.test.kafkaTest;
+package com.pancm.test.stormTest.example1;

@@ -1,4 +1,4 @@
-package com.pancm.test.kafkaTest;
+package com.pancm.test.kafkaTest.examples;
 
 import java.util.Properties;
 
@@ -6,6 +6,14 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
+/**
+ * 
+* Title: Producer
+* Description: kafka生产者 由于生产消息 
+* Version:1.0.0  
+* @author pancm
+* @date 2017年12月29日
+ */
 public class Producer extends Thread {
 
 	private final KafkaProducer<String, String> producer;
@@ -37,17 +45,19 @@ public class Producer extends Thread {
 		try {
 			while (true) {
 				String messageStr = "Message_" + messageNo;
+				//生产了100条就打印
 				if(messageNo%100==0){
 					System.out.println("Send:" + messageStr);
 				}
+				//生产1000条就退出
+//				if(messageNo%1000==0){
+//					break;
+//				}
 				producer.send(new ProducerRecord<String, String>(topic, "Message", messageStr));
 				messageNo++;
-				sleep(20);
-				if(messageNo%1000==0){
-					break;
-				}
+				sleep(10);
 			}
-		} catch (InterruptedException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			producer.close();

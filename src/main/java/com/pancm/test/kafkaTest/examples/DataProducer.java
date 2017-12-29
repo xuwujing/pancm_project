@@ -1,4 +1,4 @@
-package com.pancm.test.kafkaTest;
+package com.pancm.test.kafkaTest.examples;
 
 import java.util.Properties;
 import java.util.Random;

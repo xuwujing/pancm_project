@@ -1,4 +1,4 @@
-package com.pancm.test.kafkaTest;
+package com.pancm.test.kafkaTest.examples;
 
 public class KafkaProducerConsumerDemo {
 
@@ -6,6 +6,6 @@ public class KafkaProducerConsumerDemo {
 
 	public static void main(String[] args) {
 		new Producer(KAFKASTR, "pcm_test1").start(); // args[0] 为要发送的 topic
-		new Consumer(KAFKASTR, "pcm_test1").start(); // args[0] 为要接收的 topic
+//		new Consumer(KAFKASTR, "pcm_test1").start(); // args[0] 为要接收的 topic
 	}
 }

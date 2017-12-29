@@ -1,4 +1,4 @@
-package com.pancm.test.stormTest;
+package com.pancm.test.stormTest.example1;
 
 import java.util.ArrayList;
 import java.util.Collections;

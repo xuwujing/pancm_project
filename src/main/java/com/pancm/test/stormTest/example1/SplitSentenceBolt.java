@@ -1,4 +1,4 @@
-package com.pancm.test.stormTest;
+package com.pancm.test.stormTest.example1;
 
 import java.util.Map;
 
@@ -21,7 +21,11 @@ public class SplitSentenceBolt extends BaseRichBolt {
     //BaseRichBolt是IComponent和IBolt接口的实现
     //继承这个类，就不用去实现本例不关心的方法
 
-    private OutputCollector collector;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private OutputCollector collector;
 
     /**
      * prepare()方法类似于ISpout 的open()方法。

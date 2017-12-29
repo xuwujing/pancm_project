@@ -1,4 +1,4 @@
-package com.pancm.test.stormTest;
+package com.pancm.test.stormTest.example1;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +19,11 @@ import org.apache.storm.tuple.Values;
  *
  */
 public class WordCountBolt extends BaseRichBolt {
-    private OutputCollector collector;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private OutputCollector collector;
     //存储单词和对应的计数
     private HashMap<String, Long> counts = null;//注：不可序列化对象需在prepare中实例化
 
