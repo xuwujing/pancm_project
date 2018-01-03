@@ -12,9 +12,12 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
 	</properties>
 
-
+	
+	
+	
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -80,7 +83,7 @@
 			<artifactId>hbase-common</artifactId>
 			<version>1.1.2</version>
 		</dependency>
-		
+
 		<!--Spark相关jar -->
 		<dependency>
 			<groupId>org.apache.spark</groupId>
@@ -111,23 +114,23 @@
 		</dependency>
 
 
-		<!--storm相关jar  -->
-	  	<dependency>
-	    	<groupId>org.apache.storm</groupId>
-	    	<artifactId>storm-core</artifactId>
-	    	<version>1.1.1</version>
-	    	<scope>provided</scope>
+		<!--storm相关jar -->
+		<dependency>
+			<groupId>org.apache.storm</groupId>
+			<artifactId>storm-core</artifactId>
+			<version>1.1.1</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
-	    <groupId>org.apache.storm</groupId>
-	    	<artifactId>storm-kafka</artifactId>
-	    <version>1.1.1</version>
+			<groupId>org.apache.storm</groupId>
+			<artifactId>storm-kafka</artifactId>
+			<version>1.1.1</version>
 		</dependency>
-		
+
 		<!-- 大数据相关jar END -->
 
-		<!-- Spring 相关jar -->
+		<!-- Spring 相关jar start -->
 
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -190,6 +193,31 @@
 			<version>4.3.5.RELEASE</version>
 		</dependency>
 
+
+		<!-- Spring 相关jar end -->
+
+
+		<!-- apache commons tools jar -->
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.7</version>
+		</dependency>
+
+
+
 		<!-- 二维码工具jar包 -->
 		<dependency>
 			<groupId>com.google.zxing</groupId>
@@ -201,21 +229,7 @@
 			<artifactId>javase</artifactId>
 			<version>3.0.0</version>
 		</dependency>
-		
-		 
-		<!-- 日志 slf4j-->
-		<dependency>
-	    	<groupId>org.slf4j</groupId>
-	    	<artifactId>slf4j-api</artifactId>
-	   		 <version>1.7.25</version>
-		</dependency>
-			
-		<dependency>
-		    <groupId>org.slf4j</groupId>
-		    <artifactId>slf4j-nop</artifactId>
-		    <version>1.7.25</version>
-		    <scope>test</scope>
-		</dependency>
+
 
 
 		<!--redis 相关jar -->
@@ -298,10 +312,10 @@
 
 
 		<!-- kafka -->
-	<dependency>
-   	 	<groupId>org.apache.kafka</groupId>
-   		 <artifactId>kafka_2.12</artifactId>
-   		 <version>1.0.0</version>
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka_2.12</artifactId>
+			<version>1.0.0</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.apache.zookeeper</groupId>
@@ -318,24 +332,73 @@
 			</exclusions>
 			<scope>provided</scope>
 		</dependency>
-	
-	
+
+
 		<dependency>
-	   		 <groupId>org.apache.kafka</groupId>
-	   		 <artifactId>kafka-clients</artifactId>
-	  		  <version>1.0.0</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.apache.kafka</groupId>
-		    <artifactId>kafka-streams</artifactId>
-		    <version>1.0.0</version>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-clients</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 
-	
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-streams</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 
+
+					<!--springBoot jar -->
 		
 		
+		<!--核心启动器，包括自动配置支持、日志记录和YAML -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<version>1.5.9.RELEASE</version>
+			<exclusions>  
+		        <exclusion>  
+		            <groupId>org.springframework.boot</groupId>  
+		            <artifactId>spring-boot-starter-logging</artifactId>  
+		        </exclusion>  
+		    </exclusions>  
+		</dependency>
+		
+	<!--用于测试包括JUnit、Hamcrest和Hamcrest在内的图书馆的Spring引导应用程序。 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<version>1.5.9.RELEASE</version>
+		</dependency>
+		<!--构建web的启动器，包括使用Spring MVC的RESTful应用程序。使用Tomcat作为默认的嵌入式容器 -->
+		<dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-web</artifactId>
+	        <version>1.5.9.RELEASE</version>
+	        
+	    </dependency>
+	    
+	    
+	     <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-devtools</artifactId>
+	        <optional>true</optional>
+	        <version>1.5.9.RELEASE</version>
+		</dependency>
 		
 	</dependencies>
+	
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+	                <fork>true</fork>
+	            </configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
 </project>

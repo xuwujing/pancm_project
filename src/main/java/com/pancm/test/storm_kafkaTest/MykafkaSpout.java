@@ -1,4 +1,4 @@
-package com.pancm.test.storm_kafka;
+package com.pancm.test.storm_kafkaTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +18,16 @@ import org.apache.storm.topology.TopologyBuilder;
 /**
  * 
 * Title: MykafkaSpout
-* Description: storm 消费kafka 的topic 
+* Description: storm 消费kafka 的主程序
 * Version:1.0.0  
 * @author pancm
 * @date 2017年12月29日
  */
 public class MykafkaSpout {
-
+    
+	/*
+	 * 通过zookeeper进行获取kafka的数据
+	 */
     public static void main(String[] args)  {
 
         String topic = "pcm_test1" ;
@@ -40,13 +43,16 @@ public class MykafkaSpout {
         spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme()) ; 
 
         TopologyBuilder builder = new TopologyBuilder() ;
+      //设置1个Executeor(线程)，默认一个
         builder.setSpout("spout", new KafkaSpout(spoutConfig) ,1) ;
+      //设置storm 设置1个Executeor(线程) 没有设置Task，默认一个
         builder.setBolt("bolt1", new MyKafkaBolt(), 1).shuffleGrouping("spout") ;
 
         Config conf = new Config ();
         conf.setDebug(false) ;
 
         if (args.length > 0) {
+        	System.out.println("远程模式");
             try {
 				StormSubmitter.submitTopology(args[0], conf, builder.createTopology());
 			} catch (AlreadyAliveException e) {
@@ -57,6 +63,7 @@ public class MykafkaSpout {
 				e.printStackTrace();
 			}
         }else {
+        	System.out.println("本地模式");
             LocalCluster localCluster = new LocalCluster();
             localCluster.submitTopology("mytopology", conf, builder.createTopology());
         }

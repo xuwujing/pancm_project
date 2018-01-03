@@ -1,4 +1,4 @@
-package com.pancm.test.mapreduce;
+package com.pancm.test.mapreduceTest;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
