@@ -12,10 +12,30 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.8</java.version>
+		<java.version>1.7</java.version>
 	</properties>
 
-	
+		<build>  
+	    <plugins>  
+	        <plugin>  
+	            <groupId>org.apache.maven.plugins</groupId>  
+	            <artifactId>maven-compiler-plugin</artifactId>  
+	            <configuration>  
+	                <source>1.7</source>  
+	                <target>1.7</target>  
+	            </configuration>  
+	        </plugin>  
+	        
+	        <plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+	                <fork>true</fork>
+	            </configuration>
+			</plugin>
+	    </plugins>  
+	  
+	</build>  
 	
 	
 	<dependencies>
@@ -275,7 +295,14 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.41</version>
 		</dependency>
-
+		
+		<!-- c3p0 -->
+		<dependency>
+		    <groupId>com.mchange</groupId>
+		    <artifactId>c3p0</artifactId>
+		    <version>0.9.5.2</version>
+		</dependency>
+		
 		<!--sqlite相关jar -->
 		<dependency>
 			<groupId>org.xerial</groupId>
@@ -386,19 +413,17 @@
 	        <version>1.5.9.RELEASE</version>
 		</dependency>
 		
+		<!--使用lombok 在pojo中可以免去写getter和setter  -->
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <version>1.16.18</version>
+		    <scope>provided</scope>
+		</dependency>
+		
 	</dependencies>
 	
 	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-	                <fork>true</fork>
-	            </configuration>
-			</plugin>
-		</plugins>
-	</build>
+	
 	
 </project>

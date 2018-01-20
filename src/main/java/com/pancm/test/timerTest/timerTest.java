@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
  */  
 public class timerTest {  
     public static void main(String[] args) {  
-    	timer1();
-    	timer2();
+//    	timer1();
+//    	timer2();
     	timer3();
     }  
     
@@ -82,8 +82,7 @@ public class timerTest {
                  System.out.println("timer3  Hello !!");  
              }  
          };  
-         ScheduledExecutorService service = Executors  
-                 .newSingleThreadScheduledExecutor();  
+         ScheduledExecutorService service = Executors  .newSingleThreadScheduledExecutor();  
          // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间  10s, 2s
          service.scheduleAtFixedRate(runnable, 10, 2, TimeUnit.SECONDS); 
     }

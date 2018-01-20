@@ -10,19 +10,11 @@ import org.junit.Test;
 public class junittest1 {
 	
 	@Test
-	public int add(int a,int b){
-		return a+b;		
+	public void hello(){
+		System.out.println("hello");
 	}
 	
-	@Test
-	public int minus(int a,int b){
-		return a-b;		
-	}
-	
-	@Test
-	public boolean compare(int a,int b){
-		return a>b?true:false;		
-	}
+
 	
 	
 }
