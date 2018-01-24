@@ -36,7 +36,7 @@ public class logbackTest {
 		LOG.error("主程序的error");
 		
 		/* 
-		 * 因为设置的是自定义配置，所以不会再控制台打印
+		 * 因为自定义配置设定的是  additivity="false"  不在控制台打印
 		 * 所以一条都不会打印，但是debug级别以上的日志可以在logs/pcm/oneInfo中查看
 		 */
 		LOG2.debug("oneInfo的debug");
@@ -45,8 +45,8 @@ public class logbackTest {
 		LOG2.error("oneInfo的error");
 		
 		/* 
-		 * 因为设置的是自定义配置，所以不会再控制台打印
-		 * 所以一条都不会打印，但是warn级别以上的日志可以在logs/pcm/oneInfo中查看
+		 * 因为自定义配置设定的是 additivity="true"  可以在控制台打印
+		 * 所以回打印两条warn级别的日志，日志也可以在logs/pcm/oneInfo中查看
 		 */
 		LOG3.debug("twoInfo的debug");
 		LOG3.info("twoInfo的info");

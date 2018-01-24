@@ -62,7 +62,7 @@
 	<logger name="oneInfo" level="DEBUG" additivity="false">
 	   <appender-ref ref="ONE_INFO" />
 	</logger>
-	<logger name="twoInfo" level="WARN" additivity="false">
+	<logger name="twoInfo" level="WARN" additivity="true">
 	   <appender-ref ref="TWO_INFO" />
 	</logger>
 	
