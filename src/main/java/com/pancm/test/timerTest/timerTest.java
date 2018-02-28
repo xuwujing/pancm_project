@@ -83,7 +83,7 @@ public class timerTest {
              }  
          };  
          ScheduledExecutorService service = Executors  .newSingleThreadScheduledExecutor();  
-         // 第二个参数为首次执行的延时时间，第三个参数为定时执行的间隔时间  10s, 2s
+         // 第二个参数为首次执行的延时时间10s,，第三个参数为定时执行的间隔时间   2s
          service.scheduleAtFixedRate(runnable, 10, 2, TimeUnit.SECONDS); 
     }
     
