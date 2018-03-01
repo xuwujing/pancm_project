@@ -1,10 +1,11 @@
 package com.pancm.test.threadTest;
+
 /**
  * @author ZERO
  * @Data 2017-5-24 下午5:15:23
  * @Description 
+ * 线程优先级测试
  */
-
 class Thread1 extends Thread{  
     private String name;  
     public Thread1(String name) {  
@@ -25,12 +26,19 @@ class Thread1 extends Thread{
     }
 }
   
+/**
+ * 
+* Title: ThreadYield
+* Description: 
+*  
+ */
 class ThreadYield extends Thread{  
     public ThreadYield(String name) {  
         super(name);  
     }  
    
-    @Override  
+    @SuppressWarnings("static-access")
+	@Override  
     public void run() {  
         for (int i = 1; i <= 10; i++) {  
             System.out.println("" + this.getName() + "-----" + i);  
@@ -47,10 +55,10 @@ class ThreadYield extends Thread{
 	public class threadMain {
 	    
 	 public static void main(String[] args) {  
-		//  noJoinThread();
-		// 	joinThread();
-		// yieldThread();
-		 setPriorityThread();
+//		    noJoinThread();
+//		 	joinThread();
+//		    yieldThread();
+		    setPriorityThread();
 		 
 		 
 	    
@@ -160,12 +168,14 @@ class ThreadYield extends Thread{
 	    * */ 
 	 }
 	 
-	 //setPriority(): 设置线程的优先级。
+	 //setPriority(): 设置线程的优先级。数值在0-10之间, 数值越大，优先级越高 
 	 public static void setPriorityThread(){
 		 Thread1 t1=new Thread1("A");  
 		 Thread1 t2=new Thread1("B");  
-		 t1.setPriority(Thread.MAX_PRIORITY);
-		 t2.setPriority(Thread.MIN_PRIORITY);
+//		 t1.setPriority(Thread.MAX_PRIORITY);
+//		 t2.setPriority(Thread.MIN_PRIORITY);
+		 t1.setPriority(1);
+		 t2.setPriority(2);
 		 t1.start();
 		 t2.start();
 		 
