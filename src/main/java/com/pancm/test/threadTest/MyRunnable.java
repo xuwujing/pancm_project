@@ -10,7 +10,7 @@ public class MyRunnable implements Runnable{
 	@Override
 	public void run() {
 	  for (i = 0; i < 100; i++) {
-		System.out.println("MyRunnable:"+Thread.currentThread().getName() + " " + i);
+		System.out.println("MyRunnable:"+Thread.currentThread().getName() + "第" + i+ "次");
 	   }	
 	}
   

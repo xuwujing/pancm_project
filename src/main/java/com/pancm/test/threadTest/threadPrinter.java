@@ -61,5 +61,5 @@ public class threadPrinter implements Runnable {
 	        Thread.sleep(100);    
 	        new Thread(pc).start();     
 	        Thread.sleep(100);    
-	        }     
+	     }     
 }

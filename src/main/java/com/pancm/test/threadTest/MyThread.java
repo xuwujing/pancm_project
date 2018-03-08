@@ -19,7 +19,7 @@ public class MyThread extends Thread{
 	 @Override
      public void run() {
         for (i = 0; i < 100; i++) {
-             System.out.println("MyThread:"+Thread.currentThread().getName() + " " + i);
+             System.out.println("MyThread:"+Thread.currentThread().getName() + "第" + i+ "次");
          }
     }
 	

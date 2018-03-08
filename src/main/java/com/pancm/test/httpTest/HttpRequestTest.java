@@ -16,13 +16,7 @@ public class HttpRequestTest {
 		System.out.println("123");
 		JSONObject json=new JSONObject();
 		//Map json=new HashMap();
-		String url="http://localhost:8080/Xiaoai101/userLogin.action";
-		String url2="http://42.159.192.86:18181/Xiaoai101/userLogin.action";
-		json.put("userLogin", "15570895417");
-		json.put("userPassword", "123456");
-		String data="userLogin=15570895417&userPassword=123456";
-		final String url1=url+"?"+data;
-		final String url3=url2+"?"+data;
+		String url="http://blog.csdn.net/qazwsxpcm/article/details/79405554";
 	//	System.out.println(MyHttpClientRequest.httpPost(url2,data));
    //   System.out.println(HttpRequest.doJSONPost(url2, json.toJSONString()));
 	//    System.out.println(HttpRequest.doJSONPost(url, data));
@@ -39,8 +33,8 @@ public class HttpRequestTest {
 //	}
 		
 		for(int i=0;i<1000;i++){
-			//Thread.sleep(1000); //一秒发送一次
-			 System.out.println(i+": "+HttpUtil.doGet1(url1));
+			Thread.sleep(1000); //一秒发送一次
+			 System.out.println(i+": "+HttpUtil.doGet1(url));
       	 
         }
 

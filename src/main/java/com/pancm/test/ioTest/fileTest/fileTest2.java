@@ -21,9 +21,10 @@ public class fileTest2 {
 	private final static String linuxPath="e://test//test.txt";  //linux路径
 	private final static String path="e:"+File.separator+ "test"+File.separator+"test.txt";  //通用路径
 	
-	public static void main(String[] args) {
-		createNewFile(path);   	//创建文件
-		deleteFile(path);		//删除文件
+	public static void main(String[] args) throws InterruptedException {
+//		createNewFile(path);   	//创建文件
+		Thread.sleep(2000);
+    	deleteFile(path);		//删除文件
 	}
 	
 	/**
@@ -47,6 +48,9 @@ public class fileTest2 {
 	public static void deleteFile(String path){
 		File file=new File(path); //实例化File文件，给出路径
 		if(file.exists()){ //如果存在则删除
+			System.out.println(file.canExecute());
+			System.out.println(file.canRead());
+			System.out.println(file.canWrite());
 			file.delete();
 			System.out.println("该文件成功删除！");
 		}else{

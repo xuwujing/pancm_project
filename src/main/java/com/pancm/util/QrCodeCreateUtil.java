@@ -93,8 +93,8 @@ public class QrCodeCreateUtil {
      * @throws WriterException
      */
     public static void main(String[] args) throws IOException, WriterException {
-        createQrCode(new FileOutputStream(new File("d:\\qrcode.jpg")), "http://dmrs.me", 900, "JPEG");
-        readQrCode(new FileInputStream(new File("d:\\qrcode.jpg")));
+        createQrCode(new FileOutputStream(new File("d:\\pancm.jpg")), "http://www.panchengming.com", 900, "JPEG");
+        readQrCode(new FileInputStream(new File("d:\\pancm.jpg")));
     }
 
 }
