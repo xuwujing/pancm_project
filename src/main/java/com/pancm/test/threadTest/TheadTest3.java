@@ -9,13 +9,17 @@ public class TheadTest3 {
 			thread.setName("myRunnable-"+i);
 			thread.start();
 		}
-		
+		Thread.sleep(2000);
+		myRunnable.set(true);
+		Thread.sleep(3000);
+		myRunnable.set(false);
 		for(int i=1;i<=5;i++){
 			MyThread myThread=new MyThread();
 			myThread.setName("myThread-"+i);
 			myThread.start();
-			
 		}
+		
+		
 		System.out.println("结束...");
 	}
 	
