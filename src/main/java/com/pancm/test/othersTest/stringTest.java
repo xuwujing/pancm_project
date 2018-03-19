@@ -1,6 +1,5 @@
 package com.pancm.test.othersTest;
 
-
 /**
 * Title: test1
 * Description: string相关问题
@@ -10,7 +9,37 @@ package com.pancm.test.othersTest;
  */
 public class stringTest {
 	  public static void main(String[] args) {
-	        String s1 = "Programming";
+	   test1();
+	   test3();
+	  }
+	  
+	  private static void test1(){
+		  String str="Hello World";
+		     String str1="";
+			 StringBuffer sbr=new StringBuffer(str); 
+			 StringBuilder sbd=new StringBuilder(str); 
+			 long start=System.currentTimeMillis();
+		     for(int i=0;i<10000;i++){
+		    	 str1+=str;
+		     }
+		     System.out.println("String累加用时:"+(System.currentTimeMillis()-start)+"ms");
+		     long start2=System.currentTimeMillis();
+		     for(int i=0;i<10000;i++){
+		    	 sbr.append(str);
+		     }
+		     System.out.println("StringBuffer累加用时:"+(System.currentTimeMillis()-start2)+"ms");
+		     long start3=System.currentTimeMillis();
+		     for(int i=0;i<10000;i++){
+		    	 sbd.append(str);
+		     }
+		     System.out.println("StringBuilder累加用时:"+(System.currentTimeMillis()-start3)+"ms");
+			  
+	  }
+	  
+	  
+	  private  static void test3() {
+		
+		    String s1 = "Programming";
 	        String s2 = new String("Programming");
 	        String s3 = "Program";
 	        String s4 = "ming";
@@ -46,7 +75,7 @@ public class stringTest {
 		     * 这条语言在编译时，可以确定 ab_c1 = "abc"，因此它与 abc = "abc" 指向同一对象 所以为true
 		     */
 		    System.out.println((ab_c1 == abc) + " : " + ab_c1.equals(abc));//true : true
-		   
-	        
-	    }
+
+	}
+	  
 }
