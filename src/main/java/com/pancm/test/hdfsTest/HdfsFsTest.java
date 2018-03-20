@@ -35,7 +35,6 @@ public class HdfsFsTest {
         try {
 
             fileSystem = HdfsUtils.getFileSystem();
-
             fileInputStream = fileSystem.open(new Path(pOpenUri));
             fileOutputStream = fileSystem.create(new Path(pOutputUrl));
             IOUtils.copyBytes(fileInputStream, fileOutputStream, buffSize,

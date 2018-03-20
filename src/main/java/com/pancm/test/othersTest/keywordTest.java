@@ -11,14 +11,18 @@ package com.pancm.test.othersTest;
 * @date 2018年3月19日
  */
 public class keywordTest {
-    
+     public  static String name="pancm";
+     
+       static{
+    	
+        }
+	
 	public static void main(String[] args) {
 		
-
 	}
 	
 	private void test1() {
-
+		
 	}
 
 	private void test2() {
@@ -34,4 +38,12 @@ public class keywordTest {
 
 	}
 	
+	private class test{
+		//修饰一个私有变量
+		private int count=1;
+		//修饰一个私有方法
+		private int add(int i,int j){
+			return i+j;
+	   }
+	}
 }

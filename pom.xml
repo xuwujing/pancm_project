@@ -463,18 +463,12 @@
 		    <scope>provided</scope>
 		</dependency>
 		
-<<<<<<< HEAD
-	
-	
-=======
 		<!--gecco 爬虫  -->
 		<dependency>
 		    <groupId>com.geccocrawler</groupId>
 		    <artifactId>gecco</artifactId>
 		    <version>1.2.8</version>
 		</dependency>
-		
->>>>>>> a9e3d40cab83f522a9e9bfef0d93ecb165717979
 	</dependencies>
 	
 	

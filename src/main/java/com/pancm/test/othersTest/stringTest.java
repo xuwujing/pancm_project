@@ -14,7 +14,7 @@ public class stringTest {
 	  }
 	  
 	  private static void test1(){
-		  String str="Hello World";
+		     String str="Hello World";
 		     String str1="";
 			 StringBuffer sbr=new StringBuffer(str); 
 			 StringBuilder sbd=new StringBuilder(str); 
@@ -33,17 +33,16 @@ public class stringTest {
 		    	 sbd.append(str);
 		     }
 		     System.out.println("StringBuilder累加用时:"+(System.currentTimeMillis()-start3)+"ms");
-			  
 	  }
 	  
 	  
 	  private  static void test3() {
 		
-		    String s1 = "Programming";
-	        String s2 = new String("Programming");
-	        String s3 = "Program";
-	        String s4 = "ming";
-	        String s5 = "Program" + "ming";
+		    String s1 = "test";
+	        String s2 = new String("test");
+	        String s3 = "te";
+	        String s4 = "st";
+	        String s5 = "te" + "st";
 	        String s6 = s3 + s4;
 	        String s7 = new String(s1);
 	        // 引用地址不同  equals相同    
@@ -52,8 +51,6 @@ public class stringTest {
 	        System.out.println(s1 == s5); //true
 	        //字符串常量池的原则 这时 s6 的值是在运行时得到的，它会重新构造字符串对象 所以为false
 	        System.out.println(s1 == s6); //false
-	        System.out.println(s1 == s6.intern()); //true
-	        System.out.println(s2 == s2.intern()); //false
 	        System.out.println(s7==s1);       //false
 	        System.out.println(s7.equals(s1)); //true
 	        
