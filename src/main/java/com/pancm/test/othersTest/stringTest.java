@@ -5,7 +5,7 @@ package com.pancm.test.othersTest;
 * Title: test1
 * Description: string相关问题
 * Version:1.0.0  
-* @author Administrator
+* @author pancm
 * @date 2017-7-21
  */
 public class stringTest {

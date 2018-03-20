@@ -161,7 +161,6 @@ public class MyHttpClientRequest {
                 /**读取服务器返回过来的json字符串数据**/
 
                 String strResult = EntityUtils.toString(response.getEntity());
-
                 /**把json字符串转换成json对象**/
 
             //    jsonResult = JSONObject.fromObject(strResult);
@@ -185,4 +184,9 @@ public class MyHttpClientRequest {
 
     }
 
+    public static  void main(String [] args) {
+    	System.out.println(httpGet("http://localhost:8080/testServlet/testQuery.do"));
+		
+	}
+    
 }
