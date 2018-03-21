@@ -70,7 +70,7 @@ public class MinaClient {
           
             sy.put("client_bind","client_bind");
             logger.info("SentBody:"+sy);
-         //   session.setAttribute("account","hello world");
+         // session.setAttribute("account","hello world");
             session.write(sy);// 发送消息
             logger.info("终端与服务端建立连接成功...发送的消息为:"+sy);
         } catch (Exception e) {
@@ -97,7 +97,7 @@ public class MinaClient {
            session.write(sy);// 发送消息
            logger.info("客户端与服务端建立连接成功...发送的消息为:"+sy);
        } catch (Exception e) {
-       	e.printStackTrace();
+       	   e.printStackTrace();
            logger.error("客户端链接异常...", e);
        }
 //       session.getCloseFuture().awaitUninterruptibly();// 等待连接断开

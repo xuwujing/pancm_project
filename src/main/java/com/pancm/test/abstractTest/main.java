@@ -21,14 +21,15 @@ class G extends E{
 }  
 public class main   
 {  
-    public static void main(String[] args)throws InterruptedException {  
+    public static void main(String[] args) throws InterruptedException {  
         E p = new F();  
         p.show();  
         E q = new G();  
         q.show();
         
          /*
-          * 1、抽象类和抽象方法都需要被abstract修饰。抽象方法一定要定义在抽象类中。
+          * 
+          1、抽象类和抽象方法都需要被abstract修饰。抽象方法一定要定义在抽象类中。
 
 		　　2、抽象类不可以创建实例，原因：调用抽象方法没有意义。
 		

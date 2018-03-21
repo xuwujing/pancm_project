@@ -9,9 +9,20 @@ package com.pancm.test.othersTest;
  */
 public class stringTest {
 	  public static void main(String[] args) {
-	   test1();
-	   test3();
+		
+		  String hello="hello";
+		  //有15种构造方法,有两种是过时的，其中包含char[],byte[],int[],String,StringBuffer,StringBuilder。
+		  String newHello=new String("hello");
+		  char []cHello ={'h','e','l','l','o'};
+		  String str=new String(cHello);
+		  System.out.println(hello+","+newHello+","+str);
+		  test1();
+		  test3();
 	  }
+	  
+	  
+	  
+	  
 	  
 	  private static void test1(){
 		     String str="Hello World";
