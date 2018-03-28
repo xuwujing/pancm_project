@@ -32,6 +32,9 @@ public class getPropertiesTest {
 	private  void init(){
 		InputStream in = null;
 		try{
+			//获取resource中的配置
+			in=getPropertiesTest.class.getClassLoader().getResourceAsStream("test.properties");
+			//获取项目同级的配置
 			in = new FileInputStream(new File("test.properties"));
 			Properties prop = new Properties();
 			prop.load(in);

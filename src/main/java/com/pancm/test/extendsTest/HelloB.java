@@ -7,7 +7,7 @@ package com.pancm.test.extendsTest;
 
 
 class HelloA {
-
+	private int i=10;
     public HelloA() {
         System.out.println("HelloA"); //5
     }
@@ -18,6 +18,7 @@ class HelloA {
 
 }
 public class HelloB extends HelloA{
+	private int j=12;
     public HelloB() {
         System.out.println("HelloB");  //7
     }
