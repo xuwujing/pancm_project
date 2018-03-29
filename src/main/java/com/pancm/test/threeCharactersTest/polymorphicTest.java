@@ -1,5 +1,8 @@
 package com.pancm.test.threeCharactersTest;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * 
 * @Title: polymorphicTest
@@ -12,8 +15,16 @@ package com.pancm.test.threeCharactersTest;
 public class polymorphicTest {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		System.out.println(getNowTime());
+		System.out.println(getNowTime("yyyy-MM-dd HH:mm:ss SSS"));
+	}
+	
+	public static String getNowTime() {
+		return getNowTime("yyyy-MM-dd HH:mm:ss");
 	}
 
+	public static String getNowTime(String format) {
+		return new SimpleDateFormat(format).format(new Date());
+	}
+	
 }

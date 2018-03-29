@@ -18,7 +18,6 @@ public class packagingTest {
 		System.out.println(user.getId());
 		System.out.println(user.getName());
 	}
-
 }
 
 class User{
