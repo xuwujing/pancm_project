@@ -6,56 +6,69 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MakeTestDataUtil {
 
 	private static String driverName = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 
-	private static String dbURL = "jdbc:sqlserver://192.169.2.204:1433;DatabaseName=testmsg";
+	private static String dbURL = "jdbc:sqlserver://192.169.2.204:1433;DatabaseName=pancm_DB";
 
 	private static String userName = "sa";
 
 	private static String userPwd = "123zxcvbnm,./";
 
 	public static void main(String[] args) throws SQLException {
+		System.out.println("开始");
+		long start=System.currentTimeMillis();
 		test();
-
+		System.out.println("使用时间:"+(System.currentTimeMillis()-start)+"ms");
 	}
 	
 	private static void test() throws SQLException{
-		try {
-			String insertSql=" INSERT into test_msg (id,msg,msg1,msg2) values (10,'abc\\ "
-					+ "qwe','jk"
-					+ "\\ kl','qwe \\"
-					+ "qqq');";
-			String sql = "select msg from test_msg where id = 3";
-			Connection conn = getCoonection();
-			Statement stmt =conn.createStatement();
-			stmt.executeUpdate(insertSql);
-			PreparedStatement ps = conn.prepareStatement(sql);
-			ResultSet rs = ps.executeQuery();
-			String msg  = null;
-			while(rs.next()){
-				msg = rs.getString("msg");
-				break;
-			}
-			String sql2 = "select * from test_msg where msg=("+sql+")";
-			
-			PreparedStatement ps2 = conn.prepareStatement(sql2);
-			ResultSet rs2 = ps2.executeQuery();
-			String msg2  = null;
-			while(rs2.next()){
-				msg2 = rs.getString("msg");
-				break;
-			}
-			System.out.println(msg2);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally{
-			
+		String insertSql="";
+		List<String> list=new ArrayList<String>();
+		long phone=23341678910L;
+		for(int i=0;i<100000;i++){
+			 insertSql=" INSERT INTO PB_VALID_PHONE ( PHONE, STATUS, "
+					+ "CREATETM, RMSSTATUS,  LASTDLTM, RMSFG, PHONEOS, "
+					+ "OSVER, BRAND, MODEL, XBROWSER, IMEI, IMSI, ISCHANGE) "
+					+ "VALUES ('"+ phone+i +"', '1', '2018-03-12 09:49:47.0000000', "
+					+ "'3',  '2018-03-12 09:49:47.0000000', "
+					+ "'1', '2', '3', '2', '3', 'IE8', '345', '133', '2');";
+			 list.add(insertSql);
 		}
+		updateBatch(list);
 	}
 
+	public static int[] updateBatch(List<String> sqls) throws SQLException{
+		Statement stmt = null;
+		Connection connection = getCoonection();
+		int[] t={0,0};
+		try {
+		   stmt = connection.createStatement();
+			  /**设置不自动提交，以便于在出现异常的时候数据库回滚**/
+           connection.setAutoCommit(false);
+			for (int i = 0, j = sqls.size(); i < j; i++) {
+				stmt.addBatch(sqls.get(i));
+			}
+			t=stmt.executeBatch();
+		    connection.commit();
+		} catch (Exception e) {
+			if (connection != null) {
+                try {
+					connection.rollback();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+            }
+			e.printStackTrace();
+		} finally {
+		}
+		return t;
+	}
+	
 	
 
 	private static Connection getCoonection() {

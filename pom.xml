@@ -351,6 +351,14 @@
 			<artifactId>sqlite-jdbc</artifactId>
 			<version>3.20.1</version>
 		</dependency>
+		
+		  <!--SQL Server 驱动包  -->
+	<dependency>
+      <groupId>com.microsoft.sqlserver</groupId>
+      <artifactId>sqljdbc4</artifactId>
+       <version>4.0</version>
+   </dependency>  
+		
 
 		<!--fastjson 相关jar -->
 		<dependency>
