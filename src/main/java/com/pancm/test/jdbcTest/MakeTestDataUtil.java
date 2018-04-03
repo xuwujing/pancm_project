@@ -29,14 +29,15 @@ public class MakeTestDataUtil {
 	private static void test() throws SQLException{
 		String insertSql="";
 		List<String> list=new ArrayList<String>();
-		long phone=23341678910L;
-		for(int i=0;i<100000;i++){
+		long phone=12345678912L;
+		for(int i=0;i<2;i++){
+			long qw=phone+i;
 			 insertSql=" INSERT INTO PB_VALID_PHONE ( PHONE, STATUS, "
 					+ "CREATETM, RMSSTATUS,  LASTDLTM, RMSFG, PHONEOS, "
 					+ "OSVER, BRAND, MODEL, XBROWSER, IMEI, IMSI, ISCHANGE) "
-					+ "VALUES ('"+ phone+i +"', '1', '2018-03-12 09:49:47.0000000', "
+					+ "VALUES ('"+ qw +"', '1', '2018-03-12 09:49:47.0000000', "
 					+ "'3',  '2018-03-12 09:49:47.0000000', "
-					+ "'1', '2', '3', '2', '3', 'IE8', '345', '133', '2');";
+					+ "'1', '1', 'ios6.0', '苹果', 'iphone6', 'IE8', '345', '133', '2');";
 			 list.add(insertSql);
 		}
 		updateBatch(list);
