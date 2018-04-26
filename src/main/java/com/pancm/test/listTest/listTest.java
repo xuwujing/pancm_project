@@ -1,7 +1,10 @@
 package com.pancm.test.listTest;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * 
@@ -12,9 +15,90 @@ import java.util.List;
 * @date 2017年10月13日
  */
 public class listTest {
+	
+	private final static int count=50000;
+	
+	private static ArrayList arrayList = new ArrayList<>();  
+    private static LinkedList linkedList = new LinkedList<>();  
+    private static Vector vector = new Vector<>();  
+	 
 
 	public static void main(String[] args) {
-        List<Integer> list=initData(100);
+//		test1();
+		test2();
+//		test4();
+//		test5();
+		
+		Vector<String> v=new Vector<>();
+	}
+	 
+	
+	/**
+	 * 遍历方法
+	 */
+	private static void test1() {
+	 List<String> list=new ArrayList<String>();
+     list.add("a");
+     list.add("b");
+     list.add("c");
+     
+     //第一种使用
+     for(int i=0;i<list.size();i++){
+    	 System.out.println(list.get(i));
+     }
+     //第二种遍历方法使用foreach遍历List
+     for (String str : list) {  
+    	 System.out.println(str);
+     }
+     
+     //第三种遍历 使用迭代器进行相关遍历
+     Iterator<String> iterator=list.iterator();
+     while(iterator.hasNext())//判断下一个元素之后有值
+     {
+         System.out.println(iterator.next());
+     }
+	}
+	
+	/**
+	 * 数组变化遍历
+	 */
+	private static void test2() {
+		
+		List<String> list1 = new ArrayList<String>();
+		 list1.add("1");
+		 list1.add("2");
+		System.out.println("list1遍历之前:"+list1);
+		 Iterator<String> iterator = list1.iterator();
+		 while (iterator.hasNext()) {
+			 String item = iterator.next();
+			 if ("2".equals(item)) {
+				 iterator.remove();
+			 }
+		 }
+		 System.out.println("list1遍历之后:"+list1);
+		
+		 List<String> list = new ArrayList<String>();
+		 list.add("1");
+		 list.add("2");
+		 System.out.println("list遍历之前:"+list);
+		 for (String item : list) {
+		   if ("2".equals(item)) {
+		    list.remove(item);
+		    //如果这里不适用break的话，会直接报错的
+		    break; 
+		 }
+	   } 
+		System.out.println("list遍历之后:"+list);
+		
+		
+	}
+	
+	
+	/**
+	 * 常用方法
+	 */
+	private static void test3() {
+		List<Integer> list=initData(100);
 		System.out.println("list:"+list);
 		System.out.println("removeList:"+removeList(list,10,20));
 		list.subList(10, 20).clear();
@@ -31,10 +115,83 @@ public class listTest {
         System.out.println("合集:"+addAll(ls1,ls2));			
         System.out.println("交集 :"+retainAll(ls1,ls2));		
         System.out.println("差集 :"+removeAll(ls1,ls2));		
-        System.out.println("并集 :"+andAll(ls1,ls2));			
-        
+        System.out.println("并集 :"+andAll(ls1,ls2));		
+		
 	}
-	 
+	
+	private static  void test4() {
+		LinkedList<Integer> list=new LinkedList<Integer>();	
+		list.add(3);
+		list.add(5);
+		list.add(4);
+		System.out.println(list);
+		list.addFirst(2);
+		list.addLast(4);
+		System.out.println(list);
+	}
+	
+	private static  void test5() {
+		insertList(arrayList);
+		insertList(linkedList);
+		insertList(vector);
+		
+		System.out.println("--------------------");
+		
+		readList(arrayList);
+		readList(linkedList);
+		readList(vector);
+		
+		System.out.println("--------------------");
+		
+		delList(arrayList);
+		delList(linkedList);
+		delList(vector);
+		
+	}
+	
+	
+	private  static void insertList(List list){   
+	     long start=System.currentTimeMillis();   
+	     Object o = new Object();   
+	     for(int i=0;i<count;i++){   
+	         list.add(0, o);   
+	     }
+	    System.out.println(getName(list)+"插入"+count+"条数据，耗时:"+(System.currentTimeMillis()-start)+"ms");
+	 }   
+	
+	private  static void readList(List list){   
+	     long start=System.currentTimeMillis();   
+	     Object o = new Object();   
+	     for(int i = 0 ; i < count ; i++){  
+	            list.get(i);  
+	        }
+	    System.out.println(getName(list)+"查询"+count+"条数据，耗时:"+(System.currentTimeMillis()-start)+"ms");
+	 }  
+	
+	
+	private  static void delList(List list){   
+	     long start=System.currentTimeMillis();   
+	     Object o = new Object();   
+	     for(int i = 0 ; i < count ; i++){  
+	    	 list.remove(0);   
+	        }
+	    System.out.println(getName(list)+"删除"+count+"条数据，耗时:"+(System.currentTimeMillis()-start)+"ms");
+	 }  
+	
+	private static String getName(List list) {  
+        String name = "";  
+        if(list instanceof ArrayList){  
+            name = "ArrayList";  
+        }  
+        else if(list instanceof LinkedList){  
+            name = "LinkedList";  
+        }  
+        else if(list instanceof Vector){  
+            name = "Vector";  
+        }  
+        return name;  
+    }  
+	
 	/**
 	 * for循环移除指定数据
 	 * @param list 

@@ -21,7 +21,6 @@ public class lockSydTest {
 			runTasks(lockTest.class);
 			runTasks(synTest.class);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
