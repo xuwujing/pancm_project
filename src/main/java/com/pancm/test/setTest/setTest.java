@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -207,6 +208,11 @@ public class setTest {
 	
 
 	public static void main(String[] args) {
+		Set hashSet = new HashSet();
+		Set treeSet = new TreeSet();
+		Set linkedSet = new LinkedHashSet();
+		
+		
 		set();
 		hashSetTest();
 		treeSet1();
