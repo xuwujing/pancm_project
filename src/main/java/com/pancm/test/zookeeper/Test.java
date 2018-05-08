@@ -17,15 +17,16 @@ import org.apache.zookeeper.ZooKeeper;
  */
 public class Test {
 	private static String url="192.169.0.23:2181";
+	private static  ZooKeeper zk;
 	private static  int  CONNECTION_TIMEOUT=30000;
 	
 	public static void main(String[] args) throws Exception {
 		// 创建一个与服务器的连接
-		 ZooKeeper zk = new ZooKeeper(url , 
+		 zk = new ZooKeeper(url , 
 				 CONNECTION_TIMEOUT, new Watcher() { 
 		            // 监控所有被触发的事件
-		            public void process(WatchedEvent event) { 
-		                System.out.println("已经触发了" + event.getType() + "事件！"); 
+		            public void process(WatchedEvent event) {
+		                System.out.println(event.getPath()+"已经触发了" + event.getType() + "事件！"); 
 		            } 
 		        }); 
 		 
@@ -41,11 +42,12 @@ public class Test {
 		 
 		 // 创建一个父级目录节点
 		 if(zk.exists("/test", true)==null){
-			 zk.create("/test", "test".getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT); 
+			 //参数说明:目录，参数，参数权限，节点类型
+			 zk.create("/test", "data1".getBytes(), Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT); 
 		 }
 		 if(zk.exists("/test/test1", true)==null){
 			 // 创建一个子目录节点
-			 zk.create("/test/test1", "test1".getBytes(), Ids.OPEN_ACL_UNSAFE,CreateMode.PERSISTENT); 
+			 zk.create("/test/test1", "data2".getBytes(), Ids.OPEN_ACL_UNSAFE,CreateMode.PERSISTENT); 
 		 }
 		 
 		 System.out.println("="+new String(zk.getData("/test",false,null))); 
@@ -57,7 +59,7 @@ public class Test {
 			 zk.setData("/test/test1","testOne".getBytes(),-1); 
 		 }
 		 System.out.println("目录节点状态：["+zk.exists("/test",true)+"]"); 
-		 if(zk.exists("/test/test1", true)==null){
+		 if(zk.exists("/test/test1", true)!=null){
 		  // 创建另外一个子目录节点
 		  zk.create("/test/test2", "test2".getBytes(), Ids.OPEN_ACL_UNSAFE,CreateMode.PERSISTENT); 
 		 }
@@ -74,7 +76,9 @@ public class Test {
 		 zk.delete("/test",-1); 
 		 // 关闭连接
 		 zk.close();
-
 	}
+	
 
+	
+	
 }
