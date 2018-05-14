@@ -1,4 +1,7 @@
 package com.pancm.test.pojoTest;
+
+import com.pancm.util.MyTools;
+
 /**
  * 
 * Title: User
@@ -8,7 +11,9 @@ package com.pancm.test.pojoTest;
 * @date 2017年9月26日
  */
 public class User {
-	 /** 编号 */
+	
+
+	/** 编号 */
 	 private int id;
 	 /** 姓名 */
 	 private String name;
@@ -58,6 +63,12 @@ public class User {
 		this.name = name;
 	}
 	
-	
+	 /** 
+		 * 
+		 */
+		@Override
+		public String toString() {
+			return MyTools.toString(this);
+		}
 
 }

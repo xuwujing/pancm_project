@@ -18,10 +18,11 @@ class G extends E{
     public void show(){  
         System.out.print("test all GGGG \n");  
     }  
-}  
-public class main   
+}
+
+public class Main   
 {  
-    public static void main(String[] args) throws InterruptedException {  
+    public static void main(String[] args) {  
         E p = new F();  
         p.show();  
         E q = new G();  
