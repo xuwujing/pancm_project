@@ -1,5 +1,7 @@
 package com.pancm.test.threadTest;
 
+import java.util.Random;
+
 /**
  * @author ZERO
  * @Data 2017-5-24 下午5:15:23
@@ -17,7 +19,7 @@ class Thread1 extends Thread{
         for (int i = 0; i < 5; i++) {  
             System.out.println("子线程"+name + "运行 : " + i);  
             try {  
-                sleep((int) Math.random() * 10);  
+                sleep(new Random().nextInt(10));  
             } catch (InterruptedException e) {  
                 e.printStackTrace();  
             }  

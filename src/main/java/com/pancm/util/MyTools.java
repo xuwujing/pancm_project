@@ -231,21 +231,24 @@ public final class MyTools {
 		}
 		SimpleDateFormat format1 = new SimpleDateFormat(format);
 		Date d=null;
+		String backTime=null;
 		try {
 			d = format1.parse(time);
+		
+			Calendar ca = Calendar.getInstance();  //定义一个Calendar 对象
+			ca.setTime(d);//设置时间
+			if("h".equals(type)){
+				ca.add(Calendar.HOUR, number);//改变时
+			}else if("m".equals(type)){
+				ca.add(Calendar.MINUTE, number);//改变分
+			}else if("s".equals(type)){
+				ca.add(Calendar.SECOND, number);//改变秒
+			}
+		    backTime = format1.format(ca.getTime());  //转化为String 的格式
 		} catch (Exception e) {
 			e.printStackTrace();
 		}    
-		Calendar ca = Calendar.getInstance();  //定义一个Calendar 对象
-		ca.setTime(d);//设置时间
-		if("h".equals(type)){
-			ca.add(Calendar.HOUR, number);//改变时
-		}else if("m".equals(type)){
-			ca.add(Calendar.MINUTE, number);//改变分
-		}else if("s".equals(type)){
-			ca.add(Calendar.SECOND, number);//改变秒
-		}
-		String backTime = format1.format(ca.getTime());  //转化为String 的格式
+
 		return backTime;
 	}
 	
@@ -440,12 +443,11 @@ public final class MyTools {
 	}
 	
 	/**  
-     * 将map转化为string  
+     * 将Object转化为string  
      * @param m  
      * @return  
      */  
-    @SuppressWarnings("rawtypes")
-	public static String toString(Map m) {  
+	public static String toString(Object m) {  
         return JSONObject.toJSONString(m);  
     }  
     
