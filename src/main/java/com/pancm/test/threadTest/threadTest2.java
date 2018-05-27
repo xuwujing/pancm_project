@@ -21,9 +21,7 @@ public class threadTest2 {
     public void createThread1(){
         Thread t1 = new Thread(){
             public void run(){
-                for(int i=0;i<100;i++){
-                    System.out.println("创建线程的方式1"+i);
-                }
+                    System.out.println("创建线程的方式1");
             }
         };
         t1.start();

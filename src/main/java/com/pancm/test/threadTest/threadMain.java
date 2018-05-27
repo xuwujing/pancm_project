@@ -39,18 +39,16 @@ class ThreadYield extends Thread{
         super(name);  
     }  
    
-    @SuppressWarnings("static-access")
 	@Override  
     public void run() {  
         for (int i = 1; i <= 10; i++) {  
             System.out.println("" + this.getName() + "-----" + i);  
             // 当i为5时，该线程就会把CPU时间让掉，让其他或者自己的线程执行（也就是谁先抢到谁执行）  
             if (i ==5) {  
-                this.yield();  
+                yield();  
             }  
         }  
-      
-}  
+ }  
 }
  
 
