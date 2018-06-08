@@ -4,7 +4,8 @@ import java.util.Random;
 
 /**
  * @Title: NotifyTest
- * @Description: Notify测试
+ * @Description: 
+ * wait 和 notify测试
  * @Version:1.0.0
  * @author pancm
  * @date 2018年5月22日

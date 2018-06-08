@@ -24,7 +24,7 @@ public class listTest {
 	 
 
 	public static void main(String[] args) {
-//		test1();
+		test1();
 		test2();
 //		test4();
 //		test5();
@@ -41,6 +41,10 @@ public class listTest {
      list.add("a");
      list.add("b");
      list.add("c");
+     
+     System.out.println("list截取:"+list.subList(0, 1));
+     System.out.println("list截取:"+list.subList(1, 3));
+     
      
      //第一种使用
      for(int i=0;i<list.size();i++){

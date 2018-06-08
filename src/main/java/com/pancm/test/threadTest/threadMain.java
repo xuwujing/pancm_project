@@ -9,22 +9,20 @@ import java.util.Random;
  * 线程优先级测试
  */
 class Thread1 extends Thread{  
-    private String name;  
     public Thread1(String name) {  
         super(name);  
-       this.name=name;  
     }  
     public void run() {  
-        System.out.println(Thread.currentThread().getName() + " 线程运行开始!");  
+        System.out.println(this.getName() + " 线程运行开始!");  
         for (int i = 0; i < 5; i++) {  
-            System.out.println("子线程"+name + "运行 : " + i);  
+            System.out.println("子线程"+this.getName() + "运行 : " + i);  
             try {  
                 sleep(new Random().nextInt(10));  
             } catch (InterruptedException e) {  
                 e.printStackTrace();  
             }  
         }  
-        System.out.println(Thread.currentThread().getName() + " 线程运行结束!");  
+        System.out.println(this.getName() + " 线程运行结束!");  
     }
 }
   
@@ -45,7 +43,7 @@ class ThreadYield extends Thread{
             System.out.println("" + this.getName() + "-----" + i);  
             // 当i为5时，该线程就会把CPU时间让掉，让其他或者自己的线程执行（也就是谁先抢到谁执行）  
             if (i ==5) {  
-                yield();  
+            	this.yield();  
             }  
         }  
  }  

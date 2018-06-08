@@ -4,88 +4,85 @@
 
 	<groupId>1.0.0</groupId>
 	<artifactId>pancm_project</artifactId>
-	<version>0.0.1-SNAPSHOT</version> 
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-  
-	<name>pcm_project</name> 
-	<url>http://maven.apache.org</url> 
- 	
- 	 <repositories>
-        <repository>
-            <id>aliyunmaven</id>
-            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
- 	
+
+	<name>pcm_project</name>
+	<url>http://maven.apache.org</url>
+
+	<repositories>
+		<repository>
+			<id>aliyunmaven</id>
+			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+		</repository>
+	</repositories>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
 	</properties>
 
-		<build>  
-	    <plugins>  
-	        <plugin>  
-	            <groupId>org.apache.maven.plugins</groupId>  
-	            <artifactId>maven-compiler-plugin</artifactId>  
-	            <configuration>  
-	                <source>1.8</source>  
-	                <target>1.8</target>  
-	            </configuration>  
-	        </plugin>  
-	        
-	        <plugin>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-	                <fork>true</fork>
-	            </configuration>
+					<fork>true</fork>
+				</configuration>
 			</plugin>
-	    </plugins>  
-	  
-	</build>  
-	
-	
+		</plugins>
+
+	</build>
+
+
 	<dependencies>
-    		<dependency>
-		      <groupId>junit</groupId>
-		      <artifactId>junit</artifactId>
-		      <version>4.12</version>
-		      <scope>test</scope>
-		    </dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
 
-	<!-- <dependency>
-   	 <groupId>ring-cors</groupId>
-   	 <artifactId>ring-cors</artifactId>
-  	  <version>0.1.5</version>
-   </dependency> -->
+		<!-- <dependency> <groupId>ring-cors</groupId> <artifactId>ring-cors</artifactId> 
+			<version>0.1.5</version> </dependency> -->
 
-	<dependency>  
-	   <groupId>jdk.tools</groupId>  
-	   <artifactId>jdk.tools</artifactId>  
-	   <version>1.8</version>  
-	   <scope>system</scope>  
-	   <systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>  
-	</dependency>
+		<dependency>
+			<groupId>jdk.tools</groupId>
+			<artifactId>jdk.tools</artifactId>
+			<version>1.8</version>
+			<scope>system</scope>
+			<systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
+		</dependency>
 
-	 <!--日志  -->
-    <dependency>
-   	 <groupId>org.slf4j</groupId>
-   	 <artifactId>slf4j-api</artifactId>
-   	 <version>1.7.25</version>
-	</dependency>
-    
-    
-    <dependency>
-    	<groupId>ch.qos.logback</groupId>
-    	<artifactId>logback-classic</artifactId>
-    	<version>1.2.3</version>
-	</dependency>
-    
-    <dependency>
-    	<groupId>ch.qos.logback</groupId>
-    	<artifactId>logback-core</artifactId>
-    	<version>1.2.3</version>
-	</dependency>
+		<!--日志 -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.25</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.2.3</version>
+		</dependency>
 
 
 		<!-- 大数据相关jar -->
@@ -194,89 +191,38 @@
 
 		<!-- Spring 相关jar start -->
 
-	<!-- 	<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>4.3.5.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>4.3.5.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>4.3.5.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>4.3.5.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-core</artifactId>
-			<version>4.2.1.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
-			<version>4.2.1.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-config</artifactId>
-			<version>4.2.1.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-ldap</artifactId>
-			<version>4.2.1.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-acl</artifactId>
-			<version>4.2.1.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-cas</artifactId>
-			<version>4.2.1.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-taglibs</artifactId>
-			<version>4.2.1.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>4.3.5.RELEASE</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>org.springframework</groupId> <artifactId>spring-context</artifactId> 
+			<version>4.3.5.RELEASE</version> </dependency> <dependency> <groupId>org.springframework</groupId> 
+			<artifactId>spring-orm</artifactId> <version>4.3.5.RELEASE</version> </dependency> 
+			<dependency> <groupId>org.springframework</groupId> <artifactId>spring-web</artifactId> 
+			<version>4.3.5.RELEASE</version> </dependency> <dependency> <groupId>org.springframework</groupId> 
+			<artifactId>spring-webmvc</artifactId> <version>4.3.5.RELEASE</version> </dependency> 
+			<dependency> <groupId>org.springframework.security</groupId> <artifactId>spring-security-core</artifactId> 
+			<version>4.2.1.RELEASE</version> </dependency> <dependency> <groupId>org.springframework.security</groupId> 
+			<artifactId>spring-security-web</artifactId> <version>4.2.1.RELEASE</version> 
+			</dependency> <dependency> <groupId>org.springframework.security</groupId> 
+			<artifactId>spring-security-config</artifactId> <version>4.2.1.RELEASE</version> 
+			</dependency> <dependency> <groupId>org.springframework.security</groupId> 
+			<artifactId>spring-security-ldap</artifactId> <version>4.2.1.RELEASE</version> 
+			</dependency> <dependency> <groupId>org.springframework.security</groupId> 
+			<artifactId>spring-security-acl</artifactId> <version>4.2.1.RELEASE</version> 
+			</dependency> <dependency> <groupId>org.springframework.security</groupId> 
+			<artifactId>spring-security-cas</artifactId> <version>4.2.1.RELEASE</version> 
+			</dependency> <dependency> <groupId>org.springframework.security</groupId> 
+			<artifactId>spring-security-taglibs</artifactId> <version>4.2.1.RELEASE</version> 
+			</dependency> <dependency> <groupId>org.springframework</groupId> <artifactId>spring-test</artifactId> 
+			<version>4.3.5.RELEASE</version> </dependency> -->
 
 
 		<!-- Spring 相关jar end -->
 
 
 		<!-- apache commons tools jar -->
-	<!-- 	<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-			<version>3.1</version>
-		</dependency> -->
-<!-- 
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.6</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.7</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>commons-collections</groupId> <artifactId>commons-collections</artifactId> 
+			<version>3.1</version> </dependency> -->
+		<!-- <dependency> <groupId>commons-io</groupId> <artifactId>commons-io</artifactId> 
+			<version>2.6</version> </dependency> <dependency> <groupId>org.apache.commons</groupId> 
+			<artifactId>commons-lang3</artifactId> <version>3.7</version> </dependency> -->
 
 
 
@@ -299,6 +245,12 @@
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
 			<version>2.9.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+			<version>2.0.7.RELEASE</version>
 		</dependency>
 
 		<!--netty 相关jar -->
@@ -337,28 +289,28 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.41</version>
 		</dependency>
-		
+
 		<!-- c3p0 -->
 		<dependency>
-		    <groupId>com.mchange</groupId>
-		    <artifactId>c3p0</artifactId>
-		    <version>0.9.5.2</version>
+			<groupId>com.mchange</groupId>
+			<artifactId>c3p0</artifactId>
+			<version>0.9.5.2</version>
 		</dependency>
-		
+
 		<!--sqlite相关jar -->
 		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
 			<version>3.20.1</version>
 		</dependency>
-		
-		  <!--SQL Server 驱动包  -->
-	<dependency>
-      <groupId>com.microsoft.sqlserver</groupId>
-      <artifactId>sqljdbc4</artifactId>
-       <version>4.0</version>
-   </dependency>  
-		
+
+		<!--SQL Server 驱动包 -->
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>sqljdbc4</artifactId>
+			<version>4.0</version>
+		</dependency>
+
 
 		<!--fastjson 相关jar -->
 		<dependency>
@@ -422,15 +374,15 @@
 			<artifactId>kafka-streams</artifactId>
 			<version>1.0.0</version>
 		</dependency>
-		
-		
-		
-			<!-- zookeeper -->
-    	<dependency>
-		    <groupId>org.apache.zookeeper</groupId>
-		    <artifactId>zookeeper</artifactId>
-		    <version>3.4.10</version>
-		     <exclusions>
+
+
+
+		<!-- zookeeper -->
+		<dependency>
+			<groupId>org.apache.zookeeper</groupId>
+			<artifactId>zookeeper</artifactId>
+			<version>3.4.10</version>
+			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-log4j12</artifactId>
@@ -440,33 +392,33 @@
 					<artifactId>log4j</artifactId>
 				</exclusion>
 			</exclusions>
-			<scope>provided</scope> 
+			<scope>provided</scope>
 		</dependency>
-				
+
 		<dependency>
 			<groupId>com.101tec</groupId>
 			<artifactId>zkclient</artifactId>
 			<version>0.10</version>
 		</dependency>
-				
 
-				<!--springBoot jar -->
-		
-		
+
+		<!--springBoot jar -->
+
+
 		<!--核心启动器，包括自动配置支持、日志记录和YAML -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 			<version>1.5.9.RELEASE</version>
-			<exclusions>  
-		        <exclusion>  
-		            <groupId>org.springframework.boot</groupId>  
-		            <artifactId>spring-boot-starter-logging</artifactId>  
-		        </exclusion>  
-		    </exclusions>  
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-		
-	<!--用于测试包括JUnit、Hamcrest和Hamcrest在内的图书馆的Spring引导应用程序。 -->
+
+		<!--用于测试包括JUnit、Hamcrest和Hamcrest在内的图书馆的Spring引导应用程序。 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -475,61 +427,70 @@
 		</dependency>
 		<!--构建web的启动器，包括使用Spring MVC的RESTful应用程序。使用Tomcat作为默认的嵌入式容器 -->
 		<dependency>
-	        <groupId>org.springframework.boot</groupId>
-	        <artifactId>spring-boot-starter-web</artifactId>
-	        <version>1.5.9.RELEASE</version>
-	        
-	    </dependency>
-	    
-	    
-	     <dependency>
-	        <groupId>org.springframework.boot</groupId>
-	        <artifactId>spring-boot-devtools</artifactId>
-	        <optional>true</optional>
-	        <version>1.5.9.RELEASE</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>1.5.9.RELEASE</version>
+
 		</dependency>
-		
-		<!--使用lombok 在pojo中可以免去写getter和setter  -->
+
+
 		<dependency>
-		    <groupId>org.projectlombok</groupId>
-		    <artifactId>lombok</artifactId>
-		    <version>1.16.18</version>
-		    <scope>provided</scope>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+			<version>1.5.9.RELEASE</version>
 		</dependency>
 		
-		<!--gecco 爬虫  -->
+		<!--redis依赖 -->
 		<dependency>
-		    <groupId>com.geccocrawler</groupId>
-		    <artifactId>gecco</artifactId>
-		    <version>1.2.8</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+			<version>1.5.9.RELEASE</version>
 		</dependency>
-		
-		<!--protobuf jar  -->
-	   <dependency>  
-	      <groupId>com.google.protobuf</groupId>  
-	       <artifactId>protobuf-java</artifactId>  
-	       <version>3.5.1</version>  
+
+
+
+		<!--使用lombok 在pojo中可以免去写getter和setter -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.18</version>
+			<scope>provided</scope>
 		</dependency>
-		
-		
-		<!--quartz定时器  -->
+
+		<!--gecco 爬虫 -->
+		<dependency>
+			<groupId>com.geccocrawler</groupId>
+			<artifactId>gecco</artifactId>
+			<version>1.2.8</version>
+		</dependency>
+
+		<!--protobuf jar -->
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>3.5.1</version>
+		</dependency>
+
+
+		<!--quartz定时器 -->
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
 			<version>2.3.0</version>
 		</dependency>
-		
-		 <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz-jobs</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-		
-		
-		
+
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz-jobs</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+
+
+
 	</dependencies>
-	
-	
-	
-	
+
+
+
+
 </project>

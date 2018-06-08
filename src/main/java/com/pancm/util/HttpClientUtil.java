@@ -1,4 +1,4 @@
-package com.pancm.test.httpTest;
+package com.pancm.util;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
-import com.pancm.util.MyTools;
 
 
 /**
