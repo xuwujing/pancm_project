@@ -10,6 +10,7 @@
  * 使用需要protobuf-java-x.x.x.jar和protoc.exe。
  * protoc.exe 生产java代码的工具，需要使用命令生产代码。
  * 例如，新建一个后缀名为.proto的类
+ * 注:这是protobuf2.0的版本使用
  * 内容为:
   
  
