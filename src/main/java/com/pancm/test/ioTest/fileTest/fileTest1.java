@@ -36,7 +36,6 @@ public class fileTest1 {
 		try {
 			System.out.println("getCanonicalPath:" + file1.getCanonicalPath());// getCanonicalPath:D:\WorkSpace\TestMain\test.txt
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("文件夹创建成功");

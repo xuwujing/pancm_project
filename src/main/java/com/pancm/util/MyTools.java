@@ -23,6 +23,8 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.codec.binary.Base64;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
@@ -628,6 +630,30 @@ public final class MyTools {
 		return md5code;
 	}
 
+	/**
+	 *  base64 加密
+	 * @param str
+	 * @return
+	 */
+	public static String base64En(String str){
+        Base64 base64 = new Base64();
+        byte[] encode = base64.encode(str.getBytes());
+        return new String(encode);
+    }
+	
+	/**
+	 *  base64解密
+	 * @param encodeStr
+	 * @return
+	 */
+	@SuppressWarnings("static-access")
+	public static String base64De(String encodeStr){
+        Base64 base64 = new Base64();
+        byte[] decodeStr = base64.decodeBase64(encodeStr);
+        return new String(decodeStr);
+    }
+	
+	
 	/**
 	 * 本方法的测试示例
 	 * 
