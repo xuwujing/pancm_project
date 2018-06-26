@@ -201,6 +201,21 @@ public final class MyTools {
 	}
 
 	/**
+	 * 格式化时间
+	 * @param format1 之前的 时间格式
+	 * @param format2  之后的 时间格式
+	 * @param  time 时间
+	 * @return String
+	 * @throws ParseException 
+	 */
+	public static String formatTime(String format1,String format2,String time) throws ParseException  {
+		SimpleDateFormat d1 = new SimpleDateFormat(format1);
+		 SimpleDateFormat d2 = new SimpleDateFormat(format2);
+		time = d2.format(d1.parse(time));
+		return time;
+	}
+	
+	/**
 	 * 时间补全 例如将2018-04-04补全为2018-04-04 00:00:00.000
 	 * 
 	 * @param time
