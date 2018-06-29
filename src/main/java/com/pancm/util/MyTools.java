@@ -11,6 +11,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -378,6 +382,109 @@ public final class MyTools {
 		}
 	}
 
+	
+	
+	/**
+	 * 获取几天之前的时间
+	 * @since 1.8
+	 * @param day    
+	 * @return
+	 */
+	public static String getMinusDays(int day) {
+		return getMinusDays(day,sdf);
+	}
+	
+	/**
+	 * 获取几天之前的时间
+	 * @since 1.8
+	 * @param day    
+	 * @param format
+	 * @return
+	 */
+	public static String getMinusDays(int day,String format) {
+		return LocalDateTime.now().minusDays(day).format(DateTimeFormatter.ofPattern(format));
+	}
+	
+	
+
+	/**
+	 * 获取几天之后的时间
+	 * @since 1.8
+	 * @param day    
+	 * @return
+	 */
+	public static String getPlusDays(int day) {
+		return getPlusDays(day,sdf);
+	}
+	
+	/**
+	 * 获取几天之后的时间
+	 * @since 1.8
+	 * @param day    
+	 * @param format
+	 * @return
+	 */
+	public static String getPlusDays(int day,String format) {
+		return LocalDateTime.now().plusDays(day).format(DateTimeFormatter.ofPattern(format));
+	}
+	
+	
+	/**
+	 * 获取几天之后的时间
+	 * @since 1.8
+	 * @param day    
+	 * @return
+	 */
+	public static String getPlusMonths(int month) {
+		return getPlusMonths(month,sdf);
+	}
+	
+	/**
+	 * 获取几月之后的时间
+	 * @since 1.8
+	 * @param day    
+	 * @param format
+	 * @return
+	 */
+	public static String getPlusMonths(int month,String format) {
+		return LocalDateTime.now().plusMonths(month).format(DateTimeFormatter.ofPattern(format));
+	}
+	
+	/**
+	 * 增加月份
+	 * @param time  格式为yyyy-MM-dd
+	 * @param month  增加月份
+	 * @return
+	 */
+	public static String addPlusMonths(String time,int month) {
+		return LocalDate.parse(time).plusMonths(month).toString();
+	}
+	
+	
+	/**
+	 * 时间相比得月份
+	 * 如果是201711和201801相比，返回的结果是2
+	 * 前面的时间要小于后面的时间
+	 * @param month   格式为yyyyMM
+	 * @param toMonth  格式为yyyyMM
+	 * @since jdk 1.8
+	 * @return
+	 */
+	public static int diffMonth(String month,String toMonth){
+		int year1=Integer.parseInt(month.substring(0,4));
+		int month1=Integer.parseInt(month.substring(4,6));
+		int year2=Integer.parseInt(month.substring(0,4));
+		int month2=Integer.parseInt(month.substring(4,6));
+		LocalDate ld1=LocalDate.of(year1, month1, 01);
+		LocalDate ld2=LocalDate.of(year2, month2, 01);
+		return Period.between(ld1, ld2).getMonths();
+	}
+	
+	
+	
+	
+	
+	
 	/**
 	 * 判断是否为整型
 	 * 
@@ -772,7 +879,12 @@ public final class MyTools {
 		System.out.println("时间补全:" + complementTime(time1, sdfm, 1));
 		System.out.println("时间补全:" + complementTime(time2, sdfm, 2));
 		System.out.println("时间补全:" + complementTime(time3, sdfm, 1));
-
+		String time4=addPlusMonths(time1, 2);
+		System.out.println("增加之前的数据:"+time1+"增加月份之后的数据:"+time4);
+		System.out.println("相差月份:"+diffMonth("201711", "201801"));
+		
+		
+		
 	}
 
 }
