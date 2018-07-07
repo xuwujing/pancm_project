@@ -1,4 +1,4 @@
-package com.pancm.test.singletonTest;
+package com.pancm.test.design.singletonTest;
 /**
  * @author ZERO
  * @Data 2017-6-7 下午4:08:26
@@ -26,7 +26,7 @@ package com.pancm.test.singletonTest;
     private static final SingletonTest1 instance = new SingletonTest1();  
 
     // 静态方法返回该类的实例
-    public static SingletonTest1 getInstancei() {  
+    public static SingletonTest1 getInstance() {  
         return instance;  
     }  
 }
@@ -81,27 +81,46 @@ package com.pancm.test.singletonTest;
      }   
    } 
  
-    /**  
+    
+    /**
      * 方法四
+     *   静态内部类
+     * 这种写法仍然使用JVM本身机制保证了线程安全问题；由于SingletonTest5是私有的， 除了getInstance()之外没有办法访问它，
+     * 因此它是懒汉式的；同时读取实例的时候不会进行同步，没有性能缺陷；也不依赖JDK版本。
+     */
+   class  SingletonTest4 {
+	   private SingletonTest4(){
+	   }
+	   private static class SingletonTest5{
+	       private static SingletonTest4 instance = new SingletonTest4();
+	    }
+	    public static final SingletonTest4 getInstance(){
+	        return SingletonTest5.instance;
+	    }
+   }
+    
+    
+    /**  
+     * 方法四 双重锁
      * 单例模式最优方案
      * 线程安全  并且效率高  
      * 方法四为单例模式的最佳实现。内存占用低，效率高，线程安全，多线程操作原子性。
      */  
-    class SingletonTest4 { 
+    class SingletonTest6 { 
         // 定义一个私有构造方法
-        private SingletonTest4() { 
+        private SingletonTest6() { 
         }   
         //定义一个静态私有变量(不初始化，不使用final关键字，使用volatile保证了多线程访问时instance变量的可见性，避免了instance初始化时其他变量属性还没赋值完时，被另外线程调用)
-        private static volatile SingletonTest4 instance;  
+        private static volatile SingletonTest6 instance;  
         //定义一个共有的静态方法，返回该类型实例
-        public static SingletonTest4 getIstance() { 
+        public static SingletonTest6 getIstance() { 
             // 对象实例化时与否判断（不使用同步代码块，instance不等于null时，直接返回对象，提高运行效率）
             if (instance == null) {
                 //同步代码块（对象未初始化时，使用同步代码块，保证多线程访问时对象在第一次创建后，不再重复被创建）
-                synchronized (SingletonTest4.class) {
+                synchronized (SingletonTest6.class) {
                     //未初始化，则初始instance变量
                     if (instance == null) {
-                        instance = new SingletonTest4();   
+                        instance = new SingletonTest6();   
                     }   
                 }   
             }   
@@ -109,7 +128,17 @@ package com.pancm.test.singletonTest;
         }   
     }  
     
+    /**
+     * 1.从Java1.5开始支持; 
+     * 2.无偿提供序列化机制; 
+     * 3.绝对防止多次实例化，即使在面对复杂的序列化或者反射攻击的时候; 
+     * 自由序列化，线程安全，保证单例
+     */
+     enum SingletonTest7{
+    	INSTANCE;
+     }
     
-public class singletonTest {
- 
+ public class singletonTest {
+	public static void main(String[] args) {
+	}
 }
