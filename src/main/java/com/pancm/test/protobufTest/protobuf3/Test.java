@@ -20,6 +20,7 @@ public class Test {
 	public static void main(String[] args) {
 		try {
 			protobuf3Test();
+			test1();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -58,5 +59,27 @@ public class Test {
         System.out.println("friend2:"+xxg2.getFriends());  
         
 	}
+	
+    private static void test1() throws IOException{
+    	// 按照定义的数据结构，创建一个对象  
+    	UserInfo.UserMsg.Builder userInfo = UserInfo.UserMsg.newBuilder();  
+    	userInfo.setId(1);
+    	userInfo.setName("xuwujing");
+    	userInfo.setAge(18);
+    	UserInfo.UserMsg userMsg = userInfo.build();  
+        // 将数据写到输出流 
+        ByteArrayOutputStream output = new ByteArrayOutputStream();  
+        userMsg.writeTo(output);  
+        // 将数据序列化后发送 
+        byte[] byteArray = output.toByteArray();  
+        // 接收到流并读取
+        ByteArrayInputStream input = new ByteArrayInputStream(byteArray);  
+        // 反序列化  
+        UserInfo.UserMsg userInfo2 = UserInfo.UserMsg.parseFrom(input);  
+        System.out.println("id:" + userInfo2.getId());  
+        System.out.println("name:" + userInfo2.getName());  
+        System.out.println("age:" + userInfo2.getAge());  
+    }
+	
 	
 }

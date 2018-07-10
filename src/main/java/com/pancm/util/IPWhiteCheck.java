@@ -9,14 +9,14 @@ import java.util.regex.Pattern;
 
 
 /**
-* @Title: gg
+* @Title: IPWhiteCheck
 * @Description:
 * IP白名单工具类 
 * @Version:1.0.0  
 * @author pancm
 * @date 2018年6月25日
 */
-public class IPWhiteList {
+public class IPWhiteCheck {
     // IP的正则
     private static Pattern pattern = Pattern
             .compile("(1\\d{1,2}|2[0-4]\\d|25[0-5]|\\d{1,2})\\."
@@ -72,7 +72,6 @@ public class IPWhiteList {
                     ipList.add(allow);
                 }
             }
-
         }
 
         return ipList;
@@ -122,7 +121,6 @@ public class IPWhiteList {
 
     /**
      * 在添加至白名单时进行格式校验
-     * 
      * @param ip
      * @return
      */
@@ -137,7 +135,6 @@ public class IPWhiteList {
     /**
      * 
      * checkLoginIP:(根据IP,及可用Ip列表来判断ip是否包含在白名单之中).
-     * @date 2017-4-17 下午03:01:03
      * @param ip
      * @param ipList
      * @return
@@ -174,6 +171,12 @@ public class IPWhiteList {
     
      /**
       * 根据IP地址，及IP白名单设置规则判断IP是否包含在白名单
+      * 例如:ip =192.169.0.10
+      * ipWhiteConfig=192.169.0.1-192.169.0.11;
+      * 则可以通过
+      * ip =192.169.1.10
+      * ipWhiteConfig=192.169.1.*
+      * 也可以通过
       * @param ip
       * @param ipWhiteConfig
       * @return

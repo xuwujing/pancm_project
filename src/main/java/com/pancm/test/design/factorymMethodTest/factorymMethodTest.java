@@ -6,32 +6,32 @@ package com.pancm.test.design.factorymMethodTest;
 * Description: 最原始的工厂模式测试   
 * Version:1.0.0  
 * @author pancm
-* @date 2017年10月13日
+* @date 3017年10月13日
  */
 public class factorymMethodTest {
 	
 	public static void main(String[] args) {
 		//玩游戏
-		Game game=Play.playGame(DNF.class);
+		Game3 game=Play3.playGame3(DNF3.class);
 	}
 }
 
 	//定义一个抽象事物
-	interface Game{		 
+	interface Game3{		 
 	};
 	//具体事物
-	class DNF implements Game{
+	class DNF3 implements Game3{
 	};
 	//具体事物
-	class LOL implements Game{
+	class LOL3 implements Game3{
 	};
 	
 	//工厂类
-	class Play{
+	class Play3{
 		 //玩游戏
-		 public static Game playGame(Class<? extends Game> c){
+		 public static Game3 playGame3(Class<? extends Game3> c){
 			 try{
-				 return (Game)c.newInstance();
+				 return (Game3)c.newInstance();
 			 }catch(Exception e){
 				 e.printStackTrace();
 			 }
