@@ -7,16 +7,21 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import clojure.main;
+
 
 /**
-* @Title: gg
+* @Title: IPWhiteCheck
 * @Description:
 * IP白名单工具类 
 * @Version:1.0.0  
 * @author pancm
 * @date 2018年6月25日
 */
-public class IPWhiteList {
+public class IPWhiteCheck {
+	
+	private static String VERTICAL="\\|";
+	
     // IP的正则
     private static Pattern pattern = Pattern
             .compile("(1\\d{1,2}|2[0-4]\\d|25[0-5]|\\d{1,2})\\."
@@ -72,7 +77,6 @@ public class IPWhiteList {
                     ipList.add(allow);
                 }
             }
-
         }
 
         return ipList;
@@ -122,7 +126,6 @@ public class IPWhiteList {
 
     /**
      * 在添加至白名单时进行格式校验
-     * 
      * @param ip
      * @return
      */
@@ -137,7 +140,6 @@ public class IPWhiteList {
     /**
      * 
      * checkLoginIP:(根据IP,及可用Ip列表来判断ip是否包含在白名单之中).
-     * @date 2017-4-17 下午03:01:03
      * @param ip
      * @param ipList
      * @return
@@ -174,14 +176,71 @@ public class IPWhiteList {
     
      /**
       * 根据IP地址，及IP白名单设置规则判断IP是否包含在白名单
+      * 例如:ip =192.169.0.10
+      * ipWhiteConfig=192.169.0.1-192.169.0.11;
+      * 则可以通过
+      * ip =192.169.1.10
+      * ipWhiteConfig=192.169.1.*
+      * 也可以通过
       * @param ip
       * @param ipWhiteConfig
       * @return
       */
     public static boolean checkLoginIP(String ip,String ipWhiteConfig){
+    	if(ip==null||ipWhiteConfig==null){
+ 		   return false;
+ 	   }
         Set<String> ipList = getAvaliIpList(ipWhiteConfig);
         return checkLoginIP(ip, ipList);
     }
     
-
+    /**
+     * 支持多个
+     * 根据IP地址，及IP白名单设置规则判断IP是否包含在白名单
+     * 例如:ip =192.169.0.10
+     * ipWhiteConfig=192.169.1.*|192.169.0.1-192.169.0.11;
+     * 则可以通过
+     * ip =192.169.0.12
+     * ipWhiteConfig=192.169.1.*|192.169.0.1-192.169.0.11
+     * 不可以通过
+     * @param ip
+     * @param ipWhiteConfig
+     * @return
+     */
+   public static boolean checkLoginIPS(String ip,String ipWhiteConfig){
+	   if(ip==null||ipWhiteConfig==null){
+		   return false;
+	   }
+	   String []ips=ipWhiteConfig.split(VERTICAL);
+		boolean falg=false;
+		for(String i:ips){
+			falg=checkLoginIP(ip, i);
+			if(falg){
+				break;
+			}
+		}
+       return falg;
+   }
+   
+   
+   public static void main(String[] args) {
+	   String ip="192.169.0.10";
+		String ipWhiteConfig="192.169.0.1-192.169.0.11";
+		String ip2="192.169.0.10";
+		String ipWhiteConfig2="192.169.1.*";
+		String ipWhiteConfig3="192.169.1.*|192.169.0.1-192.169.0.11";
+		String []ips=ipWhiteConfig3.split("\\|");
+		boolean falg=false;
+		for(String i:ips){
+			falg=IPWhiteCheck.checkLoginIP(ip2, i);
+			if(falg){
+				break;
+			}
+		}
+		System.out.println("是否通过1："+falg);
+		
+		System.out.println("是否通过2："+IPWhiteCheck.checkLoginIP(ip, ipWhiteConfig));
+		System.out.println("是否通过3："+IPWhiteCheck.checkLoginIP(ip2, ipWhiteConfig2));
+}
+   
 }
