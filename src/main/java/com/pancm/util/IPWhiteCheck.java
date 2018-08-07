@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import clojure.main;
-
 
 /**
 * @Title: IPWhiteCheck
@@ -19,9 +17,10 @@ import clojure.main;
 * @date 2018年6月25日
 */
 public class IPWhiteCheck {
-	
+
+
 	private static String VERTICAL="\\|";
-	
+
     // IP的正则
     private static Pattern pattern = Pattern
             .compile("(1\\d{1,2}|2[0-4]\\d|25[0-5]|\\d{1,2})\\."
