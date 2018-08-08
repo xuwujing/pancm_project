@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Properties;
 
 /**
 * @Title: Test
@@ -29,9 +30,9 @@ public class Test {
 //			test2();
 //			test3();
 //			test4();
-			test5();
+//			test5();
 //			test6();
-//			test7();
+			test7();
 		
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -178,10 +179,11 @@ public class Test {
 	private static void test7() throws IOException {
 		//创建要操作的文件路径和名称  
         String path ="E:/test2/hello.txt";
-        String str="你好!";
+        Properties prop=new Properties();
+        prop.setProperty("name", "zz");
         FileWriter fw = new FileWriter(path);  
         BufferedWriter bw=new BufferedWriter(fw);
-        bw.write(str);  
+        bw.write(prop.toString());  
         bw.close();
         fw.close();  
         

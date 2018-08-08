@@ -17,6 +17,13 @@ import java.util.regex.Pattern;
 * @date 2018年6月25日
 */
 public class IPWhiteCheck {
+<<<<<<< HEAD:src/main/java/com/pancm/util/IPWhiteCheck.java
+=======
+
+
+	private static String VERTICAL="\\|";
+
+>>>>>>> f87931b3a8659be56e0e62ad0dbd166d549509de:src/main/java/com/pancm/util/IPWhiteCheck.java
     // IP的正则
     private static Pattern pattern = Pattern
             .compile("(1\\d{1,2}|2[0-4]\\d|25[0-5]|\\d{1,2})\\."
@@ -182,9 +189,60 @@ public class IPWhiteCheck {
       * @return
       */
     public static boolean checkLoginIP(String ip,String ipWhiteConfig){
+    	if(ip==null||ipWhiteConfig==null){
+ 		   return false;
+ 	   }
         Set<String> ipList = getAvaliIpList(ipWhiteConfig);
         return checkLoginIP(ip, ipList);
     }
     
-
+    /**
+     * 支持多个
+     * 根据IP地址，及IP白名单设置规则判断IP是否包含在白名单
+     * 例如:ip =192.169.0.10
+     * ipWhiteConfig=192.169.1.*|192.169.0.1-192.169.0.11;
+     * 则可以通过
+     * ip =192.169.0.12
+     * ipWhiteConfig=192.169.1.*|192.169.0.1-192.169.0.11
+     * 不可以通过
+     * @param ip
+     * @param ipWhiteConfig
+     * @return
+     */
+   public static boolean checkLoginIPS(String ip,String ipWhiteConfig){
+	   if(ip==null||ipWhiteConfig==null){
+		   return false;
+	   }
+	   String []ips=ipWhiteConfig.split(VERTICAL);
+		boolean falg=false;
+		for(String i:ips){
+			falg=checkLoginIP(ip, i);
+			if(falg){
+				break;
+			}
+		}
+       return falg;
+   }
+   
+   
+   public static void main(String[] args) {
+	   String ip="192.169.0.10";
+		String ipWhiteConfig="192.169.0.1-192.169.0.11";
+		String ip2="192.169.0.10";
+		String ipWhiteConfig2="192.169.1.*";
+		String ipWhiteConfig3="192.169.1.*|192.169.0.1-192.169.0.11";
+		String []ips=ipWhiteConfig3.split("\\|");
+		boolean falg=false;
+		for(String i:ips){
+			falg=IPWhiteCheck.checkLoginIP(ip2, i);
+			if(falg){
+				break;
+			}
+		}
+		System.out.println("是否通过1："+falg);
+		
+		System.out.println("是否通过2："+IPWhiteCheck.checkLoginIP(ip, ipWhiteConfig));
+		System.out.println("是否通过3："+IPWhiteCheck.checkLoginIP(ip2, ipWhiteConfig2));
+}
+   
 }
