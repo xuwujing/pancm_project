@@ -15,12 +15,6 @@ public class Test2 {
 	public static void main(String[] args) {
 		String ip="192.169.0.10";
 		String ipWhiteConfig="192.169.0.1-192.169.0.11";
-<<<<<<< HEAD
-		String ip2="192.169.1.10";
-		String ipWhiteConfig2="192.169.1.*";
-		System.out.println("是否通过："+IPWhiteCheck.checkLoginIP(ip, ipWhiteConfig));
-		System.out.println("是否通过："+IPWhiteCheck.checkLoginIP(ip2, ipWhiteConfig2));
-=======
 		String ip2="192.169.0.10";
 		String ipWhiteConfig2="192.169.1.*";
 		String ipWhiteConfig3="192.169.1.*|192.169.0.1-192.169.0.11";
@@ -43,6 +37,5 @@ public class Test2 {
 		String time2="05:00:00";
 		System.out.println(time1.compareTo(time2));
 		System.out.println(time2.compareTo(time1));
->>>>>>> f87931b3a8659be56e0e62ad0dbd166d549509de
 	}
 }

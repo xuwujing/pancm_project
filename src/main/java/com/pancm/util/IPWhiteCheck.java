@@ -17,20 +17,15 @@ import java.util.regex.Pattern;
 * @date 2018年6月25日
 */
 public class IPWhiteCheck {
-<<<<<<< HEAD:src/main/java/com/pancm/util/IPWhiteCheck.java
-=======
-
 
 	private static String VERTICAL="\\|";
 
->>>>>>> f87931b3a8659be56e0e62ad0dbd166d549509de:src/main/java/com/pancm/util/IPWhiteCheck.java
     // IP的正则
     private static Pattern pattern = Pattern
             .compile("(1\\d{1,2}|2[0-4]\\d|25[0-5]|\\d{1,2})\\."
                     + "(1\\d{1,2}|2[0-4]\\d|25[0-5]|\\d{1,2})\\."
                     + "(1\\d{1,2}|2[0-4]\\d|25[0-5]|\\d{1,2})\\."
                     + "(1\\d{1,2}|2[0-4]\\d|25[0-5]|\\d{1,2})");
-
 
     
     private static Set<String> getAvaliIpList(String allowIp) {

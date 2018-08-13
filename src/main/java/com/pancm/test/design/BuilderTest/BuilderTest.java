@@ -1,4 +1,4 @@
-package com.pancm.test.design.builderTest;
+package com.pancm.test.design.BuilderTest;
 
 /**
 * @Title: BuilderTest
