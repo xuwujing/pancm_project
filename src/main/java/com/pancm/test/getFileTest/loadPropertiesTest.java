@@ -1,6 +1,7 @@
 package com.pancm.test.getFileTest;
 
 import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * 
@@ -15,6 +16,13 @@ public class loadPropertiesTest {
 		Map<String, String> conf=getPropertiesTest.getAppSettings();
 		System.out.println("本机IP:"+conf.get("localhost"));
 		System.out.println("tomcat 端口:"+conf.get("tomcatPort"));
+		getFileData();
 	}
 
+	private static void getFileData() {
+		ResourceBundle resourceBundle = ResourceBundle.getBundle("test");
+		System.out.println("本机IP:"+resourceBundle.getString("localhost"));
+		System.out.println("tomcat 端口:"+resourceBundle.getString("tomcatPort"));
+	} 
+	
 }
