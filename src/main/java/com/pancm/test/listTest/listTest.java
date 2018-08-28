@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 /**
  * 
@@ -24,9 +25,10 @@ public class listTest {
 	 
 
 	public static void main(String[] args) {
-		test1();
-		test2();
-//		test4();
+//		test1();
+//		test2();
+//		test3();
+		test4();
 //		test5();
 		
 		Vector<String> v=new Vector<>();
@@ -116,7 +118,7 @@ public class listTest {
 		ls2.add("a");
 		ls2.add("d");
 		ls2.add("e");
-        System.out.println("合集:"+addAll(ls1,ls2));			
+//        System.out.println("合集:"+addAll(ls1,ls2));			
         System.out.println("交集 :"+retainAll(ls1,ls2));		
         System.out.println("差集 :"+removeAll(ls1,ls2));		
         System.out.println("并集 :"+andAll(ls1,ls2));		
@@ -132,6 +134,20 @@ public class listTest {
 		list.addFirst(2);
 		list.addLast(4);
 		System.out.println(list);
+		
+		LinkedList<Integer> list2=new LinkedList<Integer>();
+		list2.add(1);
+		list2.add(2);
+		list2.add(4);
+		list2.add(4);
+		list2.add(6);
+		list2.add(6);
+		list2.add(5);
+		System.out.println("去重之前:"+list2);
+		//jdk1.8去重
+		List<Integer> newList = list2.stream().distinct().collect(Collectors.toList()); 
+		System.out.println("去重之后:"+newList);
+		
 	}
 	
 	private static  void test5() {
@@ -242,8 +258,8 @@ public class listTest {
 	 * @return
 	 */
 	private static List<String> retainAll(List<String> ls1,List<String>ls2){
+		System.out.println("ls1:"+ls1+";ls2:"+ls2);
 		ls1.retainAll(ls2);
-		System.out.println(ls1+";ls2:"+ls2);
 		return ls1;
 	}
 	
