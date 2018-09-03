@@ -23,6 +23,7 @@ public class loadPropertiesTest {
 		ResourceBundle resourceBundle = ResourceBundle.getBundle("test");
 		System.out.println("本机IP:"+resourceBundle.getString("localhost"));
 		System.out.println("tomcat 端口:"+resourceBundle.getString("tomcatPort"));
+		
 	} 
 	
 }
