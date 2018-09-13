@@ -228,7 +228,7 @@ public class StreamTest {
 
 		/*
 		 * min/max/distinct
-		 * 
+		 * 最大，最小和去重
 		 */
 		BufferedReader br;
 		int longest = 0;
@@ -248,7 +248,7 @@ public class StreamTest {
 		list13.add(lines);
 		words = list13.stream().flatMap(line -> Stream.of(line.split(" "))).filter(word -> word.length() > 0)
 				.map(String::toLowerCase).distinct().sorted().collect(Collectors.toList());
-		System.out.println("test.properties 去重复之后:" + words);
+		System.out.println("去重复之后:" + words);
 
 		/*
 		 * Match 匹配
@@ -283,6 +283,7 @@ public class StreamTest {
 	/**
 	 * 一些关联使用
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static void test3() {
 
 		/*

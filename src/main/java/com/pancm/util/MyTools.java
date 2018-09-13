@@ -776,6 +776,85 @@ public final class MyTools {
     }
 	
 	
+	
+	 /**
+	  * 匹配号段
+	  * @param 手机号的前四位
+	  */
+	 public static int matchPhone(String phone){
+		 //移动的号段
+		 String str = "1340,1341,1342,1343,1344,1345,1346,1347,1348,135,136,137,138,139,147,148,150,151,152,154,157,158,159,165,1703,1705,1706,172,178,182,183,184,187,188,198";
+		 List<String> list=completionData(str);
+		 if(list.contains(phone)){
+			 return 0;
+		 }
+		 //联通的号段
+		 String str2 = "130,131,132,145,146,155,156,166,167,1704,1707,1708,1709,171,175,176,185,186";
+		 List<String> list2=completionData(str2);
+		 if(list2.contains(phone)){
+			 return 1;
+		 }
+		 //电信的号段
+		 String str3 = "133,1349,149,153,1700,1701,1702,173,1740,177,180,181,189,191,199";
+		 List<String> list3=completionData(str3);
+		 if(list3.contains(phone)){
+			 return 21;
+		 }
+		return 0;
+	 }
+	 
+	 /**
+	  * 补全号段
+	  */
+	 public static List<String> completionData(String str){
+		 String []strs=str.split(",");
+		 List<String> list=new ArrayList<String>();
+		 for(String s:strs){
+			 if(s.length()==3){
+				 for(int i=0;i<10;i++){
+					String s1=s+i;
+					 list.add(s1); 
+				 }
+			 }else{
+				 list.add(s); 
+			 }
+		 }
+		return list;
+	 }
+	 
+	 /**
+		 * 十进制转二进制
+		 * @param n
+		 * @return
+		 */
+		public static String decToBinary(int n) {
+			String str = "";
+			while (n != 0) {
+				str = n % 2 + str;
+				n = n / 2;
+			}
+			return str;
+		}
+
+		/**
+		 * 二进制转十进制
+		 * @param n
+		 * @return
+		 */
+		public static int binaryToDec(char[] cs) {
+			return binaryToDec(cs);
+		}
+		
+		/**
+		 * 二进制转十进制
+		 * @param n
+		 * @return
+		 */
+		public static int binaryToDec(String cs) {
+			return new BigInteger(new String(cs), 2).intValue();
+		}
+	 
+	
 	/**
 	 * 本方法的测试示例
 	 * 
@@ -884,7 +963,24 @@ public final class MyTools {
 		System.out.println("相差月份:"+diffMonth("201711", "201801"));
 		
 		
+		/*
+		 * 手机号匹配测试
+		 */
+		String phone="15812369741";
+		String phone2="13012369741";
+		String phone3="13312369741";
 		
+		System.out.println("该手机号是:"+matchPhone(phone.substring(0,4)));
+		System.out.println("该手机号是:"+matchPhone(phone2.substring(0,4)));
+		System.out.println("该手机号是:"+matchPhone(phone3.substring(0,4)));
+		
+		
+		int l=2;
+		String string="10101";
+		System.out.println(l+" 十进制转二进制: "+ decToBinary(l) );
+		
+		System.out.println(string+" 二进制转十进制: "+ binaryToDec(string) );
+
 	}
 
 }
