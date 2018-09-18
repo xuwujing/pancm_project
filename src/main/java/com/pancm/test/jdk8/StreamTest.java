@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import com.alibaba.fastjson.JSONObject;
 import com.pancm.test.pojoTest.User;
 
 /**
@@ -167,7 +168,30 @@ public class StreamTest {
 		List<String> list4 = list3.stream().map(String::toUpperCase).collect(Collectors.toList());
 		System.out.println("转换之后的数据:" + list4); // 转换之后的数据:[ZHANGSAN, LISI,
 												// WANGWU]
-
+		
+		/*
+		 * 转换数据类型
+		 */
+		List<String> list31 = Arrays.asList("1", "2", "3");
+		System.out.println("转换之前的数据:" + list31);// 转换之前的数据:[1, 2, 3]
+		List<Integer> list41 = list31.stream().map(Integer::valueOf).collect(Collectors.toList());
+		System.out.println("转换之后的数据:" + list41); // [1, 2, 3]
+		
+		
+		/*
+		 *  转换数据类型
+		 *  对象转map
+		 */
+		List<User> list32 = new ArrayList<User>();
+		for(int i=1;i<=10;i++){
+			list32.add(new User(i,"张三"+i));
+		}
+		
+		System.out.println("转换之前的数据:" + list32);// 转换之前的数据:[1, 2, 3]
+		List<Map> list42 = list32.stream().map(User::toMap).collect(Collectors.toList());
+		System.out.println("转换之后的数据:" + list42); // [1, 2, 3]
+		
+		
 		/*
 		 * 获取平方
 		 */

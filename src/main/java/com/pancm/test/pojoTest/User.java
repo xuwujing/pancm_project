@@ -1,5 +1,7 @@
 package com.pancm.test.pojoTest;
 
+import java.util.Map;
+
 import com.pancm.util.MyTools;
 
 /**
@@ -71,6 +73,9 @@ public class User {
 	}
 	
 	
+	public Map toMap() {
+		return MyTools.toMap(toString());
+	}
 	/** 
 	 * 
 	 */
