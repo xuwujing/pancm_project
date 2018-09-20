@@ -19,7 +19,7 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 * @author pancm
 * @date 2018年5月14日
 */
-public class compressTest {
+public class CompressTest {
 
 	/**
 	 * @param args

@@ -2,10 +2,9 @@ package com.pancm.test.extendsTest;
 /**
  * @author ZERO
  * @Data 2017-6-2 上午11:46:45
- * @Description 继承测试
+ * @Description 继承测试  经典题
  */
-  
-public class extendsTest {  
+public class ExtendsTest {  
     public static void main(String[] args) {  
         A a1 = new A();  
         A a2 = new B();  

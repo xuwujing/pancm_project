@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 
 /**
  * 
-* Title: listTest
-* Description:关于list测试 
-* Version:1.0.0  
+* @Title: ListTest
+* @Description:关于list测试 
+* @Version:1.0.0  
 * @author pancm
 * @date 2017年10月13日
  */
-public class listTest {
+public class ListTest {
 	
 	private final static int count=50000;
 	

@@ -2,7 +2,7 @@ package com.pancm.test.characterEncode;
 
 /**
  * @Title: Test
- * @Description:
+ * @Description:编码测试
  * @Version:1.0.0
  * @author pancm
  * @date 2018年5月31日

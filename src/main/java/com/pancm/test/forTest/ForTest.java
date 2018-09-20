@@ -6,14 +6,17 @@ import java.util.List;
 
 /**
  * 
-* Title: forTest
-* Description: 循环测试 
-* Version:1.0.0  
+* @Title: ForTest
+* @Description: 循环测试 
+* @Version:1.0.0  
 * @author pancm
 * @date 2017年9月29日
  */
-public class forTest {
+public class ForTest {
 	 public static void main(String[] args) {
+		  /*
+		   * 阿里巴巴开发手册中的遍历移除测试
+		   */
 		 iteratorTest();
 		 forEachTest();
 	 }
@@ -23,8 +26,10 @@ public class forTest {
 		 list.add("2");
 		 System.out.println("list1:"+list);
 		 for (String item : list) {
+			 //如果是1就不会出现
 		   if ("2".equals(item)) {
 		    list.remove(item);
+		    //加上break就不会抛异常
 //		    break; 
 		 }
 	   } 

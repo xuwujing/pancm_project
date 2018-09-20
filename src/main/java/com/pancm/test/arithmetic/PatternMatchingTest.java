@@ -142,7 +142,6 @@ public class PatternMatchingTest {
         System.out.println("next函数值：");
         for(int ii = 0;ii<next.length;ii++)
         {
-            
             System.out.print(next[ii]+ " ");
         }
         System.out.println();

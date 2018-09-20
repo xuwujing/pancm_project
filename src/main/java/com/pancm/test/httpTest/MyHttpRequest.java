@@ -28,6 +28,7 @@ public class MyHttpRequest {
      * 			   发送和接收的格式
      * @return URL 所代表远程资源的响应结果
      */
+	@SuppressWarnings("rawtypes")
 	public static String sendGet(String url, Map<String,Object> map,String charset){
 		  StringBuffer sb=new StringBuffer();
 		  //构建请求参数

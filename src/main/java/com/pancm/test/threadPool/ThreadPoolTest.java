@@ -13,10 +13,10 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 
-* Title: ThreadPoolTest
-* Description:
+* @Title: ThreadPoolTest
+* @Description:
 * 线程池测试 
-* Version:1.0.0  
+* @Version:1.0.0  
 * @author pancm
 * @date 2018年3月1日
  */

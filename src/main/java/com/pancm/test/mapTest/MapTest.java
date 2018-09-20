@@ -9,13 +9,13 @@ import java.util.TreeMap;
 
 /**
  * 
-* Title: mapTest
+* Title: MapTest
 * Description:集合map测试 
 * Version:1.0.0  
 * @author pancm
 * @date 2017年11月16日
  */
-public class mapTest {
+public class MapTest {
 	private static Map<String,String> map = new HashMap<String,String>();
 	
 	public static Map<String,String> getHashMap(){

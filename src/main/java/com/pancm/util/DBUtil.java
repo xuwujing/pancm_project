@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import com.sun.istack.internal.Nullable;
 
 /**
  * 
@@ -546,7 +545,7 @@ public class DBUtil {
      * @param str the string to be examined
      * @return true if str is null or zero length
      */
-    private static boolean isEmpty(@Nullable CharSequence str) {
+    private static boolean isEmpty(CharSequence str) {
         if (str == null || str.length() == 0)
             return true;
         else

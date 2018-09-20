@@ -13,6 +13,14 @@ import java.util.List;
 import java.util.Map;
 
 
+/**
+ * 
+* @Title: hiveUtil
+* @Description: hive的连接工具类
+* @Version:1.0.0  
+* @author pancm
+* @date 2018年1月4日
+ */
 public class hiveUtil {
 	
     private static Connection connection;
