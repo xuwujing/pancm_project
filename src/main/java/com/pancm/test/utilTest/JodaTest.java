@@ -11,13 +11,13 @@ import org.joda.time.format.DateTimeFormat;
 
 /**
  * 
-* Title: jodaTest
+* Title: JodaTest
 * Description: Joda 时间工具包测试
 * Version:1.0.0  
 * @author pancm
 * @date 2017年11月1日
  */
-public class jodaTest {
+public class JodaTest {
 
 	public static void main(String[] args) {
 		jodaTest();

@@ -8,13 +8,13 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
-* Title: lockSydTest
-* Description: Lock(显示锁)和synchronized(内部锁) 测试
-* Version:1.0.0  
+* @Title: LockSydTest
+* @Description: Lock(显示锁)和synchronized(内部锁) 测试
+* @Version:1.0.0  
 * @author pancm
 * @date 2017年10月18日
  */
-public class lockSydTest {
+public class LockSydTest {
 
 	public static void main(String[] args) {
 		try {

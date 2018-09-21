@@ -7,7 +7,7 @@ package com.pancm.test.othersTest;
 * @author pancm
 * @date 2017-7-21
  */
-public class stringTest {
+public class StringTest {
 	  public static void main(String[] args) {
 		
 		  String hello="hello";

@@ -8,15 +8,15 @@ import org.apache.zookeeper.ZooKeeper;
 
 /**
  * 
-* @Title: Test
+* @Title: ZookeeperTest
 * @Description: 
 * zookeeper测试
 * @Version:1.0.0  
 * @author pancm
 * @date 2018年4月28日
  */
-public class Test {
-	private static String url="192.169.0.23:2181";
+public class ZookeeperTest {
+	private static String url="master:2181";
 	private static  ZooKeeper zk;
 	private static  int  CONNECTION_TIMEOUT=30000;
 	

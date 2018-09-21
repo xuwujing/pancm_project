@@ -22,7 +22,7 @@ import org.apache.commons.lang.WordUtils;
 * @author pancm
 * @date 2017年10月30日
  */
-public class commonsTest {
+public class CommonsTest {
 
 	public static void main(String[] args) {
 		stringTest();

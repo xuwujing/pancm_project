@@ -12,7 +12,7 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
-public class Niotest {
+public class NioTest {
 
 	/**
 	 * @param args
@@ -24,7 +24,7 @@ public class Niotest {
 	  FileChannel outChannel = null;
 	  try
 	  {
-	   File f = new File("Niotest.java");
+	   File f = new File("NioTest.java");
 	   //锟斤拷锟斤拷FileInputStream锟斤拷锟皆革拷锟侥硷拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷FileChannel
 	   inChannel = new FileInputStream(f).getChannel();
 	   //锟斤拷FileChannel锟斤拷锟饺拷锟斤拷锟斤拷映锟斤拷锟紹yteBuffer

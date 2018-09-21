@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 
-* Title: testServlet
+* Title: ServletTest
 * Description: 
 * 部署在tomcat之后，在web.xml添加:
 *   <servlet>
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 * @author pancm
 * @date 2018年3月20日
  */
-public class testServlet extends HttpServlet {
+public class ServletTest extends HttpServlet {
 
 	/**
 	 * 

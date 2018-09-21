@@ -12,7 +12,7 @@ import com.alibaba.fastjson.JSONObject;
 * @author pancm
 * @date 2017年11月23日
  */
-public class hbaseTest {
+public class HbaseTest {
 	
 	public static void main(String[] args) {
 		test();

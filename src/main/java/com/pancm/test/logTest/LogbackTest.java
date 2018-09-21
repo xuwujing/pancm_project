@@ -6,16 +6,16 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 
-* Title: logbackTest
-* Description:
+* @Title: logbackTest
+* @Description:
 * logback日志测试 
-* Version:1.0.0  
+* @Version:1.0.0  
 * @author pancm
 * @date 2018年1月24日
  */
-public class logbackTest {
+public class LogbackTest {
 	//主程序的日志打印
-	private static Logger LOG = LoggerFactory.getLogger(logbackTest.class);
+	private static Logger LOG = LoggerFactory.getLogger(LogbackTest.class);
 	//自定义的日志打印
 	private static Logger LOG2 = LoggerFactory.getLogger("oneInfo");
 	//自定义的日志打印

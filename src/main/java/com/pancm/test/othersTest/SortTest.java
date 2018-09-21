@@ -7,7 +7,7 @@ import java.util.Arrays;
  * @Data 2017-5-31 下午5:30:29
  * @Description  数组排序
  */
-public class sortTest {
+public class SortTest {
 
 	/**
 	 * @param args

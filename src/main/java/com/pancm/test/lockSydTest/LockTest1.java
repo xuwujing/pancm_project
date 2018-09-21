@@ -1,17 +1,16 @@
 package com.pancm.test.lockSydTest;
-
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * 
-* Title: test
-* Description: Lock(显示锁)和synchronized(内部锁) 测试
-* Version:1.0.0  
+* @Title: LockTest2
+* @Description: Lock(显示锁)和synchronized(内部锁) 测试
+* @Version:1.0.0  
 * @author pancm
 * @date 2017年10月23日
  */
-public class test {
+public class LockTest1 {
 
 	public static void main(String[] args) {
 		

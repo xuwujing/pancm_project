@@ -25,7 +25,7 @@ import com.google.common.primitives.Ints;
 * @author pancm
 * @date 2017年10月30日
  */
-public class guavaTest {
+public class GuavaTest {
 
 	public static void main(String[] args) {
 		noChangeList();
