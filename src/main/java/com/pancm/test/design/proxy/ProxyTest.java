@@ -25,11 +25,66 @@ public class ProxyTest {
 			  2、和装饰器模式的区别：装饰器模式为了增强功能，而代理模式是为了加以控制。
 		 */
 		
+		/*
+		 * <大话设计模式>中的追求者、代理者
+		 *  张三想买东西，可以自己买，但是此时李四正好在商场，于是便让李四帮忙(代理)买了。
+		 */
 		
+		String name = "张三";
+		String name2 = "李四";
+		Shopping shopping = new ExecutePerson(name);
+		Shopping shopping2 = new ExecutePerson(name2);
+		shopping.buyFood();
+		shopping2.buyFood();
+		
+		/*
+		 *  核心就是在不影响之前的功能下进行扩展
+		 */
 	}
-	
 }
 
+/*
+ * 
+ */
+interface Shopping {
+	void buyFood();
+}
 
+/*
+ * 定义一个需要买东西的人
+ */
+class ExecutePerson implements Shopping{
+	
+	private  String name;
+	
+	public ExecutePerson(String name) {
+		this.name = name;
+	}
+	
+	@Override
+	public void buyFood() {
+		System.out.println(name+" 买东西");
+	}
+}
+
+/*
+ * 定义一个可以帮买东西的人
+ */
+class ProxyPerson implements Shopping{
+	private String name;
+	private ExecutePerson ep;
+	
+	public ProxyPerson(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public void buyFood() {
+		if(ep == null){
+			ep = new ExecutePerson(name);
+		}
+		ep.buyFood();
+	}
+}
 
 

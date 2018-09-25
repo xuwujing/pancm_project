@@ -7,8 +7,10 @@ import java.util.Map;
  * @Title: FlyweightTest
  * @Description: 享元模式
  *               在有大量对象时，有可能会造成内存溢出，我们把其中共同的部分抽象出来，如果有相同的业务请求，直接返回在内存中已有的对象，
- *               避免重新创建。 应用实例: 1、JAVA 中的 String，如果有则返回，如果没有则创建一个字符串保存在字符串缓存池里面。
- *               2、数据库的数据池。 主要目的就是复用
+ *               避免重新创建。
+ *                应用实例: 1、JAVA 中的 String，如果有则返回，如果没有则创建一个字符串保存在字符串缓存池里面。
+ *               	     2、数据库的数据池。
+ *                主要目的就是复用
  * @Version:1.0.0
  * @author pancm
  * @date 2018年8月8日
@@ -29,36 +31,51 @@ public class FlyweightTest {
 		 * 
 		 * 享元模式的目的是共享，避免多次创建耗费资源，单例模式的目的是限制创建多个对象以避免冲突等，所以即使都是一个对象，目的也不同。
 		 */
-		String name = "张三";
-		for (int i = 1; i <= 5; i++) {
-			C tyg = DFactory.getTyg(name);
-			tyg.setName("中国体育馆");
-			tyg.setId(1);
-			tyg.a();
-			System.out.println("对象池中对象数量为：" + DFactory.getSize());
+		
+		String names[] = { "张三", "李四", "王五", "虚无境" };
+		for (int i = 0; i < 8; i++) {
+			Penil penil = PenFactory.get(names[i>3?i-4:i]);
+			penil.setSomething("画了一条鱼");
+			penil.write();
 		}
+		/*
+		 * 
+		 * 张三 第:1次创建
+			张三 用于铅笔  画了一条鱼
+			李四 第:1次创建
+			李四 用于铅笔  画了一条鱼
+			王五 第:1次创建
+			王五 用于铅笔  画了一条鱼
+			虚无境 第:1次创建
+			虚无境 用于铅笔  画了一条鱼
+			张三 用于铅笔  画了一条鱼
+			李四 用于铅笔  画了一条鱼
+			王五 用于铅笔  画了一条鱼
+			虚无境 用于铅笔  画了一条鱼
 
+		 */
 	}
 }
 
-interface A {
-	void a();
+/*
+ * 创建一支笔的接口
+ */
+interface Pen {
+	void write();
 }
 
-class C implements A {
-	private int id;
+/*
+ * 创建一支铅笔
+ */
+class Penil implements Pen {
 	private String name;
-
-	public C(String name) {
+	private String something; 
+	private  int i;
+	
+	public Penil(String name) {
 		this.name = name;
-	}
-	
-	public int getId() {
-		return id;
-	}
-	
-	public void setId(int id) {
-		this.id = id;
+		i++;
+		System.out.println(name+" 第:"+i+"次创建");
 	}
 	
 	public String getName() {
@@ -69,26 +86,33 @@ class C implements A {
 		this.name = name;
 	}
 	
-	@Override
-	public void a() {
-		System.out.println("===");
+	public String getSomething() {
+		return something;
 	}
-
+	
+	public void setSomething(String something) {
+		this.something = something;
+	}
+	
+	@Override
+	public void write() {
+		System.out.println(name+" 用于铅笔  "+something);
+	}
 }
 
-class DFactory {
-	private static final Map<String, C> tygs = new HashMap<String, C>();
+/*
+ * 创建一个工厂
+ * 核心
+ */
+class PenFactory {
+	private static final Map<String, Penil> map = new HashMap<String, Penil>();
 
-	public static C getTyg(String yundong) {
-		C tyg = tygs.get(yundong);
-		if (tyg == null) {
-			tyg = new C(yundong);
-			tygs.put(yundong, tyg);
+	public static Penil get(String name) {
+		Penil penil = map.get(name);
+		if (penil == null) {
+			penil = new Penil(name);
+			map.put(name, penil);
 		}
-		return tyg;
-	}
-
-	public static int getSize() {
-		return tygs.size();
+		return penil;
 	}
 }
