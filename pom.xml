@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -10,38 +11,35 @@
 	<name>pcm_project</name>
 	<url>http://maven.apache.org</url>
 
-	<repositories>
-		<repository>
-			<id>aliyunmaven</id>
-			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-		</repository>
-	</repositories>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 
 
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.3.1</version>
 			<scope>test</scope>
 		</dependency>
 
 		<!-- <dependency> <groupId>ring-cors</groupId> <artifactId>ring-cors</artifactId> 
 			<version>0.1.5</version> </dependency> -->
 
-		<!-- <dependency>
+		<dependency>
 			<groupId>jdk.tools</groupId>
 			<artifactId>jdk.tools</artifactId>
 			<version>1.8</version>
 			<scope>system</scope>
 			<systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
-		</dependency> -->
+		</dependency>
 
 		<!--日志 -->
 		<dependency>
@@ -203,7 +201,7 @@
 			<version>2.6</version> </dependency> <dependency> <groupId>org.apache.commons</groupId> 
 			<artifactId>commons-lang3</artifactId> <version>3.7</version> </dependency> -->
 
-		<!--base 64加解密  -->
+		<!--base 64加解密 -->
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
@@ -426,7 +424,7 @@
 			<optional>true</optional>
 			<version>1.5.9.RELEASE</version>
 		</dependency>
-		
+
 		<!--redis依赖 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -441,7 +439,6 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.16.18</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<!--gecco 爬虫 -->
