@@ -19,11 +19,15 @@ public class CommandTest {
 		
 		/*
 		 * 基本使用
+		 * 所需的角色
+		 * 1、received 真正的命令执行对象 ;
+		 * 2、Command  ;
+		 * 3、invoker 使用命令对象的入口;
 		 */
 		String name = "xuwujing";
-		Person person = new  Person();
-		Command command1 = new ACommand(person);
-		Command command2 = new BCommand(person);
+		Student student = new  Student();
+		Command command1 = new LiTeacher(student);
+		Command command2 = new WangTeacher(student);
 		Invoker invoker =new Invoker();
 		invoker.setCommand(command1);
 		invoker.setCommand(command2);
@@ -37,45 +41,46 @@ public class CommandTest {
 
 }
 
-//定义一个人，有一些方法
-class Person{
-	void eatFood(String name){
-		System.out.println(name+"在吃饭");
+//定义一个学生
+class Student{
+	
+	void cleanClassRoom(String name){
+		System.out.println(name+" 开始打扫教室...");
 	}
-	void running(String name){
-		System.out.println(name+"在跑步");
+	void doHomeWork(String name){
+		System.out.println(name+" 开始做作业...");
 	}
 }
 
 //定义一个命令抽象类
 abstract class Command{
-	protected Person person;
-	public Command(Person person){
-		this.person = person;
+	protected Student student;
+	public Command(Student student){
+		this.student = student;
 	}
 	//执行方法
 	abstract void execute(String name);
 }
 
 //将一个接收者和动作进行绑定，调用接收者相应的操作
-class ACommand extends Command{
-	public ACommand(Person person) {
-		super(person);
+class LiTeacher extends Command{
+	public LiTeacher(Student student) {
+		super(student);
 	}
 	@Override
 	void execute(String name) {
-		person.eatFood(name);
+		student.cleanClassRoom(name);
 	}
 }
 
 //将一个接收者和动作进行绑定，调用接收者相应的操作
-class BCommand extends Command{
-	public BCommand(Person person) {
-		super(person);
+class WangTeacher extends Command{
+	public WangTeacher(Student student) {
+		super(student);
 	}
 	@Override
 	void execute(String name) {
-		person.running(name);
+		student.doHomeWork(name);
 	}
 }
 
@@ -83,12 +88,29 @@ class BCommand extends Command{
 //用于执行这个请求
 class Invoker {
 	private List<Command> commands = new ArrayList<Command>();
+	
+	
+	//添加这个命令
 	public void setCommand(Command command) {
-		commands.add(command);
+		//设置执行命令的
+		if(command.toString().indexOf("WangTeacher")>-1) {
+			System.out.println("不执行 WangTeacher 的命令!");
+		}else {
+			commands.add(command);
+		}
 	}
+	
+	//执行这个命令
 	public void executeCommand(String name) {
 		commands.forEach(command->{
 			command.execute(name);
 		});
 	}
+	
+	//撤销这个命令
+	public void undoCommand(Command command) {
+		commands.remove(command);
+		System.out.println("撤销该命令!");
+	}
+	
 }
