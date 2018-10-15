@@ -117,7 +117,7 @@ class Supervisor extends Learder{
 	void handler(int level) {
 		//如果级别在自己的处理范围之内
 		if(level>1){
-			System.out.println("主管处理了  "+name+"所述的<"+something+">事情!");
+			System.out.println("主管同意了  "+name+"所述的<"+something+">事情!");
 		}else{
 			System.out.println("主管未能处理  "+name+"所述的<"+something+">事情!转交给上级!");
 			getLearder().handler(level);
@@ -136,9 +136,15 @@ class BranchManager extends Learder{
 	
 	@Override
 	void handler(int level) {
+		boolean flag=true;
 		//如果级别在自己的处理范围之内
 		if(level>0){
-			System.out.println("部门经理处理了  "+name+"所述的<"+something+">事情!");
+			//这就就直接设置同意了
+			if(flag){
+				System.out.println("部门经理同意了  "+name+"所述的<"+something+">事情!");
+			}else{
+				System.out.println("部门经理不同意  "+name+"所述的<"+something+">事情!");
+			}
 		}else{
 			System.out.println("部门经理未能处理  "+name+"所述的<"+something+">事情!转交给上级!");
 			getLearder().handler(level);
@@ -157,9 +163,16 @@ class GeneralManager extends Learder{
 	
 	@Override
 	void handler(int level) {
+		boolean flag=false;
 		//如果级别在自己的处理范围之内
 		if(level>-1){
-			System.out.println("总经理处理了  "+name+"所述的<"+something+">事情!");
+			//这就就直接设置不同意了
+			if(flag){
+				System.out.println("总经理同意了  "+name+"所述的<"+something+">事情!");
+			}else{
+				System.out.println("总经理不同意  "+name+"所述的<"+something+">事情!");
+			}
+			
 		}else{
 			System.out.println("总经理未能处理  "+name+"所述的<"+something+">事情!转交给上级!");
 			getLearder().handler(level);
