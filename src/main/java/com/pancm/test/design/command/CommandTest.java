@@ -20,10 +20,15 @@ public class CommandTest {
 		/*
 		 * 基本使用
 		 * 所需的角色
-		 * 1、received 真正的命令执行对象 ;
-		 * 2、Command  ;
-		 * 3、invoker 使用命令对象的入口;
+		 *1.命令对象：通过接口或抽象类声明实现的方法。
+ 		  2.命令执行对象：实现命令对象的方法，并将一个接收者和动作进行绑定，调用接收者相应的操作。
+ 		  3.命令请求对象：用于执行这个请求，可以动态的对命令进行控制。
+ 		  
+ 		 核心: 
+ 		  命令模式就是将一组对象的相似行为，进行了抽象，将调用者与被调用者之间进行解耦，提高了应用的灵活性。命令模式将调用的目标对象的一些异构性给封装起来，通过统一的方式来为调用者提供服
 		 */
+		
+		
 		String name = "xuwujing";
 		Student student = new  Student();
 		Command command1 = new LiTeacher(student);
@@ -32,7 +37,6 @@ public class CommandTest {
 		invoker.setCommand(command1);
 		invoker.setCommand(command2);
 		invoker.executeCommand(name);
-		
 		/*
 		 * 优点： 1、降低了系统耦合度。 2、新的命令可以很容易添加到系统中去。
 		         缺点：使用命令模式可能会导致某些系统有过多的具体命令类。
@@ -89,11 +93,10 @@ class WangTeacher extends Command{
 class Invoker {
 	private List<Command> commands = new ArrayList<Command>();
 	
-	
 	//添加这个命令
 	public void setCommand(Command command) {
-		//设置执行命令的
-		if(command.toString().indexOf("WangTeacher")>-1) {
+		//设置执行命令的条件
+		if(commands.size()>0) {
 			System.out.println("不执行 WangTeacher 的命令!");
 		}else {
 			commands.add(command);
