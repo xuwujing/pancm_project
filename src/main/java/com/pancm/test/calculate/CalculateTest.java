@@ -30,18 +30,54 @@ public class CalculateTest {
 	}
 
 	private static void test3() {
+		int a = 64>>>2;
+		int b = 2<<2;
+		int c = a&b;
+		int d = b|c;
+		int e = ~a;
+		int f = 60^13;
+		System.out.println("位运算符测试开始");
+		System.out.println(a);
+		System.out.println(b);
+		System.out.println(c);
+		System.out.println(d);
+		System.out.println(e);
+		System.out.println(f);
+		System.out.println("位运算符测试结束");
+		
+		/*
+		 * 
+		 十进制
+		 A = 60，B = 13
+		 二进制
+		 A = 0011 1100
+		 B = 0000 1101
+		 
+		操作符	描述	例子
+		＆	如果相对应位都是1，则结果为1，否则为0	（A＆B），得到12，即0000 1100
+		|	如果相对应位都是0，则结果为0，否则为1	（A | B）得到61，即 0011 1101
+		^	如果相对应位值相同，则结果为0，否则为1	（A ^ B）得到49，即 0011 0001
+		〜	按位取反运算符翻转操作数的每一位，即0变成1，1变成0。	（〜A）得到-61，即1100 0011
+		<< 	按位左移运算符。左操作数按位左移右操作数指定的位数。	A << 2得到240，即 1111 0000
+		>> 	按位右移运算符。左操作数按位右移右操作数指定的位数。	A >> 2得到15即 1111
+		>>> 	按位右移补零操作符。左操作数的值按右操作数指定的位数右移，移动得到的空位以零填充。	A>>>2得到15即0000 1111
+		 
+		 
+		 */
 		
 	}
 	
+	//运算符优先级测试
 	private static void test2() {
-		int a = 2+3*4;
-		int b = 2>>3;
+		int a = 2+3*4/2 + (5+4)*2;
+		int b = 2>>3+4/2-1;
 		int c = a++*3-b--;
-		
+		int d = (a>c?4:5) + 4%2 << 3;
 		System.out.println("运算符优先级测试开始");
 		System.out.println(a);
 		System.out.println(b);
 		System.out.println(c);
+		System.out.println(d);
 		System.out.println("运算符优先级测试结束");
 		/*
 		 * 最高优先级的运算符在的表的最上面，最低优先级的在表的底部。
