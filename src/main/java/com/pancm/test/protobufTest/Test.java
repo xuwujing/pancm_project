@@ -1,8 +1,8 @@
 package com.pancm.test.protobufTest;
 
-import java.io.ByteArrayInputStream;  
-import java.io.ByteArrayOutputStream;  
-import java.io.IOException;  
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;  
 
 /**

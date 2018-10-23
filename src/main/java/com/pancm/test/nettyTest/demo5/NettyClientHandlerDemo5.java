@@ -1,5 +1,7 @@
 package com.pancm.test.nettyTest.demo5;
 
+import com.pancm.util.MyTools;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -8,8 +10,6 @@ import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.util.CharsetUtil;
 import io.netty.util.ReferenceCountUtil;
-
-import com.pancm.util.MyTools;
 
 /**
  * 

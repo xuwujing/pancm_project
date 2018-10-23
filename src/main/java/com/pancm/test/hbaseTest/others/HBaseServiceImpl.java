@@ -1,5 +1,10 @@
 package com.pancm.test.hbaseTest.others;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.slf4j.Logger;
@@ -7,11 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pancm.test.hbaseTest.others.util.HBaseUtil;
 import com.pancm.test.hbaseTest.others.util.ThreadPoolUtil;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 /**
  * HBaseService Mutator 实现类

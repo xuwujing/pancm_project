@@ -1,7 +1,7 @@
 package com.pancm.test.nettyTest.demo3;
 
-import io.netty.buffer.ByteBuf;  
-import io.netty.channel.ChannelHandlerContext;  
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;  
   
 /**

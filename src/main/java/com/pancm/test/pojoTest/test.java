@@ -1,5 +1,4 @@
 package com.pancm.test.pojoTest;
-import com.pancm.test.pojoTest.Student;
 
 public class test {
 	

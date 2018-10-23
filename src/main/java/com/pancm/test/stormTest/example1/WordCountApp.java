@@ -8,11 +8,6 @@ import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.utils.Utils;
 
-import com.pancm.test.stormTest.example1.ReportBolt;
-import com.pancm.test.stormTest.example1.SentenceSpout;
-import com.pancm.test.stormTest.example1.SplitSentenceBolt;
-import com.pancm.test.stormTest.example1.WordCountBolt;
-
 /**
  * 实现单词计数topology
  *

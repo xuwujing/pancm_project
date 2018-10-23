@@ -10,10 +10,7 @@ import java.math.BigInteger;
  * @date 2018年10月18日
  */
 public class CalculateTest {
-
-	/**
-	 * @param args
-	 */
+	
 	public static void main(String[] args) {
 		//自增运算符测试
 		test1();
@@ -26,7 +23,46 @@ public class CalculateTest {
 	}
 
 	private static void test4() {
+		int a = 4;
+		a *= 5; 
+		int b = 6;
+		b %=3;
+		int c = 9;
+		c |= a;
+		int d = 8;
+		d <<=2;
+		int e = 17;
+		e &=9;
+		int f = 16;
+		f ^=2;
+		System.out.println("赋值运算符测试开始");
+		System.out.println(a);
+		System.out.println(b);
+		System.out.println(c);
+		System.out.println(d);
+		System.out.println(e);
+		System.out.println(f);
+		System.out.println("赋值运算符测试结束");
 		
+		
+		
+		/*
+		 
+		 操作符	描述	例子
+		=	简单的赋值运算符，将右操作数的值赋给左侧操作数	C = A + B将把A + B得到的值赋给C
+		+ =	加和赋值操作符，它把左操作数和右操作数相加赋值给左操作数	C + = A等价于C = C + A
+		- =	减和赋值操作符，它把左操作数和右操作数相减赋值给左操作数	C - = A等价于C = C -
+		 A
+		* =	乘和赋值操作符，它把左操作数和右操作数相乘赋值给左操作数	C * = A等价于C = C * A
+		/ =	除和赋值操作符，它把左操作数和右操作数相除赋值给左操作数	C / = A等价于C = C / A
+		（％）=	取模和赋值操作符，它把左操作数和右操作数取模后赋值给左操作数	C％= A等价于C = C％A
+		<< =	左移位赋值运算符	C << = 2等价于C = C << 2
+		>> =	右移位赋值运算符	C >> = 2等价于C = C >> 2
+		＆=	按位与赋值运算符	C＆= 2等价于C = C＆2
+		^ =	按位异或赋值操作符	C ^ = 2等价于C = C ^ 2
+		| =	按位或赋值操作符	C | = 2等价于C = C | 2
+		 
+		 */
 	}
 
 	private static void test3() {

@@ -1,13 +1,13 @@
 package com.pancm.test.hbaseTest.others;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import com.pancm.test.hbaseTest.others.util.Md5Util;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * HBase 各个组件管理调用类

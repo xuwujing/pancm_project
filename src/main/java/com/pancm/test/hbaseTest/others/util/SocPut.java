@@ -1,11 +1,11 @@
 package com.pancm.test.hbaseTest.others.util;
 
-import org.apache.hadoop.hbase.client.Put;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.hadoop.hbase.client.Put;
 
 /**
  * 扩展 Put 类

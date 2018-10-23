@@ -1,9 +1,9 @@
 package com.pancm.test.hbaseTest.others;
 
+import java.util.List;
+
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
-
-import java.util.List;
 
 /**
  * HBase 服务抽象类
