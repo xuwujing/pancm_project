@@ -3,8 +3,7 @@ package com.pancm.test.design.interpreter;
 /**
 * @Title: InterpreterTest
 * @Description: 解释器模式
-* 解释器模式（Interpreter Pattern）提供了评估语言的语法或表达式的方式，它属于行为型模式。
-* 这种模式实现了一个表达式接口，该接口解释一个特定的上下文。这种模式被用在 SQL 解析、符号处理引擎等。
+解释器模式（Interpreter Pattern）是类的行为模式。给定一个语言之后，解释器模式可以定义出其文法的一种表示，并同时提供一个解释器。客户端可以使用这个解释器来解释这个语言中的句子。
 * 比如正则表达式
 * @Version:1.0.0  
 * @author pancm
@@ -19,7 +18,17 @@ public class InterpreterTest {
 		
 		/*
 		 * 基本使用
-		 * 使用不同的解释器，输出的结果不同
+		  使用不同的解释器，输出的结果不同
+		
+	       （1）抽象表达式(Expression)角色：声明一个所有的具体表达式角色都需要实现的抽象接口。这个接口主要是一个interpret()方法，称做解释操作。
+
+	　　（2）终结符表达式(Terminal Expression)角色：实现了抽象表达式角色所要求的接口，主要是一个interpret()方法；文法中的每一个终结符都有一个具体终结表达式与之相对应。比如有一个简单的公式R=R1+R2，在里面R1和R2就是终结符，对应的解析R1和R2的解释器就是终结符表达式。
+	
+	　　（3）非终结符表达式(Nonterminal Expression)角色：文法中的每一条规则都需要一个具体的非终结符表达式，非终结符表达式一般是文法中的运算符或者其他关键字，比如公式R=R1+R2中，“+"就是非终结符，解析“+”的解释器就是一个非终结符表达式。
+	
+	　　（4）环境(Context)角色：这个角色的任务一般是用来存放文法中各个终结符所对应的具体值，比如R=R1+R2，我们给R1赋值100，给R2赋值200。这些信息需要存放到环境角色中，很多情况下我们使用Map来充当环境角色就足够了。
+			 
+		 
 		 */
 		Context context = new Context();
 		context.setId(1);
@@ -29,8 +38,22 @@ public class InterpreterTest {
 		aExpreeion.interpert(context);
 		aExpreeion2.interpert(context);
 		
+		String word = "好好学习，天天向上!";
+		Expreeion expreeion =new  BaiduExpreeion();
+		Expreeion expreeion2 =new  YouDaoExpreeion();
+		Expreeion expreeion3 =new  XuWuJingExpreeion();
+		expreeion.interpert(word);
+		expreeion2.interpert(word);
+		expreeion3.interpert(word);
 		
 		
+		/*
+		 输出结果：
+		 百度翻译：好好学习，天天向上! 的英文是  Study hard.
+		有道翻译：好好学习，天天向上! 的英文是  study hard and make progress every day
+		xuwujing翻译：好好学习，天天向上! 的英文是  Good good study, day day up.
+		 
+		 */
 		
 		/*
 		 
@@ -103,3 +126,42 @@ class TwoExpreeion extends AbstractExpreeion{
 
 
 
+/*
+   * 定义一个表达式，有一个解释的方法
+ */
+interface Expreeion{
+	void interpert(String word);
+}
+
+class  BaiduExpreeion implements Expreeion{
+	String str ="好好学习，天天向上!";
+	@Override
+	public void interpert(String word) {
+		//如果是这句就翻译
+		if(str.equals(word)) {
+			System.out.println("百度翻译："+word+" 的英文是  Study hard.");
+		}
+	}
+}
+
+class  YouDaoExpreeion implements Expreeion{
+	String str ="好好学习，天天向上!";
+	@Override
+	public void interpert(String word) {
+		//如果是这句就翻译
+		if(str.equals(word)) {
+			System.out.println("有道翻译："+word+" 的英文是  study hard and make progress every day");
+		}
+	}
+}
+
+class  XuWuJingExpreeion implements Expreeion{
+	String str ="好好学习，天天向上!";
+	@Override
+	public void interpert(String word) {
+		//如果是这句就翻译
+		if(str.equals(word)) {
+			System.out.println("xuwujing翻译："+word+" 的英文是  Good good study, day day up.");
+		}
+	}
+}

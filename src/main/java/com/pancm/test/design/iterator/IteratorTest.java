@@ -1,5 +1,8 @@
 package com.pancm.test.design.iterator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @Title: IteratorTest
  * @Description: 迭代器模式 迭代器模式（Iterator Pattern）是 Java 和 .Net
@@ -22,7 +25,35 @@ public class IteratorTest {
 			String name = (String) iter.next();
 			System.out.println("name : " + name);
 		}
+		
+		
+		
+		MyIterable myIterable = new ListContainer();
+		myIterable.add("1");
+		myIterable.add("zhangsan");
+		myIterable.add("2");
+		myIterable.add("lisi");
+		myIterable.add("3");
+		myIterable.add("xuwujing");
+		
+        MyIterator myIterator = myIterable.getIterator();
+        while (myIterator.hasNext()){
+            String str = myIterator.next();
+            System.out.println(str);
+        }
+        
+        /*
+         * 输出结果:
+		1
+		zhangsan
+		2
+		lisi
+		3
+		xuwujing
+         * 
+         */
 
+        
 		/*
 		 * 
 		 * 优点： 1、它支持以不同的方式遍历一个聚合对象。 2、迭代器简化了聚合类。 3、在同一个聚合上可以有多个遍历。
@@ -34,6 +65,17 @@ public class IteratorTest {
 		 * 
 		 * 注意事项：迭代器模式就是分离了集合对象的遍历行为，抽象出一个迭代器类来负责，这样既可以做到不暴露集合的内部结构，又可让外部代码透明地访问集合内部的数据。
 		 * 
+		 
+		 适用
+		访问一个聚集对象的内容而无需暴露它的内部表示;
+		支持对聚集对象的多种遍历(如: 不光可以正向遍历, 还可以反向遍历容器元素.);
+		为遍历不同的聚合结构提供一个统一的接口(即: 支持多态迭代).
+		Iterator使用场景不必多言, 由于Java已经将其固化到语言中,因此开发中天天都在使用:
+		
+		当需要访问一个聚集对象, 且不需要了解其内部实现的时, 就应该考虑使用迭代器模式.
+		当需要对聚集有多种方式遍历时, 可以考虑使用迭代器模式.
+
+		 
 		 */
 	}
 
@@ -80,10 +122,7 @@ class NameRepository implements Container {
 
 		@Override
 		public boolean hasNext() {
-			if (index < names.length) {
-				return true;
-			}
-			return false;
+			return index < names.length;
 		}
 
 		@Override
@@ -94,6 +133,69 @@ class NameRepository implements Container {
 			return null;
 		}
 	}
+}
+
+
+/*
+ * 定义一个Iterator
+ */
+interface MyIterator {
+	//判断是否还有下一个
+	boolean hasNext();
+	//返回信息
+	String next();
+}
+
+/*
+ *  定义一个Iterable
+ */
+interface MyIterable{
+	MyIterator getIterator();
+	
+	void add(String str);
+	
+	String get(int index);
+}
+
+
+
+class ListContainer implements MyIterable {
+	
+	 private List<String> list =new ArrayList<>(); 
+
+	 
+	@Override
+	public MyIterator getIterator() {
+		return new ListIterator();
+	}
+
+	@Override
+	public void add(String str) {
+		list.add(str);
+	}
+
+	@Override
+	public String get(int index) {
+		return list.get(index);
+	}
+	
+	
+	class ListIterator implements MyIterator{
+		int index;
+		@Override
+		public boolean hasNext() {
+			return index < list.size();
+		}
+
+		@Override
+		public String next() {
+			if (this.hasNext()) {
+				return list.get(index++);
+			}
+			return null;
+		}
+	}
+	
 }
 
 
