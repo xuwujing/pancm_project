@@ -1,4 +1,4 @@
-package com.pancm.test.design.singletonTest;
+package com.pancm.test.design.singleton;
 /**
  * @author ZERO
  * @Data 2017-6-7 下午4:08:26
