@@ -26,7 +26,7 @@ public class VisitorTest {
 		 * 4 具体节点(ConcreteNode)角色：实现了抽象节点所规定的接受操作。
 		 * 
 		 * 5 结构对象(ObjectStructure)角色：有如下的责任，可以遍历结构中的所有元素；如果需要，提供一个高层次的接口让访问者对象可以访问每一个元素；
-		 * 如果需要，可以设计成一个复合对象或者一个聚集，如List或
+		 
 		 * 
 		 */
 
@@ -74,9 +74,6 @@ class ZhangSan implements Visitor {
 		games.play();
 	}
 
-	/**
-	 * 对应于NodeB的访问操作
-	 */
 	@Override
 	public void visit(Photos photos) {
 		photos.watch();
@@ -92,9 +89,6 @@ class LiSi implements Visitor {
 		games.play();
 	}
 
-	/**
-	 * 对应于NodeB的访问操作
-	 */
 	@Override
 	public void visit(Photos photos) {
 		photos.watch();
