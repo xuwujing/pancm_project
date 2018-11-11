@@ -15,26 +15,48 @@ public class StrategyTest {
 
 		/*
 		 * 基本使用
+		 * 
+		 角色
+		   1，环境角色(Context)：持有一个策略类的引用，提供给客户端使用。
+	
+	　　 	   2，抽象策略角色(Strategy)：这是一个抽象角色，通常由一个接口或抽象类实现。此角色给出所有的具体策略类所需的接口。
+	
+	　　	   3，具体策略角色(ConcreteStrategy)：包装了相关的算法或行为。
+		 * 
 		 */
-		 Context context = new Context(new OperationAdd());    
-	      System.out.println("10 + 5 = " + context.executeStrategy(10, 5));
+			
+		  /*
+		   * 计算加减乘除
+		   */
+		   int a=4,b=2;
+		  Context context = new Context(new OperationAdd());    
+	      System.out.println("a + b = "+context.executeStrategy(a, b));
 	 
-	      context = new Context(new OperationSub());      
-	      System.out.println("10 - 5 = " + context.executeStrategy(10, 5));
+	      Context context2 = new Context(new OperationSub());      
+	      System.out.println("a - b = "+context2.executeStrategy(a, b));
 	 
-	      context = new Context(new OperationMul());    
-	      System.out.println("10 * 5 = " + context.executeStrategy(10, 5));
+	      Context context3 = new Context(new OperationMul());    
+	      System.out.println("a * b = "+context3.executeStrategy(a, b));
 	
-	      context = new Context(new OperationDiv());    
-	      System.out.println("10 / 5 = " + context.executeStrategy(10, 5));
+	      Context context4 = new Context(new OperationDiv());    
+	      System.out.println("a / b = "+context4.executeStrategy(a, b));
 	
+	      
+	      /*
+	        a + b = 6
+			a - b = 2
+			a * b = 8
+			a / b = 2
+	       */
+	      
+	      
 	      /*
 	       	优点： 1、算法可以自由切换。
-	       	 	2、避免使用多重条件判断。 
-	       	 	3、扩展性良好。
+	       	 	 2、避免使用多重条件判断。  
+	       	 	 3、扩展性良好。
 
-			缺点： 1、策略类会增多。 
-				2、所有策略类都需要对外暴露。
+			缺点： 1、使用策略类变多，会增加系统的复杂度。 
+				 2、客户端必须知道所有的策略类才能进行调用
 
 			使用场景： 1、如果在一个系统里面有许多类，它们之间的区别仅在于它们的行为，那么使用策略模式可以动态地让一个对象在许多行为中选择一种行为。 
 					2、一个系统需要动态地在几种算法中选择一种。 
@@ -81,7 +103,7 @@ class OperationDiv implements Strategy {
 	}
 }
 
-
+//定义一个环境
 class Context {
 	private Strategy strategy;
 
@@ -93,3 +115,6 @@ class Context {
 		return strategy.doOperation(num1, num2);
 	}
 }
+
+
+
