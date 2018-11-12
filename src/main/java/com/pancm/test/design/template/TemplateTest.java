@@ -16,6 +16,10 @@ public class TemplateTest {
 
 		/*
 		 * 基本使用
+		 Java 中的 Servlet就是经典的模板模式的使用。HttpService类提供了一个service()方法，
+		 这个方法调用七个do方法中的一个或几个，完成对客户端调用的响应。这些do方法需要由HttpServlet的具体子类提供
+		 
+		 
 		  基本角色
 		 　抽象模板(Abstract Template)角色有如下责任：
 		　　1.定义了一个或多个抽象操作，以便让子类实现。这些抽象操作叫做基本操作，它们是一个顶级逻辑的组成步骤。
@@ -25,10 +29,10 @@ public class TemplateTest {
 		　    2.每一个抽象模板角色都可以有任意多个具体模板角色与之对应，而每一个具体模板角色都可以给出这些抽象方法（也就是顶级逻辑的组成步骤）的不同实现，从而使得顶级逻辑的实现各不相同。
 				 
 		 */
-		Game game = new Cricket();
+		Game game = new ContraGame();
 		game.play();
 		System.out.println();
-		game = new Football();
+		game = new TMNTGame();
 		game.play();
 
 		/*
@@ -42,58 +46,72 @@ public class TemplateTest {
 
 }
 
-//定义一个游戏
-abstract class Game {
-	abstract void initialize();
 
-	abstract void startPlay();
 
-	abstract void endPlay();
-
-	// 模板
+//定义一个玩游戏的步骤
+abstract class  Game{
+	
+	//启动游戏
+	protected abstract void  runGame();
+	//选择人物
+	protected  void choosePerson() {};
+	//开始玩游戏游戏
+	protected abstract void startPlayGame();
+	//结束游戏
+	protected abstract void endPlayGame();
+	
+	//模板方法
 	public final void play() {
-		// 初始化游戏
-		initialize();
-		// 开始游戏
-		startPlay();
-		// 结束游戏
-		endPlay();
+		runGame();
+		choosePerson();
+		startPlayGame();
+		endPlayGame();
+	}
+	
+}
+
+//魂斗罗游戏
+class ContraGame extends Game{
+
+	@Override
+	protected void runGame() {
+		System.out.println("启动魂斗罗II...");
+	}
+
+	@Override
+	protected void startPlayGame() {
+		System.out.println("1P正在使用S弹打aircraft...");
+	}
+
+	@Override
+	protected void endPlayGame() {
+		System.out.println("1P被流弹打死了，游戏结束！");
+	}
+	
+	
+}
+
+//忍者神龟游戏
+class TMNTGame extends Game{
+
+	@Override
+	protected void runGame() {
+		System.out.println("启动忍者神龟III...");
+	}
+
+	@Override
+	protected void choosePerson() {
+		System.out.println("1P选择了Raph ！");
+	}
+
+	@Override
+	protected void startPlayGame() {
+		System.out.println("Raph正在使用绝技 “火箭头槌” ");
+	}
+
+	@Override
+	protected void endPlayGame() {
+		System.out.println("Raph 掉进井盖里死了，游戏结束了！ ");
 	}
 }
 
-//扩展游戏类
-class Cricket extends Game {
-
-	@Override
-	void endPlay() {
-		System.out.println("Cricket Game Finished!");
-	}
-
-	@Override
-	void initialize() {
-		System.out.println("Cricket Game Initialized! Start playing.");
-	}
-
-	@Override
-	void startPlay() {
-		System.out.println("Cricket Game Started. Enjoy the game!");
-	}
-}
-
-class Football extends Game {
-
-	@Override
-	void endPlay() {
-		System.out.println("Football Game Finished!");
-	}
-
-	@Override
-	void initialize() {
-		System.out.println("Football Game Initialized! Start playing.");
-	}
-
-	@Override
-	void startPlay() {
-		System.out.println("Football Game Started. Enjoy the game!");
-	}
-}

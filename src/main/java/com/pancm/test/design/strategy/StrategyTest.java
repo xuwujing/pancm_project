@@ -2,7 +2,7 @@ package com.pancm.test.design.strategy;
 
 /**
  * @Title: StrategyTest
- * @Description: 策略模式 在策略模式（Strategy Pattern）中，一个类的行为或其算法可以在运行时更改。
+ * @Description: 策略模式 在策略模式（CalculateStrategy Pattern）中，一个类的行为或其算法可以在运行时更改。
  *               这种类型的设计模式属于行为型模式。 在策略模式中，我们创建表示各种策略的对象和一个行为随着策略对象改变而改变的 context
  *               对象。 策略对象改变 context 对象的执行算法。
  * @Version:1.0.0
@@ -29,16 +29,16 @@ public class StrategyTest {
 		   * 计算加减乘除
 		   */
 		   int a=4,b=2;
-		  Context context = new Context(new OperationAdd());    
+		  CalculatorContext context = new CalculatorContext(new OperationAdd());    
 	      System.out.println("a + b = "+context.executeStrategy(a, b));
 	 
-	      Context context2 = new Context(new OperationSub());      
+	      CalculatorContext context2 = new CalculatorContext(new OperationSub());      
 	      System.out.println("a - b = "+context2.executeStrategy(a, b));
 	 
-	      Context context3 = new Context(new OperationMul());    
+	      CalculatorContext context3 = new CalculatorContext(new OperationMul());    
 	      System.out.println("a * b = "+context3.executeStrategy(a, b));
 	
-	      Context context4 = new Context(new OperationDiv());    
+	      CalculatorContext context4 = new CalculatorContext(new OperationDiv());    
 	      System.out.println("a / b = "+context4.executeStrategy(a, b));
 	
 	      
@@ -67,12 +67,12 @@ public class StrategyTest {
 }
 
 //定义一个策略
-interface Strategy {
+interface CalculateStrategy {
 	int doOperation(int num1, int num2);
 }
 
 //定义一个加法 
-class OperationAdd implements Strategy {
+class OperationAdd implements CalculateStrategy {
 	@Override
 	public int doOperation(int num1, int num2) {
 		return num1 + num2;
@@ -80,7 +80,7 @@ class OperationAdd implements Strategy {
 }
 
 //定义一个减法
-class OperationSub implements Strategy {
+class OperationSub implements CalculateStrategy {
 	@Override
 	public int doOperation(int num1, int num2) {
 		return num1 - num2;
@@ -88,7 +88,7 @@ class OperationSub implements Strategy {
 }
 
 //定义一个乘法
-class OperationMul implements Strategy {
+class OperationMul implements CalculateStrategy {
 	@Override
 	public int doOperation(int num1, int num2) {
 		return num1 * num2;
@@ -96,7 +96,7 @@ class OperationMul implements Strategy {
 }
 
 //定义一个除法
-class OperationDiv implements Strategy {
+class OperationDiv implements CalculateStrategy {
 	@Override
 	public int doOperation(int num1, int num2) {
 		return num1 / num2;
@@ -104,10 +104,10 @@ class OperationDiv implements Strategy {
 }
 
 //定义一个环境
-class Context {
-	private Strategy strategy;
+class  CalculatorContext {
+	private CalculateStrategy strategy;
 
-	public Context(Strategy strategy) {
+	public CalculatorContext(CalculateStrategy strategy) {
 		this.strategy = strategy;
 	}
 
