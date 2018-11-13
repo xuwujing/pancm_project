@@ -13,17 +13,29 @@ public class factorymMethodTest {
 	public static void main(String[] args) {
 		//玩游戏
 		Game3 game=Play3.playGame3(DNF3.class);
+		game.play();
 	}
 }
 
 	//定义一个抽象事物
-	interface Game3{		 
+	interface Game3{	
+		void play();
 	};
 	//具体事物
 	class DNF3 implements Game3{
+
+		@Override
+		public void play() {
+			System.out.println("正在玩DNF...");
+		}
 	};
 	//具体事物
 	class LOL3 implements Game3{
+
+		@Override
+		public void play() {
+			System.out.println("正在玩LOL...");
+		}
 	};
 	
 	//工厂类

@@ -147,8 +147,7 @@ public final class MyTools {
 	/**
 	 * long类型的时间转换成 yyyyMMddHHmmss String类型的时间
 	 * 
-	 * @param lo
-	 *            long类型的时间
+	 * @param lo long类型的时间
 	 * @return
 	 */
 	public static String longTime2StringTime(long lo) {
@@ -158,10 +157,8 @@ public final class MyTools {
 	/**
 	 * long类型的时间转换成自定义时间格式
 	 * 
-	 * @param lo
-	 *            long类型的时间
-	 * @param format
-	 *            时间格式
+	 * @param lo     long类型的时间
+	 * @param format 时间格式
 	 * @return String
 	 */
 	public static String longTime2StringTime(long lo, String format) {
@@ -206,24 +203,24 @@ public final class MyTools {
 
 	/**
 	 * 格式化时间
+	 * 
 	 * @param format1 之前的 时间格式
-	 * @param format2  之后的 时间格式
-	 * @param  time 时间
+	 * @param format2 之后的 时间格式
+	 * @param time    时间
 	 * @return String
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
-	public static String formatTime(String format1,String format2,String time) throws ParseException  {
+	public static String formatTime(String format1, String format2, String time) throws ParseException {
 		SimpleDateFormat d1 = new SimpleDateFormat(format1);
-		 SimpleDateFormat d2 = new SimpleDateFormat(format2);
+		SimpleDateFormat d2 = new SimpleDateFormat(format2);
 		time = d2.format(d1.parse(time));
 		return time;
 	}
-	
+
 	/**
 	 * 时间补全 例如将2018-04-04补全为2018-04-04 00:00:00.000
 	 * 
-	 * @param time
-	 *            补全的时间
+	 * @param time 补全的时间
 	 * @return
 	 */
 	public static String complementTime(String time) {
@@ -234,12 +231,9 @@ public final class MyTools {
 	/**
 	 * 时间补全 例如将2018-04-04补全为2018-04-04 00:00:00.000
 	 * 
-	 * @param time
-	 *            补全的时间
-	 * @param format
-	 *            补全的格式
-	 * @param type
-	 *            类型 1:起始;2:终止
+	 * @param time   补全的时间
+	 * @param format 补全的格式
+	 * @param type   类型 1:起始;2:终止
 	 * @return
 	 */
 	public static String complementTime(String time, String format, int type) {
@@ -288,8 +282,7 @@ public final class MyTools {
 	/**
 	 * 获取当前String类型的的时间(自定义格式)
 	 * 
-	 * @param format
-	 *            时间格式
+	 * @param format 时间格式
 	 * @return String
 	 */
 	public static String getNowTime(String format) {
@@ -308,12 +301,9 @@ public final class MyTools {
 	/**
 	 * 获取的String类型的当前时间并更改时间
 	 * 
-	 * @param number
-	 *            要更改的的数值
-	 * @param format
-	 *            更改时间的格式 如yyyy-MM-dd HH:mm:ss
-	 * @param type
-	 *            更改时间的类型 时:h; 分:m ;秒:s
+	 * @param number 要更改的的数值
+	 * @param format 更改时间的格式 如yyyy-MM-dd HH:mm:ss
+	 * @param type   更改时间的类型 时:h; 分:m ;秒:s
 	 * @return String
 	 */
 	public static String changeTime(int number, String format, String type) {
@@ -323,14 +313,10 @@ public final class MyTools {
 	/**
 	 * 获取的String类型时间并更改时间
 	 * 
-	 * @param number
-	 *            要更改的的数值
-	 * @param format
-	 *            更改时间的格式
-	 * @param type
-	 *            更改时间的类型 。时:h; 分:m ;秒:s
-	 * @param time
-	 *            更改的时间 没有则取当前时间
+	 * @param number 要更改的的数值
+	 * @param format 更改时间的格式
+	 * @param type   更改时间的类型 。时:h; 分:m ;秒:s
+	 * @param time   更改的时间 没有则取当前时间
 	 * @return String
 	 */
 	public static String changeTime(int number, String format, String type, String time) {
@@ -339,11 +325,11 @@ public final class MyTools {
 		}
 		SimpleDateFormat format1 = new SimpleDateFormat(format);
 		Date d = null;
-		Calendar ca =null;
-		String backTime=null;
+		Calendar ca = null;
+		String backTime = null;
 		try {
 			d = format1.parse(time);
-			 ca = Calendar.getInstance(); // 定义一个Calendar 对象
+			ca = Calendar.getInstance(); // 定义一个Calendar 对象
 			ca.setTime(d);// 设置时间
 			if ("h".equals(type)) {
 				ca.add(Calendar.HOUR, number);// 改变时
@@ -361,6 +347,7 @@ public final class MyTools {
 
 	/**
 	 * 两个日期带时间比较 第二个时间大于第一个则为true，否则为false
+	 * 
 	 * @param String
 	 * @return boolean
 	 * @throws ParseException
@@ -382,109 +369,104 @@ public final class MyTools {
 		}
 	}
 
-	
-	
 	/**
 	 * 获取几天之前的时间
+	 * 
 	 * @since 1.8
-	 * @param day    
+	 * @param day
 	 * @return
 	 */
 	public static String getMinusDays(int day) {
-		return getMinusDays(day,sdf);
+		return getMinusDays(day, sdf);
 	}
-	
+
 	/**
 	 * 获取几天之前的时间
+	 * 
 	 * @since 1.8
-	 * @param day    
+	 * @param day
 	 * @param format
 	 * @return
 	 */
-	public static String getMinusDays(int day,String format) {
+	public static String getMinusDays(int day, String format) {
 		return LocalDateTime.now().minusDays(day).format(DateTimeFormatter.ofPattern(format));
 	}
-	
-	
 
 	/**
 	 * 获取几天之后的时间
+	 * 
 	 * @since 1.8
-	 * @param day    
+	 * @param day
 	 * @return
 	 */
 	public static String getPlusDays(int day) {
-		return getPlusDays(day,sdf);
+		return getPlusDays(day, sdf);
 	}
-	
+
 	/**
 	 * 获取几天之后的时间
+	 * 
 	 * @since 1.8
-	 * @param day    
+	 * @param day
 	 * @param format
 	 * @return
 	 */
-	public static String getPlusDays(int day,String format) {
+	public static String getPlusDays(int day, String format) {
 		return LocalDateTime.now().plusDays(day).format(DateTimeFormatter.ofPattern(format));
 	}
-	
-	
+
 	/**
 	 * 获取几天之后的时间
+	 * 
 	 * @since 1.8
-	 * @param day    
+	 * @param day
 	 * @return
 	 */
 	public static String getPlusMonths(int month) {
-		return getPlusMonths(month,sdf);
+		return getPlusMonths(month, sdf);
 	}
-	
+
 	/**
 	 * 获取几月之后的时间
+	 * 
 	 * @since 1.8
-	 * @param day    
+	 * @param day
 	 * @param format
 	 * @return
 	 */
-	public static String getPlusMonths(int month,String format) {
+	public static String getPlusMonths(int month, String format) {
 		return LocalDateTime.now().plusMonths(month).format(DateTimeFormatter.ofPattern(format));
 	}
-	
+
 	/**
 	 * 增加月份
+	 * 
 	 * @param time  格式为yyyy-MM-dd
-	 * @param month  增加月份
+	 * @param month 增加月份
 	 * @return
 	 */
-	public static String addPlusMonths(String time,int month) {
+	public static String addPlusMonths(String time, int month) {
 		return LocalDate.parse(time).plusMonths(month).toString();
 	}
-	
-	
+
 	/**
-	 * 时间相比得月份
-	 * 如果是201711和201801相比，返回的结果是2
-	 * 前面的时间要小于后面的时间
+	 * 时间相比得月份 如果是201711和201801相比，返回的结果是2 前面的时间要小于后面的时间
+	 * 
 	 * @param month   格式为yyyyMM
-	 * @param toMonth  格式为yyyyMM
+	 * @param toMonth 格式为yyyyMM
 	 * @since jdk 1.8
 	 * @return
 	 */
-	public static int diffMonth(String month,String toMonth){
-		int year1=Integer.parseInt(month.substring(0,4));
-		int month1=Integer.parseInt(month.substring(4,6));
-		int year2=Integer.parseInt(month.substring(0,4));
-		int month2=Integer.parseInt(month.substring(4,6));
-		LocalDate ld1=LocalDate.of(year1, month1, 01);
-		LocalDate ld2=LocalDate.of(year2, month2, 01);
+	public static int diffMonth(String month, String toMonth) {
+		int year1 = Integer.parseInt(month.substring(0, 4));
+		int month1 = Integer.parseInt(month.substring(4, 6));
+		int year2 = Integer.parseInt(month.substring(0, 4));
+		int month2 = Integer.parseInt(month.substring(4, 6));
+		LocalDate ld1 = LocalDate.of(year1, month1, 01);
+		LocalDate ld2 = LocalDate.of(year2, month2, 01);
 		return Period.between(ld1, ld2).getMonths();
 	}
-	
-	
-	
-	
-	
-	
+
 	/**
 	 * 判断是否为整型
 	 * 
@@ -517,8 +499,7 @@ public final class MyTools {
 	/**
 	 * 获取自定义长度的随机数(含字母)
 	 * 
-	 * @param len
-	 *            长度
+	 * @param len 长度
 	 * @return String
 	 */
 	public static String random2(int len) {
@@ -614,8 +595,7 @@ public final class MyTools {
 	/**
 	 * JSON 字符串转换为 HashMap
 	 * 
-	 * @param json
-	 *            - String
+	 * @param json - String
 	 * @return Map
 	 */
 	@SuppressWarnings("rawtypes")
@@ -753,108 +733,142 @@ public final class MyTools {
 	}
 
 	/**
-	 *  base64 加密
+	 * base64 加密
+	 * 
 	 * @param str
 	 * @return
 	 */
-	public static String base64En(String str){
-        Base64 base64 = new Base64();
-        byte[] encode = base64.encode(str.getBytes());
-        return new String(encode);
-    }
-	
+	public static String base64En(String str) {
+		Base64 base64 = new Base64();
+		byte[] encode = base64.encode(str.getBytes());
+		return new String(encode);
+	}
+
 	/**
-	 *  base64解密
+	 * base64解密
+	 * 
 	 * @param encodeStr
 	 * @return
 	 */
 	@SuppressWarnings("static-access")
-	public static String base64De(String encodeStr){
-        Base64 base64 = new Base64();
-        byte[] decodeStr = base64.decodeBase64(encodeStr);
-        return new String(decodeStr);
-    }
-	
-	
-	
-	 /**
-	  * 匹配号段
-	  * @param 手机号的前四位
-	  */
-	 public static int matchPhone(String phone){
-		 //移动的号段
-		 String str = "1340,1341,1342,1343,1344,1345,1346,1347,1348,135,136,137,138,139,147,148,150,151,152,154,157,158,159,165,1703,1705,1706,172,178,182,183,184,187,188,198";
-		 List<String> list=completionData(str);
-		 if(list.contains(phone)){
-			 return 0;
-		 }
-		 //联通的号段
-		 String str2 = "130,131,132,145,146,155,156,166,167,1704,1707,1708,1709,171,175,176,185,186";
-		 List<String> list2=completionData(str2);
-		 if(list2.contains(phone)){
-			 return 1;
-		 }
-		 //电信的号段
-		 String str3 = "133,1349,149,153,1700,1701,1702,173,1740,177,180,181,189,191,199";
-		 List<String> list3=completionData(str3);
-		 if(list3.contains(phone)){
-			 return 21;
-		 }
-		return 0;
-	 }
-	 
-	 /**
-	  * 补全号段
-	  */
-	 public static List<String> completionData(String str){
-		 String []strs=str.split(",");
-		 List<String> list=new ArrayList<String>();
-		 for(String s:strs){
-			 if(s.length()==3){
-				 for(int i=0;i<10;i++){
-					String s1=s+i;
-					 list.add(s1); 
-				 }
-			 }else{
-				 list.add(s); 
-			 }
-		 }
-		return list;
-	 }
-	 
-	 /**
-		 * 十进制转二进制
-		 * @param n
-		 * @return
-		 */
-		public static String decToBinary(int n) {
-			String str = "";
-			while (n != 0) {
-				str = n % 2 + str;
-				n = n / 2;
-			}
-			return str;
-		}
+	public static String base64De(String encodeStr) {
+		Base64 base64 = new Base64();
+		byte[] decodeStr = base64.decodeBase64(encodeStr);
+		return new String(decodeStr);
+	}
 
-		/**
-		 * 二进制转十进制
-		 * @param n
-		 * @return
-		 */
-		public static int binaryToDec(char[] cs) {
-			return binaryToDec(cs);
+	/**
+	 * 匹配号段
+	 * 
+	 * @param 手机号的前四位
+	 */
+	public static int matchPhone(String phone) {
+		// 移动的号段
+		String str = "1340,1341,1342,1343,1344,1345,1346,1347,1348,135,136,137,138,139,147,148,150,151,152,154,157,158,159,165,1703,1705,1706,172,178,182,183,184,187,188,198";
+		List<String> list = completionData(str);
+		if (list.contains(phone)) {
+			return 0;
 		}
-		
-		/**
-		 * 二进制转十进制
-		 * @param n
-		 * @return
-		 */
-		public static int binaryToDec(String cs) {
-			return new BigInteger(new String(cs), 2).intValue();
+		// 联通的号段
+		String str2 = "130,131,132,145,146,155,156,166,167,1704,1707,1708,1709,171,175,176,185,186";
+		List<String> list2 = completionData(str2);
+		if (list2.contains(phone)) {
+			return 1;
 		}
-	 
-	
+		// 电信的号段
+		String str3 = "133,1349,149,153,1700,1701,1702,173,1740,177,180,181,189,191,199";
+		List<String> list3 = completionData(str3);
+		if (list3.contains(phone)) {
+			return 21;
+		}
+		return 0;
+	}
+
+	/**
+	 * 补全号段
+	 */
+	public static List<String> completionData(String str) {
+		String[] strs = str.split(",");
+		List<String> list = new ArrayList<String>();
+		for (String s : strs) {
+			if (s.length() == 3) {
+				for (int i = 0; i < 10; i++) {
+					String s1 = s + i;
+					list.add(s1);
+				}
+			} else {
+				list.add(s);
+			}
+		}
+		return list;
+	}
+
+	/**
+	 * 十进制转二进制
+	 * 
+	 * @param n
+	 * @return
+	 */
+	public static String decToBinary(int n) {
+		String str = "";
+		while (n != 0) {
+			str = n % 2 + str;
+			n = n / 2;
+		}
+		return str;
+	}
+
+	/**
+	 * 二进制转十进制
+	 * 
+	 * @param n
+	 * @return
+	 */
+	public static int binaryToDec(char[] cs) {
+		return binaryToDec(cs);
+	}
+
+	/**
+	 * 二进制转十进制
+	 * 
+	 * @param n
+	 * @return
+	 */
+	public static int binaryToDec(String cs) {
+		return new BigInteger(new String(cs), 2).intValue();
+	}
+
+	/**
+	 * 将int数值转换为占四个字节的byte数组，本方法适用于(低位在前，高位在后)的顺序。
+	 * 
+	 * @param value 要转换的int值
+	 * @return byte数组
+	 */
+	public static byte[] intToBytes(int value) {
+		byte[] byte_src = new byte[4];
+		byte_src[3] = (byte) ((value & 0xFF000000) >> 24);
+		byte_src[2] = (byte) ((value & 0x00FF0000) >> 16);
+		byte_src[1] = (byte) ((value & 0x0000FF00) >> 8);
+		byte_src[0] = (byte) ((value & 0x000000FF));
+		return byte_src;
+	}
+
+	/**
+	 * byte 数组拼接 使用说明 byte []a= {1,2},b= {3,4}; 那么 byte []c=addBytes(a,b);
+	 * c={1,2,3,4};
+	 * 
+	 * @param data1
+	 * @param data2
+	 * @return data1 与 data2拼接的结果
+	 */
+	public static byte[] addBytes(byte[] data1, byte[] data2) {
+		byte[] data3 = new byte[data1.length + data2.length];
+		System.arraycopy(data1, 0, data3, 0, data1.length);
+		System.arraycopy(data2, 0, data3, data1.length, data2.length);
+		return data3;
+
+	}
+
 	/**
 	 * 本方法的测试示例
 	 * 
@@ -958,28 +972,26 @@ public final class MyTools {
 		System.out.println("时间补全:" + complementTime(time1, sdfm, 1));
 		System.out.println("时间补全:" + complementTime(time2, sdfm, 2));
 		System.out.println("时间补全:" + complementTime(time3, sdfm, 1));
-		String time4=addPlusMonths(time1, 2);
-		System.out.println("增加之前的数据:"+time1+"增加月份之后的数据:"+time4);
-		System.out.println("相差月份:"+diffMonth("201711", "201801"));
-		
-		
+		String time4 = addPlusMonths(time1, 2);
+		System.out.println("增加之前的数据:" + time1 + "增加月份之后的数据:" + time4);
+		System.out.println("相差月份:" + diffMonth("201711", "201801"));
+
 		/*
 		 * 手机号匹配测试
 		 */
-		String phone="15812369741";
-		String phone2="13012369741";
-		String phone3="13312369741";
-		
-		System.out.println("该手机号是:"+matchPhone(phone.substring(0,4)));
-		System.out.println("该手机号是:"+matchPhone(phone2.substring(0,4)));
-		System.out.println("该手机号是:"+matchPhone(phone3.substring(0,4)));
-		
-		
-		int l=2;
-		String string="10101";
-		System.out.println(l+" 十进制转二进制: "+ decToBinary(l) );
-		
-		System.out.println(string+" 二进制转十进制: "+ binaryToDec(string) );
+		String phone = "15812369741";
+		String phone2 = "13012369741";
+		String phone3 = "13312369741";
+
+		System.out.println("该手机号是:" + matchPhone(phone.substring(0, 4)));
+		System.out.println("该手机号是:" + matchPhone(phone2.substring(0, 4)));
+		System.out.println("该手机号是:" + matchPhone(phone3.substring(0, 4)));
+
+		int l = 2;
+		String string = "10101";
+		System.out.println(l + " 十进制转二进制: " + decToBinary(l));
+
+		System.out.println(string + " 二进制转十进制: " + binaryToDec(string));
 
 	}
 

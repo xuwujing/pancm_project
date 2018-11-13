@@ -13,6 +13,7 @@ public class enumFactoryTest {
 	
 	public static void main(String[] args) {
 		Game game=GameS.DNF.playGame();
+		game.play();
 	}
 
 }
