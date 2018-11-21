@@ -33,7 +33,21 @@ public class Test {
 //			test5();
 //			test6();
 			test7();
-		
+			
+			/*
+			 在使用System.getProperty("user.dir")时：
+			如果是在IDE中启动，则获得的路径为D:\xxxx\projectName,包括项目名；
+			
+			如果是以Jar包方式启动，得到该jar包所在的路径。如project.jar在D:\xxxx下，获得的路径就是D:\xxxx
+			
+			但是如果是以war包方式启动获得的是：D:\apache-tomcat-9.0.7\bin
+			
+			所以此方法适合不依赖Tomcat容器（或者内嵌Tomcat如SpringBoot）的项目。
+			 */
+			String path=System.getProperty("user.dir");
+			System.out.println("path:"+path);
+			String os=System.getProperty("os.name").toLowerCase();
+			System.out.println("os:"+os);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
