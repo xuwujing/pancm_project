@@ -63,6 +63,8 @@
 		</layout>
 	</appender>
 	
+	
+	
 	<!-- 自定义定义日志文件可以从这获取 例如 logTest -->
 	<logger name="oneInfo" level="DEBUG" additivity="false">
 	   <appender-ref ref="ONE_INFO" />
@@ -70,6 +72,9 @@
 	<logger name="twoInfo" level="WARN" additivity="true">
 	   <appender-ref ref="TWO_INFO" />
 	</logger>
+	
+	<!-- 设置该包打印日志的级别  -->
+	<logger name="org.apache.kafka" level="WARN"/>
 	
 	<!--日志主级别  -->	
 	<root level="INFO">

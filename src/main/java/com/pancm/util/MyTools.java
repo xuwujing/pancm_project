@@ -756,7 +756,29 @@ public final class MyTools {
 		byte[] decodeStr = base64.decodeBase64(encodeStr);
 		return new String(decodeStr);
 	}
+	
+	
+	/**
+	 * base64解密
+	 * 
+	 * @param encodeStr
+	 * @return
+	 */
+	public static String base64DeStr(String encodeStr) {
+		byte[] decodeStr = Base64.decodeBase64(encodeStr);
+		return new String(decodeStr);
+	}
 
+	/**
+	 * base64解密
+	 * 
+	 * @param encodeStr
+	 * @return
+	 */
+	public static byte[] base64DeByte(String encodeStr) {
+		return Base64.decodeBase64(encodeStr);
+	}
+	
 	/**
 	 * 匹配号段
 	 * 
