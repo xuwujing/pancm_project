@@ -36,9 +36,9 @@ public class Test1 {
 		 * 优点:扩展性高
 		 * 缺点:增加了复杂度
 		 */
-		Game game3=new LOLFactory().playGame(LOL);
-		Game game4=new DNFFactory().playGame(DNF);
-		Game game5=new WOWFactory().playGame(WOW);
+		Game game3=new LOLFactory().playGame();
+		Game game4=new DNFFactory().playGame();
+		Game game5=new WOWFactory().playGame();
 		game3.play();
 		game4.play();
 		game5.play();
@@ -114,26 +114,26 @@ class ComputerFactory{
 }
 
 interface ComputerFactory2{
-	Game playGame(String game);
+	Game playGame();
 }
 
 class LOLFactory implements ComputerFactory2{
 	@Override
-	public Game playGame(String game) {
+	public Game playGame() {
 		return new LOL();
 	}
 }
 
 class DNFFactory implements ComputerFactory2{
 	@Override
-	public Game playGame(String game) {
+	public Game playGame() {
 		return new DNF();
 	}
 }
 
 class WOWFactory implements ComputerFactory2{
 	@Override
-	public Game playGame(String game) {
+	public Game playGame() {
 		return new WOW();
 	}
 }
