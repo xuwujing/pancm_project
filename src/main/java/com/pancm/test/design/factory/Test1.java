@@ -14,7 +14,6 @@ package com.pancm.test.design.factory;
 public class Test1 {
 	private static final String LOL="LOL"; 
 	private static final String DNF="DNF"; 
-	private static final String WOW="WOW"; 
 	/**
 	 * @param args
 	 */
