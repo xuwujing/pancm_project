@@ -69,7 +69,7 @@ public class StreamTest {
 		/*
 		 * 普通的方式过滤
 		 */
-		List<String> list = Arrays.asList("张三", "李四", "王五");
+		List<String> list = Arrays.asList("张三", "李四", "王五", "xuwujing");
 		System.out.println("过滤之前:" + list);
 		List<String> result = new ArrayList<>();
 		for (String str : list) {
@@ -122,8 +122,7 @@ public class StreamTest {
 
 			// 转换成 Collection
 			List<String> list1 = stream2.collect(Collectors.toList());
-			List<String> list2 = stream2.collect(Collectors.toCollection(ArrayList::new));
-
+			List<String> list2 = stream2.collect(Collectors.toCollection(ArrayList::new));			
 			Set set1 = stream2.collect(Collectors.toSet());
 			Stack stack1 = stream2.collect(Collectors.toCollection(Stack::new));
 
@@ -162,19 +161,19 @@ public class StreamTest {
 		 * 转换大写
 		 */
 		List<String> list3 = Arrays.asList("zhangSan", "liSi", "wangWu");
-		System.out.println("转换之前的数据:" + list3);// 转换之前的数据:[zhangSan, liSi,
-												// wangWu]
+		System.out.println("转换之前的数据:" + list3);
 		List<String> list4 = list3.stream().map(String::toUpperCase).collect(Collectors.toList());
-		System.out.println("转换之后的数据:" + list4); // 转换之后的数据:[ZHANGSAN, LISI,
-												// WANGWU]
+		System.out.println("转换之后的数据:" + list4); 
+		// 转换之后的数据:[ZHANGSAN, LISI,WANGWU]
 		
 		/*
 		 * 转换数据类型
 		 */
 		List<String> list31 = Arrays.asList("1", "2", "3");
-		System.out.println("转换之前的数据:" + list31);// 转换之前的数据:[1, 2, 3]
+		System.out.println("转换之前的数据:" + list31);
 		List<Integer> list41 = list31.stream().map(Integer::valueOf).collect(Collectors.toList());
-		System.out.println("转换之后的数据:" + list41); // [1, 2, 3]
+		System.out.println("转换之后的数据:" + list41); 
+		// [1, 2, 3]
 		
 		
 		/*
@@ -196,7 +195,8 @@ public class StreamTest {
 		 */
 		List<Integer> list5 = Arrays.asList(new Integer[] { 1, 2, 3, 4, 5 });
 		List<Integer> list6 = list5.stream().map(n -> n * n).collect(Collectors.toList());
-		System.out.println("平方的数据:" + list6);// 转换之前的数据:[1, 4, 9, 16, 25]
+		System.out.println("平方的数据:" + list6);
+		// [1, 4, 9, 16, 25]
 
 		/*
 		 * flatMap 一对多 得到多个数组里面的数字
@@ -300,7 +300,17 @@ public class StreamTest {
 		Stream.generate(random).limit(5).forEach(System.out::println);
 		System.out.println("生成5正整数的随机数:");
 		IntStream.generate(() -> (int) (System.nanoTime() % 100)).limit(5).forEach(System.out::println);
-
+		System.out.println("生成5个随机数:");
+		seed.ints().limit(5).forEach(System.out::println);
+		
+		/*
+		 并行（parallel）程序
+		parallelStream 是流并行处理程序的代替方法。
+		 */
+		List<String> strings = Arrays.asList("abc", "", "bc", "efg", "abcd","", "jkl");
+		// 获取空字符串的数量
+		long count =  strings.parallelStream().filter(string -> string.isEmpty()).count();
+		System.out.println("空字符串的个数:"+count);
 	}
 
 	/**
