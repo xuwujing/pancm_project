@@ -1,6 +1,5 @@
 package com.pancm.test.jdk8;
 
-import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -12,7 +11,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 
 /**
 * @Title: timeTest
@@ -43,7 +41,7 @@ public class LocalDateTimeTest {
 		   
 		   Java 8日期时间API 使用说明:
 		   
-		   1）提供了javax.time.ZoneId 获取时区。
+		    1）提供了javax.time.ZoneId 获取时区。
 
 			2）提供了LocalDate和LocalTime类。
 			
