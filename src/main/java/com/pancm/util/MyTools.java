@@ -1015,6 +1015,26 @@ public final class MyTools {
 
 		System.out.println(string + " 二进制转十进制: " + binaryToDec(string));
 
+		System.out.println(783 + " 十进制转二进制: " + decToBinary(783));
+		System.out.println(1022 + " 十进制转二进制: " + decToBinary(1022));
+
+		System.out.println(string + " 二进制转十进制: " + binaryToDec(string));
+		System.out.println(string + " 二进制转十进制: " + binaryToDec(string));
+
+		System.out.println("==" + (768 & 815));
+		System.out.println("==" + (768 & 783));
+		System.out.println("==" + (768 | 783));
+		
+		/*
+		 *     原 783   十进制转二进制: 1100001111
+		 *    现 1022 十进制转二进制: 1111111110
+		 *    那么增加的位数是 11110000
+		 * 减少的位数是1  
+		 */
+		System.out.println("增加的位数:"+Integer.toBinaryString(1022-(1022 & 783)));
+		System.out.println("减少的位数:"+Integer.toBinaryString(783-(783 & 1022)));
+		
+		
 	}
 
 }
