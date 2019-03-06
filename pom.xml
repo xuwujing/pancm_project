@@ -294,14 +294,14 @@
 			<artifactId>sqljdbc4</artifactId>
 			<version>4.0</version>
 		</dependency>
-	
-			<!-- Druid 数据连接池依赖 -->
+
+		<!-- Druid 数据连接池依赖 -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
 			<version>1.1.8</version>
 		</dependency>
-		
+
 
 		<!--fastjson 相关jar -->
 		<dependency>
@@ -329,7 +329,11 @@
 		</dependency>
 
 
-
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>21.0</version>
+		</dependency>
 
 		<!-- kafka -->
 		<dependency>
@@ -475,6 +479,26 @@
 			<artifactId>quartz-jobs</artifactId>
 			<version>2.3.0</version>
 		</dependency>
+
+		<!-- elasticsearch 相关jar -->
+
+		<dependency>
+			<groupId>org.elasticsearch.client</groupId>
+			<artifactId>elasticsearch-rest-high-level-client</artifactId>
+			<version>6.6.1</version>
+		</dependency>
+
+
+		<!-- Jest ES的工具包 -->
+
+		<dependency>
+			<groupId>io.searchbox</groupId>
+			<artifactId>jest</artifactId>
+			<version>6.3.1</version>
+		</dependency>
+
+
+
 
 	</dependencies>
 
