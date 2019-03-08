@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.support.replication.ReplicationResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -112,7 +114,29 @@ public class EsTest {
 		request.source(builder);
 
 			
-		client.index(request, RequestOptions.DEFAULT);
+		IndexResponse indexResponse=client.index(request, RequestOptions.DEFAULT);
+		
+		
+		String index1 = indexResponse.getIndex();
+		String type1 = indexResponse.getType();
+		String id1 = indexResponse.getId();
+		long version = indexResponse.getVersion();
+		if (indexResponse.getResult() == DocWriteResponse.Result.CREATED) {
+		    
+		} else if (indexResponse.getResult() == DocWriteResponse.Result.UPDATED) {
+		    
+		}
+		ReplicationResponse.ShardInfo shardInfo = indexResponse.getShardInfo();
+		if (shardInfo.getTotal() != shardInfo.getSuccessful()) {
+		    
+		}
+		if (shardInfo.getFailed() > 0) {
+		    for (ReplicationResponse.ShardInfo.Failure failure :
+		            shardInfo.getFailures()) {
+		        String reason = failure.reason(); 
+		    }
+		}
+		
 		System.out.println("创建成功！");
 	}
 }
