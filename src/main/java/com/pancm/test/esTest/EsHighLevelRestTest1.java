@@ -3,11 +3,19 @@ package com.pancm.test.esTest;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.ActionListener;
+import org.elasticsearch.action.DocWriteRequest;
 import org.elasticsearch.action.DocWriteResponse;
+import org.elasticsearch.action.bulk.BackoffPolicy;
+import org.elasticsearch.action.bulk.BulkItemResponse;
+import org.elasticsearch.action.bulk.BulkProcessor;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequest;
@@ -17,35 +25,45 @@ import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.support.WriteRequest;
 import org.elasticsearch.action.support.replication.ReplicationResponse;
 import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.unit.ByteSizeUnit;
+import org.elasticsearch.common.unit.ByteSizeValue;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.rest.RestStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * @Title: EsTest
- * @Description: Java High Level REST Client Es高级客户端使用教程
- * 
+ * @Title: EsHighLevelRestTest1
+ * @Description: Java High Level REST Client Es高级客户端使用教程一 (基本使用)
  * @since jdk 1.8
  * @Version:1.0.0
  * @author pancm
  * @date 2019年3月5日
  */
-public class EsTest {
+public class EsHighLevelRestTest1 {
 
 	private static String elasticIp = "192.169.0.23";
 	private static int elasticPort = 9200;
 
+	private static Logger logger = LoggerFactory.getLogger(EsHighLevelRestTest1.class);
+	
 	private static RestHighLevelClient client = null;
 
 	public static void main(String[] args) {
-		init();
 		try {
+			init();
 			careatindex();
+			get();
+			exists();
+			update();
+			delete();
 			close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -250,7 +268,7 @@ public class EsTest {
 		upateRequest.upsert(jsonMap);
 		
 		client.update(upateRequest, RequestOptions.DEFAULT);
-		
+		System.out.println("更新成功！");
 		
 	}
 	
@@ -292,12 +310,12 @@ public class EsTest {
 
 		    @Override
 		    public void onFailure(Exception e) {
-		        System.out.println("异常:"+e.getMessage());
+		        System.out.println("删除监听异常:"+e.getMessage());
 		    }
 		};
 		
 		//异步删除
-		 client.deleteAsync(deleteRequest, RequestOptions.DEFAULT, listener);
+//		 client.deleteAsync(deleteRequest, RequestOptions.DEFAULT, listener);
 		
 		ReplicationResponse.ShardInfo shardInfo = deleteResponse.getShardInfo();
 		//如果处理成功碎片的数量少于总碎片的情况,说明还在处理或者处理发生异常 
@@ -312,6 +330,141 @@ public class EsTest {
 		        String reason = failure.reason(); 
 		    }
 		}
+		System.out.println("删除成功!");
+	}
+	
+	
+	/**
+	 *   批量操作示例
+	 * @throws InterruptedException 
+	 */
+	private static void bulk()  throws IOException, InterruptedException {
+		String index = "estest";
+		String type = "estest";
+		
+		BulkRequest request = new BulkRequest(); 
+		//批量新增
+		request.add(new IndexRequest(index, type, "1")  
+		        .source(XContentType.JSON,"field", "foo"));
+		request.add(new IndexRequest("posts", type, "2")  
+		        .source(XContentType.JSON,"field", "bar"));
+		request.add(new IndexRequest("posts", type, "3")  
+		        .source(XContentType.JSON,"field", "baz"));
+		
+		//可以进行修改/删除/新增 操作 
+		request.add(new UpdateRequest("posts", "doc", "2") 
+				.doc(XContentType.JSON,"other", "test"));
+		request.add(new DeleteRequest("posts", "doc", "3")); 
+		request.add(new IndexRequest("posts", "doc", "4")  
+		        .source(XContentType.JSON,"field", "baz"));
+		
+		
+		BulkResponse bulkResponse = client.bulk(request, RequestOptions.DEFAULT);
+			
+		//可以快速检查一个或多个操作是否失败 true是有至少一个失败！
+		if (bulkResponse.hasFailures()) { 
+			System.out.println("有一个操作失败!");
+		}
+		
+		//对处理结果进行遍历操作并根据不同的操作进行处理
+		for (BulkItemResponse bulkItemResponse : bulkResponse) { 
+		    DocWriteResponse itemResponse = bulkItemResponse.getResponse(); 
+		    
+		    //操作失败的进行处理
+		    if (bulkItemResponse.isFailed()) { 
+		        BulkItemResponse.Failure failure = bulkItemResponse.getFailure(); 
+
+		    }
+		    
+		    if (bulkItemResponse.getOpType() == DocWriteRequest.OpType.INDEX
+		            || bulkItemResponse.getOpType() == DocWriteRequest.OpType.CREATE) { 
+		        IndexResponse indexResponse = (IndexResponse) itemResponse;
+
+		    } else if (bulkItemResponse.getOpType() == DocWriteRequest.OpType.UPDATE) { 
+		        UpdateResponse updateResponse = (UpdateResponse) itemResponse;
+
+		    } else if (bulkItemResponse.getOpType() == DocWriteRequest.OpType.DELETE) { 
+		        DeleteResponse deleteResponse = (DeleteResponse) itemResponse;
+		    }
+		}	
+		
+		System.out.println("批量执行成功！");
+		
+		
+		
+		/*
+		 *   批量执行处理器相关示例代码
+		 */
+		
+		
+		//批量处理器的监听器设置
+		
+		BulkProcessor.Listener listener = new BulkProcessor.Listener() {
+			
+			//在执行BulkRequest的每次执行之前调用，这个方法允许知道将要在BulkRequest中执行的操作的数量
+		    @Override
+		    public void beforeBulk(long executionId, BulkRequest request) {
+		        int numberOfActions = request.numberOfActions(); 
+		        logger.debug("Executing bulk [{}] with {} requests",
+		                executionId, numberOfActions);
+		    }
+		    
+		    //在每次执行BulkRequest之后调用，这个方法允许知道BulkResponse是否包含错误
+		    @Override
+		    public void afterBulk(long executionId, BulkRequest request,
+		            BulkResponse response) {
+		        if (response.hasFailures()) { 
+		            logger.warn("Bulk [{}] executed with failures", executionId);
+		        } else {
+		            logger.debug("Bulk [{}] completed in {} milliseconds",
+		                    executionId, response.getTook().getMillis());
+		        }
+		    }
+		    
+		    //如果BulkRequest失败，则调用该方法，该方法允许知道失败
+		    @Override
+		    public void afterBulk(long executionId, BulkRequest request, Throwable failure) {
+		        logger.error("Failed to execute bulk", failure); 
+		    }
+		};
+		
+		BiConsumer<BulkRequest, ActionListener<BulkResponse>> bulkConsumer =
+		        (request2, bulkListener) -> client.bulkAsync(request, RequestOptions.DEFAULT, bulkListener);
+		//创建一个批量执行的处理器
+		BulkProcessor bulkProcessor = BulkProcessor.builder(bulkConsumer, listener).build(); 
+		BulkProcessor.Builder builder = BulkProcessor.builder(bulkConsumer, listener);
+		//根据当前添加的操作数量设置刷新新批量请求的时间(默认为1000，使用-1禁用它)
+		builder.setBulkActions(500); 
+		//根据当前添加的操作大小设置刷新新批量请求的时间(默认为5Mb，使用-1禁用)
+		builder.setBulkSize(new ByteSizeValue(1L, ByteSizeUnit.MB)); 
+		//设置允许执行的并发请求数量(默认为1，使用0只允许执行单个请求)
+		builder.setConcurrentRequests(0); 
+		//设置刷新间隔如果间隔通过，则刷新任何挂起的BulkRequest(默认为未设置)
+		builder.setFlushInterval(TimeValue.timeValueSeconds(10L)); 
+		//设置一个常量后退策略，该策略最初等待1秒并重试最多3次。
+		builder.setBackoffPolicy(BackoffPolicy
+		        .constantBackoff(TimeValue.timeValueSeconds(1L), 3));
+		
+		
+		IndexRequest one = new IndexRequest("posts", "doc", "1").
+		        source(XContentType.JSON, "title",
+		                "In which order are my Elasticsearch queries executed?");
+		IndexRequest two = new IndexRequest("posts", "doc", "2")
+		        .source(XContentType.JSON, "title",
+		                "Current status and upcoming changes in Elasticsearch");
+		IndexRequest three = new IndexRequest("posts", "doc", "3")
+		        .source(XContentType.JSON, "title",
+		                "The Future of Federated Search in Elasticsearch");
+		bulkProcessor.add(one);
+		bulkProcessor.add(two);
+		bulkProcessor.add(three);
+		
+		
+		//如果所有大容量请求都已完成，则该方法返回true;如果在所有大容量请求完成之前的等待时间已经过去，则返回false
+		boolean terminated = bulkProcessor.awaitClose(30L, TimeUnit.SECONDS); 
+		
+		System.out.println("请求的响应结果:"+terminated);
+		
 		
 	}
 	
