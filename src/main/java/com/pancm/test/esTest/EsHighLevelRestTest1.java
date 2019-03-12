@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @Title: EsHighLevelRestTest1
  * @Description: Java High Level REST Client Es高级客户端使用教程一 (基本使用)
- 官方文档地址: https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/java-rest-high.html
+ 	官方文档地址: https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/java-rest-high.html
  * @since jdk 1.8
  * @Version:1.0.0
  * @author pancm
