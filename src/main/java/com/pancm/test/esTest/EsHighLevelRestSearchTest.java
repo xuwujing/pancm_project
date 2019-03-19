@@ -331,14 +331,10 @@ public class EsHighLevelRestSearchTest {
 		    }
 		}
 		
-		
-		
-		
-		
-		
-		
-		
-		
 	}
+	
+	
+	
+	
 
 }
