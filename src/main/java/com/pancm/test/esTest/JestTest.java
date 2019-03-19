@@ -34,7 +34,7 @@ public class JestTest {
 	    private static JestClient jestClient;  
 	    private static String indexName = "userindex";  
 	    private static String typeName = "user";  
-	    private static String elasticIps="http://192.169.0.23:9200";
+	    private static String elasticIps="http://192.169.0.23:9200,http://192.169.0.24:9200";
 		
 	    
 	    public static void main(String[] args) throws Exception {

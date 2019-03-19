@@ -1,6 +1,7 @@
 package com.pancm.test.esTest;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -11,6 +12,7 @@ import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.DocWriteRequest;
 import org.elasticsearch.action.DocWriteResponse;
+import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.bulk.BackoffPolicy;
@@ -80,7 +82,8 @@ public class EsHighLevelRestTest1 {
 	 * 初始化服务
 	 */
 	private static void init() {
-		client = new RestHighLevelClient(RestClient.builder(new HttpHost(elasticIp, elasticPort, "http")));
+		
+		client = new RestHighLevelClient(RestClient.builder(new HttpHost(elasticIp, elasticPort)));
 
 	}
 
@@ -188,11 +191,25 @@ public class EsHighLevelRestTest1 {
 		
 		
 		// mapping 的值
+//		Map<String, Object> mapping = new HashMap<>();
+//
+//		mapping.put("id", "long");
+//		mapping.put("name", "keyword");
+		
+		
+		Map<String, Object> jsonMap2 = new HashMap<>();
+		Map<String, Object> message = new HashMap<>();
+		//设置类型 
+		message.put("type", "text");
+		Map<String, Object> properties = new HashMap<>();
+		//设置字段message信息
+		properties.put("message", message);
 		Map<String, Object> mapping = new HashMap<>();
-
-		mapping.put("id", "long");
-		mapping.put("name", "keyword");
-
+		mapping.put("properties", properties);
+		jsonMap2.put(type2, mapping);
+		
+		
+		
 		// 开始创建库
 		CreateIndexRequest request2 = new CreateIndexRequest(index2);
 		try {
@@ -204,10 +221,11 @@ public class EsHighLevelRestTest1 {
 //				    .put("index.number_of_replicas", 1));
 			
 			
+			//设置mapping参数
+			request2.mapping(type2, jsonMap2);
 			
-			
-			request2.mapping(type2, mapping);
-			
+			//设置别名
+			request2.alias(new Alias("user_alias"));
 			
 			CreateIndexResponse createIndexResponse = client.indices().create(request2, RequestOptions.DEFAULT);
 			boolean falg = createIndexResponse.isAcknowledged();
