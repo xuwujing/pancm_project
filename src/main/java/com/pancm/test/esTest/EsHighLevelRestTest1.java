@@ -1,7 +1,6 @@
 package com.pancm.test.esTest;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -15,6 +14,7 @@ import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
+import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
 import org.elasticsearch.action.bulk.BackoffPolicy;
 import org.elasticsearch.action.bulk.BulkItemResponse;
 import org.elasticsearch.action.bulk.BulkProcessor;
@@ -33,7 +33,6 @@ import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.unit.ByteSizeUnit;
 import org.elasticsearch.common.unit.ByteSizeValue;
 import org.elasticsearch.common.unit.TimeValue;
@@ -209,6 +208,16 @@ public class EsHighLevelRestTest1 {
 		jsonMap2.put(type2, mapping);
 		
 		
+		GetIndexRequest getRequest2 = new GetIndexRequest();
+		getRequest2.indices(index);
+		getRequest2.local(false); 
+		getRequest2.humanReadable(true); 
+		boolean exists2 = client.indices().exists(getRequest2, RequestOptions.DEFAULT);
+		//如果存在就不创建了
+		if(exists2) {
+			System.out.println(type2+"索引库已经存在!");
+			return;
+		}
 		
 		// 开始创建库
 		CreateIndexRequest request2 = new CreateIndexRequest(index2);
@@ -226,6 +235,7 @@ public class EsHighLevelRestTest1 {
 			
 			//设置别名
 			request2.alias(new Alias("user_alias"));
+			
 			
 			CreateIndexResponse createIndexResponse = client.indices().create(request2, RequestOptions.DEFAULT);
 			boolean falg = createIndexResponse.isAcknowledged();
@@ -292,6 +302,7 @@ public class EsHighLevelRestTest1 {
 		// 创建查询请求
 		GetRequest getRequest = new GetRequest(index, type, id);
 
+		
 		boolean exists = client.exists(getRequest, RequestOptions.DEFAULT);
 
 		ActionListener<Boolean> listener = new ActionListener<Boolean>() {
@@ -308,7 +319,7 @@ public class EsHighLevelRestTest1 {
 		// 进行异步监听
 //		client.existsAsync(getRequest, RequestOptions.DEFAULT, listener);
 
-		System.out.println("是否存在：" + exists);
+		System.out.println("数据是否存在：" + exists);
 	}
 
 	/**
