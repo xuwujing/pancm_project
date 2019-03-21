@@ -9,26 +9,27 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 
 /**
- * 
-* @Title: KafkaProducerUtil
-* @Description:
-* kafka消息生产者 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年4月2日
+ * The type Kafka producer util.
+ *
+ * @author pancm
+ * @Title: KafkaProducerUtil
+ * @Description: kafka消息生产者
+ * @Version:1.0.0
+ * @date 2018年4月2日
  */
 public  final class KafkaProducerUtil {
-	
 
-	/**
-	 * 向kafka发送单条消息
-	 * @param msg 发送的消息
-	 * @param url 发送的地址
-	 * @param topicName 消息名称
-	 * @return
-	 * @throws Exception 
-	 */
-	public static boolean sendMessage(String msg,String url,String topicName) {
+
+    /**
+     * 向kafka发送单条消息
+     *
+     * @param msg       发送的消息
+     * @param url       发送的地址
+     * @param topicName 消息名称
+     * @return boolean
+     * @throws Exception
+     */
+    public static boolean sendMessage(String msg,String url,String topicName) {
 		KafkaProducer<String, String> producer=null;
 		boolean falg=false;
 		try{
@@ -45,17 +46,18 @@ public  final class KafkaProducerUtil {
 		}
 		return falg;
 	}
-	
 
-	/**
-	 * 向kafka发送批量消息
-	 * @param listMsg 发送的消息
-	 * @param url 发送的地址
-	 * @param topicName 消息名称
-	 * @return
-	 * @throws Exception 
-	 */
-	public static boolean sendMessage(List<String> listMsg,String url,String topicName) {
+
+    /**
+     * 向kafka发送批量消息
+     *
+     * @param listMsg   发送的消息
+     * @param url       发送的地址
+     * @param topicName 消息名称
+     * @return boolean
+     * @throws Exception
+     */
+    public static boolean sendMessage(List<String> listMsg,String url,String topicName) {
 		KafkaProducer<String, String> producer=null;
 		boolean falg=false;
 		try{

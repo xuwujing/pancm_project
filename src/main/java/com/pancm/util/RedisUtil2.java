@@ -6,13 +6,13 @@ import redis.clients.jedis.JedisPoolConfig;
 
 
 /**
- * 
-* @Title: RedisUtil
-* @Description:
-* RedisUtil工具类 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年6月6日
+ * The type Redis util 2.
+ *
+ * @author pancm
+ * @Title: RedisUtil
+ * @Description: RedisUtil工具类
+ * @Version:1.0.0
+ * @date 2018年6月6日
  */
 public final class RedisUtil2 {
     
@@ -56,10 +56,11 @@ public final class RedisUtil2 {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * 获取Jedis实例
-     * @return
+     *
+     * @return jedis
      */
     public synchronized static Jedis getJedis() {
         try {
@@ -74,9 +75,10 @@ public final class RedisUtil2 {
             return null;
         }
     }
-    
+
     /**
      * 释放jedis资源
+     *
      * @param jedis
      */
     public static void returnResource() {

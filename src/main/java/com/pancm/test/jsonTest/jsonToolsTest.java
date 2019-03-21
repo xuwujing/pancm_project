@@ -4,16 +4,21 @@ import com.alibaba.fastjson.JSONObject;
 import com.pancm.util.JsonTools;
 
 /**
- * 
-* Title: jsonToolsTest
-* Description: fastjson工具包测试
-* Version:1.0.0  
-* @author panchengming
-* @date 2017年9月10日
+ * Title: jsonToolsTest
+ * Description: fastjson工具包测试
+ * Version:1.0.0
+ *
+ * @author panchengming
+ * @date 2017年9月10日
  */
 public class jsonToolsTest {
-	
-	public static void main(String[] args) {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 	   JSONObject json=new JSONObject();
 	   json.put("id", 1);
 	   json.put("name", "张三");

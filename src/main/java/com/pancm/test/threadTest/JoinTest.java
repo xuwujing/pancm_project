@@ -3,16 +3,22 @@ package com.pancm.test.threadTest;
 import java.util.Random;
 
 /**
-* @Title: JoinTest
-* @Description:
-* join方法测试 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年5月22日
-*/
+ * The type Join test.
+ *
+ * @author pancm
+ * @Title: JoinTest
+ * @Description: join方法测试
+ * @Version:1.0.0
+ * @date 2018年5月22日
+ */
 public class JoinTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		 System.out.println(Thread.currentThread().getName()+ "主线程开始运行!");  
 		 Test2 t1=new Test2("A");  
 		 Test2 t2=new Test2("B");  
@@ -33,8 +39,16 @@ public class JoinTest {
 
 }
 
-class Test2 extends Thread{  
-    public Test2(String name) {  
+/**
+ * The type Test 2.
+ */
+class Test2 extends Thread{
+    /**
+     * Instantiates a new Test 2.
+     *
+     * @param name the name
+     */
+    public Test2(String name) {
         super(name);  
     }  
     public void run() {  

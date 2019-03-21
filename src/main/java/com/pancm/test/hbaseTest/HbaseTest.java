@@ -4,17 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
+
 /**
- * 
-* Title: hbaseTest
-* Description: HBase 相关测试
-* Version:1.0.0  
-* @author pancm
-* @date 2017年11月23日
+ * Title: hbaseTest
+ * Description: HBase 相关测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年11月23日
  */
 public class HbaseTest {
-	
-	public static void main(String[] args) {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		test();
 	}
 
@@ -48,21 +54,18 @@ public class HbaseTest {
 		HBaseUtil.select(tableName1, "1002"); //根据表名和行健查询
 		
 	}
-	
 
-  
-	
-	
-	
-	/**
-    * 批量测试方法
-    * @param tableName  表名
-    * @param family  列族
-    * @param qualifier  列
-    * @param value  值
-    * @param k		           次数
-    */
-   public static void insterTest(String tableName,String family,String qualifier,String value, int k){
+
+    /**
+     * 批量测试方法
+     *
+     * @param tableName 表名
+     * @param family    列族
+     * @param qualifier 列
+     * @param value     值
+     * @param k         次数
+     */
+    public static void insterTest(String tableName,String family,String qualifier,String value, int k){
 	   List<JSONObject> list =new ArrayList<>();
 		for(int i=1;i<=k;i++){
 			JSONObject json =new JSONObject();

@@ -9,13 +9,13 @@ import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Tuple;
 
 /**
- * 
-* Title: TestBolt
-* Description:
-* 用于处理消息
-* Version:1.0.0  
-* @author pancm
-* @date 2018年3月6日
+ * Title: TestBolt
+ * Description:
+ * 用于处理消息
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年3月6日
  */
 public class TestBolt extends BaseRichBolt{
 

@@ -3,15 +3,22 @@ package com.pancm.test.calculate;
 import java.math.BigInteger;
 
 /**
+ * The type Calculate test.
+ *
+ * @author pancm
  * @Title: CalculateTest
  * @Description: 运算符相关类
  * @Version:1.0.0
- * @author pancm
  * @date 2018年10月18日
  */
 public class CalculateTest {
-	
-	public static void main(String[] args) {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		//自增运算符测试
 		test1();
 		//运算符优先级测试
@@ -188,11 +195,14 @@ public class CalculateTest {
 		//二进制转十进制
 		System.out.println("--" + new BigInteger(String.valueOf(j),2).toString());
 	}
-	
-	/**
-	 * 十进制转二进制
-	 */
-	public static String decimal2Binary(int de) {
+
+    /**
+     * 十进制转二进制
+     *
+     * @param de the de
+     * @return the string
+     */
+    public static String decimal2Binary(int de) {
 		String numstr = "";
 		while (de > 0) {
 			int res = de % 2; // 除2 取余数作为二进制数
@@ -202,12 +212,13 @@ public class CalculateTest {
 		return numstr;
 	}
 
-	/**
-	 * 将二进制转换为10进制
-	 * @param bi ：待转换的二进制
-	 * @return
-	 */
-	public static Integer biannary2Decimal(int bi) {
+    /**
+     * 将二进制转换为10进制
+     *
+     * @param bi ：待转换的二进制
+     * @return integer
+     */
+    public static Integer biannary2Decimal(int bi) {
 		String binStr = bi + "";
 		Integer sum = 0;
 		int len = binStr.length();

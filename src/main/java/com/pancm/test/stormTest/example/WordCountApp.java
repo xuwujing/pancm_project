@@ -10,18 +10,25 @@ import org.apache.storm.generated.StormTopology;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 
- 
 
 /**
- * 
-* Title: WordCountApp
-* Description: 测试storm本地模式 统计words单次个数
-* 源代码地址:http://www.tianshouzhi.com/api/tutorials/storm/54
-* Version:1.0.0  
-* @author pancm
-* @date 2017年12月28日
+ * Title: WordCountApp
+ * Description: 测试storm本地模式 统计words单次个数
+ * 源代码地址:http://www.tianshouzhi.com/api/tutorials/storm/54
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年12月28日
  */
 public class WordCountApp {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws InterruptedException     the interrupted exception
+     * @throws AlreadyAliveException    the already alive exception
+     * @throws InvalidTopologyException the invalid topology exception
+     */
     public static void main(String[] args) throws InterruptedException, AlreadyAliveException, InvalidTopologyException {
     	//定义拓扑
         TopologyBuilder builder = new TopologyBuilder();

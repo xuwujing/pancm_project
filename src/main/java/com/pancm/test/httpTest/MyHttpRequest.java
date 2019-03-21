@@ -11,24 +11,23 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
+ * The type My http request.
+ *
  * @author xuwujing
- * @Data 2017-5-12 上午11:57:52
- * @Description  http请求工具类
+ * @Data 2017 -5-12 上午11:57:52
+ * @Description http请求工具类
  */
 public class MyHttpRequest {
-   
-	/**
+
+    /**
      * 向指定URL发送GET方法的请求
-     * 
-     * @param url
-     *            发送请求的URL
-     * @param param
-     *            请求Map参数，请求参数应该是 {"name1":"value1","name2":"value2"}的形式。
-     * @param charset         
-     * 			   发送和接收的格式
+     *
+     * @param url     发送请求的URL
+     * @param map     the map
+     * @param charset 发送和接收的格式
      * @return URL 所代表远程资源的响应结果
      */
-	@SuppressWarnings("rawtypes")
+    @SuppressWarnings("rawtypes")
 	public static String sendGet(String url, Map<String,Object> map,String charset){
 		  StringBuffer sb=new StringBuffer();
 		  //构建请求参数
@@ -44,20 +43,17 @@ public class MyHttpRequest {
 		  }
 	   return  sendGet(url,sb.toString(), charset);
 	}
-	
-	
-	/**
+
+
+    /**
      * 向指定URL发送POST方法的请求
-     * 
-     * @param url
-     *            发送请求的URL
-     * @param param
-     *            请求Map参数，请求参数应该是 {"name1":"value1","name2":"value2"}的形式。
-     * @param charset         
-     * 			   发送和接收的格式
+     *
+     * @param url     发送请求的URL
+     * @param map     the map
+     * @param charset 发送和接收的格式
      * @return URL 所代表远程资源的响应结果
      */
-	public static String sendPost(String url, Map<String,Object> map,String charset){
+    public static String sendPost(String url, Map<String,Object> map,String charset){
 		  StringBuffer sb=new StringBuffer();
 		  //构建请求参数
 		  if(map!=null&&map.size()>0){
@@ -70,17 +66,14 @@ public class MyHttpRequest {
 		  }
 	   return  sendPost(url,sb.toString(),charset);
 	}
-	
-	
-	/**
+
+
+    /**
      * 向指定URL发送GET方法的请求
-     * 
-     * @param url
-     *            发送请求的URL
-     * @param param
-     *            请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
-     * @param charset         
-     * 			   发送和接收的格式
+     *
+     * @param url     发送请求的URL
+     * @param param   请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
+     * @param charset 发送和接收的格式
      * @return URL 所代表远程资源的响应结果
      */
     public static String sendGet(String url, String param,String charset) {
@@ -127,14 +120,11 @@ public class MyHttpRequest {
 
     /**
      * 向指定 URL 发送POST方法的请求
-     * 
-     * @param url
-     *            发送请求的 URL
-     * @param param
-     *            请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
-     * @param charset         
-     * 			   发送和接收的格式       
-     * @return 所代表远程资源的响应结果
+     *
+     * @param url     发送请求的 URL
+     * @param param   请求参数，请求参数应该是 name1=value1&name2=value2 的形式。
+     * @param charset 发送和接收的格式
+     * @return 所代表远程资源的响应结果 string
      */
     public static String sendPost(String url, String param,String charset) {
         PrintWriter out = null;
@@ -189,8 +179,13 @@ public class MyHttpRequest {
             }
         }
         return result;
-    }  
-    
+    }
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
 		String getUrl="http://int.dpool.sina.com.cn/iplookup/iplookup.php";
 		String postUrl="http://gc.ditu.aliyun.com/geocoding";

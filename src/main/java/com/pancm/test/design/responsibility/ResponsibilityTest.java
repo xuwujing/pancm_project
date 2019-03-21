@@ -1,18 +1,22 @@
 package com.pancm.test.design.responsibility;
 
 /**
- * @Title: ResponsibilityTest
- * @Description: 责任链模式
-  	顾名思义，责任链模式（Chain of Responsibility Pattern）为请求创建了一个接收者对象的链。
-  	这种模式给予请求的类型，对请求的发送者和接收者进行解耦。这种类型的设计模式属于行为型模式。
-	在这种模式中，通常每个接收者都包含对另一个接收者的引用。如果一个对象不能处理该请求，那么它会把相同的请求传给下一个接收者，依此类推。
- * @Version:1.0.0
+ * The type Responsibility test.
+ *
  * @author pancm
+ * @Title: ResponsibilityTest
+ * @Description: 责任链模式 顾名思义，责任链模式（Chain of Responsibility Pattern）为请求创建了一个接收者对象的链。这种模式给予请求的类型，对请求的发送者和接收者进行解耦。这种类型的设计模式属于行为型模式。在这种模式中，通常每个接收者都包含对另一个接收者的引用。如果一个对象不能处理该请求，那么它会把相同的请求传给下一个接收者，依此类推。
+ * @Version:1.0.0
  * @date 2018年8月8日
  */
 public class ResponsibilityTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		
 		/*
 		 * 最基本的使用
@@ -55,25 +59,40 @@ public class ResponsibilityTest {
 
 }
 
+/**
+ * The type Handler.
+ */
 // 定义一个抽象类
 abstract class Handler {
-	protected Handler successor;
+    /**
+     * The Successor.
+     */
+    protected Handler successor;
 
-	/** * 示意处理请求的方法，虽然这个示意方法是没有传入参数的 但实际是可以传入参数的，根据具体需要来选择是否传递参数 */
-	public abstract void handleRequest();
+    /**
+     * 示意处理请求的方法，虽然这个示意方法是没有传入参数的 但实际是可以传入参数的，根据具体需要来选择是否传递参数
+     */
+    public abstract void handleRequest();
 
-	/** * 取值方法 */
-	public Handler getSuccessor() {
+    /**
+     * 取值方法  @return the successor
+     */
+    public Handler getSuccessor() {
 		return successor;
 	}
 
-	/** * 赋值方法，设置后继的责任对象 */
-	public void setSuccessor(Handler successor) {
+    /**
+     * 赋值方法，设置后继的责任对象  @param successor the successor
+     */
+    public void setSuccessor(Handler successor) {
 		this.successor = successor;
 	}
 
 }
 
+/**
+ * The type Concrete handler.
+ */
 // 具体的业务
 class ConcreteHandler extends Handler {
 	@Override
@@ -89,26 +108,57 @@ class ConcreteHandler extends Handler {
 }
 
 
-//定义一个抽象的领导 
+/**
+ * The type Learder.
+ */
+//定义一个抽象的领导
 abstract class Learder{
-	protected Learder learder;
-	
-	protected void setLearder(Learder learder){
+    /**
+     * The Learder.
+     */
+    protected Learder learder;
+
+    /**
+     * Set learder.
+     *
+     * @param learder the learder
+     */
+    protected void setLearder(Learder learder){
 		this.learder=learder;
 	}
-	
-	protected Learder getLearder(){
+
+    /**
+     * Get learder learder.
+     *
+     * @return the learder
+     */
+    protected Learder getLearder(){
 		return learder;
 	}
-	
-	abstract void handler(int  level);
+
+    /**
+     * Handler.
+     *
+     * @param level the level
+     */
+    abstract void handler(int  level);
 }
 
+/**
+ * The type Supervisor.
+ */
 //主管
 class Supervisor extends Learder{
 	 private String name;
 	 private String something;
-	 public Supervisor(String name,String something) {
+
+    /**
+     * Instantiates a new Supervisor.
+     *
+     * @param name      the name
+     * @param something the something
+     */
+    public Supervisor(String name,String something) {
 		this.name=name;
 		this.something=something;
 	}
@@ -125,11 +175,21 @@ class Supervisor extends Learder{
 	}
 }
 
+/**
+ * The type Branch manager.
+ */
 //部门经理
 class BranchManager extends Learder{
 	 private String name;
 	 private String something;
-	 public BranchManager(String name,String something) {
+
+    /**
+     * Instantiates a new Branch manager.
+     *
+     * @param name      the name
+     * @param something the something
+     */
+    public BranchManager(String name,String something) {
 		this.name=name;
 		this.something=something;
 	}
@@ -152,11 +212,21 @@ class BranchManager extends Learder{
 	}
 }
 
+/**
+ * The type General manager.
+ */
 //总经理
 class GeneralManager extends Learder{
 	 private String name;
 	 private String something;
-	 public GeneralManager(String name,String something) {
+
+    /**
+     * Instantiates a new General manager.
+     *
+     * @param name      the name
+     * @param something the something
+     */
+    public GeneralManager(String name,String something) {
 		this.name=name;
 		this.something=something;
 	}

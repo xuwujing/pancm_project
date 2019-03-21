@@ -33,11 +33,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * 
+ * The type My tools.
+ *
+ * @author pancm
  * @Title: MyTools
  * @Description:常用工具类
  * @Version:1.0.1
- * @author pancm
  * @date 2017年9月26日
  */
 public final class MyTools {
@@ -50,130 +51,138 @@ public final class MyTools {
 	/** 检查是否为整型 */
 	private static Pattern p = Pattern.compile("^\\d+$");
 
-	/**
-	 * 判断String类型的数据是否为空 null,""," " 为true "A"为false
-	 * 
-	 * @return boolean
-	 */
-	public static boolean isEmpty(String str) {
+    /**
+     * 判断String类型的数据是否为空 null,""," " 为true "A"为false
+     *
+     * @param str the str
+     * @return boolean boolean
+     */
+    public static boolean isEmpty(String str) {
 		return (null == str || str.trim().length() == 0);
 	}
 
-	/**
-	 * 判断String类型的数据是否为空 null,"", " " 为false "A", 为true
-	 * 
-	 * @return boolean
-	 */
-	public static boolean isNotEmpty(String str) {
+    /**
+     * 判断String类型的数据是否为空 null,"", " " 为false "A", 为true
+     *
+     * @param str the str
+     * @return boolean boolean
+     */
+    public static boolean isNotEmpty(String str) {
 		return !isEmpty(str);
 	}
 
-	/**
-	 * 判断list类型的数据是否为空 null,[] 为 true
-	 * 
-	 * @return boolean
-	 */
-	public static boolean isEmpty(List<?> list) {
+    /**
+     * 判断list类型的数据是否为空 null,[] 为 true
+     *
+     * @param list the list
+     * @return boolean boolean
+     */
+    public static boolean isEmpty(List<?> list) {
 		return (null == list || list.size() == 0);
 	}
 
-	/**
-	 * 判断list类型的数据是否为空 null,[] 为 false
-	 * 
-	 * @return boolean
-	 */
-	public static boolean isNotEmpty(List<?> list) {
+    /**
+     * 判断list类型的数据是否为空 null,[] 为 false
+     *
+     * @param list the list
+     * @return boolean boolean
+     */
+    public static boolean isNotEmpty(List<?> list) {
 		return !isEmpty(list);
 	}
 
-	/**
-	 * 判断Map类型的数据是否为空 null,[] 为true
-	 * 
-	 * @return boolean
-	 */
-	public static boolean isEmpty(Map<?, ?> map) {
+    /**
+     * 判断Map类型的数据是否为空 null,[] 为true
+     *
+     * @param map the map
+     * @return boolean boolean
+     */
+    public static boolean isEmpty(Map<?, ?> map) {
 		return (null == map || map.size() == 0);
 	}
 
-	/**
-	 * 判断map类型的数据是否为空 null,[] 为 false
-	 * 
-	 * @return boolean
-	 */
-	public static boolean isNotEmpty(Map<?, ?> map) {
+    /**
+     * 判断map类型的数据是否为空 null,[] 为 false
+     *
+     * @param map the map
+     * @return boolean boolean
+     */
+    public static boolean isNotEmpty(Map<?, ?> map) {
 		return !isEmpty(map);
 	}
 
-	/**
-	 * 判断JSONObject类型的数据是否为空 null,[] 为true
-	 * 
-	 * @return boolean
-	 */
-	public static boolean isEmpty(JSONObject json) {
+    /**
+     * 判断JSONObject类型的数据是否为空 null,[] 为true
+     *
+     * @param json the json
+     * @return boolean boolean
+     */
+    public static boolean isEmpty(JSONObject json) {
 		return (null == json || json.size() == 0);
 	}
 
-	/**
-	 * 判断json类型的数据是否为空 null,[] 为 false
-	 * 
-	 * @return boolean
-	 */
-	public static boolean isNotEmpty(JSONObject json) {
+    /**
+     * 判断json类型的数据是否为空 null,[] 为 false
+     *
+     * @param json the json
+     * @return boolean boolean
+     */
+    public static boolean isNotEmpty(JSONObject json) {
 		return !isEmpty(json);
 	}
 
-	/**
-	 * 字符串反转 如:入参为abc，出参则为cba
-	 * 
-	 * @param str
-	 * @return
-	 */
-	public static String reverse(String str) {
+    /**
+     * 字符串反转 如:入参为abc，出参则为cba
+     *
+     * @param str the str
+     * @return string
+     */
+    public static String reverse(String str) {
 		if (isEmpty(str)) {
 			return str;
 		}
 		return reverse(str.substring(1)) + str.charAt(0);
 	}
 
-	/**
-	 * 获取当前long类型的的时间
-	 * 
-	 * @return long
-	 */
-	public static long getNowLongTime() {
+    /**
+     * 获取当前long类型的的时间
+     *
+     * @return long now long time
+     */
+    public static long getNowLongTime() {
 		return System.currentTimeMillis();
 	}
 
-	/**
-	 * long类型的时间转换成 yyyyMMddHHmmss String类型的时间
-	 * 
-	 * @param lo long类型的时间
-	 * @return
-	 */
-	public static String longTime2StringTime(long lo) {
+    /**
+     * long类型的时间转换成 yyyyMMddHHmmss String类型的时间
+     *
+     * @param lo long类型的时间
+     * @return string
+     */
+    public static String longTime2StringTime(long lo) {
 		return longTime2StringTime(lo, sd);
 	}
 
-	/**
-	 * long类型的时间转换成自定义时间格式
-	 * 
-	 * @param lo     long类型的时间
-	 * @param format 时间格式
-	 * @return String
-	 */
-	public static String longTime2StringTime(long lo, String format) {
+    /**
+     * long类型的时间转换成自定义时间格式
+     *
+     * @param lo     long类型的时间
+     * @param format 时间格式
+     * @return String string
+     */
+    public static String longTime2StringTime(long lo, String format) {
 		return new SimpleDateFormat(format).format(lo);
 	}
 
-	/**
-	 * 获取设置的时间
-	 * 
-	 * @param hour
-	 * @param minute
-	 * @param second
-	 * @return
-	 */
-	@SuppressWarnings("static-access")
+    /**
+     * 获取设置的时间
+     *
+     * @param hour   the hour
+     * @param minute the minute
+     * @param second the second
+     * @return set time
+     */
+    @SuppressWarnings("static-access")
 	public static Date getSetTime(int hour, int minute, int second) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(calendar.HOUR_OF_DAY, hour); // 控制时
@@ -182,14 +191,15 @@ public final class MyTools {
 		return calendar.getTime();
 	}
 
-	/**
-	 * String类型的时间转换成 long
-	 * 
-	 * @param lo
-	 * @return String
-	 * @throws ParseException
-	 */
-	public static long stringTime2LongTime(String time, String format) throws ParseException {
+    /**
+     * String类型的时间转换成 long
+     *
+     * @param time   the time
+     * @param format the format
+     * @return String long
+     * @throws ParseException the parse exception
+     */
+    public static long stringTime2LongTime(String time, String format) throws ParseException {
 		if (isEmpty(format)) {
 			format = sdf;
 		}
@@ -201,42 +211,42 @@ public final class MyTools {
 		return date.getTime();
 	}
 
-	/**
-	 * 格式化时间
-	 * 
-	 * @param format1 之前的 时间格式
-	 * @param format2 之后的 时间格式
-	 * @param time    时间
-	 * @return String
-	 * @throws ParseException
-	 */
-	public static String formatTime(String format1, String format2, String time) throws ParseException {
+    /**
+     * 格式化时间
+     *
+     * @param format1 之前的 时间格式
+     * @param format2 之后的 时间格式
+     * @param time    时间
+     * @return String string
+     * @throws ParseException the parse exception
+     */
+    public static String formatTime(String format1, String format2, String time) throws ParseException {
 		SimpleDateFormat d1 = new SimpleDateFormat(format1);
 		SimpleDateFormat d2 = new SimpleDateFormat(format2);
 		time = d2.format(d1.parse(time));
 		return time;
 	}
 
-	/**
-	 * 时间补全 例如将2018-04-04补全为2018-04-04 00:00:00.000
-	 * 
-	 * @param time 补全的时间
-	 * @return
-	 */
-	public static String complementTime(String time) {
+    /**
+     * 时间补全 例如将2018-04-04补全为2018-04-04 00:00:00.000
+     *
+     * @param time 补全的时间
+     * @return string
+     */
+    public static String complementTime(String time) {
 		return complementTime(time, sdfm, 1);
 
 	}
 
-	/**
-	 * 时间补全 例如将2018-04-04补全为2018-04-04 00:00:00.000
-	 * 
-	 * @param time   补全的时间
-	 * @param format 补全的格式
-	 * @param type   类型 1:起始;2:终止
-	 * @return
-	 */
-	public static String complementTime(String time, String format, int type) {
+    /**
+     * 时间补全 例如将2018-04-04补全为2018-04-04 00:00:00.000
+     *
+     * @param time   补全的时间
+     * @param format 补全的格式
+     * @param type   类型 1:起始;2:终止
+     * @return string
+     */
+    public static String complementTime(String time, String format, int type) {
 		if (isEmpty(time) || isEmpty(format)) {
 			return null;
 		}
@@ -270,56 +280,56 @@ public final class MyTools {
 
 	}
 
-	/**
-	 * 获取当前String类型的的时间 使用默认格式 yyyy-MM-dd HH:mm:ss
-	 * 
-	 * @return String
-	 */
-	public static String getNowTime() {
+    /**
+     * 获取当前String类型的的时间 使用默认格式 yyyy-MM-dd HH:mm:ss
+     *
+     * @return String now time
+     */
+    public static String getNowTime() {
 		return getNowTime(sdf);
 	}
 
-	/**
-	 * 获取当前String类型的的时间(自定义格式)
-	 * 
-	 * @param format 时间格式
-	 * @return String
-	 */
-	public static String getNowTime(String format) {
+    /**
+     * 获取当前String类型的的时间(自定义格式)
+     *
+     * @param format 时间格式
+     * @return String now time
+     */
+    public static String getNowTime(String format) {
 		return new SimpleDateFormat(format).format(new Date());
 	}
 
-	/**
-	 * 获取当前Timestamp类型的的时间
-	 * 
-	 * @return Timestamp
-	 */
-	public static Timestamp getTNowTime() {
+    /**
+     * 获取当前Timestamp类型的的时间
+     *
+     * @return Timestamp t now time
+     */
+    public static Timestamp getTNowTime() {
 		return new Timestamp(getNowLongTime());
 	}
 
-	/**
-	 * 获取的String类型的当前时间并更改时间
-	 * 
-	 * @param number 要更改的的数值
-	 * @param format 更改时间的格式 如yyyy-MM-dd HH:mm:ss
-	 * @param type   更改时间的类型 时:h; 分:m ;秒:s
-	 * @return String
-	 */
-	public static String changeTime(int number, String format, String type) {
+    /**
+     * 获取的String类型的当前时间并更改时间
+     *
+     * @param number 要更改的的数值
+     * @param format 更改时间的格式 如yyyy-MM-dd HH:mm:ss
+     * @param type   更改时间的类型 时:h; 分:m ;秒:s
+     * @return String string
+     */
+    public static String changeTime(int number, String format, String type) {
 		return changeTime(number, format, type, "");
 	}
 
-	/**
-	 * 获取的String类型时间并更改时间
-	 * 
-	 * @param number 要更改的的数值
-	 * @param format 更改时间的格式
-	 * @param type   更改时间的类型 。时:h; 分:m ;秒:s
-	 * @param time   更改的时间 没有则取当前时间
-	 * @return String
-	 */
-	public static String changeTime(int number, String format, String type, String time) {
+    /**
+     * 获取的String类型时间并更改时间
+     *
+     * @param number 要更改的的数值
+     * @param format 更改时间的格式
+     * @param type   更改时间的类型 。时:h; 分:m ;秒:s
+     * @param time   更改的时间 没有则取当前时间
+     * @return String string
+     */
+    public static String changeTime(int number, String format, String type, String time) {
 		if (isEmpty(time)) { // 如果没有设置时间则取当前时间
 			time = getNowTime(format);
 		}
@@ -345,14 +355,16 @@ public final class MyTools {
 		return backTime;
 	}
 
-	/**
-	 * 两个日期带时间比较 第二个时间大于第一个则为true，否则为false
-	 * 
-	 * @param String
-	 * @return boolean
-	 * @throws ParseException
-	 */
-	public static boolean isCompareDay(String time1, String time2, String format) {
+    /**
+     * 两个日期带时间比较 第二个时间大于第一个则为true，否则为false
+     *
+     * @param time1  the time 1
+     * @param time2  the time 2
+     * @param format the format
+     * @return boolean boolean
+     * @throws ParseException
+     */
+    public static boolean isCompareDay(String time1, String time2, String format) {
 		if (isEmpty(format)) {// 如果没有设置格式使用默认格式
 			format = sdf;
 		}
@@ -369,95 +381,95 @@ public final class MyTools {
 		}
 	}
 
-	/**
-	 * 获取几天之前的时间
-	 * 
-	 * @since 1.8
-	 * @param day
-	 * @return
-	 */
-	public static String getMinusDays(int day) {
+    /**
+     * 获取几天之前的时间
+     *
+     * @param day the day
+     * @return minus days
+     * @since 1.8
+     */
+    public static String getMinusDays(int day) {
 		return getMinusDays(day, sdf);
 	}
 
-	/**
-	 * 获取几天之前的时间
-	 * 
-	 * @since 1.8
-	 * @param day
-	 * @param format
-	 * @return
-	 */
-	public static String getMinusDays(int day, String format) {
+    /**
+     * 获取几天之前的时间
+     *
+     * @param day    the day
+     * @param format the format
+     * @return minus days
+     * @since 1.8
+     */
+    public static String getMinusDays(int day, String format) {
 		return LocalDateTime.now().minusDays(day).format(DateTimeFormatter.ofPattern(format));
 	}
 
-	/**
-	 * 获取几天之后的时间
-	 * 
-	 * @since 1.8
-	 * @param day
-	 * @return
-	 */
-	public static String getPlusDays(int day) {
+    /**
+     * 获取几天之后的时间
+     *
+     * @param day the day
+     * @return plus days
+     * @since 1.8
+     */
+    public static String getPlusDays(int day) {
 		return getPlusDays(day, sdf);
 	}
 
-	/**
-	 * 获取几天之后的时间
-	 * 
-	 * @since 1.8
-	 * @param day
-	 * @param format
-	 * @return
-	 */
-	public static String getPlusDays(int day, String format) {
+    /**
+     * 获取几天之后的时间
+     *
+     * @param day    the day
+     * @param format the format
+     * @return plus days
+     * @since 1.8
+     */
+    public static String getPlusDays(int day, String format) {
 		return LocalDateTime.now().plusDays(day).format(DateTimeFormatter.ofPattern(format));
 	}
 
-	/**
-	 * 获取几天之后的时间
-	 * 
-	 * @since 1.8
-	 * @param day
-	 * @return
-	 */
-	public static String getPlusMonths(int month) {
+    /**
+     * 获取几天之后的时间
+     *
+     * @param month the month
+     * @return plus months
+     * @since 1.8
+     */
+    public static String getPlusMonths(int month) {
 		return getPlusMonths(month, sdf);
 	}
 
-	/**
-	 * 获取几月之后的时间
-	 * 
-	 * @since 1.8
-	 * @param day
-	 * @param format
-	 * @return
-	 */
-	public static String getPlusMonths(int month, String format) {
+    /**
+     * 获取几月之后的时间
+     *
+     * @param month  the month
+     * @param format the format
+     * @return plus months
+     * @since 1.8
+     */
+    public static String getPlusMonths(int month, String format) {
 		return LocalDateTime.now().plusMonths(month).format(DateTimeFormatter.ofPattern(format));
 	}
 
-	/**
-	 * 增加月份
-	 * 
-	 * @param time  格式为yyyy-MM-dd
-	 * @param month 增加月份
-	 * @return
-	 */
-	public static String addPlusMonths(String time, int month) {
+    /**
+     * 增加月份
+     *
+     * @param time  格式为yyyy-MM-dd
+     * @param month 增加月份
+     * @return string
+     */
+    public static String addPlusMonths(String time, int month) {
 		return LocalDate.parse(time).plusMonths(month).toString();
 	}
 
-	/**
-	 * 时间相比得月份 如果是201711和201801相比，返回的结果是2 前面的时间要小于后面的时间
-	 * 
-	 * @param month   格式为yyyyMM
-	 * @param toMonth 格式为yyyyMM
-	 * @since jdk 1.8
-	 * @return
-	 */
-	public static int diffMonth(String month, String toMonth) {
+    /**
+     * 时间相比得月份 如果是201711和201801相比，返回的结果是2 前面的时间要小于后面的时间
+     *
+     * @param month   格式为yyyyMM
+     * @param toMonth 格式为yyyyMM
+     * @return int
+     * @since jdk 1.8
+     */
+    public static int diffMonth(String month, String toMonth) {
 		int year1 = Integer.parseInt(month.substring(0, 4));
 		int month1 = Integer.parseInt(month.substring(4, 6));
 		int year2 = Integer.parseInt(month.substring(0, 4));
@@ -467,24 +479,24 @@ public final class MyTools {
 		return Period.between(ld1, ld2).getMonths();
 	}
 
-	/**
-	 * 判断是否为整型
-	 * 
-	 * @param String
-	 * @return boolean
-	 */
-	public static boolean isInteger(String str) {
+    /**
+     * 判断是否为整型
+     *
+     * @param str the str
+     * @return boolean boolean
+     */
+    public static boolean isInteger(String str) {
 		Matcher m = p.matcher(str);
 		return m.find();
 	}
 
-	/**
-	 * 自定义位数产生随机数字
-	 * 
-	 * @param int
-	 * @return String
-	 */
-	public static String random(int count) {
+    /**
+     * 自定义位数产生随机数字
+     *
+     * @param count the count
+     * @return String string
+     */
+    public static String random(int count) {
 		char start = '0';
 		char end = '9';
 		Random rnd = new Random();
@@ -496,13 +508,13 @@ public final class MyTools {
 		return new String(result);
 	}
 
-	/**
-	 * 获取自定义长度的随机数(含字母)
-	 * 
-	 * @param len 长度
-	 * @return String
-	 */
-	public static String random2(int len) {
+    /**
+     * 获取自定义长度的随机数(含字母)
+     *
+     * @param len 长度
+     * @return String string
+     */
+    public static String random2(int len) {
 		int random = Integer.parseInt(random(5));
 		Random rd = new Random(random);
 		final int maxNum = 62;
@@ -523,55 +535,57 @@ public final class MyTools {
 		return sb.toString();
 	}
 
-	/**
-	 * 获取本机ip
-	 * 
-	 * @return String
-	 * @throws UnknownHostException
-	 */
-	public static String getLocalHostIp() throws UnknownHostException {
+    /**
+     * 获取本机ip
+     *
+     * @return String local host ip
+     * @throws UnknownHostException the unknown host exception
+     */
+    public static String getLocalHostIp() throws UnknownHostException {
 		return InetAddress.getLocalHost().getHostAddress();
 	}
 
-	/**
-	 * Object 转换为 String
-	 * 
-	 * @param list
-	 * @return String
-	 */
-	public static String toString(Object obj) {
+    /**
+     * Object 转换为 String
+     *
+     * @param obj the obj
+     * @return String string
+     */
+    public static String toString(Object obj) {
 		return JSON.toJSONString(obj);
 	}
 
-	/**
-	 * JSON 转换为 JavaBean
-	 * 
-	 * @param json
-	 * @param t
-	 * @return <T>
-	 */
-	public static <T> T toBean(JSONObject json, Class<T> t) {
+    /**
+     * JSON 转换为 JavaBean
+     *
+     * @param <T>  the type parameter
+     * @param json the json
+     * @param t    the t
+     * @return <T>
+     */
+    public static <T> T toBean(JSONObject json, Class<T> t) {
 		return JSON.toJavaObject(json, t);
 	}
 
-	/**
-	 * JSON 字符串转换为 JavaBean
-	 * 
-	 * @param str
-	 * @param t
-	 * @return <T>
-	 */
-	public static <T> T toBean(String str, Class<T> t) {
+    /**
+     * JSON 字符串转换为 JavaBean
+     *
+     * @param <T> the type parameter
+     * @param str the str
+     * @param t   the t
+     * @return <T>
+     */
+    public static <T> T toBean(String str, Class<T> t) {
 		return JSON.parseObject(str, t);
 	}
 
-	/**
-	 * JSON 字符串 转换成JSON格式
-	 * 
-	 * @param obj
-	 * @return JSONObject
-	 */
-	public static JSONObject toJson(String str) {
+    /**
+     * JSON 字符串 转换成JSON格式
+     *
+     * @param str the str
+     * @return JSONObject json object
+     */
+    public static JSONObject toJson(String str) {
 		if (isEmpty(str)) {
 			return new JSONObject();
 		}
@@ -579,26 +593,26 @@ public final class MyTools {
 
 	}
 
-	/**
-	 * JavaBean 转化为JSON
-	 * 
-	 * @param t
-	 * @return
-	 */
-	public static JSONObject toJson(Object t) {
+    /**
+     * JavaBean 转化为JSON
+     *
+     * @param t the t
+     * @return json object
+     */
+    public static JSONObject toJson(Object t) {
 		if (null == t || "".equals(t)) {
 			return new JSONObject();
 		}
 		return (JSONObject) JSON.toJSON(t);
 	}
 
-	/**
-	 * JSON 字符串转换为 HashMap
-	 * 
-	 * @param json - String
-	 * @return Map
-	 */
-	@SuppressWarnings("rawtypes")
+    /**
+     * JSON 字符串转换为 HashMap
+     *
+     * @param json - String
+     * @return Map map
+     */
+    @SuppressWarnings("rawtypes")
 	public static Map toMap(String json) {
 		if (isEmpty(json)) {
 			return new HashMap();
@@ -606,44 +620,47 @@ public final class MyTools {
 		return JSON.parseObject(json, HashMap.class);
 	}
 
-	/**
-	 * 将map转化为string
-	 * 
-	 * @param m
-	 * @return
-	 */
-	@SuppressWarnings("rawtypes")
+    /**
+     * 将map转化为string
+     *
+     * @param m the m
+     * @return string
+     */
+    @SuppressWarnings("rawtypes")
 	public static String toString(Map m) {
 		return JSONObject.toJSONString(m);
 	}
 
-	/**
-	 * String转换为数组
-	 * 
-	 * @param text
-	 * @return
-	 */
-	public static <T> Object[] toArray(String text) {
+    /**
+     * String转换为数组
+     *
+     * @param <T>  the type parameter
+     * @param text the text
+     * @return object [ ]
+     */
+    public static <T> Object[] toArray(String text) {
 		return toArray(text, null);
 	}
 
-	/**
-	 * String转换为数组
-	 * 
-	 * @param text
-	 * @return
-	 */
-	public static <T> Object[] toArray(String text, Class<T> clazz) {
+    /**
+     * String转换为数组
+     *
+     * @param <T>   the type parameter
+     * @param text  the text
+     * @param clazz the clazz
+     * @return object [ ]
+     */
+    public static <T> Object[] toArray(String text, Class<T> clazz) {
 		return JSON.parseArray(text, clazz).toArray();
 	}
 
-	/**
-	 * name1=value1&name2=value2格式的数据转换成json数据格式
-	 * 
-	 * @param str
-	 * @return
-	 */
-	public static JSONObject str2Json(String str) {
+    /**
+     * name1=value1&name2=value2格式的数据转换成json数据格式
+     *
+     * @param str the str
+     * @return json object
+     */
+    public static JSONObject str2Json(String str) {
 		if (isEmpty(str)) {
 			return new JSONObject();
 		}
@@ -661,13 +678,13 @@ public final class MyTools {
 		return json;
 	}
 
-	/**
-	 * json数据格式 转换成name1=value1&name2=value2格式
-	 * 
-	 * @param str
-	 * @return
-	 */
-	@SuppressWarnings("rawtypes")
+    /**
+     * json数据格式 转换成name1=value1&name2=value2格式
+     *
+     * @param json the json
+     * @return string
+     */
+    @SuppressWarnings("rawtypes")
 	public static String json2Str(JSONObject json) {
 		if (isEmpty(json)) {
 			return null;
@@ -685,14 +702,14 @@ public final class MyTools {
 		return sb.toString();
 	}
 
-	/**
-	 * 将JDBC查询的数据转换成List类型
-	 * 
-	 * @param ResultSet
-	 * @return List
-	 * @throws SQLException
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+    /**
+     * 将JDBC查询的数据转换成List类型
+     *
+     * @param rs the rs
+     * @return List list
+     * @throws SQLException the sql exception
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
 	public static List convertList(ResultSet rs) throws SQLException {
 		if (null == rs) {
 			return new ArrayList<>();
@@ -710,13 +727,13 @@ public final class MyTools {
 		return list;
 	}
 
-	/**
-	 * MD5加密
-	 * 
-	 * @param message
-	 * @return
-	 */
-	public static String md5Encode(String message) {
+    /**
+     * MD5加密
+     *
+     * @param message the message
+     * @return string
+     */
+    public static String md5Encode(String message) {
 		byte[] secretBytes = null;
 		try {
 			secretBytes = MessageDigest.getInstance("md5").digest(message.getBytes());
@@ -732,59 +749,60 @@ public final class MyTools {
 		return md5code;
 	}
 
-	/**
-	 * base64 加密
-	 * 
-	 * @param str
-	 * @return
-	 */
-	public static String base64En(String str) {
+    /**
+     * base64 加密
+     *
+     * @param str the str
+     * @return string
+     */
+    public static String base64En(String str) {
 		Base64 base64 = new Base64();
 		byte[] encode = base64.encode(str.getBytes());
 		return new String(encode);
 	}
 
-	/**
-	 * base64解密
-	 * 
-	 * @param encodeStr
-	 * @return
-	 */
-	@SuppressWarnings("static-access")
+    /**
+     * base64解密
+     *
+     * @param encodeStr the encode str
+     * @return string
+     */
+    @SuppressWarnings("static-access")
 	public static String base64De(String encodeStr) {
 		Base64 base64 = new Base64();
 		byte[] decodeStr = base64.decodeBase64(encodeStr);
 		return new String(decodeStr);
 	}
-	
-	
-	/**
-	 * base64解密
-	 * 
-	 * @param encodeStr
-	 * @return
-	 */
-	public static String base64DeStr(String encodeStr) {
+
+
+    /**
+     * base64解密
+     *
+     * @param encodeStr the encode str
+     * @return string
+     */
+    public static String base64DeStr(String encodeStr) {
 		byte[] decodeStr = Base64.decodeBase64(encodeStr);
 		return new String(decodeStr);
 	}
 
-	/**
-	 * base64解密
-	 * 
-	 * @param encodeStr
-	 * @return
-	 */
-	public static byte[] base64DeByte(String encodeStr) {
+    /**
+     * base64解密
+     *
+     * @param encodeStr the encode str
+     * @return byte [ ]
+     */
+    public static byte[] base64DeByte(String encodeStr) {
 		return Base64.decodeBase64(encodeStr);
 	}
-	
-	/**
-	 * 匹配号段
-	 * 
-	 * @param 手机号的前四位
-	 */
-	public static int matchPhone(String phone) {
+
+    /**
+     * 匹配号段
+     *
+     * @param phone the phone
+     * @return the int
+     */
+    public static int matchPhone(String phone) {
 		// 移动的号段
 		String str = "1340,1341,1342,1343,1344,1345,1346,1347,1348,135,136,137,138,139,147,148,150,151,152,154,157,158,159,165,1703,1705,1706,172,178,182,183,184,187,188,198";
 		List<String> list = completionData(str);
@@ -806,10 +824,13 @@ public final class MyTools {
 		return 0;
 	}
 
-	/**
-	 * 补全号段
-	 */
-	public static List<String> completionData(String str) {
+    /**
+     * 补全号段
+     *
+     * @param str the str
+     * @return the list
+     */
+    public static List<String> completionData(String str) {
 		String[] strs = str.split(",");
 		List<String> list = new ArrayList<String>();
 		for (String s : strs) {
@@ -825,13 +846,13 @@ public final class MyTools {
 		return list;
 	}
 
-	/**
-	 * 十进制转二进制
-	 * 
-	 * @param n
-	 * @return
-	 */
-	public static String decToBinary(int n) {
+    /**
+     * 十进制转二进制
+     *
+     * @param n the n
+     * @return string
+     */
+    public static String decToBinary(int n) {
 		String str = "";
 		while (n != 0) {
 			str = n % 2 + str;
@@ -840,33 +861,33 @@ public final class MyTools {
 		return str;
 	}
 
-	/**
-	 * 二进制转十进制
-	 * 
-	 * @param n
-	 * @return
-	 */
-	public static int binaryToDec(char[] cs) {
+    /**
+     * 二进制转十进制
+     *
+     * @param cs the cs
+     * @return int
+     */
+    public static int binaryToDec(char[] cs) {
 		return binaryToDec(cs);
 	}
 
-	/**
-	 * 二进制转十进制
-	 * 
-	 * @param n
-	 * @return
-	 */
-	public static int binaryToDec(String cs) {
+    /**
+     * 二进制转十进制
+     *
+     * @param cs the cs
+     * @return int
+     */
+    public static int binaryToDec(String cs) {
 		return new BigInteger(new String(cs), 2).intValue();
 	}
 
-	/**
-	 * 将int数值转换为占四个字节的byte数组，本方法适用于(低位在前，高位在后)的顺序。
-	 * 
-	 * @param value 要转换的int值
-	 * @return byte数组
-	 */
-	public static byte[] intToBytes(int value) {
+    /**
+     * 将int数值转换为占四个字节的byte数组，本方法适用于(低位在前，高位在后)的顺序。
+     *
+     * @param value 要转换的int值
+     * @return byte数组 byte [ ]
+     */
+    public static byte[] intToBytes(int value) {
 		byte[] byte_src = new byte[4];
 		byte_src[3] = (byte) ((value & 0xFF000000) >> 24);
 		byte_src[2] = (byte) ((value & 0x00FF0000) >> 16);
@@ -875,15 +896,15 @@ public final class MyTools {
 		return byte_src;
 	}
 
-	/**
-	 * byte 数组拼接 使用说明 byte []a= {1,2},b= {3,4}; 那么 byte []c=addBytes(a,b);
-	 * c={1,2,3,4};
-	 * 
-	 * @param data1
-	 * @param data2
-	 * @return data1 与 data2拼接的结果
-	 */
-	public static byte[] addBytes(byte[] data1, byte[] data2) {
+    /**
+     * byte 数组拼接 使用说明 byte []a= {1,2},b= {3,4}; 那么 byte []c=addBytes(a,b);
+     * c={1,2,3,4};
+     *
+     * @param data1 the data 1
+     * @param data2 the data 2
+     * @return data1 与 data2拼接的结果
+     */
+    public static byte[] addBytes(byte[] data1, byte[] data2) {
 		byte[] data3 = new byte[data1.length + data2.length];
 		System.arraycopy(data1, 0, data3, 0, data1.length);
 		System.arraycopy(data2, 0, data3, data1.length, data2.length);
@@ -891,12 +912,12 @@ public final class MyTools {
 
 	}
 
-	/**
-	 * 本方法的测试示例
-	 * 
-	 * @param args
-	 */
-	@SuppressWarnings({ "rawtypes" })
+    /**
+     * 本方法的测试示例
+     *
+     * @param args the input arguments
+     */
+    @SuppressWarnings({ "rawtypes" })
 	public static void main(String[] args) {
 		/*
 		 * String 和List 空数据判断

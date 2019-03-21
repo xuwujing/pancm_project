@@ -23,14 +23,26 @@ public class ConfigUtil {
 		}
 	}
 
-	public static ConfigUtil getInstance() {
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    public static ConfigUtil getInstance() {
 		if (instance == null) {
 			syncInit();
 		}
 		return instance;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+    /**
+     * Gets config val.
+     *
+     * @param key            the key
+     * @param propertiesName the properties name
+     * @return the config val
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
 	public String getConfigVal(String key, String propertiesName) {
 		if (sysConfig.size() != 0) {
 			if (sysConfig.get(propertiesName) != null) {

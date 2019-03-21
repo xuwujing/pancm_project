@@ -3,21 +3,27 @@ package com.pancm.test.reflectTest;
 import java.lang.reflect.Method;
 
 /**
- * 
-* Title: ReflectTest2
-* Description:
-* 反射测试 
-* 　反射的基本步骤：
-1、获得class对象，就是获取到指定的名称的字节码文件对象。
-2、实例化对象，获得类的属性、方法或构造函数。
-3、访问属性、调用方法、调用构造函数创建对象。
-* Version:1.0.0  
-* @author pancm
-* @date 2018年2月28日
+ * Title: ReflectTest2
+ * Description:
+ * 反射测试
+ * 　反射的基本步骤：
+ * 1、获得class对象，就是获取到指定的名称的字节码文件对象。
+ * 2、实例化对象，获得类的属性、方法或构造函数。
+ * 3、访问属性、调用方法、调用构造函数创建对象。
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年2月28日
  */
 public class ReflectTest2 {
 
-	public static void main(String[] args) throws ReflectiveOperationException {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws ReflectiveOperationException the reflective operation exception
+     */
+    public static void main(String[] args) throws ReflectiveOperationException {
 		method_1();
 		method_2();
 		method_3();

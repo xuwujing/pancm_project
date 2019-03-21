@@ -1,17 +1,22 @@
 package com.pancm.test.design.strategy;
 
 /**
- * @Title: StrategyTest
- * @Description: 策略模式 在策略模式（CalculateStrategy Pattern）中，一个类的行为或其算法可以在运行时更改。
- *               这种类型的设计模式属于行为型模式。 在策略模式中，我们创建表示各种策略的对象和一个行为随着策略对象改变而改变的 context
- *               对象。 策略对象改变 context 对象的执行算法。
- * @Version:1.0.0
+ * The type Strategy test.
+ *
  * @author pancm
+ * @Title: StrategyTest
+ * @Description: 策略模式 在策略模式（CalculateStrategy Pattern）中，一个类的行为或其算法可以在运行时更改。               这种类型的设计模式属于行为型模式。 在策略模式中，我们创建表示各种策略的对象和一个行为随着策略对象改变而改变的 context               对象。 策略对象改变 context 对象的执行算法。
+ * @Version:1.0.0
  * @date 2018年8月8日
  */
 public class StrategyTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 
 		/*
 		 * 基本使用
@@ -65,12 +70,25 @@ public class StrategyTest {
 	}
 }
 
+/**
+ * The interface Calculate strategy.
+ */
 //定义一个策略
 interface CalculateStrategy {
-	int doOperation(int num1, int num2);
+    /**
+     * Do operation int.
+     *
+     * @param num1 the num 1
+     * @param num2 the num 2
+     * @return the int
+     */
+    int doOperation(int num1, int num2);
 }
 
-//定义一个加法 
+/**
+ * The type Operation add.
+ */
+//定义一个加法
 class OperationAdd implements CalculateStrategy {
 	@Override
 	public int doOperation(int num1, int num2) {
@@ -78,6 +96,9 @@ class OperationAdd implements CalculateStrategy {
 	}
 }
 
+/**
+ * The type Operation sub.
+ */
 //定义一个减法
 class OperationSub implements CalculateStrategy {
 	@Override
@@ -86,6 +107,9 @@ class OperationSub implements CalculateStrategy {
 	}
 }
 
+/**
+ * The type Operation mul.
+ */
 //定义一个乘法
 class OperationMul implements CalculateStrategy {
 	@Override
@@ -94,6 +118,9 @@ class OperationMul implements CalculateStrategy {
 	}
 }
 
+/**
+ * The type Operation div.
+ */
 //定义一个除法
 class OperationDiv implements CalculateStrategy {
 	@Override
@@ -102,15 +129,30 @@ class OperationDiv implements CalculateStrategy {
 	}
 }
 
+/**
+ * The type Calculator context.
+ */
 //定义一个环境
 class  CalculatorContext {
 	private CalculateStrategy strategy;
 
-	public CalculatorContext(CalculateStrategy strategy) {
+    /**
+     * Instantiates a new Calculator context.
+     *
+     * @param strategy the strategy
+     */
+    public CalculatorContext(CalculateStrategy strategy) {
 		this.strategy = strategy;
 	}
 
-	public int executeStrategy(int num1, int num2) {
+    /**
+     * Execute strategy int.
+     *
+     * @param num1 the num 1
+     * @param num2 the num 2
+     * @return the int
+     */
+    public int executeStrategy(int num1, int num2) {
 		return strategy.doOperation(num1, num2);
 	}
 }

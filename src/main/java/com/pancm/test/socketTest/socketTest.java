@@ -18,11 +18,12 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * 
+ * The type Socket test.
+ *
+ * @author pancm
  * @Title: socketTest
  * @Description:Socket测试
  * @Version:1.0.0
- * @author pancm
  * @date 2017年11月16日
  */
 public class socketTest {
@@ -32,7 +33,12 @@ public class socketTest {
 	private static String request = null;
 	private static String response = null;
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		request = "Hello";
 		socketTest(request);
 
@@ -76,12 +82,13 @@ public class socketTest {
 		return "hi";
 	}
 
-	/**
-	 * socket简单并发测试
-	 * @param port
-	 * @throws IOException
-	 */
-	public void serve(int port) throws IOException {
+    /**
+     * socket简单并发测试
+     *
+     * @param port the port
+     * @throws IOException the io exception
+     */
+    public void serve(int port) throws IOException {
 		// 将服务器绑定到指定端口
 		final ServerSocket socket = new ServerSocket(port);
 		try {
@@ -117,13 +124,14 @@ public class socketTest {
 			e.printStackTrace();
 		}
 	}
-    
-	/**
-	 * socket 实现非阻塞 I/O
-	 * @param port
-	 * @throws IOException
-	 */
-	public void serve1(int port) throws IOException {
+
+    /**
+     * socket 实现非阻塞 I/O
+     *
+     * @param port the port
+     * @throws IOException the io exception
+     */
+    public void serve1(int port) throws IOException {
 		ServerSocketChannel serverChannel = ServerSocketChannel.open();
 		serverChannel.configureBlocking(false);
 		ServerSocket ssocket = serverChannel.socket();

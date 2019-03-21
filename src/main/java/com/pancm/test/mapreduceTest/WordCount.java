@@ -14,16 +14,19 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 /**
- * 
- * Title: WordCount 
+ * Title: WordCount
  * Description: MapReduce 测试
- *  Version:1.0.0
+ * Version:1.0.0
+ *
  * @author pancm
  * @date 2017年11月9日
  */
 public class WordCount {
 
-	public static class TokenizerMapper extends
+    /**
+     * The type Tokenizer mapper.
+     */
+    public static class TokenizerMapper extends
 			Mapper<Object, Text, Text, IntWritable> {
 
 		private final static IntWritable one = new IntWritable(1);
@@ -39,7 +42,10 @@ public class WordCount {
 		}
 	}
 
-	public static class IntSumReducer extends
+    /**
+     * The type Int sum reducer.
+     */
+    public static class IntSumReducer extends
 			Reducer<Text, IntWritable, Text, IntWritable> {
 		private IntWritable result = new IntWritable();
 
@@ -54,7 +60,13 @@ public class WordCount {
 		}
 	}
 
-	public static void main(String[] args) throws Exception {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws Exception the exception
+     */
+    public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
 		Job job = Job.getInstance(conf, "word count");
 		job.setJarByClass(WordCount.class);

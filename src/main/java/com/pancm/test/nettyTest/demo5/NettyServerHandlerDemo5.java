@@ -4,15 +4,15 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
- 
+
 /**
- * 
-* Description:服务端业务逻辑处理类  
-* Version:1.0.0  
-* @author pancm
-* @date 2017年9月21日
+ * Description:服务端业务逻辑处理类
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年9月21日
  */
-public class NettyServerHandlerDemo5 extends ChannelInboundHandlerAdapter {  
+public class NettyServerHandlerDemo5 extends ChannelInboundHandlerAdapter {
 	/** 时间 */
     private int loss_connect_time = 0; 
     /** 发送次数 */

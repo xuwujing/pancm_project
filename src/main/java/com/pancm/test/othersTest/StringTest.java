@@ -1,14 +1,20 @@
 package com.pancm.test.othersTest;
 
 /**
-* Title: test1
-* Description: string相关问题
-* Version:1.0.0  
-* @author pancm
-* @date 2017-7-21
+ * Title: test1
+ * Description: string相关问题
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017 -7-21
  */
 public class StringTest {
-	  public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		
 		  String hello="hello";
 		  //有15种构造方法,有两种是过时的，其中包含char[],byte[],int[],String,StringBuffer,StringBuilder。

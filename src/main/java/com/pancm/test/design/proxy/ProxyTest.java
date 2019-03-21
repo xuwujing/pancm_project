@@ -5,18 +5,22 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
- * @Title: ProxyTest
- * @Description:代理模式 在代理模式中，一个类代表另一个类的功能。这种类型的设计模式属于结构型模式。
- *                   在代理模式中，我们创建具有现有对象的对象，以便向外界提供功能接口。
- * 
- *                   应用实例： 1、Windows 里面的快捷方式。 2、spring aop。 3、支票。
- * @Version:1.0.0
+ * The type Proxy test.
+ *
  * @author pancm
+ * @Title: ProxyTest
+ * @Description:代理模式 在代理模式中 ，一个类代表另一个类的功能。这种类型的设计模式属于结构型模式。                   在代理模式中，我们创建具有现有对象的对象，以便向外界提供功能接口。                   应用实例： 1、Windows 里面的快捷方式。 2、spring aop。 3、支票。
+ * @Version:1.0.0
  * @date 2018年8月8日
  */
 public class ProxyTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 
 		/*
 		 * 
@@ -69,13 +73,22 @@ public class ProxyTest {
 	}
 }
 
+/**
+ * The interface Shopping.
+ */
 /*
  * 
  */
 interface Shopping {
-	void buyFood();
+    /**
+     * Buy food.
+     */
+    void buyFood();
 }
 
+/**
+ * The type Execute person.
+ */
 /*
  * 定义一个需要买东西的人
  */
@@ -83,7 +96,12 @@ class ExecutePerson implements Shopping {
 
 	private String name;
 
-	public ExecutePerson(String name) {
+    /**
+     * Instantiates a new Execute person.
+     *
+     * @param name the name
+     */
+    public ExecutePerson(String name) {
 		this.name = name;
 	}
 
@@ -93,6 +111,9 @@ class ExecutePerson implements Shopping {
 	}
 }
 
+/**
+ * The type Proxy person.
+ */
 /*
  * 静态代理
  * 定义一个可以帮买东西的人
@@ -100,7 +121,12 @@ class ExecutePerson implements Shopping {
 class ProxyPerson implements Shopping {
 	private ExecutePerson ep;
 
-	public ProxyPerson(ExecutePerson ep) {
+    /**
+     * Instantiates a new Proxy person.
+     *
+     * @param ep the ep
+     */
+    public ProxyPerson(ExecutePerson ep) {
 		this.ep = ep;
 	}
 
@@ -110,6 +136,9 @@ class ProxyPerson implements Shopping {
 	}
 }
 
+/**
+ * The type Proxy person 2.
+ */
 /*
  * 动态代理
  * 定义一个可以帮买东西的人
@@ -119,7 +148,12 @@ class ProxyPerson2 implements InvocationHandler {
 
 	private final String methodName = "buyFood";
 
-	public ProxyPerson2(Shopping shopping) {
+    /**
+     * Instantiates a new Proxy person 2.
+     *
+     * @param shopping the shopping
+     */
+    public ProxyPerson2(Shopping shopping) {
 		this.shopping = shopping;
 	}
 

@@ -10,17 +10,23 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * 
-* @Title: setTest
-* @Description: 重写set中的equals和hashcode
-* @Version:1.0.0  
-* @author panchengming
-* @date 2017年9月17日
+ * The type Set test.
+ *
+ * @author panchengming
+ * @Title: setTest
+ * @Description: 重写set中的equals和hashcode
+ * @Version:1.0.0
+ * @date 2017年9月17日
  */
 public class SetTest {
-	
 
-	public static void main(String[] args) {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		Set hashSet = new HashSet();
 		Set treeSet = new TreeSet();
 		Set linkedSet = new LinkedHashSet();
@@ -31,11 +37,11 @@ public class SetTest {
 		treeSet1();
 		treeSet2();
 	}
-	
-	/**
-	 * set去重
-	 */
-	public static void set(){
+
+    /**
+     * set去重
+     */
+    public static void set(){
 		  // 初始化list
         List<String> list = new ArrayList<String>();
         list.add("Jhon");
@@ -55,11 +61,11 @@ public class SetTest {
         }
         System.out.println("list:"+list);
 	}
-	
-	/**
-	 *  使用hashSet去重
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+
+    /**
+     * 使用hashSet去重
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void hashSetTest(){
 		HashSet hs = new HashSet();  
 	//	TreeMap tm=new TreeMap();
@@ -77,17 +83,17 @@ public class SetTest {
         }  
 //        System.out.println("TreeMap排序之后:"+tm);
 	}
-	
-	/**
-	 * 一，让容器自身具备比较性，自定义比较器。
-		需求：当元素自身不具备比较性，或者元素自身具备的比较性不是所需的。
-		那么这时只能让容器自身具备。
-		定义一个类实现Comparator 接口，覆盖compare方法。
-		并将该接口的子类对象作为参数传递给TreeSet集合的构造函数。
-		当Comparable比较方式，及Comparator比较方式同时存在，以Comparator
-		比较方式为主
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+
+    /**
+     * 一，让容器自身具备比较性，自定义比较器。
+     * 需求：当元素自身不具备比较性，或者元素自身具备的比较性不是所需的。
+     * 那么这时只能让容器自身具备。
+     * 定义一个类实现Comparator 接口，覆盖compare方法。
+     * 并将该接口的子类对象作为参数传递给TreeSet集合的构造函数。
+     * 当Comparable比较方式，及Comparator比较方式同时存在，以Comparator
+     * 比较方式为主
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void treeSet1(){
 		 TreeSet ts = new TreeSet(new MyComparator());  
 	        ts.add(new Book("think in java", 100));  
@@ -99,16 +105,15 @@ public class SetTest {
 	  
 	        System.out.println("treeSet1:"+ts); 
 	}
-	
-	
-	/**
-	 *  
-		二，让元素自身具备比较性。
-		也就是元素需要实现Comparable接口，覆盖compareTo 方法。
-		这种方式也作为元素的自然排序，也可称为默认排序。
-		年龄按照搜要条件，年龄相同再比姓名。
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+
+
+    /**
+     * 二，让元素自身具备比较性。
+     * 也就是元素需要实现Comparable接口，覆盖compareTo 方法。
+     * 这种方式也作为元素的自然排序，也可称为默认排序。
+     * 年龄按照搜要条件，年龄相同再比姓名。
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void treeSet2(){
 		TreeSet ts = new TreeSet();  
         ts.add(new Person("aa", 20, "男"));  
@@ -125,32 +130,64 @@ public class SetTest {
 }
 
 
-
- class A{
+/**
+ * The type A.
+ */
+class A{
 	private String name;
 	private int age;
 
-	public A(String name, int age) {
+    /**
+     * Instantiates a new A.
+     *
+     * @param name the name
+     * @param age  the age
+     */
+    public A(String name, int age) {
 		this.name=name;
 		this.age=age;
 	}
-	
-		A() {  
+
+    /**
+     * Instantiates a new A.
+     */
+    A() {
 		  
-	    }  
-	public String getName() {
+	    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
+    public void setName(String name) {
 		this.name = name;
 	}
 
-	public int getAge() {
+    /**
+     * Gets age.
+     *
+     * @return the age
+     */
+    public int getAge() {
 		return age;
 	}
 
-	public void setAge(int age) {
+    /**
+     * Sets age.
+     *
+     * @param age the age
+     */
+    public void setAge(int age) {
 		this.age = age;
 	}
 	
@@ -178,43 +215,86 @@ public class SetTest {
 	    }  
 	}
 
+/**
+ * The type Person.
+ */
 @SuppressWarnings("rawtypes")
 class Person implements Comparable {  
 	    private String name;   
 	    private int age;  
 	    private String gender;   //性别
-	  
-	    public Person() {  
-	    }  
-	  
-	    public Person(String name, int age, String gender) {  
+
+    /**
+     * Instantiates a new Person.
+     */
+    public Person() {
+	    }
+
+    /**
+     * Instantiates a new Person.
+     *
+     * @param name   the name
+     * @param age    the age
+     * @param gender the gender
+     */
+    public Person(String name, int age, String gender) {
 	  
 	        this.name = name;  
 	        this.age = age;  
 	        this.gender = gender;  
-	    }  
-	  
-	    public String getName() {  
+	    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
 	        return name;  
-	    }  
-	  
-	    public void setName(String name) {  
+	    }
+
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
+    public void setName(String name) {
 	        this.name = name;  
-	    }  
-	  
-	    public int getAge() {  
+	    }
+
+    /**
+     * Gets age.
+     *
+     * @return the age
+     */
+    public int getAge() {
 	        return age;  
-	    }  
-	  
-	    public void setAge(int age) {  
+	    }
+
+    /**
+     * Sets age.
+     *
+     * @param age the age
+     */
+    public void setAge(int age) {
 	        this.age = age;  
-	    }  
-	  
-	    public String getGender() {  
+	    }
+
+    /**
+     * Gets gender.
+     *
+     * @return the gender
+     */
+    public String getGender() {
 	        return gender;  
-	    }  
-	  
-	    public void setGender(String gender) {  
+	    }
+
+    /**
+     * Sets gender.
+     *
+     * @param gender the gender
+     */
+    public void setGender(String gender) {
 	        this.gender = gender;  
 	    }  
 	  
@@ -251,8 +331,11 @@ class Person implements Comparable {
 	        return this.name.compareTo(p.name);  
 	    }  
  }
- 
 
+
+/**
+ * The type My comparator.
+ */
 @SuppressWarnings("rawtypes")
 class MyComparator implements Comparator {  
 	  
@@ -269,33 +352,65 @@ class MyComparator implements Comparator {
         return b1.getName().compareTo(b2.getName());  
     }  
   
-}  
-  
-class Book {  
+}
+
+/**
+ * The type Book.
+ */
+class Book {
     private String name;  
-    private double price;  
+    private double price;
+
+    /**
+     * Instantiates a new Book.
+     */
+    public Book() {
   
-    public Book() {  
-  
-    }  
-  
-    public String getName() {  
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
         return name;  
-    }  
-  
-    public void setName(String name) {  
+    }
+
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
+    public void setName(String name) {
         this.name = name;  
-    }  
-  
-    public double getPrice() {  
+    }
+
+    /**
+     * Gets price.
+     *
+     * @return the price
+     */
+    public double getPrice() {
         return price;  
-    }  
-  
-    public void setPrice(double price) {  
+    }
+
+    /**
+     * Sets price.
+     *
+     * @param price the price
+     */
+    public void setPrice(double price) {
         this.price = price;  
-    }  
-  
-    public Book(String name, double price) {  
+    }
+
+    /**
+     * Instantiates a new Book.
+     *
+     * @param name  the name
+     * @param price the price
+     */
+    public Book(String name, double price) {
   
         this.name = name;  
         this.price = price;  

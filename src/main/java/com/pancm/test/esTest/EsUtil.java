@@ -1,12 +1,5 @@
 package com.pancm.test.esTest;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
@@ -16,9 +9,17 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.common.xcontent.XContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @Title: EsUtil
@@ -33,19 +34,24 @@ public final class EsUtil {
 
 	}
 
+
+
+
+
 	/**
 	 * 创建链接
 	 * 
-	 * @param port
-	 * @param hosts
+	 * @param nodes
 	 * @return
 	 */
-	public static boolean build(int port, String... hosts) throws IOException {
+	public static boolean build( String... nodes) throws IOException {
 		boolean falg = false;
-		Objects.requireNonNull(hosts, "nodes can not null");
+		Objects.requireNonNull(nodes, "hosts can not null");
 		ArrayList<HttpHost> ahosts = new ArrayList<HttpHost>();
-		for (String host : hosts) {
-			ahosts.add(new HttpHost(host, port));
+		for (String host : nodes) {
+			IpHandler addr = new  IpHandler();
+			addr.IpPortFromUrl(host);
+			ahosts.add(new HttpHost(addr.getIp(),addr.getPort()));
 		}
 		httpHosts = ahosts.toArray(new HttpHost[0]);
 		try {
@@ -112,6 +118,34 @@ public final class EsUtil {
 		return exists2;
 	}
 
+	/**
+	 * @Author pancm
+	 * @Description //TODO 
+	 * @Date  2019/3/21
+	 * @Param []
+	 * @return boolean
+	 **/
+	public static boolean insert() throws  IOException{
+
+		return  false;
+	}
+
+
+	/**
+	 * @Author pancm
+	 * @Description //TODO
+	 * @Date  2019/3/21
+	 * @Param []
+	 * @return boolean
+	 **/
+	public static boolean delete() throws  IOException{
+
+		return  false;
+	}
+
+
+
+
 	/*
 	 * 初始化服务
 	 */
@@ -139,7 +173,7 @@ public final class EsUtil {
 	private static int elasticPort;
 	private static HttpHost[] httpHosts;
 	private static RestHighLevelClient client = null;
-	private static final String COMMA_SIGN = ",";
+
 	private static Logger logger = LoggerFactory.getLogger(EsHighLevelRestSearchTest.class);
 
 	/**
@@ -150,7 +184,7 @@ public final class EsUtil {
 
 		try {
 
-			EsUtil.build(9200, "192.169.0.23");
+			EsUtil.build( "192.169.0.23:9200");
 			System.out.println("ES连接初始化成功!");
 
 			// setting 的值
@@ -387,4 +421,44 @@ class SettingEntity implements Serializable {
 				+ ", refreshInterval=" + refreshInterval + ", maxResultWindow=" + maxResultWindow + "]";
 	}
 
+}
+
+class IpHandler {
+
+	private String ip;
+	private Integer port;
+	private static Pattern p = Pattern.compile("(?<=//|)((\\w)+\\.)+\\w+(:\\d{0,5})?");
+
+	/** 冒号 */
+	private static final String COMMA_COLON = ":";
+	/**
+	 * 从url中分析出hostIP:PORT<br/>
+	 * @param url
+	 * */
+	public  void IpPortFromUrl(String url) {
+
+		String host = "";
+
+		Matcher matcher = p.matcher(url);
+		if (matcher.find()) {
+			host = matcher.group() ;
+		}
+		// 如果
+		if(host.contains(COMMA_COLON) == false){
+			this.ip=host;
+			this.port=80;
+		}else{
+			String[] ipPortArr = host.split(COMMA_COLON);
+			this.ip=ipPortArr[0];
+			this.port=Integer.valueOf(ipPortArr[1].trim());
+		}
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public Integer getPort() {
+		return port;
+	}
 }

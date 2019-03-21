@@ -16,13 +16,24 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
+/**
+ * The type Quartz jdbc test.
+ */
 public class QuartzJdbcTest {
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws SchedulerException the scheduler exception
+     * @throws ParseException     the parse exception
+     */
     public static void main(String[] args) throws SchedulerException,
             ParseException {
         startSchedule();
         //resumeJob();
     }
+
     /**
      * 开始一个simpleSchedule()调度
      */

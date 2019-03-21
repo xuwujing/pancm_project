@@ -8,20 +8,75 @@ import java.util.List;
 public class TypeCheck {
 
 	private enum LongtypeCheck {
-		// sessionid,sqlid,dip,replyaccessid,smac,dmac;
-		accessid, replyaccessid, c4;
+        /**
+         * Accessid longtype check.
+         */
+// sessionid,sqlid,dip,replyaccessid,smac,dmac;
+		accessid,
+        /**
+         * Replyaccessid longtype check.
+         */
+        replyaccessid,
+        /**
+         * C 4 longtype check.
+         */
+        c4;
 	}
 
 	private enum InttypeCheck {
-		// policyid,effectrow,shgid,apptypeid,srcid,datafrom,policyalertgrade;
-		effectrow, shgid, apptypeid, srcid, datafrom, policyalertgrade;// ,poid;
+        /**
+         * Effectrow inttype check.
+         */
+// policyid,effectrow,shgid,apptypeid,srcid,datafrom,policyalertgrade;
+		effectrow,
+        /**
+         * Shgid inttype check.
+         */
+        shgid,
+        /**
+         * Apptypeid inttype check.
+         */
+        apptypeid,
+        /**
+         * Srcid inttype check.
+         */
+        srcid,
+        /**
+         * Datafrom inttype check.
+         */
+        datafrom,
+        /**
+         * Policyalertgrade inttype check.
+         */
+        policyalertgrade;// ,poid;
 	}
 
 	private enum FloattypeCheck {
-		code, level, cost, resultflag;
+        /**
+         * Code floattype check.
+         */
+        code,
+        /**
+         * Level floattype check.
+         */
+        level,
+        /**
+         * Cost floattype check.
+         */
+        cost,
+        /**
+         * Resultflag floattype check.
+         */
+        resultflag;
 	}
 
-	public static boolean checkLong(String source) {
+    /**
+     * Check long boolean.
+     *
+     * @param source the source
+     * @return the boolean
+     */
+    public static boolean checkLong(String source) {
 		for (LongtypeCheck l : LongtypeCheck.values()) {
 			if (l.toString().equals(source.toLowerCase())) {
 				return true;
@@ -30,7 +85,13 @@ public class TypeCheck {
 		return false;
 	}
 
-	public static boolean checkInt(String source) {
+    /**
+     * Check int boolean.
+     *
+     * @param source the source
+     * @return the boolean
+     */
+    public static boolean checkInt(String source) {
 		for (InttypeCheck i : InttypeCheck.values()) {
 			if (i.toString().equals(source.toLowerCase())) {
 				return true;
@@ -39,7 +100,13 @@ public class TypeCheck {
 		return false;
 	}
 
-	public static boolean checkFloat(String source) {
+    /**
+     * Check float boolean.
+     *
+     * @param source the source
+     * @return the boolean
+     */
+    public static boolean checkFloat(String source) {
 		for (FloattypeCheck f : FloattypeCheck.values()) {
 			if (f.toString().equals(source.toLowerCase())) {
 				return true;
@@ -48,7 +115,14 @@ public class TypeCheck {
 		return false;
 	}
 
-	public static boolean checkString(String source, List<String> strList) {
+    /**
+     * Check string boolean.
+     *
+     * @param source  the source
+     * @param strList the str list
+     * @return the boolean
+     */
+    public static boolean checkString(String source, List<String> strList) {
 		if (strList.contains(source)) {
 			return true;
 		}

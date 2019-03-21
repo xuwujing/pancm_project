@@ -12,16 +12,21 @@ import org.apache.commons.collections.bidimap.TreeBidiMap;
 import org.apache.commons.collections.list.LazyList;
 
 /**
- * 
-* Title: collections
-* Description: Collections 工具包测试
-* Version:1.0.0  
-* @author pancm
-* @date 2017年11月1日
+ * Title: collections
+ * Description: Collections 工具包测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年11月1日
  */
 public class collectionsTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		bagTest();
 		lazyTest();
 		bidimapTest();

@@ -4,31 +4,45 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
-import java.lang.reflect.Method;  
-  
-  
+import java.lang.reflect.Method;
+
+
 /**
- * 
-* Title: ReflectTest
-* Description:
-* 反射测试 
-* 
-* 反射技术可以对一个类进行解剖。
-　 优点:大大的增强了程序的扩展性。
-* Version:1.0.0  
-* @author pancm
-* @date 2018年2月9日
+ * Title: ReflectTest
+ * Description:
+ * 反射测试
+ * <p>
+ * 反射技术可以对一个类进行解剖。
+ * 　 优点:大大的增强了程序的扩展性。
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年2月9日
  */
-public class ReflectTest {  
-  
-    public static void main(String[] args) throws Exception {  
+public class ReflectTest {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws Exception the exception
+     */
+    public static void main(String[] args) throws Exception {
         Class clazz = User.class;//获得User的类名，返回reflect.User  
         Object obj = create(clazz);//创建User的一个对象  
         System.out.println(obj);//输出对象，会调用对象的toString方法  
         System.out.println("---------");  
         invoke1(obj, "getMessage");//调用User对象的getMessage方法  
-    }  
-    /* 
+    }
+
+    /**
+     * Create object.
+     *
+     * @param clazz the clazz
+     * @return the object
+     * @throws Exception the exception
+     */
+    /*
     **根据类名，new一个对象，并返回*/  
     static Object create(Class clazz) throws Exception {  
         //如果clazz含有无参数的构造方法，可以如下方式实例化  
@@ -39,8 +53,16 @@ public class ReflectTest {
         Object obj=con.newInstance("哈哈");  
         //返回对象  
         return obj;  
-    }  
-    /* 
+    }
+
+    /**
+     * Invoke 1.
+     *
+     * @param obj        the obj
+     * @param methodName the method name
+     * @throws Exception the exception
+     */
+    /*
     **根据对象，方法名（字符串），来调用方法*/  
     static void invoke1(Object obj, String methodName)throws Exception{  
         //getDeclaredMethods可以获取类本身（不包括父类）所有方法的名字（包括私有方法）**一般不用这种方法，私有的属性一般不能修改  
@@ -57,17 +79,30 @@ public class ReflectTest {
         **Method m = obj.getClass().getMethod(methodName, null); 
         **m.invoke(obj, null); 
         */  
-    }  
-      
-    /* 
+    }
+
+    /**
+     * Field.
+     *
+     * @param clazz the clazz
+     * @throws Exception the exception
+     */
+    /*
     **根据类名获取类的属性（一般不直接操作属性）*/  
     static void field(Class clazz) throws Exception {  
         Field[] fs = clazz.getDeclaredFields();  
         //fs = clazz.getFields();  
         for (Field f : fs)  
             System.out.println(f.getName());  
-    }  
-    /* 
+    }
+
+    /**
+     * Annon.
+     *
+     * @param clazz the clazz
+     * @throws Exception the exception
+     */
+    /*
     **根据类名获取类的注解*/  
     static void annon(Class clazz) throws Exception {  
         Annotation[] as = clazz.getAnnotations();  

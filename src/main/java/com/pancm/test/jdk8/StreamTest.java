@@ -21,24 +21,22 @@ import java.util.stream.Stream;
 import com.pancm.test.pojoTest.User;
 
 /**
- * @Title: StreamTest
- * @Description: Stream测试用例 流的操作类型分为两种：
- * 
- *               Intermediate：一个流可以后面跟随零个或多个 intermediate
- *               操作。其目的主要是打开流，做出某种程度的数据映射/过滤，然后返回一个新的流，交给下一个操作使用。
- *               这类操作都是惰性化的（lazy），就是说，仅仅调用到这类方法，并没有真正开始流的遍历。 Terminal：一个流只能有一个
- *               terminal 操作，当这个操作执行后，流就被使用“光”了，无法再被操作。 所以这必定是流的最后一个操作。 Terminal
- *               操作的执行，才会真正开始流的遍历，并且会生成一个结果，或者一个 side effect。
- * @Version:1.0.0
+ * The type Stream test.
+ *
  * @author pancm
+ * @Title: StreamTest
+ * @Description: Stream测试用例 流的操作类型分为两种：               Intermediate：一个流可以后面跟随零个或多个 intermediate               操作。其目的主要是打开流，做出某种程度的数据映射/过滤，然后返回一个新的流，交给下一个操作使用。               这类操作都是惰性化的（lazy），就是说，仅仅调用到这类方法，并没有真正开始流的遍历。 Terminal：一个流只能有一个               terminal 操作，当这个操作执行后，流就被使用“光”了，无法再被操作。 所以这必定是流的最后一个操作。 Terminal               操作的执行，才会真正开始流的遍历，并且会生成一个结果，或者一个 side effect。
+ * @Version:1.0.0
  * @date 2018年9月3日
  */
 public class StreamTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		test1();
 		test2();
 		test3();
@@ -520,7 +518,12 @@ public class StreamTest {
 		//11, pancm8
 	}
 
-	public static void print(String text) {
+    /**
+     * Print.
+     *
+     * @param text the text
+     */
+    public static void print(String text) {
 		// jdk1.8之前的写法
 		// if (text != null) {
 		// System.out.println(text);
@@ -529,7 +532,12 @@ public class StreamTest {
 		Optional.ofNullable(text).ifPresent(System.out::println);
 	}
 
-	public static void getLength(String text) {
+    /**
+     * Gets length.
+     *
+     * @param text the text
+     */
+    public static void getLength(String text) {
 		// jdk1.8之前的写法
 		// return if (text != null) ? text.length() : -1;
 		// jdk1.8的写法
@@ -538,6 +546,9 @@ public class StreamTest {
 	};
 }
 
+/**
+ * The type User supplier.
+ */
 class UserSupplier implements Supplier<User> {
 	private int index = 10;
 	private Random random = new Random();
@@ -548,6 +559,9 @@ class UserSupplier implements Supplier<User> {
 	}
 }
 
+/**
+ * The type User supplier 2.
+ */
 class UserSupplier2 implements Supplier<User> {
 	private int index = 10;
 	private Random random = new Random();
@@ -558,6 +572,9 @@ class UserSupplier2 implements Supplier<User> {
 	}
 }
 
+/**
+ * The type User supplier 3.
+ */
 class UserSupplier3 implements Supplier<User> {
 	private int index = 16;
 	private Random random = new Random();

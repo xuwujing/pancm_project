@@ -20,16 +20,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 
 /**
- * @author lurenjia
+ * The type Test 1.
  *
+ * @author lurenjia
  */
 public class test1 {
 
-	/**
-	 * @param args
-	 */
-	
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		// TODO Auto-generated method stub
          Map aa=new HashMap();
          Map<String,Object> aa1=new HashMap<String, Object>();
@@ -192,8 +194,17 @@ public class test1 {
          System.out.println(aa+" "+ss+"  "+ja+" "+s + " "+dd);
         
 	}
-	
-	 //判断是否一致 折半查询 索引 (数组，查找的下标,数组长度,数组下标的结果)
+
+    /**
+     * Sind int.
+     *
+     * @param ary   the ary
+     * @param index the index
+     * @param len   the len
+     * @param value the value
+     * @return the int
+     */
+//判断是否一致 折半查询 索引 (数组，查找的下标,数组长度,数组下标的结果)
 	public static   int sind(int []ary,int index,int len,int value)
     {
         if(len==1)//最后一个元素
@@ -213,13 +224,25 @@ public class test1 {
         //否则递归查询上半部分
         return sind(ary,index,half,value);
     }
-	
-	@SuppressWarnings("unchecked")
+
+    /**
+     * Json 2 map map.
+     *
+     * @param json the json
+     * @return the map
+     */
+    @SuppressWarnings("unchecked")
 	public static Map<String,Object> json2Map(String json){
 	return JSON.parseObject(json, Map.class);
 	}
-	
-	public static JSONObject toJO(String json) {
+
+    /**
+     * To jo json object.
+     *
+     * @param json the json
+     * @return the json object
+     */
+    public static JSONObject toJO(String json) {
 		if (json == null || json.equals("")) {
 			return new JSONObject();
 		}
@@ -229,8 +252,14 @@ public class test1 {
 		}
 		return toJsonObject(json);
 	}
-	
-	public static JSONObject toJO(Object object) {
+
+    /**
+     * To jo json object.
+     *
+     * @param object the object
+     * @return the json object
+     */
+    public static JSONObject toJO(Object object) {
 		if (object == null || object.equals("")) {
 			return new JSONObject();
 		}
@@ -240,8 +269,15 @@ public class test1 {
 		return toJsonObject(object);
 	}
 
-	
-	@SuppressWarnings("unchecked")
+
+    /**
+     * To json object t.
+     *
+     * @param <T>    the type parameter
+     * @param object the object
+     * @return the t
+     */
+    @SuppressWarnings("unchecked")
 	public static <T> T toJsonObject(Object object) {
 		if (object instanceof String) {
 			return JSON.parseObject((String) object, new TypeReference<T>() {
@@ -250,23 +286,53 @@ public class test1 {
 			return (T) JSON.toJSON(object);
 		}
 	}
-	public static <T> T toJsonObject(String json) {
+
+    /**
+     * To json object t.
+     *
+     * @param <T>  the type parameter
+     * @param json the json
+     * @return the t
+     */
+    public static <T> T toJsonObject(String json) {
 		return JSON.parseObject(json, new TypeReference<T>() {
 		});
 	}
-	
-	public static int bj(int i,int j){	
+
+    /**
+     * Bj int.
+     *
+     * @param i the
+     * @param j the j
+     * @return the int
+     */
+    public static int bj(int i,int j){
 		return ((i>j)?i:j);	
 	}
-	
-	public static int bj1(int i,int j){	
+
+    /**
+     * Bj 1 int.
+     *
+     * @param i the
+     * @param j the j
+     * @return the int
+     */
+    public static int bj1(int i,int j){
 		if(i>j) {
 			return i;
 		}
 		return j;	
 	}
-	
-	 //改变json格式中的大小写
+
+    /**
+     * Change u por low json object.
+     *
+     * @param aa     the aa
+     * @param format the format
+     * @param lx     the lx
+     * @return the json object
+     */
+//改变json格式中的大小写
 		@SuppressWarnings("rawtypes")
 		public static JSONObject changeUPorLOW(Map aa,String format,String lx) {
 			 JSONObject cc=new JSONObject();
@@ -321,7 +387,14 @@ public class test1 {
 			return cc;
 		}
 
-		//分割数据
+    /**
+     * Split string.
+     *
+     * @param demo the demo
+     * @param lx   the lx
+     * @return the string
+     */
+//分割数据
 		public static String split(String demo,String lx){
 			String[] array = demo.split(lx);
 			int len = array.length;

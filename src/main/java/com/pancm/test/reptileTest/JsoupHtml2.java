@@ -9,10 +9,18 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
- 
+
+/**
+ * The type Jsoup html 2.
+ */
 public class JsoupHtml2 {
- 
-    public static void main(String[] args) {       
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
         try {
             String url ="http://sou.zhaopin.com/jobs/searchresult.ashx?";
             String city ="西安";

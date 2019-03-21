@@ -14,14 +14,14 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 
 
 /**
- * 
-* Title: KafkaConsumerTest
-* Description: 
-* kafka消费者 demo
-* 手动提交测试 指定分区和offset
-* Version:1.0.0  
-* @author pancm
-* @date 2018年1月26日
+ * Title: KafkaConsumerTest
+ * Description:
+ * kafka消费者 demo
+ * 手动提交测试 指定分区和offset
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年1月26日
  */
 public class KafkaConsumerTest3 implements Runnable {
 
@@ -41,8 +41,13 @@ public class KafkaConsumerTest3 implements Runnable {
 	
 	/**初始化标志*/
     private boolean flag = true;
-	
-	public KafkaConsumerTest3(String topicName) {
+
+    /**
+     * Instantiates a new Kafka consumer test 3.
+     *
+     * @param topicName the topic name
+     */
+    public KafkaConsumerTest3(String topicName) {
 		this.topic = topicName;
 		init();
 	}
@@ -121,10 +126,14 @@ public class KafkaConsumerTest3 implements Runnable {
 		
 		System.out.println("初始化!");
 	}
-	
-	
-   
-	public static void main(String args[]) {
+
+
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
+    public static void main(String args[]) {
 		KafkaConsumerTest3 test1 = new KafkaConsumerTest3("TEST_INSERT");
 		Thread thread1 = new Thread(test1);
 		thread1.start();

@@ -10,21 +10,26 @@ import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
 
 
-
-
-
-
 /**
- * @author ZERO:
- * @version 2017-3-28 上午10:20:11
- * 创建服务端
+ * The type Mina server.
+ *
+ * @author ZERO :
+ * @version 2017 -3-28 上午10:20:11 创建服务端
  */
 public class MinaServer {
-		//记录日志
+    /**
+     * The constant logger.
+     */
+//记录日志
 	public static Logger logger=Logger.getLogger(MinaServer.class);
 	private static int PORT=3305;
-	
-	/* 启动此类 提示服务端运行成功后
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    /* 启动此类 提示服务端运行成功后
 	 * Windows 命令 输入  telnet 127.0.0.1 3305
 	 * 然后输入消息  message
 	 * 消息为bye的时候关闭连接
@@ -32,8 +37,11 @@ public class MinaServer {
 	public static void main(String[] args) {
 			new MinaServer().start();
 	}
-	
-	public void start() {
+
+    /**
+     * Start.
+     */
+    public void start() {
 		 IoAcceptor ia=null;
 	       try{
 	    	   //创建一个非堵塞的server端Socket

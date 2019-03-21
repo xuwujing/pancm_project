@@ -1,21 +1,22 @@
 package com.pancm.test.design.state;
 
 /**
- * @Title: StateTest
- * @Description: 状态模式 在状态模式（State Pattern）中，类的行为是基于它的状态改变的。这种类型的设计模式属于行为型模式。
- *               在状态模式中，我们创建表示各种状态的对象和一个行为随着状态对象改变而改变的 context 对象。
- *               允许对象在内部状态发生改变时改变它的行为，对象看起来好像修改了它的类。
- *      状态模式主要解决的是当控制一个对象状态转换的条件表达式过于复杂是的情况。把状态的判断逻辑转移到表示不同状态一系列类中，可以把复杂的判断简单化。
- * @Version:1.0.0
+ * The type State test.
+ *
  * @author pancm
+ * @Title: StateTest
+ * @Description: 状态模式 在状态模式（State Pattern）中，类的行为是基于它的状态改变的。这种类型的设计模式属于行为型模式。               在状态模式中，我们创建表示各种状态的对象和一个行为随着状态对象改变而改变的 context 对象。               允许对象在内部状态发生改变时改变它的行为，对象看起来好像修改了它的类。      状态模式主要解决的是当控制一个对象状态转换的条件表达式过于复杂是的情况。把状态的判断逻辑转移到表示不同状态一系列类中，可以把复杂的判断简单化。
+ * @Version:1.0.0
  * @date 2018年8月8日
  */
 public class StateTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 
 		/*
 		 * 基本使用
@@ -87,10 +88,21 @@ public class StateTest {
 
 }
 
+/**
+ * The interface State.
+ */
 interface State {
-	void doAction(Context context);
+    /**
+     * Do action.
+     *
+     * @param context the context
+     */
+    void doAction(Context context);
 }
 
+/**
+ * The type Start state.
+ */
 class StartState implements State {
 
 	public void doAction(Context context) {
@@ -103,6 +115,9 @@ class StartState implements State {
 	}
 }
 
+/**
+ * The type Stop state.
+ */
 class StopState implements State {
 
 	public void doAction(Context context) {
@@ -115,28 +130,53 @@ class StopState implements State {
 	}
 }
 
+/**
+ * The type Context.
+ */
 class Context {
 	private State state;
 
-	public Context() {
+    /**
+     * Instantiates a new Context.
+     */
+    public Context() {
 		state = null;
 	}
 
-	public void setState(State state) {
+    /**
+     * Sets state.
+     *
+     * @param state the state
+     */
+    public void setState(State state) {
 		this.state = state;
 	}
 
-	public State getState() {
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    public State getState() {
 		return state;
 	}
 }
 
 
+/**
+ * The interface Music state.
+ */
 //定义一个音乐状态
 interface MusicState{
-	void press();
+    /**
+     * Press.
+     */
+    void press();
 }
 
+/**
+ * The type Play state.
+ */
 class PlayState implements MusicState{
 
 	@Override
@@ -145,6 +185,9 @@ class PlayState implements MusicState{
 	}
 }
 
+/**
+ * The type Pause state.
+ */
 class PauseState implements MusicState{
 
 	@Override
@@ -154,16 +197,27 @@ class PauseState implements MusicState{
 }
 
 
-
-
+/**
+ * The type Headset.
+ */
 //定义一个耳机
 class Headset{
 	private MusicState state;
 	private int i;
-	public Headset(MusicState state){
+
+    /**
+     * Instantiates a new Headset.
+     *
+     * @param state the state
+     */
+    public Headset(MusicState state){
 		this.state=state;
 	}
-	public void press() {
+
+    /**
+     * Press.
+     */
+    public void press() {
 		if((i&1)==0) {
 			this.state=new PlayState();
 		}else {
@@ -172,10 +226,22 @@ class Headset{
 		this.state.press();
 		i++;
 	}
-	public MusicState getState() {
+
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    public MusicState getState() {
 		return state;
 	}
-	public void setState(MusicState state) {
+
+    /**
+     * Sets state.
+     *
+     * @param state the state
+     */
+    public void setState(MusicState state) {
 		this.state = state;
 	}
 	

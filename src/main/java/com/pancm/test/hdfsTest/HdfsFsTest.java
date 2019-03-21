@@ -6,8 +6,16 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IOUtils;
 
+/**
+ * The type Hdfs fs test.
+ */
 public class HdfsFsTest {
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
 
         String fileUri = "/home/test/test.txt";
@@ -24,6 +32,13 @@ public class HdfsFsTest {
 
     }
 
+    /**
+     * Write file to hdfs.
+     *
+     * @param pOpenUri   the p open uri
+     * @param pOutputUrl the p output url
+     * @throws Exception the exception
+     */
     public static void writeFileToHdfs(String pOpenUri, String pOutputUrl)
             throws Exception {
 

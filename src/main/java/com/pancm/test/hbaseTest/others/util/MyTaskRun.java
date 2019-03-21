@@ -1,6 +1,7 @@
 package com.pancm.test.hbaseTest.others.util;
 
 import java.util.List;
+
 /**
  * Created by babylon on 2016/12/4.
  */
@@ -9,13 +10,20 @@ public class MyTaskRun implements Runnable {
     private String tablename;
     private List<SocPut> puts;
 
+    /**
+     * Instantiates a new My task run.
+     *
+     * @param tablename the tablename
+     * @param puts      the puts
+     */
     public MyTaskRun(String tablename, List<SocPut> puts) {
         this.tablename = tablename;
         this.puts = puts;
     }
+
     /**
      * 拿到线程池
-     * */
+     */
     public ThreadPoolUtil threadPool= ThreadPoolUtil.init();
 
     @Override

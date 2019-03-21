@@ -15,17 +15,20 @@ import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
 
 /**
- * 
-* Title: NettyServerDemo2
-* Description:  Netty服务端   用于测试粘包、拆包
-* Version:1.0.0  
-* @author pancm
-* @date 2017年9月20日
+ * Title: NettyServerDemo2
+ * Description:  Netty服务端   用于测试粘包、拆包
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年9月20日
  */
 public class NettyServerDemo2 {
-	private  final static int port=2345;  
-      
-    public void start(){  
+	private  final static int port=2345;
+
+    /**
+     * Start.
+     */
+    public void start(){
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);  
         EventLoopGroup workerGroup = new NioEventLoopGroup();  
         try {  
@@ -52,9 +55,15 @@ public class NettyServerDemo2 {
             bossGroup.shutdownGracefully();  //关闭EventLoopGroup，释放掉所有资源包括创建的线程
             workerGroup.shutdownGracefully();  //关闭EventLoopGroup，释放掉所有资源包括创建的线程
         }  
-    }  
-      
-    public static void main(String[] args) throws Exception {  
+    }
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws Exception the exception
+     */
+    public static void main(String[] args) throws Exception {
         new NettyServerDemo2().start();  
     }  
 }

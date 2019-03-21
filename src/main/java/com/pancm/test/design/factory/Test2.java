@@ -4,16 +4,22 @@
 package com.pancm.test.design.factory;
 
 /**
-* @Title: Test2
-* @Description: 
-* 工厂方法模式测试
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年7月23日
-*/
+ * The type Test 2.
+ *
+ * @author pancm
+ * @Title: Test2
+ * @Description: 工厂方法模式测试
+ * @Version:1.0.0
+ * @date 2018年7月23日
+ */
 public class Test2 {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 	}
 
 }
@@ -22,7 +28,10 @@ public class Test2 {
  * 定义一个接口
  */
 interface Game2{
-	void play();
+    /**
+     * Play.
+     */
+    void play();
 }
 
 /**
@@ -35,6 +44,9 @@ class LOL2 implements Game2{
 	}	
 }
 
+/**
+ * The type Dnf 2.
+ */
 class DNF2 implements Game2{
 	@Override
 	public void play() {

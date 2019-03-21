@@ -1,17 +1,22 @@
 package com.pancm.test.design.builder;
 
 /**
-* @Title: BuilderTest
-* @Description: 
-* 建造者模式
-* 将一个复杂的构建与其表示相分离，使得同样的构建过程可以创建不同的表示。
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月7日
-*/
+ * The type Builder test.
+ *
+ * @author pancm
+ * @Title: BuilderTest
+ * @Description: 建造者模式   将一个复杂的构建与其表示相分离，使得同样的构建过程可以创建不同的表示。
+ * @Version:1.0.0
+ * @date 2018年8月7日
+ */
 public class BuilderTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		FoodStore foodStore=new FoodStore();
 		Meal meal=foodStore.createBreakfast(new Breakfast());
 		Meal meal2=foodStore.createBreakfast(new Lunch());
@@ -23,61 +28,102 @@ public class BuilderTest {
 }
 
 /**
- * 
-* @Title: Breakfast
-* @Description: 
-* 定义一份餐点
-* 分为吃的和喝的
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月7日
+ * The type Meal.
+ *
+ * @author pancm
+ * @Title: Breakfast
+ * @Description: 定义一份餐点   分为吃的和喝的
+ * @Version:1.0.0
+ * @date 2018年8月7日
  */
 class Meal{
 	private String food;
 	private String drinks;
-	
-	public String getFood() {
+
+    /**
+     * Gets food.
+     *
+     * @return the food
+     */
+    public String getFood() {
 		return food;
 	}
-	public void setFood(String food) {
+
+    /**
+     * Sets food.
+     *
+     * @param food the food
+     */
+    public void setFood(String food) {
 		this.food = food;
 	}
-	
-	public String getDrinks() {
+
+    /**
+     * Gets drinks.
+     *
+     * @return the drinks
+     */
+    public String getDrinks() {
 		return drinks;
 	}
-	public void setDrinks(String drinks) {
+
+    /**
+     * Sets drinks.
+     *
+     * @param drinks the drinks
+     */
+    public void setDrinks(String drinks) {
 		this.drinks = drinks;
 	}
 }
 
 /**
- * 
-* @Title: IBuilderFood
-* @Description: 
-* 定义一个食物接口
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月7日
+ * The interface Builder food.
+ *
+ * @author pancm
+ * @Title: IBuilderFood
+ * @Description: 定义一个食物接口
+ * @Version:1.0.0
+ * @date 2018年8月7日
  */
 interface IBuilderFood{
-	void buildFood();
-	void buildDrinks();
-	Meal createMeal();
+    /**
+     * Build food.
+     */
+    void buildFood();
+
+    /**
+     * Build drinks.
+     */
+    void buildDrinks();
+
+    /**
+     * Create meal meal.
+     *
+     * @return the meal
+     */
+    Meal createMeal();
 }
 
 /**
- * 
-* @Title: Breakfast
-* @Description:定义一份早餐
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月7日
+ * The type Breakfast.
+ *
+ * @author pancm
+ * @Title: Breakfast
+ * @Description:定义一份早餐
+ * @Version:1.0.0
+ * @date 2018年8月7日
  */
 class Breakfast implements IBuilderFood{
-	Meal meal;
+    /**
+     * The Meal.
+     */
+    Meal meal;
 
-	public Breakfast(){
+    /**
+     * Instantiates a new Breakfast.
+     */
+    public Breakfast(){
 		meal=new Meal();
 	}
 	
@@ -98,17 +144,24 @@ class Breakfast implements IBuilderFood{
 }
 
 /**
- * 
-* @Title: Lunch
-* @Description: 定义一份午餐
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月15日
+ * The type Lunch.
+ *
+ * @author pancm
+ * @Title: Lunch
+ * @Description: 定义一份午餐
+ * @Version:1.0.0
+ * @date 2018年8月15日
  */
 class Lunch implements IBuilderFood{
-	Meal meal;
+    /**
+     * The Meal.
+     */
+    Meal meal;
 
-	public Lunch(){
+    /**
+     * Instantiates a new Lunch.
+     */
+    public Lunch(){
 		meal=new Meal();
 	}
 	
@@ -129,17 +182,22 @@ class Lunch implements IBuilderFood{
 }
 
 /**
- * 
-* @Title: FoodStore
-* @Description: 
-* 定义一个餐点
-* 导演者
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月15日
+ * The type Food store.
+ *
+ * @author pancm
+ * @Title: FoodStore
+ * @Description: 定义一个餐点   导演者
+ * @Version:1.0.0
+ * @date 2018年8月15日
  */
 class FoodStore{
-	public Meal createBreakfast(IBuilderFood bf){
+    /**
+     * Create breakfast meal.
+     *
+     * @param bf the bf
+     * @return the meal
+     */
+    public Meal createBreakfast(IBuilderFood bf){
 		bf.buildDrinks();
 		bf.buildFood();
 		return bf.createMeal();

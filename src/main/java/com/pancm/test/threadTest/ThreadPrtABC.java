@@ -6,18 +6,22 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @Title: ThreadPrtABC
- * @Description: 三个线程，打印ABC
- * @Version:1.0.0
+ * The type Thread prt abc.
+ *
  * @author pancm
+ * @Title: ThreadPrtABC
+ * @Description: 三个线程 ，打印ABC
+ * @Version:1.0.0
  * @date 2018年12月24日
  */
 public class ThreadPrtABC {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		// 只打印一次
 
 //		printOnceLatch();

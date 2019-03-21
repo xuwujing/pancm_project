@@ -12,13 +12,13 @@ import io.netty.util.CharsetUtil;
 import io.netty.util.ReferenceCountUtil;
 
 /**
- * 
-* Description: Netty业务处理  心跳测试
-* Version:1.0.0  
-* @author pancm
-* @date 2017年9月21日
+ * Description: Netty业务处理  心跳测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年9月21日
  */
-public class NettyClientHandlerDemo5 extends ChannelInboundHandlerAdapter {  
+public class NettyClientHandlerDemo5 extends ChannelInboundHandlerAdapter {
       
 		/**心跳命令 */
 	 	private static final ByteBuf HEARTBEAT_SEQUENCE = Unpooled.unreleasableBuffer(Unpooled.copiedBuffer("Heartbeat",  

@@ -1,20 +1,22 @@
 package com.pancm.test.design.interpreter;
 
 /**
-* @Title: InterpreterTest
-* @Description: 解释器模式
-解释器模式（Interpreter Pattern）是类的行为模式。给定一个语言之后，解释器模式可以定义出其文法的一种表示，并同时提供一个解释器。客户端可以使用这个解释器来解释这个语言中的句子。
-* 比如正则表达式
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月8日
-*/
+ * The type Interpreter test.
+ *
+ * @author pancm
+ * @Title: InterpreterTest
+ * @Description: 解释器模式 解释器模式（Interpreter Pattern）是类的行为模式。给定一个语言之后，解释器模式可以定义出其文法的一种表示，并同时提供一个解释器。客户端可以使用这个解释器来解释这个语言中的句子。 比如正则表达式
+ * @Version:1.0.0
+ * @date 2018年8月8日
+ */
 public class InterpreterTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		
 		/*
 		 * 基本使用
@@ -72,19 +74,46 @@ public class InterpreterTest {
 
 }
 
+/**
+ * The type Context.
+ */
 class Context{
 	private Integer id;
 	private String name;
-	public Integer getId() {
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
+    public Integer getId() {
 		return id;
 	}
-	public void setId(Integer id) {
+
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
+    public void setId(Integer id) {
 		this.id = id;
 	}
-	public String getName() {
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
 		return name;
 	}
-	public void setName(String name) {
+
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
+    public void setName(String name) {
 		this.name = name;
 	}
 	/** 
@@ -97,13 +126,24 @@ class Context{
 	
 }
 
+/**
+ * The type Abstract expreeion.
+ */
 /*
  * 定义一个抽象类
  */
 abstract class AbstractExpreeion{
-	abstract void interpert(Context context);
+    /**
+     * Interpert.
+     *
+     * @param context the context
+     */
+    abstract void interpert(Context context);
 }
 
+/**
+ * The type One expreeion.
+ */
 /*
  * 一个解释器
  */
@@ -114,6 +154,9 @@ class OneExpreeion extends AbstractExpreeion{
 	}
 }
 
+/**
+ * The type Two expreeion.
+ */
 /*
  * 另一个解释器
  */
@@ -125,16 +168,29 @@ class TwoExpreeion extends AbstractExpreeion{
 }
 
 
-
+/**
+ * The interface Expreeion.
+ */
 /*
    * 定义一个表达式，有一个解释的方法
  */
 interface Expreeion{
-	void interpert(String word);
+    /**
+     * Interpert.
+     *
+     * @param word the word
+     */
+    void interpert(String word);
 }
 
+/**
+ * The type Baidu expreeion.
+ */
 class  BaiduExpreeion implements Expreeion{
-	String str ="好好学习，天天向上!";
+    /**
+     * The Str.
+     */
+    String str ="好好学习，天天向上!";
 	@Override
 	public void interpert(String word) {
 		//如果是这句就翻译
@@ -144,8 +200,14 @@ class  BaiduExpreeion implements Expreeion{
 	}
 }
 
+/**
+ * The type You dao expreeion.
+ */
 class  YouDaoExpreeion implements Expreeion{
-	String str ="好好学习，天天向上!";
+    /**
+     * The Str.
+     */
+    String str ="好好学习，天天向上!";
 	@Override
 	public void interpert(String word) {
 		//如果是这句就翻译
@@ -155,8 +217,14 @@ class  YouDaoExpreeion implements Expreeion{
 	}
 }
 
+/**
+ * The type Xu wu jing expreeion.
+ */
 class  XuWuJingExpreeion implements Expreeion{
-	String str ="好好学习，天天向上!";
+    /**
+     * The Str.
+     */
+    String str ="好好学习，天天向上!";
 	@Override
 	public void interpert(String word) {
 		//如果是这句就翻译

@@ -6,11 +6,16 @@ import java.net.URISyntaxException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 
+/**
+ * The type Hdfs utils.
+ */
 public class HdfsUtils {
-    
+
     /**
-     * @return
-     * @throws Exception
+     * Gets file system.
+     *
+     * @return file system
+     * @throws Exception the exception
      */
     public static FileSystem getFileSystem() throws Exception{
         
@@ -21,13 +26,16 @@ public class HdfsUtils {
         
         return fileSystem ;
     }
+
     /**
-     * @param pOpenUri
-     * @param pUser
-     * @return
-     * @throws Exception
-     * @throws InterruptedException
-     * @throws URISyntaxException
+     * Gets file system by user.
+     *
+     * @param pOpenUri the p open uri
+     * @param pUser    the p user
+     * @return file system by user
+     * @throws Exception            the exception
+     * @throws InterruptedException the interrupted exception
+     * @throws URISyntaxException   the uri syntax exception
      */
     public static FileSystem getFileSystemByUser(String pOpenUri,String pUser) throws Exception, InterruptedException, URISyntaxException{
         
@@ -39,13 +47,15 @@ public class HdfsUtils {
         return fileSystem ;
         
     }
-    
+
     /**
-     * @param pUser
-     * @return
-     * @throws Exception
-     * @throws InterruptedException
-     * @throws URISyntaxException
+     * Gets file system by user.
+     *
+     * @param pUser the p user
+     * @return file system by user
+     * @throws Exception            the exception
+     * @throws InterruptedException the interrupted exception
+     * @throws URISyntaxException   the uri syntax exception
      */
     public static FileSystem getFileSystemByUser(String pUser) throws Exception, InterruptedException, URISyntaxException{
         

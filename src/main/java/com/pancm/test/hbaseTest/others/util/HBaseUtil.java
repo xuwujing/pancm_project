@@ -61,7 +61,12 @@ public class HBaseUtil {
 //		}
 //	}
 
-	public static void init(String zkHost){
+    /**
+     * Init.
+     *
+     * @param zkHost the zk host
+     */
+    public static void init(String zkHost){
 		try {
 			if (conf == null) {
 				conf = HBaseConfiguration.create();
@@ -75,11 +80,12 @@ public class HBaseUtil {
 		}
 	}
 
-	/**
-	 * 获得链接
-	 * @return
+    /**
+     * 获得链接
+     *
+     * @return connection
      */
-	public static synchronized Connection getConnection() {
+    public static synchronized Connection getConnection() {
 		try {
             if(conn == null || conn.isClosed()){
                 conn = ConnectionFactory.createConnection(conf);
@@ -92,12 +98,15 @@ public class HBaseUtil {
 
 	}
 
-	/**
-	 * 创建表
-	 * @param tableName
-	 * @throws Exception
+    /**
+     * 创建表
+     *
+     * @param tableName      the table name
+     * @param columnFamilies the column families
+     * @param preBuildRegion the pre build region
+     * @throws Exception the exception
      */
-	public static void createTable(String tableName, String[] columnFamilies, boolean preBuildRegion) throws Exception {
+    public static void createTable(String tableName, String[] columnFamilies, boolean preBuildRegion) throws Exception {
 		if(preBuildRegion){
 			String[] s = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F" };
 			int partition = 16;
@@ -180,10 +189,11 @@ public class HBaseUtil {
 
     /**
      * 删除表
-     * @param tablename
-     * @throws IOException
+     *
+     * @param tablename the tablename
+     * @throws IOException the io exception
      */
-	public static void deleteTable(String tablename) throws IOException {
+    public static void deleteTable(String tablename) throws IOException {
 		Connection conn = getConnection();
 		HBaseAdmin admin = (HBaseAdmin) conn.getAdmin();
 		try {
@@ -199,14 +209,15 @@ public class HBaseUtil {
 			closeConnect(conn);
 		}
 	}
-	
-	/**
-	 * 获取  Table
-	 * @param tableName 表名
-	 * @return
-	 * @throws IOException
-	 */
-	public static Table getTable(String tableName){
+
+    /**
+     * 获取  Table
+     *
+     * @param tableName 表名
+     * @return table
+     * @throws IOException
+     */
+    public static Table getTable(String tableName){
 		try {
 			return getConnection().getTable(TableName.valueOf(tableName));
 		} catch (Exception e) {
@@ -215,14 +226,15 @@ public class HBaseUtil {
 		return null;
 	}
 
-	/**
-	 * 给 table 创建 snapshot
-	 * @param snapshotName 快照名称
-     * @param tableName 表名
-	 * @return
-	 * @throws IOException
-	 */
-	public static void snapshot(String snapshotName, TableName tableName){
+    /**
+     * 给 table 创建 snapshot
+     *
+     * @param snapshotName 快照名称
+     * @param tableName    表名
+     * @return
+     * @throws IOException
+     */
+    public static void snapshot(String snapshotName, TableName tableName){
 		try {
             Admin admin = getConnection().getAdmin();
             admin.snapshot(snapshotName, tableName);
@@ -233,8 +245,9 @@ public class HBaseUtil {
 
     /**
      * 获得现已有的快照
+     *
      * @param snapshotNameRegex 正则过滤表达式
-     * @return
+     * @return list
      * @throws IOException
      */
     public static List<HBaseProtos.SnapshotDescription> listSnapshots(String snapshotNameRegex){
@@ -252,6 +265,7 @@ public class HBaseUtil {
 
     /**
      * 批量删除Snapshot
+     *
      * @param snapshotNameRegex 正则过滤表达式
      * @return
      * @throws IOException
@@ -270,6 +284,7 @@ public class HBaseUtil {
 
     /**
      * 单个删除Snapshot
+     *
      * @param snapshotName 正则过滤表达式
      * @return
      * @throws IOException
@@ -286,18 +301,19 @@ public class HBaseUtil {
         }
     }
 
-	/**
-	 * 分页检索表数据。<br>
-	 * （如果在创建表时为此表指定了非默认的命名空间，则需拼写上命名空间名称，格式为【namespace:tablename】）。
-	 * @param tableName 表名称(*)。
-	 * @param startRowKey 起始行键(可以为空，如果为空，则从表中第一行开始检索)。
-	 * @param endRowKey 结束行键(可以为空)。
-	 * @param filterList 检索条件过滤器集合(不包含分页过滤器；可以为空)。
-	 * @param maxVersions 指定最大版本数【如果为最大整数值，则检索所有版本；如果为最小整数值，则检索最新版本；否则只检索指定的版本数】。
-	 * @param pageModel 分页模型(*)。
-	 * @return 返回HBasePageModel分页对象。
-	 */
-	public static HBasePageModel scanResultByPageFilter(String tableName, byte[] startRowKey, byte[] endRowKey, FilterList filterList, int maxVersions, HBasePageModel pageModel) {
+    /**
+     * 分页检索表数据。<br>
+     * （如果在创建表时为此表指定了非默认的命名空间，则需拼写上命名空间名称，格式为【namespace:tablename】）。
+     *
+     * @param tableName   表名称(*)。
+     * @param startRowKey 起始行键(可以为空，如果为空，则从表中第一行开始检索)。
+     * @param endRowKey   结束行键(可以为空)。
+     * @param filterList  检索条件过滤器集合(不包含分页过滤器；可以为空)。
+     * @param maxVersions 指定最大版本数【如果为最大整数值，则检索所有版本；如果为最小整数值，则检索最新版本；否则只检索指定的版本数】。
+     * @param pageModel   分页模型(*)。
+     * @return 返回HBasePageModel分页对象 。
+     */
+    public static HBasePageModel scanResultByPageFilter(String tableName, byte[] startRowKey, byte[] endRowKey, FilterList filterList, int maxVersions, HBasePageModel pageModel) {
 		if(pageModel == null) {
 			pageModel = new HBasePageModel(10);
 		}
@@ -395,14 +411,15 @@ public class HBaseUtil {
 		return pageModel;
 	}
 
-	/**
-	 * 检索指定表的第一行记录。<br>
-	 * （如果在创建表时为此表指定了非默认的命名空间，则需拼写上命名空间名称，格式为【namespace:tablename】）。
-	 * @param tableName 表名称(*)。
-	 * @param filterList 过滤器集合，可以为null。
-	 * @return
-	 */
-	public static Result selectFirstResultRow(String tableName,FilterList filterList) {
+    /**
+     * 检索指定表的第一行记录。<br>
+     * （如果在创建表时为此表指定了非默认的命名空间，则需拼写上命名空间名称，格式为【namespace:tablename】）。
+     *
+     * @param tableName  表名称(*)。
+     * @param filterList 过滤器集合，可以为null。
+     * @return result
+     */
+    public static Result selectFirstResultRow(String tableName,FilterList filterList) {
 		if(StringUtils.isBlank(tableName)) return null;
 		Table table = null;
 		try {
@@ -432,15 +449,16 @@ public class HBaseUtil {
 		}
 		return null;
 	}
-	
+
     /**
      * 异步往指定表添加数据
-     * @param tablename  	表名
-     * @param puts	 			需要添加的数据
-	 * @return long				返回执行时间
-     * @throws IOException
+     *
+     * @param tablename 表名
+     * @param puts      需要添加的数据
+     * @return long 返回执行时间
+     * @throws Exception the exception
      */
-	public static long put(String tablename, List puts) throws Exception {
+    public static long put(String tablename, List puts) throws Exception {
 		long currentTime = System.currentTimeMillis();
 		Connection conn = getConnection();
 		final BufferedMutator.ExceptionListener listener = new BufferedMutator.ExceptionListener() {
@@ -467,25 +485,27 @@ public class HBaseUtil {
 		return System.currentTimeMillis() - currentTime;
 	}
 
-	/**
-	 * 异步往指定表添加数据
-	 * @param tablename  	表名
-	 * @param put	 			需要添加的数据
-	 * @return long				返回执行时间
-	 * @throws IOException
-	 */
-	public static long put(String tablename, Put put) throws Exception {
+    /**
+     * 异步往指定表添加数据
+     *
+     * @param tablename 表名
+     * @param put       需要添加的数据
+     * @return long 返回执行时间
+     * @throws Exception the exception
+     */
+    public static long put(String tablename, Put put) throws Exception {
 		return put(tablename, Arrays.asList(put));
 	}
-	
-	/**
-	 * 往指定表添加数据
-	 * @param tablename  	表名
-	 * @param puts	 			需要添加的数据
-	 * @return long				返回执行时间
-	 * @throws IOException
-	 */
-	public static long putByHTable(String tablename, List<?> puts) throws Exception {
+
+    /**
+     * 往指定表添加数据
+     *
+     * @param tablename 表名
+     * @param puts      需要添加的数据
+     * @return long 返回执行时间
+     * @throws Exception the exception
+     */
+    public static long putByHTable(String tablename, List<?> puts) throws Exception {
 		long currentTime = System.currentTimeMillis();
 		Connection conn = getConnection();
         HTable htable = (HTable) conn.getTable(TableName.valueOf(tablename));
@@ -500,14 +520,15 @@ public class HBaseUtil {
 		}
 		return System.currentTimeMillis() - currentTime;
 	}
-    
-	/**
-	 * 删除单条数据
-	 * @param tablename
-	 * @param row
-	 * @throws IOException
-	 */
-	public static void delete(String tablename, String row) throws IOException {
+
+    /**
+     * 删除单条数据
+     *
+     * @param tablename the tablename
+     * @param row       the row
+     * @throws IOException the io exception
+     */
+    public static void delete(String tablename, String row) throws IOException {
 		Table table = getTable(tablename);
         if(table!=null){
 			try {
@@ -519,13 +540,14 @@ public class HBaseUtil {
         }
 	}
 
-	/**
-	 * 删除多行数据
-	 * @param tablename
-	 * @param rows
-	 * @throws IOException
-	 */
-	public static void delete(String tablename, String[] rows) throws IOException {
+    /**
+     * 删除多行数据
+     *
+     * @param tablename the tablename
+     * @param rows      the rows
+     * @throws IOException the io exception
+     */
+    public static void delete(String tablename, String[] rows) throws IOException {
 		Table table = getTable(tablename);
 		if (table != null) {
 			try {
@@ -543,11 +565,13 @@ public class HBaseUtil {
 		}
 	}
 
-	/**
-	 * 关闭连接
-	 * @throws IOException
-	 */
-	public static void closeConnect(Connection conn){
+    /**
+     * 关闭连接
+     *
+     * @param conn the conn
+     * @throws IOException
+     */
+    public static void closeConnect(Connection conn){
 		if(null != conn){
 			try {
 //				conn.close();
@@ -557,14 +581,15 @@ public class HBaseUtil {
 		}
 	}
 
-	/**
-	 * 获取单条数据
-	 * @param tablename
-	 * @param row
-	 * @return
-	 * @throws IOException
-	 */
-	public static Result getRow(String tablename, byte[] row) {
+    /**
+     * 获取单条数据
+     *
+     * @param tablename the tablename
+     * @param row       the row
+     * @return row
+     * @throws IOException
+     */
+    public static Result getRow(String tablename, byte[] row) {
 		Table table = getTable(tablename);
 		Result rs = null;
 		if(table!=null){
@@ -584,14 +609,16 @@ public class HBaseUtil {
 		return rs;
 	}
 
-	/**
-	 * 获取多行数据
-	 * @param tablename
-	 * @param rows
-	 * @return
-	 * @throws Exception
-	 */
-	public static <T> Result[] getRows(String tablename, List<T> rows) {
+    /**
+     * 获取多行数据
+     *
+     * @param <T>       the type parameter
+     * @param tablename the tablename
+     * @param rows      the rows
+     * @return result [ ]
+     * @throws Exception
+     */
+    public static <T> Result[] getRows(String tablename, List<T> rows) {
         Table table = getTable(tablename);
         List<Get> gets = null;
         Result[] results = null;
@@ -621,13 +648,14 @@ public class HBaseUtil {
 		return results;
 	}
 
-	/**
-	 * 扫描整张表，注意使用完要释放。
-	 * @param tablename
-	 * @return
-	 * @throws IOException
-	 */
-	public static ResultScanner get(String tablename) {
+    /**
+     * 扫描整张表，注意使用完要释放。
+     *
+     * @param tablename the tablename
+     * @return result scanner
+     * @throws IOException
+     */
+    public static ResultScanner get(String tablename) {
 		Table table = getTable(tablename);
 		ResultScanner results = null;
 		if (table != null) {
@@ -648,10 +676,12 @@ public class HBaseUtil {
 		return results;
 	}
 
-	/**
-	 * 格式化输出结果
-	 */
-	public static void formatRow(KeyValue[] rs){
+    /**
+     * 格式化输出结果
+     *
+     * @param rs the rs
+     */
+    public static void formatRow(KeyValue[] rs){
 		for(KeyValue kv : rs){
 			System.out.println(" column family  :  " + Bytes.toString(kv.getFamily()));
 			System.out.println(" column   :  " + Bytes.toString(kv.getQualifier()));
@@ -661,12 +691,13 @@ public class HBaseUtil {
 		}
 	}
 
-	/**
-	 * byte[] 类型的长整形数字转换成 long 类型
-	 * @param byteNum
-	 * @return
-	 */
-	public static long bytes2Long(byte[] byteNum) {
+    /**
+     * byte[] 类型的长整形数字转换成 long 类型
+     *
+     * @param byteNum the byte num
+     * @return long
+     */
+    public static long bytes2Long(byte[] byteNum) {
 		long num = 0;
 		for (int ix = 0; ix < 8; ++ix) {
 			num <<= 8;

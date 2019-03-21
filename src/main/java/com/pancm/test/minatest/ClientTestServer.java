@@ -15,21 +15,35 @@ import com.pancm.test.minatest.demo.MinaClientHandler;
 
 
 /**
+ * The type Client test server.
+ *
  * @author ZERO
- * @Data 2017-5-12 上午10:25:57
- * @Description 
+ * @Data 2017 -5-12 上午10:25:57
+ * @Description
  */
-public class ClientTestServer {  
-    
-    public IoConnector creatClient(){  
+public class ClientTestServer {
+
+    /**
+     * Creat client io connector.
+     *
+     * @return the io connector
+     */
+    public IoConnector creatClient(){
         IoConnector connector=new NioSocketConnector();   
         connector.setConnectTimeoutMillis(30000);   
         connector.getFilterChain().addLast("codec",   
         new ProtocolCodecFilter(new ObjectSerializationCodecFactory()));  
         connector.setHandler(new MinaClientHandler());  
         return connector;  
-    }  
-    public IoSession getIOSession(IoConnector connector){  
+    }
+
+    /**
+     * Get io session io session.
+     *
+     * @param connector the connector
+     * @return the io session
+     */
+    public IoSession getIOSession(IoConnector connector){
         ConnectFuture future = connector.connect(new InetSocketAddress("192.168.2.55", 1255));   
         // 等待是否连接成功，相当于是转异步执行为同步执行。   
         future.awaitUninterruptibly();   
@@ -41,8 +55,15 @@ public class ClientTestServer {
             e.printStackTrace();  
         }  
         return session;  
-    }  
-    public void sendMsg(IoSession session,String msg){  
+    }
+
+    /**
+     * Send msg.
+     *
+     * @param session the session
+     * @param msg     the msg
+     */
+    public void sendMsg(IoSession session,String msg){
     	
             HashMap<String,String> sy=new HashMap<String, String>();           
               sy.put("channel", "android");
@@ -55,8 +76,14 @@ public class ClientTestServer {
          //     logger.info("SentBody:"+sy);
            //   session.setAttribute("account","hello world");
               session.write(sy);// 发送消息 
-    }  
-    public static void main(String[] args) {   
+    }
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
         for(int i=0;i<4000;i++){  
             ClientTestServer  client = new ClientTestServer();  
             IoConnector connector = client.creatClient();  

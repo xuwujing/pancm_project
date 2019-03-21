@@ -1,16 +1,21 @@
 package com.pancm.test.codetest;
 
 
-
 /**
+ * The type Test boolean.
+ *
  * @author ZERO
- * @version 2017-4-17 下午6:05:37
- * 类说明 boolean源码检测
+ * @version 2017 -4-17 下午6:05:37 类说明 boolean源码检测
  */
 public class TestBoolean {
 
-						
-	public static void main(String[] args) {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		 {
 		        Boolean bool1 = Boolean.valueOf(true);       //这里均使用valueof创建对象，new创建的Boolean对象是不断的新创建一个实例对象，而valueOf则是返回Boolean类里的静态成员变量
 		        Boolean bool2 = Boolean.valueOf("True");    //这里上一句代码验证使用String变量作为参数时，不区分大小写的。

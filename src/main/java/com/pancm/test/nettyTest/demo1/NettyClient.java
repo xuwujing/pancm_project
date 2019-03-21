@@ -15,12 +15,12 @@ import io.netty.handler.codec.string.StringEncoder;
 
 
 /**
- * 
-* Title: NettyClient
-* Description:Netty客户端 测试
-* Version:1.0.0  
-* @author Administrator
-* @date 2017-8-31
+ * Title: NettyClient
+ * Description:Netty客户端 测试
+ * Version:1.0.0
+ *
+ * @author Administrator
+ * @date 2017 -8-31
  */
 public class NettyClient {
 	private static final int port = 1234;  
@@ -28,11 +28,15 @@ public class NettyClient {
 	private static  EventLoopGroup group = new NioEventLoopGroup();   // 通过nio方式来接收连接和处理连接   
 	private static   Bootstrap b = new Bootstrap();
 	private static Channel ch ;
-	/**
-	 * Netty创建全部都是实现自AbstractBootstrap。
-	 * 客户端的是Bootstrap，服务端的则是	ServerBootstrap。
-	 **/
-	 public static void main(String[] args) throws Exception {  
+
+    /**
+     * Netty创建全部都是实现自AbstractBootstrap。
+     * 客户端的是Bootstrap，服务端的则是	ServerBootstrap。
+     *
+     * @param args the input arguments
+     * @throws Exception the exception
+     */
+    public static void main(String[] args) throws Exception {
 		try{ 
 		     b.group(group)  
 		      .channel(NioSocketChannel.class)  
@@ -58,8 +62,13 @@ public class NettyClient {
          
         // 	start();  
 	    }
-	
-    public static void start() throws Exception {  
+
+    /**
+     * Start.
+     *
+     * @throws Exception the exception
+     */
+    public static void start() throws Exception {
        System.out.println("客户端像服务端发送数据");
     	try {  
           String str="Hello Netty";

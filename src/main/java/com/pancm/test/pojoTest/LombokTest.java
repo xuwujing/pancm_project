@@ -13,11 +13,12 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 
+ * The type Lombok test.
+ *
+ * @author pancm
  * @Title: LombokTest
  * @Description: 学生信息表 里面的属性通过lombok实现
  * @Version:1.0.0
- * @author pancm
  * @date 2018年1月11日
  */
 /*
@@ -54,7 +55,12 @@ public class LombokTest {
 	/** 班级ID */
 	private int classId;
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		LombokTest student = new LombokTest();
 		LombokTest student2 = new LombokTest(2, "zhangsan", 3);
 		student.setId(1);

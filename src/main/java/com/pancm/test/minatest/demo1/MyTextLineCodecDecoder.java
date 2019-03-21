@@ -11,11 +11,11 @@ import org.apache.mina.filter.codec.ProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 
 /**
+ * The type My text line codec decoder.
+ *
  * @author ZERO
- * @version 2017-3-28 上午10:44:55
- * 设置编码解码器
+ * @version 2017 -3-28 上午10:44:55 设置编码解码器
  */
-
 public class MyTextLineCodecDecoder implements ProtocolDecoder {
 		 private static Logger logger = Logger.getLogger(MyTextLineCodecDecoder.class);
 		   
@@ -25,9 +25,15 @@ public class MyTextLineCodecDecoder implements ProtocolDecoder {
 		 private IoBuffer delimBuf; // 文本分割符匹配的变量
 		   
 		 // 定义常量值，作为每个IoSession中保存解码任务的key值
-		 private static String CONTEXT = MyTextLineCodecDecoder.class.getName() + ".context";  
-		
-		 public MyTextLineCodecDecoder(Charset charset,String delimiter){
+		 private static String CONTEXT = MyTextLineCodecDecoder.class.getName() + ".context";
+
+    /**
+     * Instantiates a new My text line codec decoder.
+     *
+     * @param charset   the charset
+     * @param delimiter the delimiter
+     */
+    public MyTextLineCodecDecoder(Charset charset,String delimiter){
 			 this.charset=charset;
 			 this.delimiter=delimiter;
 		 }
@@ -174,30 +180,58 @@ public class MyTextLineCodecDecoder implements ProtocolDecoder {
 		            buf = IoBuffer.allocate(80).setAutoExpand(true);
 		        }
 
-		        // 重置
+                /**
+                 * Reset.
+                 */
+// 重置
 		        public void reset() {
 		            matchCount = 0;
 		            decoder.reset();
 		        }
 
-		        // 追加数据
+                /**
+                 * Append.
+                 *
+                 * @param in the in
+                 */
+// 追加数据
 		        public void append(IoBuffer in) {
 		            getBuf().put(in);
 		        }
 
-		        public CharsetDecoder getDecoder() {
+                /**
+                 * Gets decoder.
+                 *
+                 * @return the decoder
+                 */
+                public CharsetDecoder getDecoder() {
 		            return decoder;
 		        }
 
-		        public IoBuffer getBuf() {
+                /**
+                 * Gets buf.
+                 *
+                 * @return the buf
+                 */
+                public IoBuffer getBuf() {
 		            return buf;
 		        }
 
-		        public int getMatchCount() {
+                /**
+                 * Gets match count.
+                 *
+                 * @return the match count
+                 */
+                public int getMatchCount() {
 		            return matchCount;
 		        }
 
-		        public void setMatchCount(int matchCount) {
+                /**
+                 * Sets match count.
+                 *
+                 * @param matchCount the match count
+                 */
+                public void setMatchCount(int matchCount) {
 		            this.matchCount = matchCount;
 		        }
 		    }    

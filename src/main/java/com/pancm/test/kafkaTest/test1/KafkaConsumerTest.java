@@ -10,13 +10,13 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 
 
 /**
- * 
-* Title: KafkaConsumerTest
-* Description: 
-*  kafka消费者 demo
-* Version:1.0.0  
-* @author pancm
-* @date 2018年1月26日
+ * Title: KafkaConsumerTest
+ * Description:
+ * kafka消费者 demo
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年1月26日
  */
 public class KafkaConsumerTest implements Runnable {
 
@@ -25,9 +25,13 @@ public class KafkaConsumerTest implements Runnable {
 	private  String topic;
 	private static final String GROUPID = "groupA";
 
-	
-	
-	public KafkaConsumerTest(String topicName) {
+
+    /**
+     * Instantiates a new Kafka consumer test.
+     *
+     * @param topicName the topic name
+     */
+    public KafkaConsumerTest(String topicName) {
 		Properties props = new Properties();
 		//kafka消费的的地址
 		props.put("bootstrap.servers", "master:9092,slave1:9092,slave2:9092");
@@ -86,8 +90,13 @@ public class KafkaConsumerTest implements Runnable {
 			consumer.close();
 		}
 	}
-   
-	public static void main(String args[]) {
+
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
+    public static void main(String args[]) {
 		KafkaConsumerTest test1 = new KafkaConsumerTest("KAFKA_TEST");
 		Thread thread1 = new Thread(test1);
 		thread1.start();

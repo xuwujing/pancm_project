@@ -5,10 +5,19 @@ import java.util.concurrent.TimeUnit;
 import org.I0Itec.zkclient.IZkDataListener;
 import org.I0Itec.zkclient.ZkClient;
 
+/**
+ * The type Zk client api.
+ */
 public class ZkClientApi {
     
     private final static String connectString = "192.169.0.23:2181";
-     
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws InterruptedException the interrupted exception
+     */
     public static void main(String[] args) throws InterruptedException {
         ZkClient zkClient = new ZkClient(connectString,4000);
         //zkClient一次创建多个节点

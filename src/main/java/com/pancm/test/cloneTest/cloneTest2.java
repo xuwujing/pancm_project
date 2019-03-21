@@ -1,44 +1,78 @@
 package com.pancm.test.cloneTest;
+
 /**
- * 
-* Title: cloneTest1
-* Description: 浅克隆测试2
-* Version:1.0.0  
-* @author Administrator
-* @date 2017-7-24
+ * Title: cloneTest1
+ * Description: 浅克隆测试2
+ * Version:1.0.0
+ *
+ * @author Administrator
+ * @date 2017 -7-24
  */
 //该对象不继承Cloneable
  class Address  {  
-	    private String add;  
-	  
-    public String getAdd() {  
+	    private String add;
+
+    /**
+     * Gets add.
+     *
+     * @return the add
+     */
+    public String getAdd() {
          return add;  
-     }  
-   
-     public void setAdd(String add) {  
+     }
+
+    /**
+     * Sets add.
+     *
+     * @param add the add
+     */
+    public void setAdd(String add) {
          this.add = add;  
      }         
- }  
-   
- //此对象依旧继承 Cloneable
+ }
+
+/**
+ * The type Student 2.
+ */
+//此对象依旧继承 Cloneable
  class Student2 implements Cloneable{  
      private int number;  
    
-     private Address addr;  
-       
-     public Address getAddr() {  
+     private Address addr;
+
+    /**
+     * Gets addr.
+     *
+     * @return the addr
+     */
+    public Address getAddr() {
          return addr;  
-     }  
-   
-     public void setAddr(Address addr) {  
+     }
+
+    /**
+     * Sets addr.
+     *
+     * @param addr the addr
+     */
+    public void setAddr(Address addr) {
          this.addr = addr;  
-     }  
-   
-     public int getNumber() {  
+     }
+
+    /**
+     * Gets number.
+     *
+     * @return the number
+     */
+    public int getNumber() {
          return number;  
-     }  
-   
-     public void setNumber(int number) {  
+     }
+
+    /**
+     * Sets number.
+     *
+     * @param number the number
+     */
+    public void setNumber(int number) {
          this.number = number;  
      }  
        
@@ -52,10 +86,18 @@ package com.pancm.test.cloneTest;
          }  
          return stu;  
      }  
- }  
- 
- public class cloneTest2 {  
-     public static void main(String args[]) {  
+ }
+
+/**
+ * The type Clone test 2.
+ */
+public class cloneTest2 {
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
+    public static void main(String args[]) {
            
          Address addr = new Address();  
          addr.setAdd("杭州市");  

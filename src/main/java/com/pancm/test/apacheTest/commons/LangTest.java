@@ -11,22 +11,29 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 /**
+ * The type Lang test.
+ *
+ * @author pancm
  * @Title: LangTest
  * @Description:
  * @Version:1.0.0
- * @author pancm
  * @date 2018年5月14日
  */
 public class LangTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		 test();
 	}
 
-	public static void test() {
+    /**
+     * Test.
+     */
+    public static void test() {
 		// 1 合并两个数组: org.apache.commons.lang. ArrayUtils
 		String[] s1 = new String[] { "1", "2", "3" };
 		String[] s2 = new String[] { "a", "b", "c" };

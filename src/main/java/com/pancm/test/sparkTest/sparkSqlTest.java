@@ -27,15 +27,21 @@ import org.apache.spark.sql.types.StructType;
 import scala.Tuple2;
 
 /**
- * 
-* Title: sparkSqlTest
-* Description: SparkOnHbase 的测试
-* Version:1.0.0  
-* @author pancm
-* @date 2017年11月24日
+ * Title: sparkSqlTest
+ * Description: SparkOnHbase 的测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年11月24日
  */
 public class sparkSqlTest {
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws Exception the exception
+     */
     public static void main(String[] args) throws Exception {
     	System.out.println("开始...");
 //        System.setProperty("hadoop.home.dir", "E:\\hadoop");

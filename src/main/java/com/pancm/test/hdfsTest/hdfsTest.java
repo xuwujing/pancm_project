@@ -12,12 +12,12 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
 /**
- * 
-* Title: hdfsTest
-* Description: HDFS测试
-* Version:1.0.0  
-* @author pancm
-* @date 2017年11月8日
+ * Title: hdfsTest
+ * Description: HDFS测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年11月8日
  */
 public class hdfsTest {
 		/** 文件夹路径  */
@@ -32,10 +32,19 @@ public class hdfsTest {
 	  	
 	  	/**主目录 */
 	  	private static final String  srcPath1="D:\\HadoopTest";
-	  	
-	  	static Configuration conf = new Configuration();  
-	 
-	  	public static void main(String[] args) throws IOException {  
+
+    /**
+     * The Conf.
+     */
+    static Configuration conf = new Configuration();
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws IOException the io exception
+     */
+    public static void main(String[] args) throws IOException {
 	  		 FileSystem fs = FileSystem.get(conf);  
 			  makeDir(fs,new Path(srcPath));
 			  deleteDir(fs,new Path(srcPath));

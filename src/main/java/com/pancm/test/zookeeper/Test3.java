@@ -9,13 +9,13 @@ import org.I0Itec.zkclient.IZkDataListener;
 import org.I0Itec.zkclient.ZkClient;
 
 /**
- * 
-* @Title: Test
-* @Description: 
-* zookeeper测试
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年4月28日
+ * The type Test 3.
+ *
+ * @author pancm
+ * @Title: Test
+ * @Description: zookeeper测试
+ * @Version:1.0.0
+ * @date 2018年4月28日
  */
 public class Test3 {
 	private static  ZkClient zk;
@@ -26,8 +26,14 @@ public class Test3 {
 	/** 私有目录*/
 	private static String PRIVATE_PATH = "/zkroot/mboss/1001";
 	private  static final String SPRIT ="/";
-	
-	public static void main(String[] args) throws Exception {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws Exception the exception
+     */
+    public static void main(String[] args) throws Exception {
 		// 创建一个与服务器的连接
 		connection();
 		delete("/zkroot/mboss");

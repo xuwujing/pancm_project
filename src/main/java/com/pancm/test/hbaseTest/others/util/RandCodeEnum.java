@@ -4,32 +4,35 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * The enum Rand code enum.
+ */
 enum RandCodeEnum {
-	/**
-	 * 混合字符串
-	 */
-	ALL_CHAR("0123456789abcdefghijkmnpqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), // 去除小写的l和o这个两个不容易区分的字符；
-	/**
-	 * 字符
-	 */
-	LETTER_CHAR("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"),
-	/**
-	 * 小写字母
-	 */
-	LOWER_CHAR("abcdefghijklmnopqrstuvwxyz"),
-	/**
-	 * 数字
-	 */
-	NUMBER_CHAR("0123456789"),
-	/**
-	 * 大写字符
-	 */
-	UPPER_CHAR("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
-	
-	/**
-	 * Hbase 离散前缀
-	 */
-	HBASE_CHAR("123456789ABCDEF");
+    /**
+     * 混合字符串
+     */
+    ALL_CHAR("0123456789abcdefghijkmnpqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), // 去除小写的l和o这个两个不容易区分的字符；
+    /**
+     * 字符
+     */
+    LETTER_CHAR("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+    /**
+     * 小写字母
+     */
+    LOWER_CHAR("abcdefghijklmnopqrstuvwxyz"),
+    /**
+     * 数字
+     */
+    NUMBER_CHAR("0123456789"),
+    /**
+     * 大写字符
+     */
+    UPPER_CHAR("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+
+    /**
+     * Hbase 离散前缀
+     */
+    HBASE_CHAR("123456789ABCDEF");
 	
 	/**
 	 * 待生成的字符串
@@ -40,7 +43,13 @@ enum RandCodeEnum {
 		this.charStr = charStr;
 	}
 
-	public String generateStr(final int codeLength) {
+    /**
+     * Generate str string.
+     *
+     * @param codeLength the code length
+     * @return the string
+     */
+    public String generateStr(final int codeLength) {
 		final StringBuffer sb = new StringBuffer();
 		final Random random = new Random();
 		final String sourseStr = getCharStr();
@@ -52,12 +61,25 @@ enum RandCodeEnum {
 		return sb.toString();
 	}
 
-	public String getCharStr() {
+    /**
+     * Gets char str.
+     *
+     * @return the char str
+     */
+    public String getCharStr() {
 		return charStr;
 	}
-	
-	
-	public String[] getHbaseKeys(int pNum, int b, boolean only) {
+
+
+    /**
+     * Get hbase keys string [ ].
+     *
+     * @param pNum the p num
+     * @param b    the b
+     * @param only the only
+     * @return the string [ ]
+     */
+    public String[] getHbaseKeys(int pNum, int b, boolean only) {
 		Set<String> ts = new TreeSet<String>();
 		int tss = 0;
 		while ((tss = ts.size()) < pNum) {
@@ -71,8 +93,13 @@ enum RandCodeEnum {
 		}
 		return ts.toArray(new String[tss]);
 	}
-	
-	public static void main(String[] args) {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		String[] hbaseKeys = RandCodeEnum.HBASE_CHAR.getHbaseKeys(240,2,false);
 		for (String s : hbaseKeys) {
 			System.out.println(s);

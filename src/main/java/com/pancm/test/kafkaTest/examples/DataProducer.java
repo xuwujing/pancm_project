@@ -7,11 +7,19 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
+/**
+ * The type Data producer.
+ */
 public class DataProducer {
 	private static Random random = new Random(93285);
 	private static Producer<String, String> producer;
 
-	public static void main(String args[]) {
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
+    public static void main(String args[]) {
 		Properties props = new Properties();
 		props.put("bootstrap.servers", "192.168.125.172:9092");
 		props.put("acks", "all");

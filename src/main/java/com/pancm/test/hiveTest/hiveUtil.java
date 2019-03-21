@@ -14,12 +14,13 @@ import java.util.Map;
 
 
 /**
- * 
-* @Title: hiveUtil
-* @Description: hive的连接工具类
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年1月4日
+ * The type Hive util.
+ *
+ * @author pancm
+ * @Title: hiveUtil
+ * @Description: hive的连接工具类
+ * @Version:1.0.0
+ * @date 2018年1月4日
  */
 public class hiveUtil {
 	
@@ -39,7 +40,12 @@ public class hiveUtil {
 		}
 	}
 
-	public synchronized static Connection getConnection() {
+    /**
+     * Gets connection.
+     *
+     * @return the connection
+     */
+    public synchronized static Connection getConnection() {
 		try {
 		if (null == connection||connection.isClosed()) {
 			    connection = DriverManager.getConnection("jdbc:hive2://192.169.0.23:10000", "root", "123456");
@@ -52,13 +58,12 @@ public class hiveUtil {
 		return connection;
 	}
 
-	
-	
-	
-	/**
-	 * 通过sql进行查询
-	 * @param sql
-	 */
+
+    /**
+     * 通过sql进行查询
+     *
+     * @param sql the sql
+     */
     public static void find(String sql) {
     	try {
 			if(null==connection||connection.isClosed()){
@@ -78,11 +83,12 @@ public class hiveUtil {
 			close();
 		}      
     }
-    
 
-	
-	
-	   public static void close() {
+
+    /**
+     * Close.
+     */
+    public static void close() {
 	        try {
 	            if (rs != null) {
 	                rs.close();
@@ -102,15 +108,16 @@ public class hiveUtil {
 	            System.exit(1);
 	        }
 	    }
-	
-	
-	/**
-	 * 将查询的数据转换成List类型
-	 * @param rs
-	 * @return
-	 * @throws SQLException
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+
+
+    /**
+     * 将查询的数据转换成List类型
+     *
+     * @param rs the rs
+     * @return list
+     * @throws SQLException the sql exception
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
 	public static List convertList(ResultSet rs) throws SQLException {
         if(null==rs||rs.isClosed()){
         	return null;

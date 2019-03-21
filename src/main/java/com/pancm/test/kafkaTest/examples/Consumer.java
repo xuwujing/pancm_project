@@ -9,12 +9,12 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 /**
- * 
-* Title: Consumer
-* Description: kafka消费者 
-* Version:1.0.0  
-* @author pancm
-* @date 2017年12月29日
+ * Title: Consumer
+ * Description: kafka消费者
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年12月29日
  */
 public class Consumer extends Thread {
 
@@ -22,7 +22,13 @@ public class Consumer extends Thread {
 	private final String topic;
 	private static final String GROUPID = "test-consumer-group";
 
-	public Consumer(String kafkaStr, String topic) {
+    /**
+     * Instantiates a new Consumer.
+     *
+     * @param kafkaStr the kafka str
+     * @param topic    the topic
+     */
+    public Consumer(String kafkaStr, String topic) {
 		Properties props = new Properties();
 		props.put("bootstrap.servers", kafkaStr);
 		props.put("group.id", GROUPID);

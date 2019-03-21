@@ -7,6 +7,12 @@ public class MacOrIpconvert {
 
     //
 
+    /**
+     * Ip to long long.
+     *
+     * @param strIp the str ip
+     * @return the long
+     */
     public static long ipToLong(String strIp){
         if(null==strIp || "".equals(strIp.trim())) return 0;
         long[] ip = new long[4];
@@ -24,6 +30,12 @@ public class MacOrIpconvert {
 
     //
 
+    /**
+     * Long to ip string.
+     *
+     * @param longIp the long ip
+     * @return the string
+     */
     public static String longToIp(long longIp){
         StringBuffer sb = new StringBuffer("");
         sb.append(String.valueOf((longIp >>> 24)));
@@ -38,6 +50,12 @@ public class MacOrIpconvert {
 
     //
 
+    /**
+     * Mac to string long.
+     *
+     * @param mac the mac
+     * @return the long
+     */
     public static long macToString(String mac){
         if(null==mac || "".equals(mac.trim())) return 0;
         mac = mac.trim();
@@ -48,6 +66,12 @@ public class MacOrIpconvert {
 
     //
 
+    /**
+     * Long to mac string.
+     *
+     * @param longMac the long mac
+     * @return the string
+     */
     public static String longToMac(long longMac){
         String strMac = Long.toHexString(longMac);
         while (strMac.length()<12){
@@ -64,6 +88,11 @@ public class MacOrIpconvert {
         return mac;
     }
 
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
     public static  void main(String[] args){
         System.out.println(longToMac(345052545026l));
         System.out.println(macToString("00:50:56:bc:00:02"));

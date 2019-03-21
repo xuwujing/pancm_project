@@ -15,12 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
-* Title: getProperties
-* Description: 获取配置文件
-* Version:1.0.0  
-* @author pancm
-* @date 2018年1月4日
+ * Title: getProperties
+ * Description: 获取配置文件
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年1月4日
  */
 public class GetProperties {
 	private static Map<String,String> appSettings = new HashMap<String,String>();
@@ -60,31 +60,39 @@ public class GetProperties {
 			}
 		}
 	}
-	
-	/**
-	 * 获取配置文件
-	 * @param name 配置文件名称
-	 * @return
-	 */
-	public synchronized static Map<String, String> getAppSettings() {
+
+    /**
+     * 获取配置文件
+     *
+     * @param name 配置文件名称
+     * @return app settings
+     */
+    public synchronized static Map<String, String> getAppSettings() {
 		if(null == appSettings || appSettings.isEmpty()){
 				new GetProperties();
 		}
 		return appSettings;
 	}
 
-	public synchronized static void setAppSettings(Map<String, String> appSettings,String name) {
+    /**
+     * Sets app settings.
+     *
+     * @param appSettings the app settings
+     * @param name        the name
+     */
+    public synchronized static void setAppSettings(Map<String, String> appSettings,String name) {
 		if(null == appSettings || appSettings.isEmpty()){
 			new GetProperties();
 		}
 		GetProperties.appSettings = appSettings;
 	}
-	   
-	/**
-	 * 方法测试
-	 * @param args
-	 */
-	  public static void main(String[] args) {
+
+    /**
+     * 方法测试
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		  Map<String, String> conf = GetProperties.getAppSettings();
 		  System.out.println("jdbc账号:"+conf.get("username"));
 	  }

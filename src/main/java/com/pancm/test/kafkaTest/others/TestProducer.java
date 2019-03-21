@@ -6,7 +6,15 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
+/**
+ * The type Test producer.
+ */
 public class TestProducer {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
     	System.out.println("开始...");
          Properties props = new Properties();

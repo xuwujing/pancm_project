@@ -11,10 +11,11 @@ public class ArrayUtil {
 
     /**
      * 拆分集合
-     * @param <T>
-     * @param resList  要拆分的集合
-     * @param count	每个集合的元素个数
-     * @return  返回拆分后的各个集合
+     *
+     * @param <T>     the type parameter
+     * @param resList 要拆分的集合
+     * @param count   每个集合的元素个数
+     * @return 返回拆分后的各个集合 list
      */
     public static <T> List<List<T>> split(List<T> resList, int count){
 

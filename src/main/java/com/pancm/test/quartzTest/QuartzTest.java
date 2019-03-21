@@ -14,8 +14,16 @@ import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.quartz.impl.StdSchedulerFactory;
 
+/**
+ * The type Quartz test.
+ */
 public class QuartzTest {
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         try {
             //创建scheduler
@@ -50,6 +58,9 @@ public class QuartzTest {
     }
 }
 
+/**
+ * The type Hello quartz.
+ */
 class HelloQuartz implements Job {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         JobDetail detail = context.getJobDetail();

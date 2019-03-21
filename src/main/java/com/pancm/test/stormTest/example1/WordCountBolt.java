@@ -12,11 +12,10 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 
 
-
 /**
  * 订阅 split sentence bolt的输出流，实现单词计数，并发送当前计数给下一个bolt
- * @author soul
  *
+ * @author soul
  */
 public class WordCountBolt extends BaseRichBolt {
     /**

@@ -1,22 +1,22 @@
 package com.pancm.test.design.facade;
 
 /**
-* @Title: FacadeTest
-* @Description: 
-* 外观模式测试代码
-* 
-* 为子系统中的一组接口提供一个一致的界面，外观模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。
-* 
-* 比如windows开机:启动CPU、启动内存、启动硬盘
-* windows关机:关闭硬盘、关闭内存、关闭CPU
-* 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月8日
-*/
+ * The type Facade test.
+ *
+ * @author pancm
+ * @Title: FacadeTest
+ * @Description: 外观模式测试代码   为子系统中的一组接口提供一个一致的界面，外观模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。 比如windows开机:启动CPU、启动内存、启动硬盘 windows关机:关闭硬盘、关闭内存、关闭CPU
+ * @Version:1.0.0
+ * @date 2018年8月8日
+ */
 public class FacadeTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		
 		/*
 		 * 对外提供 一个界面
@@ -29,10 +29,19 @@ public class FacadeTest {
 	}
 }
 
+/**
+ * The interface Game.
+ */
 interface Game{
-	void play();
+    /**
+     * Play.
+     */
+    void play();
 }
 
+/**
+ * The type Dnf.
+ */
 class DNF implements Game{
 
 	@Override
@@ -41,6 +50,9 @@ class DNF implements Game{
 	}
 }
 
+/**
+ * The type Lol.
+ */
 class LOL implements Game{
 	@Override
 	public void play() {
@@ -48,6 +60,9 @@ class LOL implements Game{
 	}
 }
 
+/**
+ * The type Wow.
+ */
 class WOW implements Game{
 	@Override
 	public void play() {
@@ -55,27 +70,42 @@ class WOW implements Game{
 	}
 }
 
+/**
+ * The type Computer.
+ */
 class Computer{
 	
 	private Game dnf;
 	private Game lol;
 	private Game wow;
-	
-	public Computer() {
+
+    /**
+     * Instantiates a new Computer.
+     */
+    public Computer() {
 		dnf=new DNF();
 		lol=new LOL();
 		wow=new WOW();
 	}
-	
-	public void playDNF(){
+
+    /**
+     * Play dnf.
+     */
+    public void playDNF(){
 		dnf.play();
 	}
-	
-	public void playLOL(){
+
+    /**
+     * Play lol.
+     */
+    public void playLOL(){
 		lol.play();
 	}
-	
-	public void playWOW(){
+
+    /**
+     * Play wow.
+     */
+    public void playWOW(){
 		wow.play();
 	}
 	

@@ -16,11 +16,12 @@ import com.alibaba.druid.pool.DruidDataSource;
 
 
 /**
- * 
+ * The type Connection manager.
+ *
+ * @author pancm
  * @Title: ConnectionManager
  * @Description:数据库连接初始类
  * @Version:1.0.0
- * @author pancm
  * @date 2018年1月4日
  */
 public class ConnectionManager {
@@ -95,15 +96,13 @@ public class ConnectionManager {
 
 	}
 
-	/**
-	 * 连接测试
-	 * 
-	 * @param dataSource
-	 * @param username
-	 * @param password
-	 * @return
-	 */
-	public boolean testCon(DataSource dataSource) {
+    /**
+     * 连接测试
+     *
+     * @param dataSource the data source
+     * @return boolean
+     */
+    public boolean testCon(DataSource dataSource) {
 		try {
 			dataSource.getConnection();
 		} catch (Exception e) {
@@ -112,12 +111,12 @@ public class ConnectionManager {
 		return true;
 	}
 
-	/**
-	 * 获取数据库连接对象，单例
-	 * 
-	 * @return
-	 */
-	public static ConnectionManager getInstance() {
+    /**
+     * 获取数据库连接对象，单例
+     *
+     * @return instance
+     */
+    public static ConnectionManager getInstance() {
 		if (dbConnection == null) {
 			synchronized (ConnectionManager.class) {
 				if (dbConnection == null) {
@@ -128,7 +127,13 @@ public class ConnectionManager {
 		return dbConnection;
 	}
 
-	public final Connection getConnection() throws SQLException {
+    /**
+     * Gets connection.
+     *
+     * @return the connection
+     * @throws SQLException the sql exception
+     */
+    public final Connection getConnection() throws SQLException {
 		Connection conn = null;
 		try {
 			conn = ec_pool.getConnection();
@@ -139,7 +144,14 @@ public class ConnectionManager {
 		return conn;
 	}
 
-	public static void close(ResultSet rs, Statement stmt, Connection connection) {
+    /**
+     * Close.
+     *
+     * @param rs         the rs
+     * @param stmt       the stmt
+     * @param connection the connection
+     */
+    public static void close(ResultSet rs, Statement stmt, Connection connection) {
 		try {
 			if (rs != null) {
 				rs.close();

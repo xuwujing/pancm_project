@@ -4,19 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Title: ObserverTest
- * @Description: 观察者模式 当对象间存在一对多关系时，则使用观察者模式（Observer
- *               Pattern）。比如，当一个对象被修改时，则会自动通知它的依赖对象。观察者模式属于行为型模式。
- 观察者模式是对象的行为模式，又叫发布-订阅(Publish/Subscribe)模式、模型-视图(Model/View)模式、源-监听器(Source/Listener)模式或从属者(Dependents)模式。
-观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态上发生变化时，会通知所有观察者对象，使它们能够自动更新自己。    
- *               核心:定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。
- * @Version:1.0.0
+ * The type Observer test.
+ *
  * @author pancm
+ * @Title: ObserverTest
+ * @Description: 观察者模式 当对象间存在一对多关系时，则使用观察者模式（Observer               Pattern）。比如，当一个对象被修改时，则会自动通知它的依赖对象。观察者模式属于行为型模式。观察者模式是对象的行为模式，又叫发布-订阅(Publish/Subscribe)模式、模型-视图(Model/View)模式、源-监听器(Source/Listener)模式或从属者(Dependents)模式。观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态上发生变化时，会通知所有观察者对象，使它们能够自动更新自己。                   核心:定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都得到通知并被自动更新。
+ * @Version:1.0.0
  * @date 2018年8月8日
  */
 public class ObserverTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 
 		/*
 		 * 基本使用
@@ -115,43 +118,80 @@ public class ObserverTest {
 
 }
 
+/**
+ * The type Subject.
+ */
 class Subject {
 
 	private List<Observer> observers = new ArrayList<Observer>();
 	private int state;
 
-	public int getState() {
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    public int getState() {
 		return state;
 	}
 
-	public void setState(int state) {
+    /**
+     * Sets state.
+     *
+     * @param state the state
+     */
+    public void setState(int state) {
 		this.state = state;
 		notifyAllObservers();
 	}
 
-	public void attach(Observer observer) {
+    /**
+     * Attach.
+     *
+     * @param observer the observer
+     */
+    public void attach(Observer observer) {
 		observers.add(observer);
 	}
 
-	public void notifyAllObservers() {
+    /**
+     * Notify all observers.
+     */
+    public void notifyAllObservers() {
 		for (Observer observer : observers) {
 			observer.update();
 		}
 	}
 }
 
+/**
+ * The type Observer.
+ */
 //观察者
 abstract class Observer {
-	protected Subject subject;
+    /**
+     * The Subject.
+     */
+    protected Subject subject;
 
-	public abstract void update();
+    /**
+     * Update.
+     */
+    public abstract void update();
 }
 
 
-
+/**
+ * The type Binary observer.
+ */
 class BinaryObserver extends Observer {
 
-	public BinaryObserver(Subject subject) {
+    /**
+     * Instantiates a new Binary observer.
+     *
+     * @param subject the subject
+     */
+    public BinaryObserver(Subject subject) {
 		this.subject = subject;
 		this.subject.attach(this);
 	}
@@ -162,9 +202,17 @@ class BinaryObserver extends Observer {
 	}
 }
 
+/**
+ * The type Octal observer.
+ */
 class OctalObserver extends Observer {
 
-	public OctalObserver(Subject subject) {
+    /**
+     * Instantiates a new Octal observer.
+     *
+     * @param subject the subject
+     */
+    public OctalObserver(Subject subject) {
 		this.subject = subject;
 		this.subject.attach(this);
 	}
@@ -175,9 +223,17 @@ class OctalObserver extends Observer {
 	}
 }
 
+/**
+ * The type Hexa observer.
+ */
 class HexaObserver extends Observer {
 
-	public HexaObserver(Subject subject) {
+    /**
+     * Instantiates a new Hexa observer.
+     *
+     * @param subject the subject
+     */
+    public HexaObserver(Subject subject) {
 		this.subject = subject;
 		this.subject.attach(this);
 	}
@@ -189,27 +245,62 @@ class HexaObserver extends Observer {
 }
 
 
+/**
+ * The interface Bangumi subject.
+ */
 //定义一个抽象主题, 将观察者(订阅者)聚集起来,可以进行新增、删除和通知。
 //这里就可以当做番剧
 interface BangumiSubject{
-	//追番
+    /**
+     * To them.
+     *
+     * @param user the user
+     */
+//追番
 	void toThem(UserObserver user);
-	//取消追番
+
+    /**
+     * Call off.
+     *
+     * @param user the user
+     */
+//取消追番
 	void callOff(UserObserver user);
-	//通知
+
+    /**
+     * Notify user.
+     */
+//通知
 	void notifyUser();
 }
 
 
+/**
+ * The interface User observer.
+ */
 //定义一个抽象观察者,在得到通知时进行更新
 //这里就可以当做是用户
 interface UserObserver{
-	//更新通知
+    /**
+     * Update.
+     *
+     * @param bangumi the bangumi
+     */
+//更新通知
 	void update(String bangumi);
-	//得到用户名称
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+//得到用户名称
 	String getName();
 }
 
+/**
+ * The type Bangumi.
+ */
 //定义一个具体主题,实现了抽象主题(BangumiSubject)接口的方法
 //同时通过一个List集合保存观察者的信息，当需要通知观察者的时候，遍历通知即可。
 class  Bangumi implements BangumiSubject {
@@ -217,6 +308,12 @@ class  Bangumi implements BangumiSubject {
 
     private List<UserObserver> list;
     private String  anime;
+
+    /**
+     * Instantiates a new Bangumi.
+     *
+     * @param anime the anime
+     */
     public Bangumi(String anime) {
         this.anime = anime;
     	list = new ArrayList<UserObserver>();
@@ -247,10 +344,19 @@ class  Bangumi implements BangumiSubject {
 }
 
 
+/**
+ * The type User.
+ */
 //定义了一个具体观察者,实现抽象观察者(UserObserver)接口的方法
 class  User implements UserObserver{
 	private String name;
-	public User(String name){
+
+    /**
+     * Instantiates a new User.
+     *
+     * @param name the name
+     */
+    public User(String name){
 		this.name = name;
 	}
 	

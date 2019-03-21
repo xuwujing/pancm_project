@@ -5,17 +5,21 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.kevinsawicki.http.HttpRequest;
 
 /**
+ * The type Http util.
+ *
  * @author ZERO
- * @Data 2017-4-18 2:25:44
+ * @Data 2017 -4-18 2:25:44
  */
 public class HttpUtil {
-          
-	/**
-	 * @param String
-	 * @param JSONObject
-	 * @return
-	 */
-	public static String  doGet(String url,JSONObject json){
+
+    /**
+     * Do get string.
+     *
+     * @param url  the url
+     * @param json the json
+     * @return string
+     */
+    public static String  doGet(String url,JSONObject json){
 		HttpRequest hr = new HttpRequest(url, HttpRequest.METHOD_GET); 
     	if ("https".equalsIgnoreCase(url.substring(0, 5))) {
     		hr.trustAllCerts().trustAllHosts();
@@ -26,9 +30,15 @@ public class HttpUtil {
     	}
 	   return hr.send(json.toString()).body();
 	}
-	
 
-	public static String  doGet1(String url){
+
+    /**
+     * Do get 1 string.
+     *
+     * @param url the url
+     * @return the string
+     */
+    public static String  doGet1(String url){
 		HttpRequest hr = new HttpRequest(url, HttpRequest.METHOD_GET); 
     	if ("https".equalsIgnoreCase(url.substring(0, 5))) {
     		hr.trustAllCerts().trustAllHosts();
@@ -40,9 +50,16 @@ public class HttpUtil {
 	       
 	   return hr.body();
 	}
-	
-	
-	public static String  doPost(String url,JSONObject json){
+
+
+    /**
+     * Do post string.
+     *
+     * @param url  the url
+     * @param json the json
+     * @return the string
+     */
+    public static String  doPost(String url,JSONObject json){
 		HttpRequest hr = new HttpRequest(url, HttpRequest.METHOD_POST); 
     	if ("https".equalsIgnoreCase(url.substring(0, 5))) {
     		hr.trustAllCerts().trustAllHosts();
@@ -53,8 +70,15 @@ public class HttpUtil {
     	}
     	return hr.send(json.toJSONString()).body();
 	}
-	
-	public static String  doPost(String url,String json){
+
+    /**
+     * Do post string.
+     *
+     * @param url  the url
+     * @param json the json
+     * @return the string
+     */
+    public static String  doPost(String url,String json){
 		HttpRequest hr = new HttpRequest(url, HttpRequest.METHOD_POST); 
     	if ("https".equalsIgnoreCase(url.substring(0, 5))) {
     		hr.trustAllCerts().trustAllHosts();

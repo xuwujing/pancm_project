@@ -1,21 +1,22 @@
 package com.pancm.test.design.adapter;
 
 /**
-* @Title: AdapterTest
-* @Description: 
-* 适配器模式
-* 将一个类的接口转换成客户希望的另外一个接口。适配器模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。
-* 
-* 有两种种模式
-* 1.类适配器模式
-* 2.对象适配器模式
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月8日
-*/
+ * The type Adapter test.
+ *
+ * @author pancm
+ * @Title: AdapterTest
+ * @Description: 适配器模式   将一个类的接口转换成客户希望的另外一个接口。适配器模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。 有两种种模式 1.类适配器模式 2.对象适配器模式
+ * @Version:1.0.0
+ * @date 2018年8月8日
+ */
 public class AdapterTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		/*
 		 * 1.类适配器模式 
 		 * 通过继承来实现适配器功能。
@@ -41,26 +42,45 @@ public class AdapterTest {
 }
 
 
+/**
+ * The interface Mp 4.
+ */
 interface Mp4{
-	void playMp4();
-}
-
-interface Avi{
-	void playAvi();
-}
-
-
-interface Rvmb{
-	void playRvmb();
+    /**
+     * Play mp 4.
+     */
+    void playMp4();
 }
 
 /**
- * 
-* @Title: VideoPlayer
-* @Description: 视频播放器
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月21日
+ * The interface Avi.
+ */
+interface Avi{
+    /**
+     * Play avi.
+     */
+    void playAvi();
+}
+
+
+/**
+ * The interface Rvmb.
+ */
+interface Rvmb{
+    /**
+     * Play rvmb.
+     */
+    void playRvmb();
+}
+
+/**
+ * The type Video player.
+ *
+ * @author pancm
+ * @Title: VideoPlayer
+ * @Description: 视频播放器
+ * @Version:1.0.0
+ * @date 2018年8月21日
  */
 class VideoPlayer implements Mp4{
 
@@ -72,12 +92,13 @@ class VideoPlayer implements Mp4{
 
 
 /**
- * 
-* @Title: FormatFactory
-* @Description: 格式工厂
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月21日
+ * The type Format factory.
+ *
+ * @author pancm
+ * @Title: FormatFactory
+ * @Description: 格式工厂
+ * @Version:1.0.0
+ * @date 2018年8月21日
  */
 class FormatFactory extends VideoPlayer  implements Avi{
 
@@ -90,17 +111,23 @@ class FormatFactory extends VideoPlayer  implements Avi{
 
 
 /**
- * 
-* @Title: FormatFactory2
-* @Description: 格式工厂
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月21日
+ * The type Format factory 2.
+ *
+ * @author pancm
+ * @Title: FormatFactory2
+ * @Description: 格式工厂
+ * @Version:1.0.0
+ * @date 2018年8月21日
  */
 class FormatFactory2  implements Rvmb{
 	private Mp4 mp4;
-	
-	 public FormatFactory2(Mp4 mp4) {
+
+    /**
+     * Instantiates a new Format factory 2.
+     *
+     * @param mp4 the mp 4
+     */
+    public FormatFactory2(Mp4 mp4) {
 		this.mp4=mp4;
    	}
 	

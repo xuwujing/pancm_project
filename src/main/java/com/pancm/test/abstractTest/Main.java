@@ -1,28 +1,48 @@
 package com.pancm.test.abstractTest;
+
 /**
+ * The type E.
+ *
  * @author ZERO
- * @Data 2017-6-1 下午3:37:23
+ * @Data 2017 -6-1 下午3:37:23
  * @Description 抽象类
  */
-abstract class E{  
-    public abstract  void show();  
-}  
-  
-class F extends E{  
+abstract class E{
+    /**
+     * Show.
+     */
+    public abstract  void show();
+}
+
+/**
+ * The type F.
+ */
+class F extends E{
     public void show(){  
         System.out.print("test all FFFF \n");  
     }  
-}  
-  
-class G extends E{  
+}
+
+/**
+ * The type G.
+ */
+class G extends E{
     public void show(){  
         System.out.print("test all GGGG \n");  
     }  
 }
 
-public class Main   
-{  
-    public static void main(String[] args) {  
+/**
+ * The type Main.
+ */
+public class Main
+{
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
         E p = new F();  
         p.show();  
         E q = new G();  

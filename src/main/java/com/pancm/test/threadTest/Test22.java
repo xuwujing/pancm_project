@@ -4,9 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+/**
+ * The type Test 22.
+ */
 public class Test22 {
-	
-	public static void main(String[] args) {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		Map<Integer,Integer> map=new HashMap<Integer,Integer>();
 		map.put(0, 0);
 		map.put(1, 1);
@@ -17,11 +25,19 @@ public class Test22 {
 	}
 }
 
+/**
+ * The type Thread 3.
+ */
 class Thread3 extends Thread{
 
 	private int type;
-	
-	public Thread3(int type){
+
+    /**
+     * Instantiates a new Thread 3.
+     *
+     * @param type the type
+     */
+    public Thread3(int type){
 		this.type=type;
 	}
 	 

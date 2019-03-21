@@ -7,15 +7,15 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
- 
+
 
 /**
- * 
-* Title: NettyServerFilter
-* Description: Netty 服务端过滤器
-* Version:1.0.0  
-* @author pancm
-* @date 2017年10月26日
+ * Title: NettyServerFilter
+ * Description: Netty 服务端过滤器
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年10月26日
  */
 public class NettyServerFilter extends ChannelInitializer<SocketChannel> {
  

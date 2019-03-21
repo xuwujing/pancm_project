@@ -3,28 +3,30 @@ package com.pancm.test.arithmetic;
 import java.util.Scanner;
 
 /**
+ * The type Pattern matching test.
+ *
+ * @author pancm
  * @Title: PatternMatchingTest
  * @Description: 模式匹配算法
  * @Version:1.0.0
- * @author pancm
  * @date 2018年9月14日
  */
 public class PatternMatchingTest {
 
-	
-	
-	/**
-	 * 暴力匹配
-	 * 　时间复杂度为O(n*m)；n为主串长度，m为模式串长度
-　　		算法的基本思想：
-　　　　　　从主串的起始位置（或指定位置）开始与模式串的第一个字符比较，若相等，则继续逐个比较后续字符；
-                       否则从主串的下一个字符再重新和模式串的字符比较。
-                       依次类推，直到模式串成功匹配，返回主串中第一次出现模式串字符的位置，或者模式串匹配不成功，这里约定返回-1；
-	 * @param source
-	 * @param pattern
-	 * @return
-	 */
-	public static int bruteForceStringMatch(String source, String pattern) {
+
+    /**
+     * 暴力匹配
+     * 　时间复杂度为O(n*m)；n为主串长度，m为模式串长度
+     * 　　		算法的基本思想：
+     * 　　　　　　从主串的起始位置（或指定位置）开始与模式串的第一个字符比较，若相等，则继续逐个比较后续字符；
+     * 否则从主串的下一个字符再重新和模式串的字符比较。
+     * 依次类推，直到模式串成功匹配，返回主串中第一次出现模式串字符的位置，或者模式串匹配不成功，这里约定返回-1；
+     *
+     * @param source  the source
+     * @param pattern the pattern
+     * @return int
+     */
+    public static int bruteForceStringMatch(String source, String pattern) {
 		int slen = source.length();
 		int plen = pattern.length();
 		char[] s = source.toCharArray();
@@ -52,22 +54,19 @@ public class PatternMatchingTest {
 		}
 	}
 
-	
-	
-	
-	
-	/**
-	 * KMP算法
-	　　KMP算法是D.E.Knuth、V.R.Pratt和J.H.Morris同时发现，所以命名为KMP算法。
-	　　此算法可以在O(n+m)的时间数量级上完成串的模式匹配。
-	　　主要就是改进了暴力匹配中i回溯的操作，KMP算法中当一趟匹配过程中出现字符比较不等时，
-	不直接回溯i，而是利用已经得到的“部分匹配”的结果将模式串向右移动（j-next[k]）的距离。
-	
-	* @param source
-	 * @param pattern
-	 * @return
-	 */
-	public static int kmpStringMatch(String source, String pattern)
+
+    /**
+     * KMP算法
+     * 　　KMP算法是D.E.Knuth、V.R.Pratt和J.H.Morris同时发现，所以命名为KMP算法。
+     * 　　此算法可以在O(n+m)的时间数量级上完成串的模式匹配。
+     * 　　主要就是改进了暴力匹配中i回溯的操作，KMP算法中当一趟匹配过程中出现字符比较不等时，
+     * 不直接回溯i，而是利用已经得到的“部分匹配”的结果将模式串向右移动（j-next[k]）的距离。
+     *
+     * @param source  the source
+     * @param pattern the pattern
+     * @return int
+     */
+    public static int kmpStringMatch(String source, String pattern)
     {
         int i = 0;
         int j = 0;
@@ -147,9 +146,13 @@ public class PatternMatchingTest {
         System.out.println();
         return next;
     }
-    
-    
-    
+
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     @SuppressWarnings("resource")
 	public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);

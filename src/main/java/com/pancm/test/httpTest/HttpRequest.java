@@ -21,15 +21,27 @@ import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 
 /**
+ * The type Http request.
+ *
  * @author ZERO
- * @Data 2017-5-12 下午4:04:18
- * @Description 
+ * @Data 2017 -5-12 下午4:04:18
+ * @Description
  */
-
 public class HttpRequest {
-	public static int HTTP_TIME_OUT = 600000;// 超时时间600秒
+    /**
+     * The constant HTTP_TIME_OUT.
+     */
+    public static int HTTP_TIME_OUT = 600000;// 超时时间600秒
 	private static final String DEFAULT_CHARSET = "UTF-8";
-	public static String doJSONPost(String url, String json) {	
+
+    /**
+     * Do json post string.
+     *
+     * @param url  the url
+     * @param json the json
+     * @return the string
+     */
+    public static String doJSONPost(String url, String json) {
         CloseableHttpClient httpclient = null;
         try {
             SSLContext sslcontext = SSLContexts.custom().loadTrustMaterial(null, new TrustSelfSignedStrategy()).build();

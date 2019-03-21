@@ -4,20 +4,24 @@
 package com.pancm.test.design.factory;
 
 /**
-* @Title: Test1
-* @Description: 
-* 简单工厂模式测试
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年7月23日
-*/
+ * The type Test 1.
+ *
+ * @author pancm
+ * @Title: Test1
+ * @Description: 简单工厂模式测试
+ * @Version:1.0.0
+ * @date 2018年7月23日
+ */
 public class Test1 {
 	private static final String LOL="LOL"; 
-	private static final String DNF="DNF"; 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+	private static final String DNF="DNF";
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		/**
 		 * 简单工厂模式
 		 * 根据条件决定一个接口由哪个具体产品类来实现
@@ -68,7 +72,10 @@ public class Test1 {
  * 定义一个接口
  */
 interface Game{
-	void play();
+    /**
+     * Play.
+     */
+    void play();
 }
 
 /**
@@ -81,6 +88,9 @@ class LOL implements Game{
 	}	
 }
 
+/**
+ * The type Dnf.
+ */
 class DNF implements Game{
 	@Override
 	public void play() {
@@ -88,6 +98,9 @@ class DNF implements Game{
 	}	
 }
 
+/**
+ * The type Wow.
+ */
 class WOW  implements Game{
 	@Override
 	public void play() {
@@ -100,8 +113,15 @@ class WOW  implements Game{
  */
 class ComputerFactory{
 	private static final String LOL="LOL"; 
-	private static final String DNF="DNF"; 
-	//玩游戏
+	private static final String DNF="DNF";
+
+    /**
+     * Play game game.
+     *
+     * @param game the game
+     * @return the game
+     */
+//玩游戏
 	 public static Game playGame(String game){
 		 if(LOL.equalsIgnoreCase(game)){
 			 return new LOL();
@@ -112,10 +132,21 @@ class ComputerFactory{
 	 }	
 }
 
+/**
+ * The interface Computer factory 2.
+ */
 interface ComputerFactory2{
-	Game playGame();
+    /**
+     * Play game game.
+     *
+     * @return the game
+     */
+    Game playGame();
 }
 
+/**
+ * The type Lol factory.
+ */
 class LOLFactory implements ComputerFactory2{
 	@Override
 	public Game playGame() {
@@ -123,6 +154,9 @@ class LOLFactory implements ComputerFactory2{
 	}
 }
 
+/**
+ * The type Dnf factory.
+ */
 class DNFFactory implements ComputerFactory2{
 	@Override
 	public Game playGame() {
@@ -130,6 +164,9 @@ class DNFFactory implements ComputerFactory2{
 	}
 }
 
+/**
+ * The type Wow factory.
+ */
 class WOWFactory implements ComputerFactory2{
 	@Override
 	public Game playGame() {
@@ -137,12 +174,28 @@ class WOWFactory implements ComputerFactory2{
 	}
 }
 
+/**
+ * The interface Computer factory 3.
+ */
 interface ComputerFactory3{
-	Game playGame();
-	
-	Game playGame2();
+    /**
+     * Play game game.
+     *
+     * @return the game
+     */
+    Game playGame();
+
+    /**
+     * Play game 2 game.
+     *
+     * @return the game
+     */
+    Game playGame2();
 }
 
+/**
+ * The type Pvp factory.
+ */
 class PVPFactory implements ComputerFactory3{
 
 	@Override
@@ -157,6 +210,9 @@ class PVPFactory implements ComputerFactory3{
 	
 }
 
+/**
+ * The type Pve factory.
+ */
 class PVEFactory implements ComputerFactory3{
 
 	@Override

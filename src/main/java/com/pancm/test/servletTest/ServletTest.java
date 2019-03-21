@@ -9,24 +9,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 
-* Title: ServletTest
-* Description: 
-* 部署在tomcat之后，在web.xml添加:
-*   <servlet>
-    <servlet-name>testServlet</servlet-name>
-    <servlet-class>com.pancm.test.servletTest.testServlet</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>testServlet</servlet-name>
-    <url-pattern>/test.do</url-pattern>
-  </servlet-mapping>
-  然后启动tomcat，在浏览器输入 ip:端口/项目名/设置的地址        
-  就可以访问了
-* Version:1.0.0  
-* @author pancm
-* @date 2018年3月20日
+ * Title: ServletTest
+ * Description:
+ * 部署在tomcat之后，在web.xml添加:
+ * <servlet>
+ * <servlet-name>testServlet</servlet-name>
+ * <servlet-class>com.pancm.test.servletTest.testServlet</servlet-class>
+ * </servlet>
+ * <p>
+ * <servlet-mapping>
+ * <servlet-name>testServlet</servlet-name>
+ * <url-pattern>/test.do</url-pattern>
+ * </servlet-mapping>
+ * 然后启动tomcat，在浏览器输入 ip:端口/项目名/设置的地址
+ * 就可以访问了
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年3月20日
  */
 public class ServletTest extends HttpServlet {
 

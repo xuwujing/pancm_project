@@ -11,16 +11,22 @@ import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
 
 /**
+ * The type Mina client.
+ *
  * @author ZERO
- * @version 2017-3-27 下午5:59:54
- * mina 客户端
+ * @version 2017 -3-27 下午5:59:54 mina 客户端
  */
 public class MinaClient {
     private static Logger logger = Logger.getLogger(MinaClient.class);
     private static String HOST = "127.0.0.1";
     private static int PORT = 3305;
-    
-   /* 
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+/*
     * 测试服务端与客户端程序！
     a. 启动服务端，然后再启动客户端（客户端发送的消息是"why are you so diao "）
     b. 服务端接收消息并处理成功;

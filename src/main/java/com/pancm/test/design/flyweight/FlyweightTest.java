@@ -4,20 +4,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Title: FlyweightTest
- * @Description: 享元模式
- *               在有大量对象时，有可能会造成内存溢出，我们把其中共同的部分抽象出来，如果有相同的业务请求，直接返回在内存中已有的对象，
- *               避免重新创建。
- *                应用实例: 1、JAVA 中的 String，如果有则返回，如果没有则创建一个字符串保存在字符串缓存池里面。
- *               	     2、数据库的数据池。
- *                主要目的就是复用
- * @Version:1.0.0
+ * The type Flyweight test.
+ *
  * @author pancm
+ * @Title: FlyweightTest
+ * @Description: 享元模式                在有大量对象时，有可能会造成内存溢出，我们把其中共同的部分抽象出来，如果有相同的业务请求，直接返回在内存中已有的对象，               避免重新创建。                应用实例: 1、JAVA 中的 String，如果有则返回，如果没有则创建一个字符串保存在字符串缓存池里面。               	     2、数据库的数据池。                主要目的就是复用
+ * @Version:1.0.0
  * @date 2018年8月8日
  */
 public class FlyweightTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		/*
 		 * 享元模式的角色: Flyweight: 抽象享元类。所有具体享元类的超类或者接口，通过这个接口，Flyweight可以接受并作用于外部专题
 		 * ConcreteFlyweight: 具体享元类。指定内部状态，为内部状态增加存储空间。
@@ -57,13 +59,22 @@ public class FlyweightTest {
 	}
 }
 
+/**
+ * The interface Pen.
+ */
 /*
  * 创建一支笔的接口
  */
 interface Pen {
-	void write();
+    /**
+     * Write.
+     */
+    void write();
 }
 
+/**
+ * The type Penil.
+ */
 /*
  * 创建一支铅笔
  */
@@ -71,26 +82,51 @@ class Penil implements Pen {
 	private String name;
 	private String something; 
 	private  int i;
-	
-	public Penil(String name) {
+
+    /**
+     * Instantiates a new Penil.
+     *
+     * @param name the name
+     */
+    public Penil(String name) {
 		this.name = name;
 		i++;
 		System.out.println(name+" 第:"+i+"次创建");
 	}
-	
-	public String getName() {
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
 		return name;
 	}
-	
-	public void setName(String name) {
+
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
+    public void setName(String name) {
 		this.name = name;
 	}
-	
-	public String getSomething() {
+
+    /**
+     * Gets something.
+     *
+     * @return the something
+     */
+    public String getSomething() {
 		return something;
 	}
-	
-	public void setSomething(String something) {
+
+    /**
+     * Sets something.
+     *
+     * @param something the something
+     */
+    public void setSomething(String something) {
 		this.something = something;
 	}
 	
@@ -100,6 +136,9 @@ class Penil implements Pen {
 	}
 }
 
+/**
+ * The type Pen factory.
+ */
 /*
  * 创建一个工厂
  * 核心
@@ -107,7 +146,13 @@ class Penil implements Pen {
 class PenFactory {
 	private static final Map<String, Penil> map = new HashMap<String, Penil>();
 
-	public static Penil get(String name) {
+    /**
+     * Get penil.
+     *
+     * @param name the name
+     * @return the penil
+     */
+    public static Penil get(String name) {
 		Penil penil = map.get(name);
 		if (penil == null) {
 			penil = new Penil(name);

@@ -3,16 +3,22 @@ package com.pancm.test.threadTest;
 import java.util.Random;
 
 /**
-* @Title: PriorityTest
-* @Description:
-* 线程优先级测试 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年5月27日
-*/
+ * The type Priority test.
+ *
+ * @author pancm
+ * @Title: PriorityTest
+ * @Description: 线程优先级测试
+ * @Version:1.0.0
+ * @date 2018年5月27日
+ */
 public class PriorityTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		Test3 t1 = new Test3("张三");
 		Test3 t2 = new Test3("李四");
 		t1.setPriority(Thread.MIN_PRIORITY);
@@ -22,8 +28,16 @@ public class PriorityTest {
 	}
 }
 
+/**
+ * The type Test 3.
+ */
 class Test3 extends Thread {
-	public Test3(String name) {
+    /**
+     * Instantiates a new Test 3.
+     *
+     * @param name the name
+     */
+    public Test3(String name) {
 		super(name);
 	}
 	@Override

@@ -13,7 +13,15 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class DesEncrypt {
     private static final String Algorithm = "DES"; // 定义 加密算法,可用
-    // DES,DESede,Blowfish
+
+    /**
+     * Encrypt mode byte [ ].
+     *
+     * @param keybyte the keybyte
+     * @param src     the src
+     * @return the byte [ ]
+     */
+// DES,DESede,Blowfish
     // src为被加密的数据缓冲区（源）
     public static byte[] encryptMode(byte[] keybyte, byte[] src) {
         try {
@@ -33,7 +41,14 @@ public class DesEncrypt {
         return null;
     }
 
-    // keybyte为加密密钥，长度为24字节
+    /**
+     * Decrypt mode byte [ ].
+     *
+     * @param keybyte the keybyte
+     * @param src     the src
+     * @return the byte [ ]
+     */
+// keybyte为加密密钥，长度为24字节
     // src为加密后的缓冲区
     public static byte[] decryptMode(byte[] keybyte, byte[] src) {
         try {
@@ -53,7 +68,13 @@ public class DesEncrypt {
         return null;
     }
 
-    // 转换成十六进制字符串
+    /**
+     * Byte 2 hex string.
+     *
+     * @param b the b
+     * @return the string
+     */
+// 转换成十六进制字符串
     public static String byte2hex(byte[] b) {
         String hs = "";
         String stmp = "";
@@ -69,7 +90,14 @@ public class DesEncrypt {
         return hs.toUpperCase();
     }
 
-    // 16 进制 转 2 进制
+    /**
+     * Hex 2 byte byte [ ].
+     *
+     * @param hex the hex
+     * @return the byte [ ]
+     * @throws IllegalArgumentException the illegal argument exception
+     */
+// 16 进制 转 2 进制
     public static byte[] hex2byte(String hex) throws IllegalArgumentException {
         if (hex.length() % 2 != 0) {
             throw new IllegalArgumentException();
@@ -96,7 +124,14 @@ public class DesEncrypt {
         return b2;
     }
 
-    // 加密
+    /**
+     * Encrypt string.
+     *
+     * @param str the str
+     * @param key the key
+     * @return the string
+     */
+// 加密
     @SuppressWarnings("restriction")
     public static String Encrypt(String str, byte[] key) {
         Security.addProvider(new com.sun.crypto.provider.SunJCE());
@@ -104,7 +139,14 @@ public class DesEncrypt {
         return byte2hex(encrypt);
     }
 
-    // 加密
+    /**
+     * Encrypt ret byte byte [ ].
+     *
+     * @param src the src
+     * @param key the key
+     * @return the byte [ ]
+     */
+// 加密
     @SuppressWarnings("restriction")
     public static byte[] EncryptRetByte(byte[] src, byte[] key) {
         Security.addProvider(new com.sun.crypto.provider.SunJCE());
@@ -112,7 +154,14 @@ public class DesEncrypt {
         return encrypt;
     }
 
-    // 解密
+    /**
+     * Decrypt string.
+     *
+     * @param str the str
+     * @param key the key
+     * @return the string
+     */
+// 解密
     @SuppressWarnings("restriction")
     public static String Decrypt(String str, byte[] key) {
         Security.addProvider(new com.sun.crypto.provider.SunJCE());
@@ -121,6 +170,12 @@ public class DesEncrypt {
     }
 
 
+    /**
+     * Sha 1 string.
+     *
+     * @param decript the decript
+     * @return the string
+     */
     public static String SHA1(String decript) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA1");
@@ -144,6 +199,11 @@ public class DesEncrypt {
         return "";
     }
 
+    /**
+     * Main.
+     *
+     * @param arg the arg
+     */
     public static void main(String arg[]) {
         String str = "jdbc\\:mysql\\://127.0.0.1\\:3306/uu_db?useUnicode=true&characterEncoding=utf8";
 

@@ -18,16 +18,21 @@ import com.google.common.collect.Table;
 import com.google.common.primitives.Ints;
 
 /**
- * 
-* Title: guavaTest
-* Description:谷歌 guava 工具包测试
-* Version:1.0.0  
-* @author pancm
-* @date 2017年10月30日
+ * Title: guavaTest
+ * Description:谷歌 guava 工具包测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年10月30日
  */
 public class GuavaTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		noChangeList();
 		one2MoreMap();
 		more2One();

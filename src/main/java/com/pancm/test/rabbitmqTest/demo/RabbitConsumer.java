@@ -5,12 +5,21 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
 
-//消费者 
+/**
+ * The type Rabbit consumer.
+ */
+//消费者
 public class RabbitConsumer {
   
   private final static String QUEUE_NAME = "RabbitMQ_Hello"; //消息队列名
 
-  public static void main(String[] argv) throws Exception {
+    /**
+     * The entry point of application.
+     *
+     * @param argv the input arguments
+     * @throws Exception the exception
+     */
+    public static void main(String[] argv) throws Exception {
 
 	    ConnectionFactory factory = new ConnectionFactory();
 	    factory.setHost("127.0.0.1");

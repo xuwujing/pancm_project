@@ -4,18 +4,22 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
-* @Title: SpringIocTest
-* @Description: Spring的IOC测试类
-* @Version:1.0.0  
-* @author pancm
-* @date 2019年1月18日
-*/
+ * The type Spring ioc test.
+ *
+ * @author pancm
+ * @Title: SpringIocTest
+ * @Description: Spring的IOC测试类
+ * @Version:1.0.0
+ * @date 2019年1月18日
+ */
 public class SpringIocTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		
 		SpringIocTest test =new SpringIocTest();
 		IHello hello =new Hello();
@@ -53,16 +57,32 @@ public class SpringIocTest {
 	
 }
 
+/**
+ * The interface Hello.
+ */
 /*
  * 定义一个Hello的接口
  */
 interface IHello{
-	
-	void sayHello(String name);
-	
-	void sayBye(String name);
+
+    /**
+     * Say hello.
+     *
+     * @param name the name
+     */
+    void sayHello(String name);
+
+    /**
+     * Say bye.
+     *
+     * @param name the name
+     */
+    void sayBye(String name);
 }
 
+/**
+ * The type Hello.
+ */
 /*
  * 
  */

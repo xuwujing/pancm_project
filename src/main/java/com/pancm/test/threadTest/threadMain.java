@@ -3,13 +3,19 @@ package com.pancm.test.threadTest;
 import java.util.Random;
 
 /**
+ * The type Thread 1.
+ *
  * @author ZERO
- * @Data 2017-5-24 下午5:15:23
- * @Description 
- * 线程优先级测试
+ * @Data 2017 -5-24 下午5:15:23
+ * @Description 线程优先级测试
  */
-class Thread1 extends Thread{  
-    public Thread1(String name) {  
+class Thread1 extends Thread{
+    /**
+     * Instantiates a new Thread 1.
+     *
+     * @param name the name
+     */
+    public Thread1(String name) {
         super(name);  
     }  
     public void run() {  
@@ -25,15 +31,18 @@ class Thread1 extends Thread{
         System.out.println(this.getName() + " 线程运行结束!");  
     }
 }
-  
+
 /**
- * 
-* Title: ThreadYield
-* Description: 
-*  
+ * Title: ThreadYield
+ * Description:
  */
-class ThreadYield extends Thread{  
-    public ThreadYield(String name) {  
+class ThreadYield extends Thread{
+    /**
+     * Instantiates a new Thread yield.
+     *
+     * @param name the name
+     */
+    public ThreadYield(String name) {
         super(name);  
     }  
    
@@ -48,11 +57,19 @@ class ThreadYield extends Thread{
         }  
  }  
 }
- 
 
-	public class threadMain {
-	    
-	 public static void main(String[] args) {  
+
+/**
+ * The type Thread main.
+ */
+public class threadMain {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 //		    noJoinThread();
 //		 	joinThread();
 //		    yieldThread();
@@ -60,9 +77,12 @@ class ThreadYield extends Thread{
 		 
 		 
 	    
-	 } 
-	
-	 public static void noJoinThread(){
+	 }
+
+    /**
+     * No join thread.
+     */
+    public static void noJoinThread(){
 		 System.out.println(Thread.currentThread().getName()+"主线程运行开始!");  
 	     Thread1 mTh1=new Thread1("A");  
 	     Thread1 mTh2=new Thread1("B");  
@@ -91,8 +111,11 @@ class ThreadYield extends Thread{
 			B线程先运行，但是A线程先结束。说明多线程程序是乱序执行。
 	    * */ 
 	 }
-	 
-	 //join指等待t线程终止
+
+    /**
+     * Join thread.
+     */
+//join指等待t线程终止
 	 public static void joinThread(){
 		 System.out.println(Thread.currentThread().getName()+"主线程运行开始!");  
 	     Thread1 mTh1=new Thread1("A");  
@@ -132,8 +155,11 @@ class ThreadYield extends Thread{
 			B线程先运行，但是A线程先结束。说明多线程程序是乱序执行。
 	    * */ 
 	 }
-	 
-	 //yield():暂停当前正在执行的线程对象，并执行其他线程。
+
+    /**
+     * Yield thread.
+     */
+//yield():暂停当前正在执行的线程对象，并执行其他线程。
 	 public static void yieldThread(){
 		 ThreadYield yt1 = new ThreadYield("张三");  
 	     ThreadYield yt2 = new ThreadYield("李四");  
@@ -165,8 +191,11 @@ class ThreadYield extends Thread{
 	        
 	    * */ 
 	 }
-	 
-	 //setPriority(): 设置线程的优先级。数值在0-10之间, 数值越大，优先级越高 
+
+    /**
+     * Set priority thread.
+     */
+//setPriority(): 设置线程的优先级。数值在0-10之间, 数值越大，优先级越高
 	 public static void setPriorityThread(){
 		 Thread1 t1=new Thread1("A");  
 		 Thread1 t2=new Thread1("B");  

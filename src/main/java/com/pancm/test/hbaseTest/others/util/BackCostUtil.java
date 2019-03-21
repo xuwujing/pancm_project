@@ -5,6 +5,12 @@ package com.pancm.test.hbaseTest.others.util;
  */
 public class BackCostUtil {
 
+    /**
+     * Back cost string.
+     *
+     * @param cost the cost
+     * @return the string
+     */
     public static String backCost(String cost){
         if(cost == null) return "";
         if(cost.startsWith("-")){
@@ -34,6 +40,11 @@ public class BackCostUtil {
         return (double)((int)(val*p))/p;
     }
 
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
     public static void main(String[] args){
       System.out.print(backCost("-311101"));
     }

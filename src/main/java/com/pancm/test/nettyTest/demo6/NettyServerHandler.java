@@ -17,12 +17,12 @@ import io.netty.handler.codec.http.HttpVersion;
 import io.netty.util.CharsetUtil;
 
 /**
- * 
-* Title: NettyServerHandler
-* Description: 服务端业务逻辑
-* Version:1.0.0  
-* @author pancm
-* @date 2017年10月26日
+ * Title: NettyServerHandler
+ * Description: 服务端业务逻辑
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年10月26日
  */
 public class NettyServerHandler extends ChannelInboundHandlerAdapter {
 	private String result="";

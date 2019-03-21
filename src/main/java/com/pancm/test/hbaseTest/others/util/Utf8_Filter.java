@@ -1,7 +1,16 @@
 package com.pancm.test.hbaseTest.others.util;
 
+/**
+ * The type Utf 8 filter.
+ */
 public class Utf8_Filter {
-	public static String stripNonCharCodepoints(String input) {
+    /**
+     * Strip non char codepoints string.
+     *
+     * @param input the input
+     * @return the string
+     */
+    public static String stripNonCharCodepoints(String input) {
 		StringBuilder retval = new StringBuilder();
 		char ch;
 

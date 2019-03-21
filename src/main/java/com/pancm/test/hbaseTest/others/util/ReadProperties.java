@@ -10,14 +10,12 @@ import java.util.Properties;
 public class ReadProperties {
 
     /**
+     * Gets property from configuration.
      *
-     * @param fileName
-     *            文件名
-     * @param key
-     *            key
-     * @param defaultValue
-     *            NULL的时候默认返回值
-     * @return
+     * @param fileName     文件名
+     * @param key          key
+     * @param defaultValue NULL的时候默认返回值
+     * @return property from configuration
      */
     public static Object getPropertyFromConfiguration(String fileName, String key, Object defaultValue) {
         InputStream inputStream = ReadProperties.class.getClassLoader()
@@ -40,8 +38,8 @@ public class ReadProperties {
     /**
      * TODO 读取配置文件的相关项
      *
-     * @param fileName
-     * @return
+     * @param fileName the file name
+     * @return properties
      */
     public static Properties loadConfiguration(String fileName) {
         InputStream inputStream = ReadProperties.class.getClassLoader().getResourceAsStream(fileName);

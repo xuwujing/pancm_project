@@ -10,14 +10,14 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 
 /**
- * 
-* Title: TestSpout
-* Description:
-* Spout 发射器
-* 用于向Bolt发送消息
-* Version:1.0.0  
-* @author pancm
-* @date 2018年3月6日
+ * Title: TestSpout
+ * Description:
+ * Spout 发射器
+ * 用于向Bolt发送消息
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年3月6日
  */
 public class TestSpout extends BaseRichSpout{
 

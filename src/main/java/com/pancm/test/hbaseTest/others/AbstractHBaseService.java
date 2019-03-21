@@ -9,7 +9,6 @@ import org.apache.hadoop.hbase.client.Result;
  * HBase 服务抽象类
  * Created by babylon on 2016/12/6.
  */
-
 public abstract class AbstractHBaseService implements HBaseService {
 
     @Override

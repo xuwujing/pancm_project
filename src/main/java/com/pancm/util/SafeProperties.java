@@ -27,7 +27,12 @@ public class SafeProperties extends Properties {
 
    private PropertiesContext context = new PropertiesContext();
 
-   public PropertiesContext getContext() {
+    /**
+     * Gets context.
+     *
+     * @return the context
+     */
+    public PropertiesContext getContext() {
       return context;
    }
 
@@ -307,7 +312,15 @@ public synchronized void store(OutputStream out, String header) throws IOExcepti
       return super.put(key, value);
    }
 
-   public synchronized Object put(Object key, Object value, String line) {
+    /**
+     * Put object.
+     *
+     * @param key   the key
+     * @param value the value
+     * @param line  the line
+     * @return the object
+     */
+    public synchronized Object put(Object key, Object value, String line) {
       context.putOrUpdate(key.toString(), value.toString(), line);
       return super.put(key, value);
    }
@@ -317,41 +330,78 @@ public synchronized void store(OutputStream out, String header) throws IOExcepti
       context.remove(key.toString());
       return super.remove(key);
    }
-   
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+
+    /**
+     * The type Properties context.
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
    class PropertiesContext {
      
 	private List commentOrEntrys = new ArrayList();
 
-     
-	public List getCommentOrEntrys() {
+
+        /**
+         * Gets comment or entrys.
+         *
+         * @return the comment or entrys
+         */
+        public List getCommentOrEntrys() {
          return commentOrEntrys;
       }
 
 
-	public void addCommentLine(String line) {
+        /**
+         * Add comment line.
+         *
+         * @param line the line
+         */
+        public void addCommentLine(String line) {
          commentOrEntrys.add(line);
       }
 
-     
-	public void putOrUpdate(PropertyEntry pe) {
+
+        /**
+         * Put or update.
+         *
+         * @param pe the pe
+         */
+        public void putOrUpdate(PropertyEntry pe) {
          remove(pe.getKey());
          commentOrEntrys.add(pe);
       }
 
-      public void putOrUpdate(String key, String value, String line) {
+        /**
+         * Put or update.
+         *
+         * @param key   the key
+         * @param value the value
+         * @param line  the line
+         */
+        public void putOrUpdate(String key, String value, String line) {
          PropertyEntry pe = new PropertyEntry(key, value, line);
          remove(key);
          commentOrEntrys.add(pe);
       }
 
-      public void putOrUpdate(String key, String value) {
+        /**
+         * Put or update.
+         *
+         * @param key   the key
+         * @param value the value
+         */
+        public void putOrUpdate(String key, String value) {
          PropertyEntry pe = new PropertyEntry(key, value);
          int index = remove(key);
          commentOrEntrys.add(index,pe);
       }
 
-      public int remove(String key) {
+        /**
+         * Remove int.
+         *
+         * @param key the key
+         * @return the int
+         */
+        public int remove(String key) {
          for (int index = 0; index < commentOrEntrys.size(); index++) {
             Object obj = commentOrEntrys.get(index);
             if (obj instanceof PropertyEntry) {
@@ -366,49 +416,90 @@ public synchronized void store(OutputStream out, String header) throws IOExcepti
          return commentOrEntrys.size();
       }
 
-      class PropertyEntry {
+        /**
+         * The type Property entry.
+         */
+        class PropertyEntry {
          private String key;
 
          private String value;
 
          private String line;
 
-         public String getLine() {
+            /**
+             * Gets line.
+             *
+             * @return the line
+             */
+            public String getLine() {
             return line;
          }
 
-         public void setLine(String line) {
+            /**
+             * Sets line.
+             *
+             * @param line the line
+             */
+            public void setLine(String line) {
             this.line = line;
          }
 
-         public PropertyEntry(String key, String value) {
+            /**
+             * Instantiates a new Property entry.
+             *
+             * @param key   the key
+             * @param value the value
+             */
+            public PropertyEntry(String key, String value) {
             this.key = key;
             this.value = value;
          }
 
-         /**
-          * @param key
-          * @param value
-          * @param line
-          */
-         public PropertyEntry(String key, String value, String line) {
+            /**
+             * Instantiates a new Property entry.
+             *
+             * @param key   the key
+             * @param value the value
+             * @param line  the line
+             */
+            public PropertyEntry(String key, String value, String line) {
             this(key, value);
             this.line = line;
          }
 
-         public String getKey() {
+            /**
+             * Gets key.
+             *
+             * @return the key
+             */
+            public String getKey() {
             return key;
          }
 
-         public void setKey(String key) {
+            /**
+             * Sets key.
+             *
+             * @param key the key
+             */
+            public void setKey(String key) {
             this.key = key;
          }
 
-         public String getValue() {
+            /**
+             * Gets value.
+             *
+             * @return the value
+             */
+            public String getValue() {
             return value;
          }
 
-         public void setValue(String value) {
+            /**
+             * Sets value.
+             *
+             * @param value the value
+             */
+            public void setValue(String value) {
             this.value = value;
          }
 
@@ -426,10 +517,12 @@ public synchronized void store(OutputStream out, String header) throws IOExcepti
       }
    }
 
-   /**
-    * @param comment
-    */
-   public void addComment(String comment) {
+    /**
+     * Add comment.
+     *
+     * @param comment the comment
+     */
+    public void addComment(String comment) {
       if (comment != null) {
          context.addCommentLine("#" + comment);
       }

@@ -1,19 +1,22 @@
 package com.pancm.test.arithmetic;
 
 /**
-* @Title: StockTest
-* @Description: 一些常用的算法技巧
-* 参考文章:https://www.cnblogs.com/kubidemanong/p/9887669.html
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年11月2日
-*/
+ * The type Stock test.
+ *
+ * @author pancm
+ * @Title: StockTest
+ * @Description: 一些常用的算法技巧  参考文章:https://www.cnblogs.com/kubidemanong/p/9887669.html
+ * @Version:1.0.0
+ * @date 2018年11月2日
+ */
 public class StockTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 			
 			//乱序改有序
 			test1();

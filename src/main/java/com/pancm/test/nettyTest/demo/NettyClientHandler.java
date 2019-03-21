@@ -4,12 +4,12 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 /**
- * 
-* Title: NettyClientHandler
-* Description: 客户端业务逻辑实现
-* Version:1.0.0  
-* @author Administrator
-* @date 2017-8-31
+ * Title: NettyClientHandler
+ * Description: 客户端业务逻辑实现
+ * Version:1.0.0
+ *
+ * @author Administrator
+ * @date 2017 -8-31
  */
 public class NettyClientHandler extends SimpleChannelInboundHandler<String> {
 

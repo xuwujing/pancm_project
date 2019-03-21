@@ -18,7 +18,8 @@ public class SocPut extends Put{
 
     /**
      * 初始化方法
-     * @param row  rowKey 名称
+     *
+     * @param row rowKey 名称
      */
     public SocPut(byte[] row) {
         super(row);
@@ -34,10 +35,20 @@ public class SocPut extends Put{
         return super.addColumn(family, qualifier, super.ts, value);
     }
 
+    /**
+     * Gets data.
+     *
+     * @return the data
+     */
     public List<Map<String, byte[]>> getData() {
         return data;
     }
 
+    /**
+     * Get data size int.
+     *
+     * @return the int
+     */
     public int getDataSize(){
         return data.size();
     }

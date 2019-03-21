@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 
-* Description: Netty 传输对象 
-* Version:1.0.0  
-* @author pancm
-* @date 2017年9月24日
+ * Description: Netty 传输对象
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年9月24日
  */
 public class NettySendBody  implements Serializable{
 	
@@ -22,34 +22,69 @@ public class NettySendBody  implements Serializable{
 	private ConcurrentHashMap<String, String> data;
 	/** 时间戳 */
 	private long timestamp;
-	
-	public NettySendBody() {
+
+    /**
+     * Instantiates a new Netty send body.
+     */
+    public NettySendBody() {
 		data = new ConcurrentHashMap<String, String>();
 		timestamp = System.currentTimeMillis();  //取当前时间
 	}
 
 
-	public ConcurrentHashMap<String, String> getData() {
+    /**
+     * Gets data.
+     *
+     * @return the data
+     */
+    public ConcurrentHashMap<String, String> getData() {
 		return data;
 	}
 
-	public void setData(ConcurrentHashMap<String, String> data) {
+    /**
+     * Sets data.
+     *
+     * @param data the data
+     */
+    public void setData(ConcurrentHashMap<String, String> data) {
 		this.data = data;
 	}
 
-	public long getTimestamp() {
+    /**
+     * Gets timestamp.
+     *
+     * @return the timestamp
+     */
+    public long getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(long timestamp) {
+    /**
+     * Sets timestamp.
+     *
+     * @param timestamp the timestamp
+     */
+    public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}
-	
-	public String get(String k) {
+
+    /**
+     * Get string.
+     *
+     * @param k the k
+     * @return the string
+     */
+    public String get(String k) {
 		return data.get(k);
 	}
 
-	public void put(String k, String v) {
+    /**
+     * Put.
+     *
+     * @param k the k
+     * @param v the v
+     */
+    public void put(String k, String v) {
 		data.put(k, v);
 	}
 

@@ -40,9 +40,10 @@ public class HBase {
 
     /**
      * 写入单条数据
-     * @param tableName   表名称
-     * @param put              列值
-     * @param waiting  是否等待线程执行完成  true 可以及时看到结果, false 让线程继续执行，并跳出此方法返回调用方主程序
+     *
+     * @param tableName 表名称
+     * @param put       列值
+     * @param waiting   是否等待线程执行完成  true 可以及时看到结果, false 让线程继续执行，并跳出此方法返回调用方主程序
      * @return
      */
     public static void put(String tableName, Put put, boolean waiting) {
@@ -51,9 +52,10 @@ public class HBase {
 
     /**
      * 多线程同步提交
-     * @param tableName  表名称
-     * @param puts  待提交参数
-     * @param waiting  是否等待线程执行完成  true 可以及时看到结果, false 让线程继续执行，并跳出此方法返回调用方主程序
+     *
+     * @param tableName 表名称
+     * @param puts      待提交参数
+     * @param waiting   是否等待线程执行完成  true 可以及时看到结果, false 让线程继续执行，并跳出此方法返回调用方主程序
      */
     public static void put(String tableName, List<Put> puts, boolean waiting) {
         hBaseService.batchPut(tableName, puts, waiting);
@@ -61,10 +63,12 @@ public class HBase {
 
     /**
      * 获取多行数据
-     * @param tablename
-     * @param rows
-     * @return
-     * @throws Exception
+     *
+     * @param <T>       the type parameter
+     * @param tablename the tablename
+     * @param rows      the rows
+     * @return result [ ]
+     * @throws Exception the exception
      */
     public static <T> Result[] getRows(String tablename, List<T> rows) throws Exception {
         return hBaseService.getRows(tablename, rows);
@@ -72,14 +76,22 @@ public class HBase {
 
     /**
      * 获取单条数据
-     * @param tablename
-     * @param row
-     * @return
+     *
+     * @param tablename the tablename
+     * @param row       the row
+     * @return row
      */
     public static Result getRow(String tablename, byte[] row) {
         return hBaseService.getRow(tablename, row);
     }
 
+    /**
+     * Generate rowkey byte [ ].
+     *
+     * @param <T>    the type parameter
+     * @param rowKey the row key
+     * @return the byte [ ]
+     */
     public static <T> byte[] generateRowkey(T rowKey){
         // TODO 测试generateRowkey
         return Bytes.toBytes(Md5Util.getHash(String.valueOf(rowKey)).substring(0, 8) + "_" + String.valueOf(rowKey));

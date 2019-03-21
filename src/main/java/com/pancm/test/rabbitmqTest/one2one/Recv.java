@@ -8,12 +8,21 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
 
 
+/**
+ * The type Recv.
+ */
 //消费者 (Consumer:数据的接收方)
 //单发送单接收  Send.java和Recv.java类
 public class Recv {
     
     private final static String QUEUE_NAME = "header_exchange";
 
+    /**
+     * The entry point of application.
+     *
+     * @param argv the input arguments
+     * @throws Exception the exception
+     */
     public static void main(String[] argv) throws Exception {
 
     ConnectionFactory factory = new ConnectionFactory();

@@ -7,21 +7,26 @@ import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 
 /**
- * 
-* Title: App
-* Description:
-* storm测试 
-* Version:1.0.0  
-* @author pancm
-* @date 2018年3月6日
+ * Title: App
+ * Description:
+ * storm测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年3月6日
  */
 public class App {
 	
 	private static final String test_spout="test_spout"; 
 	private static final String test_bolt="test_bolt"; 
-	private static final String test2_bolt="test2_bolt"; 
+	private static final String test2_bolt="test2_bolt";
 
-	public static void main(String[] args)  {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args)  {
 		//定义一个拓扑
 		TopologyBuilder builder=new TopologyBuilder();
 		//设置两个Executeor(线程)，默认一个

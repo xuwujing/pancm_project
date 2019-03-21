@@ -1,16 +1,22 @@
 package com.pancm.test.othersTest;
 
 /**
-* Title: basicTest
-* Description: 
-* 基本数据类型转换测试
-* Version:1.0.0  
-* @author pancm
-* @date 2018年3月18日
+ * Title: basicTest
+ * Description:
+ * 基本数据类型转换测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年3月18日
  */
 public class basicTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		
 		Integer a=127;
 		Integer b=127;
@@ -80,8 +86,14 @@ public class basicTest {
 		float f=(float) d;
 		System.out.println("f:"+f+",d:"+d);
 	}
-	
-	//获取变量类型方法
+
+    /**
+     * Get type string.
+     *
+     * @param o the o
+     * @return the string
+     */
+//获取变量类型方法
 	public static String getType(Object o){ 
 		return o.getClass().toString(); 
 	} 

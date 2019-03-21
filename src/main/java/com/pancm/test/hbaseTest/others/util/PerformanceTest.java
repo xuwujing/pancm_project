@@ -9,6 +9,9 @@ import java.util.Map;
 public class PerformanceTest {
     private Map<String, Stat> total = new HashMap<String, Stat>();
     private Map<String, Stat> last = new HashMap<String, Stat>();
+    /**
+     * The Count.
+     */
     int count = 0;
 
     private void statNoLock(String key, long time) {
@@ -35,12 +38,23 @@ public class PerformanceTest {
         }
     }
 
+    /**
+     * Stat with lock.
+     *
+     * @param key  the key
+     * @param time the time
+     */
     public void statWithLock(String key, long time) {
         synchronized(this) {
             statNoLock(key, time);
         }
     }
 
+    /**
+     * Stat.
+     *
+     * @param kv the kv
+     */
     public void stat(Map<String, Long> kv) {
         synchronized(this) {
             for (Map.Entry<String, Long> entry : kv.entrySet()) {
@@ -49,6 +63,9 @@ public class PerformanceTest {
         }
     }
 
+    /**
+     * Print.
+     */
     public void print() {
         synchronized(this) {
             count = count + 1;
@@ -71,13 +88,40 @@ public class PerformanceTest {
     }
 }
 
+/**
+ * The type Stat.
+ */
 class Stat {
+    /**
+     * The Avg.
+     */
     public long avg;
+    /**
+     * The Times.
+     */
     public int times;
+    /**
+     * The Total.
+     */
     public long total;
+    /**
+     * The Min.
+     */
     public long min;
+    /**
+     * The Max.
+     */
     public long max;
 
+    /**
+     * Instantiates a new Stat.
+     *
+     * @param avg   the avg
+     * @param times the times
+     * @param total the total
+     * @param min   the min
+     * @param max   the max
+     */
     public Stat(long avg, int times, long total, long min, long max) {
         this.avg= avg;
         this.times = times;

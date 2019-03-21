@@ -8,21 +8,26 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 
 /**
- * 
-* Title: KafkaProducerTest
-* Description: 
-* kafka 生产者demo
-* Version:1.0.0  
-* @author pancm
-* @date 2018年1月26日
+ * Title: KafkaProducerTest
+ * Description:
+ * kafka 生产者demo
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年1月26日
  */
 public class KafkaProducerTest implements Runnable {
 
 	private final KafkaProducer<String, String> producer;
 	private final String topic;
 
-	
-	public KafkaProducerTest(String topicName) {
+
+    /**
+     * Instantiates a new Kafka producer test.
+     *
+     * @param topicName the topic name
+     */
+    public KafkaProducerTest(String topicName) {
 		Properties props = new Properties();
 		props.put("bootstrap.servers", "master:9092,slave1:9092,slave2:9092");
 		//acks=0：如果设置为0，生产者不会等待kafka的响应。
@@ -64,8 +69,13 @@ public class KafkaProducerTest implements Runnable {
 			producer.close();
 		}
 	}
-	
-	public static void main(String args[]) {
+
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
+    public static void main(String args[]) {
 		KafkaProducerTest test = new KafkaProducerTest("KAFKA_TEST2");
 		Thread thread = new Thread(test);
 		thread.start();

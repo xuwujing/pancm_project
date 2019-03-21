@@ -48,7 +48,8 @@ public class ThreadPoolUtil {
 
     /**
      * 单例
-     * @return
+     *
+     * @return thread pool util
      */
     public static ThreadPoolUtil init(){
         if(threadPool==null)
@@ -68,20 +69,32 @@ public class ThreadPoolUtil {
 
     /**
      * 线程池获取方法
-     * @return
+     *
+     * @return executor
      */
     public ThreadPoolExecutor getExecutor() {return executor;}
 
     /**
-     *  准备执行 抛入线程池
-     * @param t
+     * 准备执行 抛入线程池
+     *
+     * @param t the t
      */
     public void execute(Thread t){
         executor.execute(t);
     }
 
+    /**
+     * Execute.
+     *
+     * @param t the t
+     */
     public void execute(Runnable t){ executor.execute(t);}
 
+    /**
+     * Get queue size int.
+     *
+     * @return the int
+     */
     public int getQueueSize(){
         return executor.getQueue().size();
     }
@@ -89,27 +102,33 @@ public class ThreadPoolUtil {
     /**
      * 异步提交返回 Future
      * Future.get()可获得返回结果
-     * @return
+     *
+     * @param t the t
+     * @return future
      */
     public Future<?> submit(Runnable t){return executor.submit(t);}
 
     /**
      * 异步提交返回 Future
      * Future.get()可获得返回结果
-     * @return
+     *
+     * @param t the t
+     * @return future
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public Future<?> submit(Callable t){return getExecutor().submit(t);}
 
     /**
      * 销毁线程池
-     * */
+     */
     public void shutdown(){
         getExecutor().shutdown();
     }
 
     /**
      * 阻塞，直到线程池里所有任务结束
+     *
+     * @throws InterruptedException the interrupted exception
      */
     public void awaitTermination() throws InterruptedException {
         logger.info("Thread pool ,awaitTermination started, please wait till all the jobs complete.");

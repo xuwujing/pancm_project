@@ -9,16 +9,16 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;  
- 
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+
 /**
- * 
-* Description:  Netty 服务端    测试自定义解码器
-* Version:1.0.0  
-* @author pancm
-* @date 2017年9月21日
+ * Description:  Netty 服务端    测试自定义解码器
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年9月21日
  */
-public class NettyServerDemo3 {  
+public class NettyServerDemo3 {
       
     private static final int MAX_FRAME_LENGTH = 1024 * 1024;  
     private static final int LENGTH_FIELD_LENGTH = 4;  
@@ -26,10 +26,13 @@ public class NettyServerDemo3 {
     private static final int LENGTH_ADJUSTMENT = 0;  
     private static final int INITIAL_BYTES_TO_STRIP = 0;  
   
-    private  final static int port=3456;  
-      
-      
-    public void start(){  
+    private  final static int port=3456;
+
+
+    /**
+     * Start.
+     */
+    public void start(){
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);  
         EventLoopGroup workerGroup = new NioEventLoopGroup();  
         try {  
@@ -53,9 +56,15 @@ public class NettyServerDemo3 {
             bossGroup.shutdownGracefully();  
             workerGroup.shutdownGracefully();  
         }  
-    }  
-      
-    public static void main(String[] args) throws Exception {  
+    }
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws Exception the exception
+     */
+    public static void main(String[] args) throws Exception {
         new NettyServerDemo3().start();  
     }  
 }  

@@ -4,16 +4,16 @@ import java.nio.charset.Charset;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToByteEncoder;  
+import io.netty.handler.codec.MessageToByteEncoder;
 
 /**
- * 
-* Description:Netty自定义编码器 
-* Version:1.0.0  
-* @author pancm
-* @date 2017年9月21日
+ * Description:Netty自定义编码器
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年9月21日
  */
-public class NettyEncoder extends MessageToByteEncoder<NettyMsg> {  
+public class NettyEncoder extends MessageToByteEncoder<NettyMsg> {
   
     @Override  
     protected void encode(ChannelHandlerContext ctx, NettyMsg msg, ByteBuf out) throws Exception {  

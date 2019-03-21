@@ -12,21 +12,23 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
 
-
-  
-
 /**
- * 
-* Title: NettyServer
-* Description: Netty服务端  测试自定义channelhandler
-* Version:1.0.0  
-* @author Administrator
-* @date 2017-8-31
+ * Title: NettyServer
+ * Description: Netty服务端  测试自定义channelhandler
+ * Version:1.0.0
+ *
+ * @author Administrator
+ * @date 2017 -8-31
  */
-
 public class NettyServer {
-	private static final int port = 1234;  
-	  public static void main(String[] args) {  
+	private static final int port = 1234;
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 			System.out.println("开始运行...");
 	        try {  
 	             start();  
@@ -34,13 +36,15 @@ public class NettyServer {
 	        	System.out.println("运行异常...");
 	            e.printStackTrace();  
 	        }  
-	  } 
-   
-	  /**
-		 * Netty创建全部都是实现自AbstractBootstrap。
-		 * 客户端的是Bootstrap，服务端的则是	ServerBootstrap。
-		 **/
-	 public static void start() throws InterruptedException {  
+	  }
+
+    /**
+     * Netty创建全部都是实现自AbstractBootstrap。
+     * 客户端的是Bootstrap，服务端的则是	ServerBootstrap。
+     *
+     * @throws InterruptedException the interrupted exception
+     */
+    public static void start() throws InterruptedException {
         ServerBootstrap sb = new ServerBootstrap();// 引导辅助程序  
         EventLoopGroup group = new NioEventLoopGroup();// 通过nio方式来接收连接和处理连接  
         try {  

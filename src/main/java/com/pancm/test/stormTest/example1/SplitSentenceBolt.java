@@ -11,11 +11,10 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 
 
-
 /**
  * 订阅sentence spout发射的tuple流，实现分割单词
- * @author soul
  *
+ * @author soul
  */
 public class SplitSentenceBolt extends BaseRichBolt {
     //BaseRichBolt是IComponent和IBolt接口的实现

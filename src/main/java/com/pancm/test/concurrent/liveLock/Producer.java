@@ -3,16 +3,22 @@ package com.pancm.test.concurrent.liveLock;
 import java.util.Random;
 
 /**
- * 
-* Title: Producer
-* Description:
-* 消息生产者 
-* Version:1.0.0  
-* @author pancm
-* @date 2018年3月8日
+ * Title: Producer
+ * Description:
+ * 消息生产者
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年3月8日
  */
 public  class Producer implements Runnable {
     private Drop drop;
+
+    /**
+     * Instantiates a new Producer.
+     *
+     * @param drop the drop
+     */
     public Producer(Drop drop) {
         this.drop = drop;
     }

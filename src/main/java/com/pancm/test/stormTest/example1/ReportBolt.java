@@ -12,11 +12,10 @@ import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Tuple;
 
 
-
 /**
  * 生成一份报告
- * @author soul
  *
+ * @author soul
  */
 public class ReportBolt extends BaseRichBolt {
 

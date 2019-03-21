@@ -20,16 +20,21 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 /**
-* @Title: RedisUtil
-* @Description: 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年6月6日
-*/
+ * The type Redis handle.
+ *
+ * @author pancm
+ * @Title: RedisUtil
+ * @Description:
+ * @Version:1.0.0
+ * @date 2018年6月6日
+ */
 @SuppressWarnings("unchecked")
 @Component
 public class RedisHandle implements RedisCommand<String, Object> {
     private Logger logger = Logger.getLogger(RedisHandle.class);
+    /**
+     * The Redis template.
+     */
     @SuppressWarnings("rawtypes")
 	@Autowired
     protected RedisTemplate redisTemplate;

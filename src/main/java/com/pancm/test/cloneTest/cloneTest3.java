@@ -1,21 +1,33 @@
 package com.pancm.test.cloneTest;
+
 /**
- * 
-* Title: cloneTest1
-* Description: 浅克隆测试3
-* Version:1.0.0  
-* @author Administrator
-* @date 2017-7-24
+ * Title: cloneTest1
+ * Description: 浅克隆测试3
+ * Version:1.0.0
+ *
+ * @author Administrator
+ * @date 2017 -7-24
  */
 
 //该对象继承Cloneable
  class Address3 implements Cloneable {  
-	private String add;  
-    public String getAdd() {  
+	private String add;
+
+    /**
+     * Gets add.
+     *
+     * @return the add
+     */
+    public String getAdd() {
          return add;  
-     }  
-   
-     public void setAdd(String add) {  
+     }
+
+    /**
+     * Sets add.
+     *
+     * @param add the add
+     */
+    public void setAdd(String add) {
          this.add = add;  
      }   
      
@@ -29,27 +41,50 @@ package com.pancm.test.cloneTest;
     	 }
     	return addr;
      }
- }  
-   
- //此对象依旧继承 Cloneable
+ }
+
+/**
+ * The type Student 3.
+ */
+//此对象依旧继承 Cloneable
  class Student3 implements Cloneable{  
      private int number;  
    
-     private Address3 addr;  
-       
-     public Address3 getAddr() {  
+     private Address3 addr;
+
+    /**
+     * Gets addr.
+     *
+     * @return the addr
+     */
+    public Address3 getAddr() {
          return addr;  
-     }  
-   
-     public void setAddr(Address3 addr) {  
+     }
+
+    /**
+     * Sets addr.
+     *
+     * @param addr the addr
+     */
+    public void setAddr(Address3 addr) {
          this.addr = addr;  
-     }  
-   
-     public int getNumber() {  
+     }
+
+    /**
+     * Gets number.
+     *
+     * @return the number
+     */
+    public int getNumber() {
          return number;  
-     }  
-   
-     public void setNumber(int number) {  
+     }
+
+    /**
+     * Sets number.
+     *
+     * @param number the number
+     */
+    public void setNumber(int number) {
          this.number = number;  
      }  
        
@@ -64,10 +99,18 @@ package com.pancm.test.cloneTest;
          stu.addr = (Address3)addr.clone();   //深度复制 
          return stu;  
      }  
- }  
- 
- public class cloneTest3 {  
-     public static void main(String args[]) {  
+ }
+
+/**
+ * The type Clone test 3.
+ */
+public class cloneTest3 {
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
+    public static void main(String args[]) {
            
          Address3 addr = new Address3();  
          addr.setAdd("杭州市");  

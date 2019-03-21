@@ -12,20 +12,17 @@ import java.util.Map;
  * 数据解析辅助类 Created by ${薛龙虎} on 15/3/13.
  */
 public class AnalysisUtil {
-	/**
-	 * 将一行数据解析为一个个字段
-	 * <p/>
-	 * 示例数据 ,'ab\'c',bcd,,'ce\',d','ce,c','bcd',
-	 *
-	 * @param str
-	 *            要解析的字符串
-	 * @param delim
-	 *            间隔符,示例中的间隔符为,
-	 * @param identi
-	 *            字段包含符号，如‘，“等等. 示例中字段包含符号即为 ’
-	 * @return 返回List<String>
-	 */
-	public static List<String> StringToColumns(String str, char delim, char identi) {
+    /**
+     * 将一行数据解析为一个个字段
+     * <p/>
+     * 示例数据 ,'ab\'c',bcd,,'ce\',d','ce,c','bcd',
+     *
+     * @param str    要解析的字符串
+     * @param delim  间隔符,示例中的间隔符为,
+     * @param identi 字段包含符号，如‘，“等等. 示例中字段包含符号即为 ’
+     * @return 返回List<String> list
+     */
+    public static List<String> StringToColumns(String str, char delim, char identi) {
 
 		List<String> colList = new ArrayList<String>();
 
@@ -83,22 +80,18 @@ public class AnalysisUtil {
 		return colList;
 	}
 
-	/**
-	 * 将一行数据解析为一个Map(key:字段名,value:字段值)
-	 * <p/>
-	 * 示例数据 ,'ab\'c',bcd,,'ce\',d','ce,c','bcd',
-	 *
-	 * @param str
-	 *            要解析的字符串
-	 * @param colNameList
-	 *            字段名列表
-	 * @param delim
-	 *            间隔符,示例中的间隔符为,
-	 * @param identi
-	 *            字段包含符号，如‘，“等等. 示例中字段包含符号即为 ’
-	 * @return 返回Map<String, String>
-	 */
-	public static Map<String, String> StringToMap(String str, List<String> colNameList, char delim, char identi) {
+    /**
+     * 将一行数据解析为一个Map(key:字段名,value:字段值)
+     * <p/>
+     * 示例数据 ,'ab\'c',bcd,,'ce\',d','ce,c','bcd',
+     *
+     * @param str         要解析的字符串
+     * @param colNameList 字段名列表
+     * @param delim       间隔符,示例中的间隔符为,
+     * @param identi      字段包含符号，如‘，“等等. 示例中字段包含符号即为 ’
+     * @return 返回Map<String, String> map
+     */
+    public static Map<String, String> StringToMap(String str, List<String> colNameList, char delim, char identi) {
 		final Map<String, String> colMap = new HashMap<String, String>();
 
 		List<String> colList = AnalysisUtil.StringToColumns(str, delim, identi);
@@ -114,7 +107,15 @@ public class AnalysisUtil {
 		return colMap;
 	}
 
-	public static List<String> dealString(String line, char separator, char escape) {
+    /**
+     * Deal string list.
+     *
+     * @param line      the line
+     * @param separator the separator
+     * @param escape    the escape
+     * @return the list
+     */
+    public static List<String> dealString(String line, char separator, char escape) {
 		List<String> result = new ArrayList<String>();
 		boolean flag = false;
 		char ch = ' ';
@@ -146,14 +147,13 @@ public class AnalysisUtil {
 		return result;
 	}
 
-	/**
-	 * 利用md5加密字符串
-	 *
-	 * @param str
-	 *            需要加密的字符串
-	 * @return 返回加密过的字符串
-	 */
-	public static String md5(String str) {
+    /**
+     * 利用md5加密字符串
+     *
+     * @param str 需要加密的字符串
+     * @return 返回加密过的字符串 string
+     */
+    public static String md5(String str) {
 		String retStr = "";
 
 		try {

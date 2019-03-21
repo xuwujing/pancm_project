@@ -11,18 +11,22 @@ import com.google.common.collect.Lists;
 import com.pancm.test.pojoTest.User;
 
 /**
-* @Title: googleTest
-* @Description: 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年5月14日
-*/
+ * The type Google test.
+ *
+ * @author pancm
+ * @Title: googleTest
+ * @Description:
+ * @Version:1.0.0
+ * @date 2018年5月14日
+ */
 public class googleTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		test();
 	}
 

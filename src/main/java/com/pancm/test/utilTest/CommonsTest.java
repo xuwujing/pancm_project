@@ -15,16 +15,21 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 
 /**
- * 
-* Title: langTest
-* Description: Apache commons工具包测试
-* Version:1.0.0  
-* @author pancm
-* @date 2017年10月30日
+ * Title: langTest
+ * Description: Apache commons工具包测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年10月30日
  */
 public class CommonsTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		stringTest();
 		otherTest();
 	}

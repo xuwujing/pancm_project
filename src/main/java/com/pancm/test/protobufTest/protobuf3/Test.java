@@ -6,18 +6,22 @@ import java.io.IOException;
 
 
 /**
-* @Title: Test
-* @Description: 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年6月12日
-*/
+ * The type Test.
+ *
+ * @author pancm
+ * @Title: Test
+ * @Description:
+ * @Version:1.0.0
+ * @date 2018年6月12日
+ */
 public class Test {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		try {
 			protobuf3Test();
 			test1();

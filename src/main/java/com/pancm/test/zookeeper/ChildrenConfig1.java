@@ -1,13 +1,13 @@
 package com.pancm.test.zookeeper;
 
 /**
- * 
-* @Title: ChildrenConfig
-* @Description:
-* 子类配置 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年5月2日
+ * The type Children config 1.
+ *
+ * @author pancm
+ * @Title: ChildrenConfig
+ * @Description: 子类配置
+ * @Version:1.0.0
+ * @date 2018年5月2日
  */
 public class ChildrenConfig1 {
 
@@ -15,35 +15,39 @@ public class ChildrenConfig1 {
 	
 	private String dburl;
 
-	/**  
-	 * 获取name  
-	 * @return  name  
-	 */
-	public String getName() {
+    /**
+     * 获取name
+     *
+     * @return name name
+     */
+    public String getName() {
 		return name;
 	}
 
-	/**  
-	 * 设置name  
-	 * @param String name  
-	 */
-	public void setName(String name) {
+    /**
+     * 设置name
+     *
+     * @param name the name
+     */
+    public void setName(String name) {
 		this.name = name;
 	}
 
-	/**  
-	 * 获取dburl  
-	 * @return  dburl  
-	 */
-	public String getDburl() {
+    /**
+     * 获取dburl
+     *
+     * @return dburl dburl
+     */
+    public String getDburl() {
 		return dburl;
 	}
 
-	/**  
-	 * 设置dburl  
-	 * @param String dburl  
-	 */
-	public void setDburl(String dburl) {
+    /**
+     * 设置dburl
+     *
+     * @param dburl the dburl
+     */
+    public void setDburl(String dburl) {
 		this.dburl = dburl;
 	}
 	

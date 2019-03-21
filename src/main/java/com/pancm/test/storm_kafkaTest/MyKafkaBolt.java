@@ -9,14 +9,13 @@ import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.tuple.Tuple;
 
 /**
- * 
-* Title: MyKafkaBolt
-* Description: 
-* Version:1.0.0  
-* @author pancm
-* @date 2017年12月29日
+ * Title: MyKafkaBolt
+ * Description:
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年12月29日
  */
-
 public class MyKafkaBolt implements IBasicBolt {
 
     /**

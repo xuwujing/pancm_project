@@ -12,20 +12,23 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
- 
+
 /**
- * 
-* Description:  Netty 服务端    测试自定义解码器
-* Version:1.0.0  
-* @author pancm
-* @date 2017年9月21日
+ * Description:  Netty 服务端    测试自定义解码器
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年9月21日
  */
-public class NettyServerDemo4 {  
+public class NettyServerDemo4 {
       
-    private  final static int port=4567;  
-      
-      
-    public void start(){  
+    private  final static int port=4567;
+
+
+    /**
+     * Start.
+     */
+    public void start(){
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);  
         EventLoopGroup workerGroup = new NioEventLoopGroup();  
         try {  
@@ -49,9 +52,15 @@ public class NettyServerDemo4 {
             bossGroup.shutdownGracefully();    //释放资源
             workerGroup.shutdownGracefully();  
         }  
-    }  
-      
-    public static void main(String[] args) throws Exception {  
+    }
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws Exception the exception
+     */
+    public static void main(String[] args) throws Exception {
         new NettyServerDemo4().start();  
     }  
 }  

@@ -9,13 +9,13 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 /**
- * 
-* Title: KafkaConsumerTest
-* Description:
-*  kafka消费者 
-* Version:1.0.0  
-* @author pancm
-* @date 2017年12月29日
+ * Title: KafkaConsumerTest
+ * Description:
+ * kafka消费者
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年12月29日
  */
 public class KafkaConsumerTest extends Thread {
 
@@ -25,8 +25,13 @@ public class KafkaConsumerTest extends Thread {
 	private static final String GROUPID = "groupA1";
 	private final String servers="192.169.0.23:9092,192.169.0.24:9092,192.169.0.25:9092";
 //    private final String servers="192.169.2.156:9092,192.169.2.98:9092,192.169.2.188:9092";
-	
-	public KafkaConsumerTest(String topicName) {
+
+    /**
+     * Instantiates a new Kafka consumer test.
+     *
+     * @param topicName the topic name
+     */
+    public KafkaConsumerTest(String topicName) {
 		Properties props = new Properties();
 		//kafka消费的的地址
 		props.put("bootstrap.servers", servers);
@@ -92,8 +97,13 @@ public class KafkaConsumerTest extends Thread {
 			consumer.close();
 		}
 	}
-   
-	public static void main(String args[]) {
+
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
+    public static void main(String args[]) {
 		KafkaConsumerTest test1 = new KafkaConsumerTest("TEST_INSERT");
 		KafkaConsumerTest test2 = new KafkaConsumerTest("1001_INSERT");
 		KafkaConsumerTest test3 = new KafkaConsumerTest("1002_INSERT");

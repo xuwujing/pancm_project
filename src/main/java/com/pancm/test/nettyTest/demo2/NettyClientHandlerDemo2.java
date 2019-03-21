@@ -6,20 +6,23 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 /**
- * 
-* Title: NettyClientHandlerDemo2
-* Description: Netty客户端业务逻辑处理    
-* Version:1.0.0  
-* @author pancm
-* @date 2017年9月20日
+ * Title: NettyClientHandlerDemo2
+ * Description: Netty客户端业务逻辑处理
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年9月20日
  */
-public class NettyClientHandlerDemo2 extends ChannelInboundHandlerAdapter{  
+public class NettyClientHandlerDemo2 extends ChannelInboundHandlerAdapter{
     
     private byte[] req;  
       
-    private int counter;   
-      
-    public NettyClientHandlerDemo2() {  
+    private int counter;
+
+    /**
+     * Instantiates a new Netty client handler demo 2.
+     */
+    public NettyClientHandlerDemo2() {
 //        req = ("书到用时方恨少，事非经过不知难!").getBytes();  
   
    //用于测试字节解码器 LineBasedFrameDecoder(2048)
