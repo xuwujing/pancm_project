@@ -65,6 +65,13 @@ public final class EsUtil {
 
 	}
 
+	/**
+	 * @Author pancm
+	 * @Description //创建索引库(指定Mpping类型)
+	 * @Date  2019/3/21
+	 * @Param [esBasicModelConfig]
+	 * @return boolean
+	 **/
 	public static boolean creatIndex(EsBasicModelConfig esBasicModelConfig) throws IOException {
 		boolean falg = true;
 		Objects.requireNonNull(esBasicModelConfig, "esBasicModelConfig is not null");
@@ -120,7 +127,7 @@ public final class EsUtil {
 
 	/**
 	 * @Author pancm
-	 * @Description //TODO 
+	 * @Description //新增/更新数据
 	 * @Date  2019/3/21
 	 * @Param []
 	 * @return boolean
@@ -133,7 +140,7 @@ public final class EsUtil {
 
 	/**
 	 * @Author pancm
-	 * @Description //TODO
+	 * @Description //删除数据
 	 * @Date  2019/3/21
 	 * @Param []
 	 * @return boolean
