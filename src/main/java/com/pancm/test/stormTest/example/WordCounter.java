@@ -10,21 +10,30 @@ import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.tuple.Tuple;
 
 /**
- * 
-* Title: WordCounter
-* Description: 该类主要用于统计
-* Version:1.0.0  
-* @author pancm
-* @date 2017年12月28日
+ * Title: WordCounter
+ * Description: 该类主要用于统计
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年12月28日
  */
 public class WordCounter implements IRichBolt {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	Integer id;
-	String name;
-	Map<String, Integer> counters;
+    /**
+     * The Id.
+     */
+    Integer id;
+    /**
+     * The Name.
+     */
+    String name;
+    /**
+     * The Counters.
+     */
+    Map<String, Integer> counters;
 	private OutputCollector collector;
 
 	/**

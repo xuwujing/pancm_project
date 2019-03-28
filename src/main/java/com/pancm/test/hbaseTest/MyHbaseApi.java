@@ -22,18 +22,24 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.util.Bytes;
+
 /**
- * 
-* Title: hbaseTest
-* Description: hbase的一些测试
-* Version:1.0.0  
-* @author pancm
-* @date 2017年11月23日
+ * Title: hbaseTest
+ * Description: hbase的一些测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年11月23日
  */
 public class MyHbaseApi {
 
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		Admin admin = null;
 		Connection con = null;
 

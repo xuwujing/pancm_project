@@ -1,23 +1,55 @@
 package com.pancm.test.spring;
 
+<<<<<<< HEAD
 import java.lang.reflect.*;
+=======
+import static org.hamcrest.CoreMatchers.nullValue;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Proxy;
+>>>>>>> origin/master
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Objects;
 
+<<<<<<< HEAD
 /**
  * @Title: SpringAopTest
  * @Description: SpringAop 测试类
  * @Version:1.0.0
  * @author pancm
+=======
+import sun.reflect.Reflection;
+
+/**
+ * The type Spring aop test.
+ *
+ * @author pancm
+ * @Title: SpringAopTest
+ * @Description: SpringAop 测试类
+ * @Version:1.0.0
+>>>>>>> origin/master
  * @date 2019年1月18日
  */
 public class SpringAopTest {
 
+<<<<<<< HEAD
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
+=======
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
+>>>>>>> origin/master
 
 		IHello hello = new Hello();
 		ProxyHello proxyHello = new ProxyHello(hello);
@@ -31,6 +63,7 @@ public class SpringAopTest {
 		proxy.sayBye("xuwujing");
 
 	}
+<<<<<<< HEAD
 	
 	
 	
@@ -43,6 +76,20 @@ public class SpringAopTest {
 	 * @throws IllegalArgumentException
 	 */
 	public static Object newProxyInstance(ClassLoader loader, Class<?>[] interfaces, InvocationHandler h)
+=======
+
+
+    /**
+     * JDK1.8代理源码
+     *
+     * @param loader     the loader
+     * @param interfaces the interfaces
+     * @param h          the h
+     * @return object
+     * @throws IllegalArgumentException the illegal argument exception
+     */
+    public static Object newProxyInstance(ClassLoader loader, Class<?>[] interfaces, InvocationHandler h)
+>>>>>>> origin/master
 			throws IllegalArgumentException {
 		//空指针校验
 		Objects.requireNonNull(h);
@@ -124,23 +171,41 @@ public class SpringAopTest {
 }
 
 /**
+<<<<<<< HEAD
  * 
  * @Title: ProxyHello
  * @Description:实现代理
  * @Version:1.0.0
  * @author pancm
+=======
+ * The type Proxy hello.
+ *
+ * @author pancm
+ * @Title: ProxyHello
+ * @Description:实现代理
+ * @Version:1.0.0
+>>>>>>> origin/master
  * @date 2019年1月18日
  */
 class ProxyHello implements InvocationHandler {
 
 	private Object object;
 
+<<<<<<< HEAD
 	/**
 	 * 指定
 	 * 
 	 * @param
 	 */
 	public ProxyHello(Object obj) {
+=======
+    /**
+     * 指定
+     *
+     * @param obj the obj
+     */
+    public ProxyHello(Object obj) {
+>>>>>>> origin/master
 		this.object = obj;
 	}
 

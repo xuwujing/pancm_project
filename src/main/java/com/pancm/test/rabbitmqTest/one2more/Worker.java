@@ -3,14 +3,24 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
-  //消费者 (Consumer:数据的接收方)
+
+/**
+ * The type Worker.
+ */
+//消费者 (Consumer:数据的接收方)
  //单发送多接收  Worker.java和NewTask.java
 public class Worker {
 
   private static final String TASK_QUEUE_NAME = "task_queue";
 //  private static final String TASK_QUEUE_NAME = "tsk.hybris.productbrand.tsk";
 
-  public static void main(String[] argv) throws Exception {
+    /**
+     * The entry point of application.
+     *
+     * @param argv the input arguments
+     * @throws Exception the exception
+     */
+    public static void main(String[] argv) throws Exception {
 
     ConnectionFactory factory = new ConnectionFactory();
     //factory.setHost("localhost");

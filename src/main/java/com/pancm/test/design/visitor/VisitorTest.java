@@ -4,17 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Title: VisitorTest
- * @Description: 访问者模式
- *               访问者模式（VisitorPattern）是对象的行为模式。访问者模式的目的是封装一些施加于某种数据结构元素之上的操作。一旦这些操作需要修改的话，接受这个操作的数据结构则可以保持不变。
- *               核心:主要将数据结构与数据操作分离。
- * @Version:1.0.0
+ * The type Visitor test.
+ *
  * @author pancm
+ * @Title: VisitorTest
+ * @Description: 访问者模式                访问者模式（VisitorPattern）是对象的行为模式。访问者模式的目的是封装一些施加于某种数据结构元素之上的操作。一旦这些操作需要修改的话，接受这个操作的数据结构则可以保持不变。               核心:主要将数据结构与数据操作分离。
+ * @Version:1.0.0
  * @date 2018年8月8日
  */
 public class VisitorTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 
 		/*
 		 * 基本角色: 1 抽象访问者(Visitor)角色：声明了一个或者多个方法操作，形成所有的具体访问者角色必须实现的接口。
@@ -57,17 +62,33 @@ public class VisitorTest {
 
 }
 
+/**
+ * The interface Visitor.
+ */
 /*
  * 定义一个抽象的角色(游客)
  */
 interface Visitor {
-	// 可以玩游戏
+    /**
+     * Visit.
+     *
+     * @param games the games
+     */
+// 可以玩游戏
 	void visit(Games games);
 
-	// 可以查看图片
+    /**
+     * Visit.
+     *
+     * @param photos the photos
+     */
+// 可以查看图片
 	void visit(Photos photos);
 }
 
+/**
+ * The type Zhang san.
+ */
 class ZhangSan implements Visitor {
 	@Override
 	public void visit(Games games) {
@@ -80,6 +101,9 @@ class ZhangSan implements Visitor {
 	}
 }
 
+/**
+ * The type Li si.
+ */
 /*
  * 
  */
@@ -95,35 +119,58 @@ class LiSi implements Visitor {
 	}
 }
 
+/**
+ * The interface Computer.
+ */
 /*
  * 定义个接受者
  */
 interface Computer {
-	void accept(Visitor visitor);
+    /**
+     * Accept.
+     *
+     * @param visitor the visitor
+     */
+    void accept(Visitor visitor);
 }
 
+/**
+ * The type Games.
+ */
 class Games implements Computer {
 	@Override
 	public void accept(Visitor visitor) {
 		visitor.visit(this);
 	}
 
-	public void play() {
+    /**
+     * Play.
+     */
+    public void play() {
 		System.out.println("play lol");
 	}
 }
 
+/**
+ * The type Photos.
+ */
 class Photos implements Computer {
 	@Override
 	public void accept(Visitor visitor) {
 		visitor.visit(this);
 	}
 
-	public void watch() {
+    /**
+     * Watch.
+     */
+    public void watch() {
 		System.out.println("watch scenery photo");
 	}
 }
 
+/**
+ * The type Object structure.
+ */
 /*
  * 结构对象角色
  */
@@ -131,20 +178,24 @@ class ObjectStructure {
 
 	private List<Computer> computers = new ArrayList<Computer>();
 
-	/**
-	 * 执行方法操作
-	 */
-	public void action(Visitor visitor) {
+    /**
+     * 执行方法操作
+     *
+     * @param visitor the visitor
+     */
+    public void action(Visitor visitor) {
 		computers.forEach(c -> {
 			c.accept(visitor);
 		});
 
 	}
 
-	/**
-	 * 添加一个新元素
-	 */
-	public void add(Computer computer) {
+    /**
+     * 添加一个新元素
+     *
+     * @param computer the computer
+     */
+    public void add(Computer computer) {
 		computers.add(computer);
 	}
 }

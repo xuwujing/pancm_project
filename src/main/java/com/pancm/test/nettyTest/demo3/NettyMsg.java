@@ -1,13 +1,13 @@
 package com.pancm.test.nettyTest.demo3;
 
 /**
- * 
-* Description: Netty 自定义消息 
-* Version:1.0.0  
-* @author pancm
-* @date 2017年9月21日
+ * Description: Netty 自定义消息
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年9月21日
  */
-public class NettyMsg {  
+public class NettyMsg {
     
 
 	/** 类型  系统编号 0xAB 表示A系统，0xBC 表示B系统  */
@@ -20,56 +20,100 @@ public class NettyMsg {
     private int length;  
       
     /** 主题信息  */ 
-    private String body;  
-      
-    public NettyMsg() {  
-          
-    }  
-    
-    
+    private String body;
+
     /**
-     *  
-     * @param type    类型  系统编号 0xAB 表示A系统，0xBC 表示B系统
-     * @param flag    信息标志  0xAB 表示心跳包    0xBC 表示超时包  0xCD 业务信息包
-     * @param length  主题信息的长度
-     * @param body    主题信息
+     * Instantiates a new Netty msg.
      */
-    public NettyMsg(byte type, byte flag, int length, String body) {  
+    public NettyMsg() {
+          
+    }
+
+
+    /**
+     * Instantiates a new Netty msg.
+     *
+     * @param type   类型  系统编号 0xAB 表示A系统，0xBC 表示B系统
+     * @param flag   信息标志  0xAB 表示心跳包    0xBC 表示超时包  0xCD 业务信息包
+     * @param length 主题信息的长度
+     * @param body   主题信息
+     */
+    public NettyMsg(byte type, byte flag, int length, String body) {
         this.type = type;  
         this.flag = flag;  
         this.length = length;  
         this.body = body;  
-    }  
-  
-    public byte getType() {  
+    }
+
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
+    public byte getType() {
         return type;  
-    }  
-  
-    public void setType(byte type) {  
+    }
+
+    /**
+     * Sets type.
+     *
+     * @param type the type
+     */
+    public void setType(byte type) {
         this.type = type;  
-    }  
-  
-    public byte getFlag() {  
+    }
+
+    /**
+     * Gets flag.
+     *
+     * @return the flag
+     */
+    public byte getFlag() {
         return flag;  
-    }  
-  
-    public void setFlag(byte flag) {  
+    }
+
+    /**
+     * Sets flag.
+     *
+     * @param flag the flag
+     */
+    public void setFlag(byte flag) {
         this.flag = flag;  
-    }  
-  
-    public int getLength() {  
+    }
+
+    /**
+     * Gets length.
+     *
+     * @return the length
+     */
+    public int getLength() {
         return length;  
-    }  
-  
-    public void setLength(int length) {  
+    }
+
+    /**
+     * Sets length.
+     *
+     * @param length the length
+     */
+    public void setLength(int length) {
         this.length = length;  
-    }  
-  
-    public String getBody() {  
+    }
+
+    /**
+     * Gets body.
+     *
+     * @return the body
+     */
+    public String getBody() {
         return body;  
-    }  
-  
-    public void setBody(String body) {  
+    }
+
+    /**
+     * Sets body.
+     *
+     * @param body the body
+     */
+    public void setBody(String body) {
         this.body = body;  
     }  
   

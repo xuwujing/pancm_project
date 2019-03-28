@@ -1,18 +1,22 @@
 package com.pancm.test.system;
 
 /**
-* @Title: SystemTest
-* @Description: 系统相关的类
-* @Version:1.0.0  
-* @author pancm
-* @date 2019年1月16日
-*/
+ * The type System test.
+ *
+ * @author pancm
+ * @Title: SystemTest
+ * @Description: 系统相关的类
+ * @Version:1.0.0
+ * @date 2019年1月16日
+ */
 public class SystemTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		//获取当前的cpu数
 		int cup = Runtime.getRuntime().availableProcessors();
 		System.out.println("当前cup个数:"+cup);

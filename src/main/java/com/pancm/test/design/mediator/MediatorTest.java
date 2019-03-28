@@ -1,17 +1,22 @@
 package com.pancm.test.design.mediator;
 
 /**
- * @Title: MediatorTest
- * @Description: 中介者模式 中介者模式（Mediator Pattern）是用来降低多个对象和类之间的通信复杂性。
- *               这种模式提供了一个中介类，该类通常处理不同类之间的通信，并支持松耦合，使代码易于维护。中介者模式属于行为型模式。
- *               用一个中介对象来封装一系列的对象交互，中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。
- * @Version:1.0.0
+ * The type Mediator test.
+ *
  * @author pancm
+ * @Title: MediatorTest
+ * @Description: 中介者模式 中介者模式（Mediator Pattern）是用来降低多个对象和类之间的通信复杂性。               这种模式提供了一个中介类，该类通常处理不同类之间的通信，并支持松耦合，使代码易于维护。中介者模式属于行为型模式。               用一个中介对象来封装一系列的对象交互，中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。
+ * @Version:1.0.0
  * @date 2018年8月8日
  */
 public class MediatorTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		
 		/*
 		 * 基本使用
@@ -52,100 +57,217 @@ public class MediatorTest {
 
 }
 
+/**
+ * The type Student.
+ */
 class Student {
 	private String name;
-	
-	public Student(String name) {
+
+    /**
+     * Instantiates a new Student.
+     *
+     * @param name the name
+     */
+    public Student(String name) {
 		super();
 		this.name = name;
 	}
 
-	public String getName() {
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
+    public void setName(String name) {
 		this.name = name;
 	}
-	
-	public void showMessage(String msg) {
+
+    /**
+     * Show message.
+     *
+     * @param msg the msg
+     */
+    public void showMessage(String msg) {
 		ChatRoom.showMessage(this, msg);
 	}
 	
 }
 
+/**
+ * The type Chat room.
+ */
 class ChatRoom{
-	public static void showMessage(Student student,String msg){
+    /**
+     * Show message.
+     *
+     * @param student the student
+     * @param msg     the msg
+     */
+    public static void showMessage(Student student,String msg){
 		System.out.println(student.getName()+":"+msg);
 	}
 }
 
+/**
+ * The interface Q qqun.
+ */
 //定义一个中介者 QQ群
 interface QQqun {
-	//提供一个交流的方法
+    /**
+     * Exchange.
+     *
+     * @param person  the person
+     * @param message the message
+     */
+//提供一个交流的方法
 	void exchange(Person person,String message);
 }
 
-//定义一个抽象同事类 
+/**
+ * The type Person.
+ */
+//定义一个抽象同事类
 abstract class Person{
-	protected String name;
+    /**
+     * The Name.
+     */
+    protected String name;
+    /**
+     * The Qun.
+     */
     protected QQqun qun;
-    
+
+    /**
+     * Instantiates a new Person.
+     *
+     * @param name the name
+     * @param qun  the qun
+     */
     Person(String name,QQqun qun){
         this.name = name;
         this.qun = qun;
     }
 }
 
+/**
+ * The type Zhang san.
+ */
 class ZhangSan extends Person{
 
-	ZhangSan(String name, QQqun qun) {
+    /**
+     * Instantiates a new Zhang san.
+     *
+     * @param name the name
+     * @param qun  the qun
+     */
+    ZhangSan(String name, QQqun qun) {
 		super(name, qun);
 	}
-	
-	 void exchange(String message){
+
+    /**
+     * Exchange.
+     *
+     * @param message the message
+     */
+    void exchange(String message){
 		qun.exchange(this,message);
     }
-	
-     void talk(String message){
+
+    /**
+     * Talk.
+     *
+     * @param message the message
+     */
+    void talk(String message){
         System.out.println(name +"说：" + message);
     }
 }
 
+/**
+ * The type Xu wu jing.
+ */
 class XuWuJing extends Person{
 
-	XuWuJing(String name, QQqun qun) {
+    /**
+     * Instantiates a new Xu wu jing.
+     *
+     * @param name the name
+     * @param qun  the qun
+     */
+    XuWuJing(String name, QQqun qun) {
 		super(name, qun);
 	}
-	
-	 void exchange(String message){
+
+    /**
+     * Exchange.
+     *
+     * @param message the message
+     */
+    void exchange(String message){
 		qun.exchange(this,message);
     }
-	
-     void talk(String message){
+
+    /**
+     * Talk.
+     *
+     * @param message the message
+     */
+    void talk(String message){
         System.out.println(name +"回应：" + message);
     }
 }
 
+/**
+ * The type Java q qqun.
+ */
 //定义一个JavaQQ群
 class JavaQQqun implements QQqun{
     private ZhangSan zs;
     private XuWuJing xwj;
 
+    /**
+     * Gets zs.
+     *
+     * @return the zs
+     */
     public ZhangSan getZs() {
 		return zs;
 	}
 
-	public void setZs(ZhangSan zs) {
+    /**
+     * Sets zs.
+     *
+     * @param zs the zs
+     */
+    public void setZs(ZhangSan zs) {
 		this.zs = zs;
 	}
 
-	public XuWuJing getXwj() {
+    /**
+     * Gets xwj.
+     *
+     * @return the xwj
+     */
+    public XuWuJing getXwj() {
 		return xwj;
 	}
 
 
-	public void setXwj(XuWuJing xwj) {
+    /**
+     * Sets xwj.
+     *
+     * @param xwj the xwj
+     */
+    public void setXwj(XuWuJing xwj) {
 		this.xwj = xwj;
 	}
 

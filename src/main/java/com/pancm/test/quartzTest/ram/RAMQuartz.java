@@ -15,17 +15,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
-* @Title: RAMQuartz
-* @Description: 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年5月12日
+ * The type Ram quartz.
+ *
+ * @author pancm
+ * @Title: RAMQuartz
+ * @Description:
+ * @Version:1.0.0
+ * @date 2018年5月12日
  */
 public class RAMQuartz {
 
     private static Logger LOG = LoggerFactory.getLogger(RAMQuartz.class);
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws SchedulerException the scheduler exception
+     */
     public static void main(String[] args) throws SchedulerException {
         //1.创建Scheduler的工厂
         SchedulerFactory sf = new StdSchedulerFactory();

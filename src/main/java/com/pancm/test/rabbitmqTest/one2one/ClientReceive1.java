@@ -8,10 +8,35 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
+
+/**
+ * The type Client receive 1.
+ */
 public class ClientReceive1 {
+    /**
+     * The constant queue_name.
+     */
     public static final String queue_name="my_queue";
+    /**
+     * The constant autoAck.
+     */
     public static final boolean autoAck=false;
+    /**
+     * The constant durable.
+     */
     public static final boolean durable=true;
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws IOException              the io exception
+     * @throws InterruptedException     the interrupted exception
+     * @throws TimeoutException         the timeout exception
+     * @throws KeyManagementException   the key management exception
+     * @throws NoSuchAlgorithmException the no such algorithm exception
+     * @throws URISyntaxException       the uri syntax exception
+     */
     public static void main(String[] args)
     throws java.io.IOException,java.lang.InterruptedException, TimeoutException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException{
         ConnectionFactory factory=new ConnectionFactory();

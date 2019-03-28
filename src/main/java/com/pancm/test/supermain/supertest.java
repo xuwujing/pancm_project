@@ -2,24 +2,43 @@ package com.pancm.test.supermain;
 
 
 /**
+ * The type Supertest.
+ *
  * @author ZERO
- * @Data 2017-5-24 下午4:27:42
- * @Description 
+ * @Data 2017 -5-24 下午4:27:42
+ * @Description
  */
 public class supertest {
-	static class Father {
-		  Father(){
+    /**
+     * The type Father.
+     */
+    static class Father {
+        /**
+         * Instantiates a new Father.
+         */
+        Father(){
 			System.out.println("father");  
 			  };
 		}
 
-	static	class Son {
-		  Son(){
+    /**
+     * The type Son.
+     */
+    static	class Son {
+        /**
+         * Instantiates a new Son.
+         */
+        Son(){
 			  System.out.println("son");
 			 };
 		}
-		
-		public static  void main(String[] args){
+
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
+    public static  void main(String[] args){
 			Father fa= new  Father();
 			Son so=new Son();
 		}

@@ -7,23 +7,26 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 /**
- * 
-* Title: NettyServer
-* Description: Netty服务端
-* Version:1.0.0  
-* @author Administrator
-* @date 2017-8-31
+ * Title: NettyServer
+ * Description: Netty服务端
+ * Version:1.0.0
+ *
+ * @author Administrator
+ * @date 2017 -8-31
  */
 public class NettyServer {
 	    private static final int port = 6789; //设置服务端端口
 	    private static  EventLoopGroup group = new NioEventLoopGroup();   // 通过nio方式来接收连接和处理连接   
 	    private static  ServerBootstrap b = new ServerBootstrap();
-	    
-	    /**
-		 * Netty创建全部都是实现自AbstractBootstrap。
-		 * 客户端的是Bootstrap，服务端的则是	ServerBootstrap。
-		 **/
-	    public static void main(String[] args) throws InterruptedException {
+
+    /**
+     * Netty创建全部都是实现自AbstractBootstrap。
+     * 客户端的是Bootstrap，服务端的则是	ServerBootstrap。
+     *
+     * @param args the input arguments
+     * @throws InterruptedException the interrupted exception
+     */
+    public static void main(String[] args) throws InterruptedException {
 	        try {
 	            b.group(group);
 	            b.channel(NioServerSocketChannel.class);

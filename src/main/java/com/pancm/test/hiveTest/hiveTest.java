@@ -3,19 +3,24 @@ package com.pancm.test.hiveTest;
 import java.sql.SQLException;
 
 /**
- * 
-* Title: hiveTest
-* Description: hive的JDBC测试 
-* 参考 官方文档
-* https://cwiki.apache.org/confluence/display/Hive/HiveServer2+Clients#HiveServer2Clients-BeelineExample 
-* Version:1.0.0  
-* @author pancm
-* @date 2017年12月1日
+ * Title: hiveTest
+ * Description: hive的JDBC测试
+ * 参考 官方文档
+ * https://cwiki.apache.org/confluence/display/Hive/HiveServer2+Clients#HiveServer2Clients-BeelineExample
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年12月1日
  */
 public class hiveTest {
-	
-  
-    
+
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws SQLException the sql exception
+     */
     public static void main(String[] args) throws SQLException {
     	  String sql1 = "select * from t_student where key=1001";
     	  String sql2= "select * from t_student_info where key=1001";

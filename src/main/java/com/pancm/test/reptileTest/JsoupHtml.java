@@ -8,25 +8,35 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /**
- * 
-* @Title: JsoupHtml
-* @Description: 爬虫测试
-* 使用 jsoup 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年3月21日
+ * The type Jsoup html.
+ *
+ * @author pancm
+ * @Title: JsoupHtml
+ * @Description: 爬虫测试  使用 jsoup
+ * @Version:1.0.0
+ * @date 2018年3月21日
  */
 public class JsoupHtml {
     
     private String url="http://sou.zhaopin.com/jobs/searchresult.ashx?jl=";  //智联招聘网站
     private  String city="深圳"; //搜索工作的城市
     private  String keywords="java";  //搜索工作的关键字
-    public JsoupHtml(String city,String keywords){        
+
+    /**
+     * Instantiates a new Jsoup html.
+     *
+     * @param city     the city
+     * @param keywords the keywords
+     */
+    public JsoupHtml(String city,String keywords){
         this.city=city;
         this.keywords =keywords;
         
     }
-    
+
+    /**
+     * Get zhi lian work.
+     */
     public void getZhiLianWork(){
         try {
             for (int i=0;i<10;i++) {
@@ -58,7 +68,13 @@ public class JsoupHtml {
             e.printStackTrace();
         }
     }
-    public static void main(String[] args) {    
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
         
         JsoupHtml jHtml = new JsoupHtml("上海", "java");
         jHtml.getZhiLianWork();

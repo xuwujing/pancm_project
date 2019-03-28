@@ -13,9 +13,10 @@ import org.apache.mina.transport.socket.nio.NioSocketConnector;
 
 
 /**
+ * The type Mina client.
+ *
  * @author ZERO
- * @version 2017-3-27 下午5:59:54
- * mina 客户端
+ * @version 2017 -3-27 下午5:59:54 mina 客户端
  */
 public class MinaClient {
     private static Logger logger = Logger.getLogger(MinaClient.class);
@@ -23,15 +24,31 @@ public class MinaClient {
     private static int PORT = 1255;
     private static  IoConnector connector=new NioSocketConnector();
     private static   IoSession session;
+
+    /**
+     * Gets connector.
+     *
+     * @return the connector
+     */
     public static IoConnector getConnector() {
 		return connector;
 	}
 
-	public static void setConnector(IoConnector connector) {
+    /**
+     * Sets connector.
+     *
+     * @param connector the connector
+     */
+    public static void setConnector(IoConnector connector) {
 		MinaClient.connector = connector;
 	}
 
-	/* 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+/*
     * 测试服务端与客户端程序！
     a. 启动服务端，然后再启动客户端
     b. 服务端接收消息并处理成功;
@@ -54,7 +71,10 @@ public class MinaClient {
     	bindstart();
     	pushstart();
     }
-    
+
+    /**
+     * Bindstart.
+     */
     public static void bindstart(){
     	logger.info("客户端绑定服务端");
     	 // 创建一个非阻塞的客户端程序 
@@ -80,7 +100,10 @@ public class MinaClient {
 //        session.getCloseFuture().awaitUninterruptibly();// 等待连接断开
 //        connector.dispose();
     }
-    
+
+    /**
+     * Pushstart.
+     */
     public static void pushstart(){
     	logger.info("客户端请求服务端推送");
    	 // 创建一个非阻塞的客户端程序 

@@ -9,11 +9,20 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
+/**
+ * The type Send.
+ */
 public class Send {
     
   private final static String QUEUE_NAME = "header_exchange"; //消息队列名
 
-  public static void main(String[] argv) throws Exception {
+    /**
+     * The entry point of application.
+     *
+     * @param argv the input arguments
+     * @throws Exception the exception
+     */
+    public static void main(String[] argv) throws Exception {
            Map map=new HashMap();  
            map.put("aa", 11);
            map.put("bb", 22);

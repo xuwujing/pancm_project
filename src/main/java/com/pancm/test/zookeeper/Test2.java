@@ -7,22 +7,26 @@ import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
 
 /**
- * 
-* @Title: Test2
-* @Description: 
-* zookeeper 的其他测试
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年5月2日
+ * The type Test 2.
+ *
+ * @author pancm
+ * @Title: Test2
+ * @Description: zookeeper  的其他测试
+ * @Version:1.0.0
+ * @date 2018年5月2日
  */
 public class Test2 {
 	private static String url="192.169.0.23:2181";
 	private static  ZooKeeper zk;
 	private static  int  CONNECTION_TIMEOUT=30000;
-	
-	
-	
-	public static void main(String[] args) {
+
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		watch();
 		
 		

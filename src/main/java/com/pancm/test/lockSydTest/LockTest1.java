@@ -3,21 +3,30 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * 
-* @Title: LockTest2
-* @Description: Lock(显示锁)和synchronized(内部锁) 测试
-* @Version:1.0.0  
-* @author pancm
-* @date 2017年10月23日
+ * The type Lock test 1.
+ *
+ * @author pancm
+ * @Title: LockTest2
+ * @Description: Lock(显示锁)和synchronized(内部锁) 测试
+ * @Version:1.0.0
+ * @date 2017年10月23日
  */
 public class LockTest1 {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		
 	}
 
 }
 
+/**
+ * The type Foo.
+ */
 class Foo{
 	/** 可重入的读写锁 */
 	private final ReentrantReadWriteLock rwl=new ReentrantReadWriteLock();
@@ -27,9 +36,12 @@ class Foo{
 	
 	/** 写锁 */
 	private final Lock w=rwl.writeLock();
-	
-	
-	//读操作，可并发执行
+
+
+    /**
+     * Read.
+     */
+//读操作，可并发执行
 	public void read(){
 		try{
 			r.lock();
@@ -41,8 +53,11 @@ class Foo{
 			r.unlock();
 		}
 	}
-	
-	//写操作，同时值允许一个执行
+
+    /**
+     * Write.
+     */
+//写操作，同时值允许一个执行
 	public void write(){
 		try{
 			w.lock();

@@ -1,8 +1,17 @@
 package com.pancm.test.threadTest;
 
+/**
+ * The type Thead test 3.
+ */
 public class TheadTest3 {
 
-	public static void main(String[] args) throws InterruptedException {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws InterruptedException the interrupted exception
+     */
+    public static void main(String[] args) throws InterruptedException {
 		MyRunnable myRunnable=new MyRunnable();
 		for(int i=1;i<=5;i++){
 			Thread thread=new Thread(myRunnable);

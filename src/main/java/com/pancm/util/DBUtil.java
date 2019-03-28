@@ -18,24 +18,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
+ * The type Db util.
+ *
+ * @author pancm
  * @Title: DBUtil
  * @Description: 数据库JDBC连接工具类
  * @Version:1.0.0
- * @author pancm
  * @date 2018年1月5日
  */
 public class DBUtil {
 	
 	private static Logger logger = LoggerFactory.getLogger(DBUtil.class);
-	
-	/**
-	 *  新增/修改
-	 * @param sql
-	 * @return
-	 * @throws SQLException
-	 */
-	public static int executeUpdate(String sql) throws SQLException {
+
+    /**
+     * 新增/修改
+     *
+     * @param sql the sql
+     * @return int
+     * @throws SQLException the sql exception
+     */
+    public static int executeUpdate(String sql) throws SQLException {
 		Statement stmt = null;
 		Connection connection = null;
 		int i = 0;
@@ -50,14 +52,15 @@ public class DBUtil {
 		}
 		return i;
 	}
-	
-	/**
-	 * 批量插入/更新
-	 * @param sqls
-	 * @return
-	 * @throws SQLException
-	 */
-	public int[] updateBatch(List<String> sqls) throws SQLException{
+
+    /**
+     * 批量插入/更新
+     *
+     * @param sqls the sqls
+     * @return int [ ]
+     * @throws SQLException the sql exception
+     */
+    public int[] updateBatch(List<String> sqls) throws SQLException{
 		Statement stmt = null;
 		Connection connection = null;
 		int[] t={0,0};
@@ -85,14 +88,15 @@ public class DBUtil {
 		}
 		return t;
 	}
-	
-	/**
-	 *    查询
-	 * @param sql
-	 * @return
-	 * @throws SQLException
-	 */
-	public static List<Map<String, Object>>  executeQuery(String sql) throws SQLException {
+
+    /**
+     * 查询
+     *
+     * @param sql the sql
+     * @return list
+     * @throws SQLException the sql exception
+     */
+    public static List<Map<String, Object>>  executeQuery(String sql) throws SQLException {
 		Statement stmt = null;
 		Connection connection = null;
 		ResultSet rs = null;
@@ -137,16 +141,16 @@ public class DBUtil {
 		}
 		return list;
 	}
-	
-	/**
-	 * 执行数据库插入操作
-	 *
-	 * @param valueMap  插入数据表中key为列名和value为列对应的值的Map对象
-	 * @param tableName 要插入的数据库的表名
-	 * @return 影响的行数
-	 * @throws SQLException SQL异常
-	 */
-	public static int insert(String tableName, Map<String, Object> valueMap) throws SQLException {
+
+    /**
+     * 执行数据库插入操作
+     *
+     * @param tableName 要插入的数据库的表名
+     * @param valueMap  插入数据表中key为列名和value为列对应的值的Map对象
+     * @return 影响的行数 int
+     * @throws SQLException SQL异常
+     */
+    public static int insert(String tableName, Map<String, Object> valueMap) throws SQLException {
 
 		/** 获取数据库插入的Map的键值对的值 **/
 		Set<String> keySet = valueMap.keySet();
@@ -179,15 +183,15 @@ public class DBUtil {
 		return executeUpdate(sql.toString(), bindArgs);
 	}
 
-	/**
-	 * 执行数据库插入操作
-	 *
-	 * @param datas     插入数据表中key为列名和value为列对应的值的Map对象的List集合
-	 * @param tableName 要插入的数据库的表名
-	 * @return 影响的行数
-	 * @throws SQLException SQL异常
-	 */
-	public static int insertAll(String tableName, List<Map<String, Object>> datas) throws SQLException {
+    /**
+     * 执行数据库插入操作
+     *
+     * @param tableName 要插入的数据库的表名
+     * @param datas     插入数据表中key为列名和value为列对应的值的Map对象的List集合
+     * @return 影响的行数 int
+     * @throws SQLException SQL异常
+     */
+    public static int insertAll(String tableName, List<Map<String, Object>> datas) throws SQLException {
 		/** 影响的行数 **/
 		int affectRowCount = -1;
 		Connection connection = null;
@@ -259,16 +263,16 @@ public class DBUtil {
 		return affectRowCount;
 	}
 
-	/**
-	 * 执行更新操作
-	 *
-	 * @param tableName 表名
-	 * @param valueMap  要更改的值
-	 * @param whereMap  条件
-	 * @return 影响的行数
-	 * @throws SQLException SQL异常
-	 */
-	public static int update(String tableName, Map<String, Object> valueMap, Map<String, Object> whereMap)
+    /**
+     * 执行更新操作
+     *
+     * @param tableName 表名
+     * @param valueMap  要更改的值
+     * @param whereMap  条件
+     * @return 影响的行数 int
+     * @throws SQLException SQL异常
+     */
+    public static int update(String tableName, Map<String, Object> valueMap, Map<String, Object> whereMap)
 			throws SQLException {
 		/** 获取数据库插入的Map的键值对的值 **/
 		Set<String> keySet = valueMap.keySet();
@@ -310,15 +314,15 @@ public class DBUtil {
 		return executeUpdate(sql.toString(), objects.toArray());
 	}
 
-	/**
-	 * 执行删除操作
-	 *
-	 * @param tableName 要删除的表名
-	 * @param whereMap  删除的条件
-	 * @return 影响的行数
-	 * @throws SQLException SQL执行异常
-	 */
-	public static int delete(String tableName, Map<String, Object> whereMap) throws SQLException {
+    /**
+     * 执行删除操作
+     *
+     * @param tableName 要删除的表名
+     * @param whereMap  删除的条件
+     * @return 影响的行数 int
+     * @throws SQLException SQL执行异常
+     */
+    public static int delete(String tableName, Map<String, Object> whereMap) throws SQLException {
 		/** 准备删除的sql语句 **/
 		StringBuilder sql = new StringBuilder();
 		sql.append("DELETE FROM ");
@@ -346,15 +350,15 @@ public class DBUtil {
 		return executeUpdate(sql.toString(), bindArgs);
 	}
 
-	/**
-	 * 可以执行新增，修改，删除
-	 *
-	 * @param sql      sql语句
-	 * @param bindArgs 绑定参数
-	 * @return 影响的行数
-	 * @throws SQLException SQL异常
-	 */
-	public static int executeUpdate(String sql, Object[] bindArgs) throws SQLException {
+    /**
+     * 可以执行新增，修改，删除
+     *
+     * @param sql      sql语句
+     * @param bindArgs 绑定参数
+     * @return 影响的行数 int
+     * @throws SQLException SQL异常
+     */
+    public static int executeUpdate(String sql, Object[] bindArgs) throws SQLException {
 		/** 影响的行数 **/
 		int affectRowCount = -1;
 		Connection connection = null;
@@ -403,26 +407,26 @@ public class DBUtil {
 		return affectRowCount;
 	}
 
-	/**
-	 * 通过sql查询数据, 慎用，会有sql注入问题
-	 *
-	 * @param sql
-	 * @return 查询的数据集合
-	 * @throws SQLException
-	 */
-	public static List<Map<String, Object>> query(String sql) throws SQLException {
+    /**
+     * 通过sql查询数据, 慎用，会有sql注入问题
+     *
+     * @param sql the sql
+     * @return 查询的数据集合 list
+     * @throws SQLException the sql exception
+     */
+    public static List<Map<String, Object>> query(String sql) throws SQLException {
 		return executeQuery(sql, null);
 	}
 
-	/**
-	 * 执行sql通过 Map<String, Object>限定查询条件查询
-	 *
-	 * @param tableName 表名
-	 * @param whereMap  where条件
-	 * @return List<Map<String, Object>>
-	 * @throws SQLException
-	 */
-	public static List<Map<String, Object>> query(String tableName, Map<String, Object> whereMap) throws Exception {
+    /**
+     * 执行sql通过 Map<String, Object>限定查询条件查询
+     *
+     * @param tableName 表名
+     * @param whereMap  where条件
+     * @return List<Map < String, Object> >
+     * @throws Exception the exception
+     */
+    public static List<Map<String, Object>> query(String tableName, Map<String, Object> whereMap) throws Exception {
 		String whereClause = "";
 		Object[] whereArgs = null;
 		if (whereMap != null && whereMap.size() > 0) {
@@ -440,36 +444,36 @@ public class DBUtil {
 		return query(tableName, false, null, whereClause, whereArgs, null, null, null, null);
 	}
 
-	/**
-	 * 执行sql条件参数绑定形式的查询
-	 *
-	 * @param tableName   表名
-	 * @param whereClause where条件的sql
-	 * @param whereArgs   where条件中占位符中的值
-	 * @return List<Map<String, Object>>
-	 * @throws SQLException
-	 */
-	public static List<Map<String, Object>> query(String tableName, String whereClause, String[] whereArgs)
+    /**
+     * 执行sql条件参数绑定形式的查询
+     *
+     * @param tableName   表名
+     * @param whereClause where条件的sql
+     * @param whereArgs   where条件中占位符中的值
+     * @return List<Map < String, Object> >
+     * @throws SQLException the sql exception
+     */
+    public static List<Map<String, Object>> query(String tableName, String whereClause, String[] whereArgs)
 			throws SQLException {
 		return query(tableName, false, null, whereClause, whereArgs, null, null, null, null);
 	}
 
-	/**
-	 * 执行全部结构的sql查询
-	 *
-	 * @param tableName     表名
-	 * @param distinct      去重
-	 * @param columns       要查询的列名
-	 * @param selection     where条件
-	 * @param selectionArgs where条件中占位符中的值
-	 * @param groupBy       分组
-	 * @param having        筛选
-	 * @param orderBy       排序
-	 * @param limit         分页
-	 * @return List<Map<String, Object>>
-	 * @throws SQLException
-	 */
-	public static List<Map<String, Object>> query(String tableName, boolean distinct, String[] columns,
+    /**
+     * 执行全部结构的sql查询
+     *
+     * @param tableName     表名
+     * @param distinct      去重
+     * @param columns       要查询的列名
+     * @param selection     where条件
+     * @param selectionArgs where条件中占位符中的值
+     * @param groupBy       分组
+     * @param having        筛选
+     * @param orderBy       排序
+     * @param limit         分页
+     * @return List<Map < String, Object> >
+     * @throws SQLException the sql exception
+     */
+    public static List<Map<String, Object>> query(String tableName, boolean distinct, String[] columns,
 			String selection, Object[] selectionArgs, String groupBy, String having, String orderBy, String limit)
 			throws SQLException {
 		String sql = buildQueryString(distinct, tableName, columns, selection, groupBy, having, orderBy, limit);
@@ -477,15 +481,15 @@ public class DBUtil {
 
 	}
 
-	/**
-	 * 执行查询
-	 *
-	 * @param sql      要执行的sql语句
-	 * @param bindArgs 绑定的参数
-	 * @return List<Map<String, Object>>结果集对象
-	 * @throws SQLException SQL执行异常
-	 */
-	public static List<Map<String, Object>> executeQuery(String sql, Object[] bindArgs) throws SQLException {
+    /**
+     * 执行查询
+     *
+     * @param sql      要执行的sql语句
+     * @param bindArgs 绑定的参数
+     * @return List<Map < String, Object> >结果集对象
+     * @throws SQLException SQL执行异常
+     */
+    public static List<Map<String, Object>> executeQuery(String sql, Object[] bindArgs) throws SQLException {
 		List<Map<String, Object>> datas = new ArrayList<>();
 		Connection connection = null;
 		PreparedStatement preparedStatement = null;
@@ -673,9 +677,16 @@ public class DBUtil {
 		}
 		return sb.toString();
 	}
-	
-	
-	public static void close(ResultSet rs, Statement stmt, Connection connection) {
+
+
+    /**
+     * Close.
+     *
+     * @param rs         the rs
+     * @param stmt       the stmt
+     * @param connection the connection
+     */
+    public static void close(ResultSet rs, Statement stmt, Connection connection) {
 		try {
 			if (rs != null) {
 				rs.close();

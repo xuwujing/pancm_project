@@ -1,12 +1,12 @@
 package com.pancm.test.tokenTest;
 
 /**
- * 
-* Title: test
-* Description: token 测试 
-* Version:1.0.0  
-* @author pancm
-* @date 2017年10月27日
+ * Title: test
+ * Description: token 测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年10月27日
  */
 public class test {
 		/** Token 密钥 */
@@ -15,13 +15,21 @@ public class test {
 		private static String PATH = "/test";
 		
 		private static token tk = null;
-		
-		public static void main(String []args) {
+
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
+    public static void main(String []args) {
 			 tk = new token();
 			testToToken();
 		}
-		
-		public static void testToToken() {
+
+    /**
+     * Test to token.
+     */
+    public static void testToToken() {
 			String sign = tk.toToken(KEY, PATH);
 			System.out.println(sign);
 		}

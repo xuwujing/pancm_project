@@ -8,6 +8,9 @@ import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.Watcher.Event.EventType;
 import org.apache.zookeeper.ZooKeeper;
 
+/**
+ * The type Wa.
+ */
 class Wa implements Runnable
 {
 
@@ -59,8 +62,19 @@ class Wa implements Runnable
 
 }
 
+/**
+ * The type Main.
+ */
 public class Main {
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws IOException          the io exception
+     * @throws KeeperException      the keeper exception
+     * @throws InterruptedException the interrupted exception
+     */
     public static void main(String[] args) throws IOException, KeeperException, InterruptedException {
         // TODO Auto-generated method stub
 

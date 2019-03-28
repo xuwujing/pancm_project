@@ -1,16 +1,23 @@
 package com.pancm.test.extendsTest;
 
 /**
- * 
+ * The type Static test.
+ *
+ * @author Administrator
  * @Title: StaticTest
  * @Description: 构造块和静态方法测试
  * @Version:1.0.0
- * @author Administrator
- * @date 2017-8-14
+ * @date 2017 -8-14
  */
 public class StaticTest {
-	public static StaticTest t1 = new StaticTest();
-	public static StaticTest t2 = new StaticTest();
+    /**
+     * The constant t1.
+     */
+    public static StaticTest t1 = new StaticTest();
+    /**
+     * The constant t2.
+     */
+    public static StaticTest t2 = new StaticTest();
 	{
 		System.out.println("构造块");
 	}
@@ -18,7 +25,12 @@ public class StaticTest {
 		System.out.println("静态块");
 	}
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		StaticTest t = new StaticTest(); // 构造块 构造块 静态块 构造块
 		
 		
@@ -43,8 +55,15 @@ public class StaticTest {
 	
 }
 
+/**
+ * The type Hello a.
+ */
 class HelloA {
 	private int i=10;
+
+    /**
+     * Instantiates a new Hello a.
+     */
     public HelloA() {
         System.out.println("HelloA"); //5
     }
@@ -54,8 +73,16 @@ class HelloA {
     static { System.out.println("static A"); } //1
 
 }
- class HelloB extends HelloA{
+
+/**
+ * The type Hello b.
+ */
+class HelloB extends HelloA{
 	private int j=12;
+
+    /**
+     * Instantiates a new Hello b.
+     */
     public HelloB() {
         System.out.println("HelloB");  //7
     }

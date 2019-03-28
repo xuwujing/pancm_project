@@ -16,16 +16,21 @@ import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.topology.TopologyBuilder;
 
 /**
- * 
-* Title: MykafkaSpout
-* Description: storm 消费kafka 的主程序
-* Version:1.0.0  
-* @author pancm
-* @date 2017年12月29日
+ * Title: MykafkaSpout
+ * Description: storm 消费kafka 的主程序
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年12月29日
  */
 public class MykafkaSpout {
-    
-	/*
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    /*
 	 * 通过zookeeper进行获取kafka的数据
 	 */
     public static void main(String[] args)  {

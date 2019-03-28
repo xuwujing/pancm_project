@@ -18,10 +18,19 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
+/**
+ * The type Json util.
+ */
 public class JSONUtil {
 	private static Logger log = Logger.getLogger(JSONUtil.class);
-	
-	public static String object2json(Object obj) {
+
+    /**
+     * Object 2 json string.
+     *
+     * @param obj the obj
+     * @return the string
+     */
+    public static String object2json(Object obj) {
 		StringBuilder json = new StringBuilder();
 		if (obj == null) {
 			json.append("\"\"");
@@ -43,7 +52,13 @@ public class JSONUtil {
 		return json.toString();
 	}
 
-	public static String bean2json(Object bean) {
+    /**
+     * Bean 2 json string.
+     *
+     * @param bean the bean
+     * @return the string
+     */
+    public static String bean2json(Object bean) {
 		StringBuilder json = new StringBuilder();
 		json.append("{");
 		PropertyDescriptor[] props = null;
@@ -70,7 +85,13 @@ public class JSONUtil {
 		return json.toString();
 	}
 
-	public static String list2json(List<?> list) {
+    /**
+     * List 2 json string.
+     *
+     * @param list the list
+     * @return the string
+     */
+    public static String list2json(List<?> list) {
 		StringBuilder json = new StringBuilder();
 		json.append("[");
 		if (list != null && list.size() > 0) {
@@ -85,7 +106,13 @@ public class JSONUtil {
 		return json.toString();
 	}
 
-	public static String array2json(Object[] array) {
+    /**
+     * Array 2 json string.
+     *
+     * @param array the array
+     * @return the string
+     */
+    public static String array2json(Object[] array) {
 		StringBuilder json = new StringBuilder();
 		json.append("[");
 		if (array != null && array.length > 0) {
@@ -100,7 +127,13 @@ public class JSONUtil {
 		return json.toString();
 	}
 
-	public static String map2json(Map<?, ?> map) {
+    /**
+     * Map 2 json string.
+     *
+     * @param map the map
+     * @return the string
+     */
+    public static String map2json(Map<?, ?> map) {
 		StringBuilder json = new StringBuilder();
 		json.append("{");
 		if (map != null && map.size() > 0) {
@@ -117,7 +150,13 @@ public class JSONUtil {
 		return json.toString();
 	}
 
-	public static String set2json(Set<?> set) {
+    /**
+     * Sets 2 json.
+     *
+     * @param set the set
+     * @return the 2 json
+     */
+    public static String set2json(Set<?> set) {
 		StringBuilder json = new StringBuilder();
 		json.append("[");
 		if (set != null && set.size() > 0) {
@@ -132,7 +171,13 @@ public class JSONUtil {
 		return json.toString();
 	}
 
-	public static String string2json(String s) {
+    /**
+     * String 2 json string.
+     *
+     * @param s the s
+     * @return the string
+     */
+    public static String string2json(String s) {
 		if (s == null) {
 			return "";
 		}
@@ -179,15 +224,27 @@ public class JSONUtil {
 		}
 		return sb.toString();
 	}
-	
-	public static JSONArray getJSONArray(Map<String,Object> map){
+
+    /**
+     * Get json array json array.
+     *
+     * @param map the map
+     * @return the json array
+     */
+    public static JSONArray getJSONArray(Map<String,Object> map){
 	    List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 	    list.add(map);
     	JSONArray jArray = (JSONArray) JSONArray.toJSON(list);
 		return jArray;
 	}
-	
-	public static JSONArray getListJSONArray(List<Map<String, Object>> list){
+
+    /**
+     * Get list json array json array.
+     *
+     * @param list the list
+     * @return the json array
+     */
+    public static JSONArray getListJSONArray(List<Map<String, Object>> list){
 	    if(list==null || list.isEmpty()){
 	        return null;
 	    }
@@ -195,7 +252,15 @@ public class JSONUtil {
 	    return jArray;
 	}
 
-	public static String getJSONStringResult(Map<String, Object> map, int i, String message) {
+    /**
+     * Gets json string result.
+     *
+     * @param map     the map
+     * @param i       the
+     * @param message the message
+     * @return the json string result
+     */
+    public static String getJSONStringResult(Map<String, Object> map, int i, String message) {
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		if(map == null){
 			map = new HashMap<String, Object>();
@@ -214,6 +279,14 @@ public class JSONUtil {
         return JSON.toJSONString(json,SerializerFeature.DisableCheckSpecialChar);
 	}
 
+    /**
+     * Gets json object result.
+     *
+     * @param map     the map
+     * @param i       the
+     * @param message the message
+     * @return the json object result
+     */
     public static Object getJSONObjectResult(Map<String, Object> map, int i, String message) {
         Map<String, Object> resultMap = new HashMap<String, Object>();
         if(map == null){

@@ -12,17 +12,22 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 
-* @Title: ThreadPoolTest
-* @Description:
-* 线程池测试 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年3月1日
+ * The type Thread pool test.
+ *
+ * @author pancm
+ * @Title: ThreadPoolTest
+ * @Description: 线程池测试
+ * @Version:1.0.0
+ * @date 2018年3月1日
  */
 public class ThreadPoolTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 //		cachedThreadPool();
 //		fixedThreadPool();
 //		newSingleThreadExecutor();
@@ -175,9 +180,18 @@ public class ThreadPoolTest {
 	
 }
 
+/**
+ * The type My thread.
+ */
 class MyThread implements Runnable{
 	private String name;
-	public  MyThread(String name){
+
+    /**
+     * Instantiates a new My thread.
+     *
+     * @param name the name
+     */
+    public  MyThread(String name){
 		this.name=name;
 	}
 	

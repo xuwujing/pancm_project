@@ -4,15 +4,20 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
- * 
-* Title: loadPropertiesTest
-* Description: 读取文件数据测试
-* Version:1.0.0  
-* @author pancm
-* @date 2017年9月22日
+ * Title: loadPropertiesTest
+ * Description: 读取文件数据测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年9月22日
  */
 public class loadPropertiesTest {
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		Map<String, String> conf=getPropertiesTest.getAppSettings();
 		System.out.println("本机IP:"+conf.get("localhost"));
 		System.out.println("tomcat 端口:"+conf.get("tomcatPort"));

@@ -1,14 +1,24 @@
 package com.pancm.test.threadTest;
+
 /**
+ * The type My runnable.
+ *
  * @author ZERO
- * @Data 2017-5-24 下午2:29:39
- * @Description 
+ * @Data 2017 -5-24 下午2:29:39
+ * @Description
  */
 public class MyRunnable implements Runnable{
 	private int i = 0;
 	
 	private boolean stop=false;
-	public void set(boolean falg) throws InterruptedException{
+
+    /**
+     * Set.
+     *
+     * @param falg the falg
+     * @throws InterruptedException the interrupted exception
+     */
+    public void set(boolean falg) throws InterruptedException{
 		if(!falg){
 			synchronized (this) {
 				this.notify();

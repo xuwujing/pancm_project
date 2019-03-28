@@ -6,19 +6,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * The type Lambda test.
+ *
+ * @author pancm
  * @Title: lambdaTest
  * @Description: 拉姆达表达式
- * 
  * @Version:1.0.0
- * @author pancm
  * @date 2018年8月28日
  */
 public class LambdaTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		test1();
 		test2();
 	}
@@ -72,21 +75,30 @@ public class LambdaTest {
 		});
 		System.out.println("list2:" + list2);
 	}
-	
-	//使用普通的方式创建
+
+    /**
+     * The R 1.
+     */
+//使用普通的方式创建
 	Runnable r1 = new Runnable() {
 		@Override
 		public void run() {
 			System.out.println("普通方式创建!");
 		}
 	};
-	
-	//使用拉姆达方式创建
+
+    /**
+     * The R 2.
+     */
+//使用拉姆达方式创建
 	Runnable r2 = ()-> System.out.println("拉姆达方式创建!");
 	
 
 }
 
+/**
+ * The type User.
+ */
 class User {
 
 	/** 编号 */
@@ -94,55 +106,58 @@ class User {
 	/** 姓名 */
 	private String name;
 
-	public User() {
+    /**
+     * Instantiates a new User.
+     */
+    public User() {
 	}
 
-	/**
-	 * 构造方法
-	 * 
-	 * @param id   编号
-	 * @param name 姓名
-	 */
-	public User(int id, String name) {
+    /**
+     * 构造方法
+     *
+     * @param id   编号
+     * @param name 姓名
+     */
+    public User(int id, String name) {
 		super();
 		this.id = id;
 		this.name = name;
 	}
 
-	/**
-	 * 获取编号
-	 * 
-	 * @return id
-	 */
-	public int getId() {
+    /**
+     * 获取编号
+     *
+     * @return id id
+     */
+    public int getId() {
 		return id;
 	}
 
-	/**
-	 * 设置编号
-	 * 
-	 * @param id
-	 */
-	public void setId(int id) {
+    /**
+     * 设置编号
+     *
+     * @param id the id
+     */
+    public void setId(int id) {
 		this.id = id;
 	}
 
-	/**
-	 * 获取姓名
-	 * 
-	 * @return name
-	 */
-	public String getName() {
+    /**
+     * 获取姓名
+     *
+     * @return name name
+     */
+    public String getName() {
 		System.out.println("姓名:" + name);
 		return name;
 	}
 
-	/**
-	 * 设置姓名
-	 * 
-	 * @param name
-	 */
-	public void setName(String name) {
+    /**
+     * 设置姓名
+     *
+     * @param name the name
+     */
+    public void setName(String name) {
 		this.name = name;
 	}
 

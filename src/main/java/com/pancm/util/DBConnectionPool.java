@@ -11,13 +11,13 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mchange.v2.c3p0.DataSources;
 
 /**
- * 
-* Title: DBConnectionPool
-* Description:
-* 数据库连接池对象，单例 
-* Version:1.0.0  
-* @author pancm
-* @date 2018年1月5日
+ * Title: DBConnectionPool
+ * Description:
+ * 数据库连接池对象，单例
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年1月5日
  */
 public class DBConnectionPool {
     private static volatile DBConnectionPool dbConnection;
@@ -88,7 +88,7 @@ public class DBConnectionPool {
     /**
      * 获取数据库连接对象，单例
      *
-     * @return
+     * @return instance
      */
     public static DBConnectionPool getInstance() {
         if (dbConnection == null) {
@@ -104,7 +104,8 @@ public class DBConnectionPool {
     /**
      * 获取数据库连接
      *
-     * @return 数据库连接
+     * @return 数据库连接 connection
+     * @throws SQLException the sql exception
      */
     public final synchronized Connection getConnection() throws SQLException {
         return cpds.getConnection();

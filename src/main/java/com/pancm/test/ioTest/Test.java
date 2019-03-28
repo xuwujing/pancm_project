@@ -15,16 +15,22 @@ import java.io.OutputStreamWriter;
 import java.util.Properties;
 
 /**
-* @Title: Test
-* @Description: 
-* io字符流和字节流测试
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年6月11日
-*/
+ * The type Test.
+ *
+ * @author pancm
+ * @Title: Test
+ * @Description: io字符流和字节流测试
+ * @Version:1.0.0
+ * @date 2018年6月11日
+ */
 public class Test {
 
-	public static void main(String[] args)  {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args)  {
 		try {
 //			test();
 //			test2();

@@ -13,19 +13,22 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 /**
-* @Title: timeTest
-* @Description: 
-* 时间测试
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年6月21日
-*/
+ * The type Local date time test.
+ *
+ * @author pancm
+ * @Title: timeTest
+ * @Description: 时间测试
+ * @Version:1.0.0
+ * @date 2018年6月21日
+ */
 public class LocalDateTimeTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		
 		
 		/*

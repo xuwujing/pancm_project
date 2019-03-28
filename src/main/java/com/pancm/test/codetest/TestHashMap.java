@@ -4,17 +4,24 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
-* @Title: TestHashMap
-* @Description: hashmap源码理解
-* @since jdk 1.8
-* @Version:1.0.0  
-* @author pancm
-* @date 2019年2月18日
-*/
+ * The type Test hash map.
+ *
+ * @author pancm
+ * @Title: TestHashMap
+ * @Description: hashmap源码理解
+ * @Version:1.0.0
+ * @date 2019年2月18日
+ * @since jdk 1.8
+ */
 public class TestHashMap {
 
-	
-	public static void main(String[] args) {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		
 		/*
 		  HashMap提供了三个构造函数：

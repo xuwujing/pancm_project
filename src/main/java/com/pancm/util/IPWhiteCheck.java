@@ -9,13 +9,14 @@ import java.util.regex.Pattern;
 
 
 /**
-* @Title: IPWhiteCheck
-* @Description:
-* IP白名单工具类 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年6月25日
-*/
+ * The type Ip white check.
+ *
+ * @author pancm
+ * @Title: IPWhiteCheck
+ * @Description: IP白名单工具类
+ * @Version:1.0.0
+ * @date 2018年6月25日
+ */
 public class IPWhiteCheck {
 
 	private static String VERTICAL="\\|";
@@ -170,19 +171,20 @@ public class IPWhiteCheck {
         }
         return false;
     }
-    
-     /**
-      * 根据IP地址，及IP白名单设置规则判断IP是否包含在白名单
-      * 例如:ip =192.169.0.10
-      * ipWhiteConfig=192.169.0.1-192.169.0.11;
-      * 则可以通过
-      * ip =192.169.1.10
-      * ipWhiteConfig=192.169.1.*
-      * 也可以通过
-      * @param ip
-      * @param ipWhiteConfig
-      * @return
-      */
+
+    /**
+     * 根据IP地址，及IP白名单设置规则判断IP是否包含在白名单
+     * 例如:ip =192.169.0.10
+     * ipWhiteConfig=192.169.0.1-192.169.0.11;
+     * 则可以通过
+     * ip =192.169.1.10
+     * ipWhiteConfig=192.169.1.*
+     * 也可以通过
+     *
+     * @param ip            the ip
+     * @param ipWhiteConfig the ip white config
+     * @return boolean
+     */
     public static boolean checkLoginIP(String ip,String ipWhiteConfig){
     	if(ip==null||ipWhiteConfig==null){
  		   return false;
@@ -190,7 +192,7 @@ public class IPWhiteCheck {
         Set<String> ipList = getAvaliIpList(ipWhiteConfig);
         return checkLoginIP(ip, ipList);
     }
-    
+
     /**
      * 支持多个
      * 根据IP地址，及IP白名单设置规则判断IP是否包含在白名单
@@ -200,11 +202,12 @@ public class IPWhiteCheck {
      * ip =192.169.0.12
      * ipWhiteConfig=192.169.1.*|192.169.0.1-192.169.0.11
      * 不可以通过
-     * @param ip
-     * @param ipWhiteConfig
-     * @return
+     *
+     * @param ip            the ip
+     * @param ipWhiteConfig the ip white config
+     * @return boolean
      */
-   public static boolean checkLoginIPS(String ip,String ipWhiteConfig){
+    public static boolean checkLoginIPS(String ip,String ipWhiteConfig){
 	   if(ip==null||ipWhiteConfig==null){
 		   return false;
 	   }
@@ -218,9 +221,14 @@ public class IPWhiteCheck {
 		}
        return falg;
    }
-   
-   
-   public static void main(String[] args) {
+
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 	   String ip="192.169.0.10";
 		String ipWhiteConfig="192.169.0.1-192.169.0.11";
 		String ip2="192.169.0.10";

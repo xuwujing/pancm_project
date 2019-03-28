@@ -14,9 +14,8 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * 
  * Title: sqTest Description:sql语句的一些测试 Version:1.0.0
- * 
+ *
  * @author pancm
  * @date 2017年10月19日
  */
@@ -58,33 +57,58 @@ public class sqTest {
 			+ "INWAIT2TIME DATETIME NOT NULL DEFAULT (datetime(CURRENT_TIMESTAMP,'localtime')) ,"
 			+ "VERIFYTIME2 DATETIME NOT NULL DEFAULT (datetime(CURRENT_TIMESTAMP,'localtime')) )";
 
-	/** 添加待审数据 */
-	public final static String SQL_INSERT_VERIFY = "INSERT INTO MT_VERIFY_WAIT2(ID,UID,PHONECOUNT,TOTALCOUNT,SENDSTATUS,MSGTYPE,SENDTIME,"
+    /**
+     * 添加待审数据
+     */
+    public final static String SQL_INSERT_VERIFY = "INSERT INTO MT_VERIFY_WAIT2(ID,UID,PHONECOUNT,TOTALCOUNT,SENDSTATUS,MSGTYPE,SENDTIME,"
 			+ "SENDLEVEL,USERID,MESSAGE,INWAITTIME,INWAIT2TIME,PTCODE,FEEFLAG,ACK2,LOCKSTATUS,ASSIGNSTATUS,ASSIGNTIME,CHECKUSER,MINID,MAXID,RECCOUNT,OPUSER,VERIFYTIME,VERIFYTIME2)"
 			+ "VALUES(%d,%d,%d,%d,%d,%d,'%s',%d,'%s','%s','%s','%s','%s',%d,%d,'%s',%d,'%s','%s',%d,%d,%d,'%s','%s','%s')";
 
-	/** 添加新的待审数据  */
-	public final static String SQL_INSERTOR_VERIFY = "INSERT INTO MT_VERIFY_WAIT2(ID,UID,PHONECOUNT,TOTALCOUNT,SENDSTATUS,MSGTYPE,SENDTIME,"
+    /**
+     * 添加新的待审数据
+     */
+    public final static String SQL_INSERTOR_VERIFY = "INSERT INTO MT_VERIFY_WAIT2(ID,UID,PHONECOUNT,TOTALCOUNT,SENDSTATUS,MSGTYPE,SENDTIME,"
 			+ "SENDLEVEL,USERID,MESSAGE,INWAITTIME,INWAIT2TIME,PTCODE,FEEFLAG,ACK2,LOCKSTATUS,ASSIGNSTATUS,ASSIGNTIME,CHECKUSER,MINID,MAXID,RECCOUNT,OPUSER,VERIFYTIME,VERIFYTIME2)"
 			+ " SELECT %d,%d,%d,%d,%d,%d,'%s',%d,'%s','%s','%s','%s','%s',%d,%d,'%s',%d,'%s','%s',%d,%d,%d,'%s','%s','%s'  WHERE NOT EXISTS (SELECT 1 FROM MT_VERIFY_WAIT2 WHERE PTCODE='%s' AND ID=%d)";
 
-	/** 添加待审数据 */
-	public final static String SQL_INSERTORIGNORE_VERIFY = "INSERT OR IGNORE INTO MT_VERIFY_WAIT2(ID,UID,PHONECOUNT,TOTALCOUNT,SENDSTATUS,MSGTYPE,SENDTIME,"
+    /**
+     * 添加待审数据
+     */
+    public final static String SQL_INSERTORIGNORE_VERIFY = "INSERT OR IGNORE INTO MT_VERIFY_WAIT2(ID,UID,PHONECOUNT,TOTALCOUNT,SENDSTATUS,MSGTYPE,SENDTIME,"
 			+ "SENDLEVEL,USERID,MESSAGE,INWAITTIME,INWAIT2TIME,PTCODE,FEEFLAG,ACK2,LOCKSTATUS,ASSIGNSTATUS,ASSIGNTIME,CHECKUSER,MINID,MAXID,RECCOUNT,OPUSER,VERIFYTIME,VERIFYTIME2)"
 			+ "VALUES(%d,%d,%d,%d,%d,%d,'%s',%d,'%s','%s','%s','%s','%s',%d,%d,'%s',%d,'%s','%s',%d,%d,%d,'%s','%s','%s')";
 
-	/** 合并待审审数据 */
-	public final static String SQL_MERGE_VERIFY = "UPDATE MT_VERIFY_WAIT2 SET MAXID = %d,PHONECOUNT =%d,TOTALCOUNT = %d,"+
-														"RECCOUNT= %d,INWAITTIME='%s',INWAIT2TIME='%s'  WHERE PTCODE='%s' AND ID=%d ";	
-	
-	
-	/** 待审数据索引 */
-	public final static String SQL_CREATE_WAIT2_ACK2_IDX = "CREATE INDEX IDX_ACK2_WAIT2 ON MT_VERIFY_WAIT2(ACK2);";
-	public final static String SQL_CREATE_WAIT2_LOCKSTATUS_IDX = "CREATE INDEX IDX_LOCKSTATUS_WAIT2 ON MT_VERIFY_WAIT2(LOCKSTATUS);";
-	public final static String SQL_CREATE_WAIT2_PTCODE_IDX = "CREATE INDEX IDX_PTCODE_WAIT2 ON MT_VERIFY_WAIT2(PTCODE);";
-	public final static String SQL_CREATE_WAIT2_USERID_IDX = "CREATE INDEX IDX_USERID_WAIT2 ON MT_VERIFY_WAIT2(USERID);";
-	public final static String SQL_CREATE_WAIT2_ASSIGNSTATUS_IDX = "CREATE INDEX IDX_ASSIGNSTATUS_WAIT2 ON MT_VERIFY_WAIT2(ASSIGNSTATUS);";
-	public final static String SQL_CREATE_WAIT2_ID_IDX = "CREATE INDEX IDX_ID_WAIT2 ON MT_VERIFY_WAIT2(ID);";
+    /**
+     * 合并待审审数据
+     */
+    public final static String SQL_MERGE_VERIFY = "UPDATE MT_VERIFY_WAIT2 SET MAXID = %d,PHONECOUNT =%d,TOTALCOUNT = %d,"+
+														"RECCOUNT= %d,INWAITTIME='%s',INWAIT2TIME='%s'  WHERE PTCODE='%s' AND ID=%d ";
+
+
+    /**
+     * 待审数据索引
+     */
+    public final static String SQL_CREATE_WAIT2_ACK2_IDX = "CREATE INDEX IDX_ACK2_WAIT2 ON MT_VERIFY_WAIT2(ACK2);";
+    /**
+     * The constant SQL_CREATE_WAIT2_LOCKSTATUS_IDX.
+     */
+    public final static String SQL_CREATE_WAIT2_LOCKSTATUS_IDX = "CREATE INDEX IDX_LOCKSTATUS_WAIT2 ON MT_VERIFY_WAIT2(LOCKSTATUS);";
+    /**
+     * The constant SQL_CREATE_WAIT2_PTCODE_IDX.
+     */
+    public final static String SQL_CREATE_WAIT2_PTCODE_IDX = "CREATE INDEX IDX_PTCODE_WAIT2 ON MT_VERIFY_WAIT2(PTCODE);";
+    /**
+     * The constant SQL_CREATE_WAIT2_USERID_IDX.
+     */
+    public final static String SQL_CREATE_WAIT2_USERID_IDX = "CREATE INDEX IDX_USERID_WAIT2 ON MT_VERIFY_WAIT2(USERID);";
+    /**
+     * The constant SQL_CREATE_WAIT2_ASSIGNSTATUS_IDX.
+     */
+    public final static String SQL_CREATE_WAIT2_ASSIGNSTATUS_IDX = "CREATE INDEX IDX_ASSIGNSTATUS_WAIT2 ON MT_VERIFY_WAIT2(ASSIGNSTATUS);";
+    /**
+     * The constant SQL_CREATE_WAIT2_ID_IDX.
+     */
+    public final static String SQL_CREATE_WAIT2_ID_IDX = "CREATE INDEX IDX_ID_WAIT2 ON MT_VERIFY_WAIT2(ID);";
 	
 	/***
 	 * 静态加载Sqlite驱动类
@@ -97,7 +121,12 @@ public class sqTest {
 		}
 	}
 
-	public synchronized static Connection getConnection() {
+    /**
+     * Gets connection.
+     *
+     * @return the connection
+     */
+    public synchronized static Connection getConnection() {
 		if (null == connection) {
 			try {
 				connection = DriverManager.getConnection(memory, null, null);// 不适用用户名和密码
@@ -108,7 +137,12 @@ public class sqTest {
 		return connection;
 	}
 
-	public synchronized static boolean closeConnetion() {
+    /**
+     * Close connetion boolean.
+     *
+     * @return the boolean
+     */
+    public synchronized static boolean closeConnetion() {
 		try {
 			if (null != connection) {
 				connection.close();
@@ -119,9 +153,13 @@ public class sqTest {
 		return true;
 	}
 
-	
-	
-	public static void main(String[] args) {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		creatTable();	   //创建表
 		initialTableIndex(); //创建索引
 		long starTime=System.currentTimeMillis(); 

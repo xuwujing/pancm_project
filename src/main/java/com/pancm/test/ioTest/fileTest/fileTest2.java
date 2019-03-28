@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * 
-* Title: fileTest
-* Description:  IO中File类的创建和删除测试
-* Version:1.0.0  
-* @author panchengming
+ * Title: fileTest
+ * Description:  IO中File类的创建和删除测试
+ * Version:1.0.0
+ *
+ * @author panchengming
  */
 public class fileTest2 {
 	/**
@@ -20,18 +20,25 @@ public class fileTest2 {
 	private final static String windPath="e:\\test\\test.txt";  //windows路径
 	private final static String linuxPath="e://test//test.txt";  //linux路径
 	private final static String path="e:"+File.separator+ "test"+File.separator+"test.txt";  //通用路径
-	
-	public static void main(String[] args) throws InterruptedException {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws InterruptedException the interrupted exception
+     */
+    public static void main(String[] args) throws InterruptedException {
 //		createNewFile(path);   	//创建文件
 		Thread.sleep(2000);
     	deleteFile(path);		//删除文件
 	}
-	
-	/**
-	 * 创建文件
-	 * @param path
-	 */
-	public static void createNewFile(String path){
+
+    /**
+     * 创建文件
+     *
+     * @param path the path
+     */
+    public static void createNewFile(String path){
 		File file=new File(path); //实例化File文件，给出路径
 		try {
 			file.createNewFile();  //创建文件
@@ -40,12 +47,13 @@ public class fileTest2 {
 			e.printStackTrace();
 		}
 	}
-	
-	/**
-	 * 删除文件
-	 * @param path
-	 */
-	public static void deleteFile(String path){
+
+    /**
+     * 删除文件
+     *
+     * @param path the path
+     */
+    public static void deleteFile(String path){
 		File file=new File(path); //实例化File文件，给出路径
 		if(file.exists()){ //如果存在则删除
 			System.out.println(file.canExecute());

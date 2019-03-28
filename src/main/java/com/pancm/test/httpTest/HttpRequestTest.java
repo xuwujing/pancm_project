@@ -3,16 +3,21 @@ package com.pancm.test.httpTest;
 import com.alibaba.fastjson.JSONObject;
 
 /**
+ * The type Http request test.
+ *
  * @author ZERO
- * @Data 2017-5-12 下午3:06:29
- * @Description 
+ * @Data 2017 -5-12 下午3:06:29
+ * @Description
  */
 public class HttpRequestTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) throws InterruptedException {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws InterruptedException the interrupted exception
+     */
+    public static void main(String[] args) throws InterruptedException {
 		System.out.println("123");
 		JSONObject json=new JSONObject();
 		//Map json=new HashMap();

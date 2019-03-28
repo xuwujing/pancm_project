@@ -10,16 +10,21 @@ import org.joda.time.MutableDateTime;
 import org.joda.time.format.DateTimeFormat;
 
 /**
- * 
-* Title: JodaTest
-* Description: Joda 时间工具包测试
-* Version:1.0.0  
-* @author pancm
-* @date 2017年11月1日
+ * Title: JodaTest
+ * Description: Joda 时间工具包测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年11月1日
  */
 public class JodaTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		jodaTest();
 	}
 	

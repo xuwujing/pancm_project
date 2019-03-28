@@ -5,9 +5,10 @@ import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IoSession;
 
 /**
+ * The type Mina client handler.
+ *
  * @author ZERO
- * @version 2017-3-27 下午6:01:31
- * 业务逻辑过滤器代码
+ * @version 2017 -3-27 下午6:01:31 业务逻辑过滤器代码
  */
 public class MinaClientHandler extends IoHandlerAdapter {
     private static Logger logger = Logger.getLogger(MinaClientHandler.class);

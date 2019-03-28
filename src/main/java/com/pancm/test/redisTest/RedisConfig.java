@@ -19,13 +19,13 @@ import com.pancm.util.MyTools;
 import redis.clients.jedis.JedisPoolConfig;
 
 /**
- * 
-* @Title: RedisConfig
-* @Description: 
-* redis初始化配置
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年6月7日
+ * The type Redis config.
+ *
+ * @author pancm
+ * @Title: RedisConfig
+ * @Description: redis初始化配置
+ * @Version:1.0.0
+ * @date 2018年6月7日
  */
 @Component
 public class RedisConfig {
@@ -62,11 +62,12 @@ public class RedisConfig {
     private Integer mmaxRedirectsac;
 
     @Value("${spring.redis.password}")
-    private String redispwd; 
-    
+    private String redispwd;
+
     /**
      * JedisPoolConfig 连接池
-     * @return
+     *
+     * @return jedis pool config
      */
     @Bean
     public JedisPoolConfig jedisPoolConfig() {
@@ -89,9 +90,11 @@ public class RedisConfig {
         jedisPoolConfig.setTestWhileIdle(testWhileIdle);
         return jedisPoolConfig;
     }
-    
+
     /**
      * Redis集群的配置
+     *
+     * @return the redis cluster configuration
      */
     @Bean
     public RedisClusterConfiguration redisClusterConfiguration(){
@@ -111,9 +114,13 @@ public class RedisConfig {
 
         return redisClusterConfiguration;
     }
-    
+
     /**
      * 配置工厂
+     *
+     * @param jedisPoolConfig           the jedis pool config
+     * @param redisClusterConfiguration the redis cluster configuration
+     * @return the jedis connection factory
      */
     @SuppressWarnings("deprecation")
 	@Bean
@@ -128,7 +135,9 @@ public class RedisConfig {
 
     /**
      * 实例化 RedisTemplate 对象
-     * @return
+     *
+     * @param redisConnectionFactory the redis connection factory
+     * @return redis template
      */
     @Bean
     public RedisTemplate<String, Object> functionDomainRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
@@ -152,9 +161,12 @@ public class RedisConfig {
         redisTemplate.setEnableTransactionSupport(true);
         redisTemplate.setConnectionFactory(factory);
     }
-    
+
     /**
      * 注入封装RedisTemplate
+     *
+     * @param redisTemplate the redis template
+     * @return the redis util
      */
     @Bean(name = "redisUtil")
     public RedisUtil redisUtil(RedisTemplate<String, Object> redisTemplate) {

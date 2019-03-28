@@ -12,19 +12,22 @@ import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 
 /**
-* @Title: compressTest
-* @Description:
-* 压缩测试 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年5月14日
-*/
+ * The type Compress test.
+ *
+ * @author pancm
+ * @Title: compressTest
+ * @Description: 压缩测试
+ * @Version:1.0.0
+ * @date 2018年5月14日
+ */
 public class CompressTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		test();
 	}
 

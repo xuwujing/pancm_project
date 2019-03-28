@@ -15,13 +15,13 @@ import org.apache.commons.codec.binary.Base64;
 
 
 /**
- * 
-* @Title: AESUtil
-* @Description: 
-* AES 加密工具类
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年4月3日
+ * The type Aes util.
+ *
+ * @author pancm
+ * @Title: AESUtil
+ * @Description: AES  加密工具类
+ * @Version:1.0.0
+ * @date 2018年4月3日
  */
 public class AESUtil {
 
@@ -30,25 +30,24 @@ public class AESUtil {
     private static final String PASSWORD = "e!@$%s^&*a)_m+s.";
     private static final String DEFAULT_CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding";//默认的加密算法
 
-    
-    
+
     /**
      * AES 加密操作
      *
      * @param content 待加密内容
-     * @return 返回Base64转码后的加密数据
+     * @return 返回Base64转码后的加密数据 string
      */
     public static String encrypt(String content) {
     	return encrypt(content,PASSWORD);
     }
-    
-    
+
+
     /**
      * AES 加密操作
      *
-     * @param content 待加密内容
+     * @param content  待加密内容
      * @param password 加密密码
-     * @return 返回Base64转码后的加密数据
+     * @return 返回Base64转码后的加密数据 string
      */
     public static String encrypt(String content, String password) {
         try {
@@ -67,21 +66,23 @@ public class AESUtil {
 
         return null;
     }
-    
+
     /**
      * AES 解密操作
-     * @param content
-     * @return
+     *
+     * @param content the content
+     * @return string
      */
     public static String decrypt(String content) {
     	return decrypt(content,PASSWORD);
     }
-    
+
     /**
      * AES 解密操作
-     * @param content
-     * @param password
-     * @return
+     *
+     * @param content  the content
+     * @param password the password
+     * @return string
      */
     public static String decrypt(String content, String password) {
 
@@ -129,6 +130,11 @@ public class AESUtil {
         return null;
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         String s = "1234";
         String s1 = AESUtil.encrypt(s, "1234");

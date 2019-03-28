@@ -8,12 +8,13 @@ import java.util.Vector;
 import java.util.stream.Collectors;
 
 /**
- * 
-* @Title: ListTest
-* @Description:关于list测试 
-* @Version:1.0.0  
-* @author pancm
-* @date 2017年10月13日
+ * The type List test.
+ *
+ * @author pancm
+ * @Title: ListTest
+ * @Description:关于list测试
+ * @Version:1.0.0
+ * @date 2017年10月13日
  */
 public class ListTest {
 	
@@ -21,10 +22,15 @@ public class ListTest {
 	
 	private static ArrayList arrayList = new ArrayList<>();  
     private static LinkedList linkedList = new LinkedList<>();  
-    private static Vector vector = new Vector<>();  
-	 
+    private static Vector vector = new Vector<>();
 
-	public static void main(String[] args) {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 //		test1();
 //		test2();
 //		test3();

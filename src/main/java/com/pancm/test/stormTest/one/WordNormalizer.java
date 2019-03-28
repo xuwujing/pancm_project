@@ -12,12 +12,12 @@ import org.apache.storm.tuple.Values;
 
 
 /**
- * 
-* Title: WordNormalizer
-* Description:该类主要用于格式化数据 
-* Version:1.0.0  
-* @author pancm
-* @date 2017年12月28日
+ * Title: WordNormalizer
+ * Description:该类主要用于格式化数据
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年12月28日
  */
 public class WordNormalizer implements IRichBolt {
 	/**

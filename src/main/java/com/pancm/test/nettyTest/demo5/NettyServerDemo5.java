@@ -15,20 +15,23 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
- 
+
 /**
- * 
-* Description:  Netty 服务端    测试心跳
-* Version:1.0.0  
-* @author pancm
-* @date 2017年9月21日
+ * Description:  Netty 服务端    测试心跳
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年9月21日
  */
-public class NettyServerDemo5 {  
+public class NettyServerDemo5 {
       /** 设置端口 */
-    private  final static int port=5678;  
-      
-      
-    public void start(){  
+    private  final static int port=5678;
+
+
+    /**
+     * Start.
+     */
+    public void start(){
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);  
         EventLoopGroup workerGroup = new NioEventLoopGroup();  
         try {  
@@ -55,9 +58,15 @@ public class NettyServerDemo5 {
             bossGroup.shutdownGracefully();    //释放资源
             workerGroup.shutdownGracefully();  
         }  
-    }  
-      
-    public static void main(String[] args) throws Exception {  
+    }
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws Exception the exception
+     */
+    public static void main(String[] args) throws Exception {
         new NettyServerDemo5().start();  
     }  
 }  

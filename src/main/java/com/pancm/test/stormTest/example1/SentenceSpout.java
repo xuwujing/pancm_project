@@ -11,11 +11,10 @@ import org.apache.storm.tuple.Values;
 import org.apache.storm.utils.Utils;
 
 
-
 /**
  * 向后端发射tuple数据流
- * @author soul
  *
+ * @author soul
  */
 public class SentenceSpout extends BaseRichSpout {
 

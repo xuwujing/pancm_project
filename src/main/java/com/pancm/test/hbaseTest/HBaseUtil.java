@@ -28,10 +28,10 @@ import org.apache.hadoop.hbase.util.Bytes;
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * 
  * Title: HBaseUtil
- * Description: HBase工具类 
+ * Description: HBase工具类
  * Version:1.0.0
+ *
  * @author pancm
  * @date 2017年12月6日
  */
@@ -58,14 +58,14 @@ public class HBaseUtil {
 		//这个ip和端口是在hadoop/mapred-site.xml配置文件配置的
 		conf.set("hbase.master", ip+":"+port1); 
    }
-		
 
-	/**
-	 * 获取连接
-	 * 
-	 * @return
-	 */
-	public synchronized static Connection getConnection() {
+
+    /**
+     * 获取连接
+     *
+     * @return connection
+     */
+    public synchronized static Connection getConnection() {
 		try {
 			if (null == con || con.isClosed()) {
 				// 获得连接对象
@@ -79,10 +79,10 @@ public class HBaseUtil {
 		return con;
 	}
 
-	/**
-	 * 连接关闭
-	 */
-	public static void close() {
+    /**
+     * 连接关闭
+     */
+    public static void close() {
 		try {
 			if (admin != null) {
 				admin.close();
@@ -96,15 +96,13 @@ public class HBaseUtil {
 		}
 	}
 
-	/**
-	 * 创建表
-	 * 
-	 * @param tableName
-	 *            表名
-	 * @param columnFamily
-	 *            列族
-	 */
-	public static void creatTable(String tableName, String[] columnFamily) {
+    /**
+     * 创建表
+     *
+     * @param tableName    表名
+     * @param columnFamily 列族
+     */
+    public static void creatTable(String tableName, String[] columnFamily) {
 		if(null==tableName||tableName.length()==0){
 			return;
 		}
@@ -142,22 +140,17 @@ public class HBaseUtil {
 		}
 	}
 
-	/**
-	 * 数据单条插入或更新
-	 * 
-	 * @param tableName
-	 *            表名
-	 * @param rowKey
-	 *            行健 (主键)
-	 * @param family
-	 *            列族
-	 * @param qualifier
-	 *            列
-	 * @param value
-	 *            存入的值
-	 * @return
-	 */
-	public static void insert(String tableName, String rowKey, String family,
+    /**
+     * 数据单条插入或更新
+     *
+     * @param tableName 表名
+     * @param rowKey    行健 (主键)
+     * @param family    列族
+     * @param qualifier 列
+     * @param value     存入的值
+     * @return
+     */
+    public static void insert(String tableName, String rowKey, String family,
 			String qualifier, String value) {
 		Table t = null;
 		try {
@@ -175,16 +168,14 @@ public class HBaseUtil {
 		}
 	}
 
-	/**
-	 * 数据批量插入或更新
-	 * 
-	 * @param tableName
-	 *            表名
-	 * @param list
-	 *            hbase的数据 
-	 * @return
-	 */
-	public static void insertBatch(String tableName, List<?> list) {
+    /**
+     * 数据批量插入或更新
+     *
+     * @param tableName 表名
+     * @param list      hbase的数据
+     * @return
+     */
+    public static void insertBatch(String tableName, List<?> list) {
 		if (null == tableName ||tableName.length()==0) {
 			return;
 		}
@@ -214,36 +205,39 @@ public class HBaseUtil {
 			close();
 		}
 	}
-	
-	/**
-	 * 数据删除 
-	 * @param tableName 表名
-	 * @param rowKey	行健
-	 * @return
-	 */
+
+    /**
+     * 数据删除
+     *
+     * @param tableName 表名
+     * @param rowKey    行健
+     * @return
+     */
     public static void delete(String tableName, String rowKey) {
     	delete(tableName,rowKey,"","");
     }
-	
-	/**
-	 * 数据删除 
-	 * @param tableName 表名
-	 * @param rowKey	行健
-	 * @param family	列族
-	 * @return
-	 */
+
+    /**
+     * 数据删除
+     *
+     * @param tableName 表名
+     * @param rowKey    行健
+     * @param family    列族
+     * @return
+     */
     public static void delete(String tableName, String rowKey, String family) {
     	delete(tableName,rowKey,family,"");
     }
-	
-	/**
-	 * 数据删除 
-	 * @param tableName 表名
-	 * @param rowKey	行健
-	 * @param family	列族
-	 * @param qualifier 列
-	 * @return
-	 */
+
+    /**
+     * 数据删除
+     *
+     * @param tableName 表名
+     * @param rowKey    行健
+     * @param family    列族
+     * @param qualifier 列
+     * @return
+     */
     public static void delete(String tableName, String rowKey, String family,
             String qualifier) {
     	if (null == tableName ||tableName.length()==0) {
@@ -274,14 +268,13 @@ public class HBaseUtil {
           close();
         }
     }
-	
-	/**
-	 * 查询该表中的所有数据
-	 * 
-	 * @param tableName
-	 *            表名
-	 */
-	public static void select(String tableName) {
+
+    /**
+     * 查询该表中的所有数据
+     *
+     * @param tableName 表名
+     */
+    public static void select(String tableName) {
 		if(null==tableName||tableName.length()==0){
 			return;
 		}
@@ -321,38 +314,36 @@ public class HBaseUtil {
 		}
 	}
 
-	/**
-	 * 根据表名和行健查询
-	 * @param tableName
-	 * @param rowKey
-	 */
-	public static void select(String tableName, String rowKey) {
+    /**
+     * 根据表名和行健查询
+     *
+     * @param tableName the table name
+     * @param rowKey    the row key
+     */
+    public static void select(String tableName, String rowKey) {
 		select(tableName,rowKey,"","");
 	}
-	
-	/**
-	 * 根据表名、行健和列族查询
-	 * @param tableName
-	 * @param rowKey
-	 * @param family
-	 */
-	public static void select(String tableName, String rowKey, String family) {
+
+    /**
+     * 根据表名、行健和列族查询
+     *
+     * @param tableName the table name
+     * @param rowKey    the row key
+     * @param family    the family
+     */
+    public static void select(String tableName, String rowKey, String family) {
 		select(tableName,rowKey,family,"");
 	}
-	
-	/**
-	 * 根据条件明细查询
-	 * 
-	 * @param tableName
-	 *            表名
-	 * @param rowKey
-	 *            行健 (主键)
-	 * @param family
-	 *            列族
-	 * @param qualifier
-	 *            列
-	 */
-	public static void select(String tableName, String rowKey, String family,
+
+    /**
+     * 根据条件明细查询
+     *
+     * @param tableName 表名
+     * @param rowKey    行健 (主键)
+     * @param family    列族
+     * @param qualifier 列
+     */
+    public static void select(String tableName, String rowKey, String family,
 			String qualifier) {
 		Table t = null;
 		List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();

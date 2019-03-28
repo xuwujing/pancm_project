@@ -1,15 +1,21 @@
 package com.pancm.test.design.bridge;
 
 /**
-* @Title: BridgeTest
-* @Description:桥接模式 
-* 将抽象部分与实现部分分离，使它们都可以独立的变化。
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月8日
-*/
+ * The type Bridge test.
+ *
+ * @author pancm
+ * @Title: BridgeTest
+ * @Description:桥接模式 将抽象部分与实现部分分离  ，使它们都可以独立的变化。
+ * @Version:1.0.0
+ * @date 2018年8月8日
+ */
 public class BridgeTest {
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		Paper paper=new ExaminationPaper();
 		paper.setPen(new RedPen());
 		paper.writing();
@@ -21,18 +27,24 @@ public class BridgeTest {
 }
 
 /**
- * 
-* @Title: ColourPen
-* @Description: 
-* 笔 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月22日
+ * The interface Pen.
+ *
+ * @author pancm
+ * @Title: ColourPen
+ * @Description: 笔
+ * @Version:1.0.0
+ * @date 2018年8月22日
  */
 interface Pen{
-	void write();
+    /**
+     * Write.
+     */
+    void write();
 }
 
+/**
+ * The type Red pen.
+ */
 class RedPen implements Pen{
 	@Override
 	public void write() {
@@ -40,6 +52,9 @@ class RedPen implements Pen{
 	}
 }
 
+/**
+ * The type Black pen.
+ */
 class BlackPen implements Pen{
 	@Override
 	public void write() {
@@ -48,23 +63,38 @@ class BlackPen implements Pen{
 }
 
 
+/**
+ * The type Paper.
+ */
 abstract class  Paper{
-	protected  Pen pen;
-	
-	void setPen(Pen pen){
+    /**
+     * The Pen.
+     */
+    protected  Pen pen;
+
+    /**
+     * Set pen.
+     *
+     * @param pen the pen
+     */
+    void setPen(Pen pen){
 		this.pen=pen;
 	}
-	
-	abstract void writing();
+
+    /**
+     * Writing.
+     */
+    abstract void writing();
 }
 
 /**
- * 
-* @Title: ExaminationPaper
-* @Description:考试用的卷子 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月22日
+ * The type Examination paper.
+ *
+ * @author pancm
+ * @Title: ExaminationPaper
+ * @Description:考试用的卷子
+ * @Version:1.0.0
+ * @date 2018年8月22日
  */
 class ExaminationPaper extends Paper{
 	@Override
@@ -73,6 +103,9 @@ class ExaminationPaper extends Paper{
 	}
 }
 
+/**
+ * The type News paper.
+ */
 class NewsPaper extends Paper{
 	@Override
 	void writing() {

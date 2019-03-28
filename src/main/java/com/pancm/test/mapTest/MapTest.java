@@ -7,24 +7,34 @@ import java.util.Map.Entry;
 import java.util.TreeMap;
 
 /**
- * 
-* Title: MapTest
-* Description:集合map测试 
-* Version:1.0.0  
-* @author pancm
-* @date 2017年11月16日
+ * Title: MapTest
+ * Description:集合map测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年11月16日
  */
 public class MapTest {
 	private static Map<String,String> map = new HashMap<String,String>();
-	
-	public static Map<String,String> getHashMap(){
+
+    /**
+     * Get hash map map.
+     *
+     * @return the map
+     */
+    public static Map<String,String> getHashMap(){
 		if(map == null || map.isEmpty()){
 			map = new HashMap<String,String>();
 		}
 		return  map;
 	}
-	
-	public static void main(String[] args) {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		//普通的HashMap 
 //		Map<String,String> map=mapTest.getHashMap();
 //		map.put("a", "1");

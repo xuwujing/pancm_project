@@ -3,88 +3,124 @@
 
 package com.pancm.test.protobufTest.protobuf3;
 
+/**
+ * The type Person msg 2.
+ */
 public final class PersonMsg2 {
   private PersonMsg2() {}
-  public static void registerAllExtensions(
+
+    /**
+     * Register all extensions.
+     *
+     * @param registry the registry
+     */
+    public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
-  public static void registerAllExtensions(
+    /**
+     * Register all extensions.
+     *
+     * @param registry the registry
+     */
+    public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-  public interface PersonOrBuilder extends
+
+    /**
+     * The interface Person or builder.
+     */
+    public interface PersonOrBuilder extends
       // @@protoc_insertion_point(interface_extends:Person)
       com.google.protobuf.MessageOrBuilder {
 
-    /**
-     * <pre>
-     * ID（必需）  
-     * </pre>
-     *
-     * <code>optional int32 id = 1;</code>
-     */
-    int getId();
+        /**
+         * <pre>
+         * ID（必需）
+         * </pre>
+         *
+         * <code>optional int32 id = 1;</code>
+         *
+         * @return the id
+         */
+        int getId();
 
-    /**
-     * <pre>
-     * 姓名（必需）  
-     * </pre>
-     *
-     * <code>optional string name = 2;</code>
-     */
-    java.lang.String getName();
-    /**
-     * <pre>
-     * 姓名（必需）  
-     * </pre>
-     *
-     * <code>optional string name = 2;</code>
-     */
-    com.google.protobuf.ByteString
+        /**
+         * <pre>
+         * 姓名（必需）
+         * </pre>
+         *
+         * <code>optional string name = 2;</code>
+         *
+         * @return the name
+         */
+        java.lang.String getName();
+
+        /**
+         * <pre>
+         * 姓名（必需）
+         * </pre>
+         *
+         * <code>optional string name = 2;</code>
+         *
+         * @return the name bytes
+         */
+        com.google.protobuf.ByteString
         getNameBytes();
 
-    /**
-     * <pre>
-     * email（可选）  
-     * </pre>
-     *
-     * <code>optional string email = 3;</code>
-     */
-    java.lang.String getEmail();
-    /**
-     * <pre>
-     * email（可选）  
-     * </pre>
-     *
-     * <code>optional string email = 3;</code>
-     */
-    com.google.protobuf.ByteString
+        /**
+         * <pre>
+         * email（可选）
+         * </pre>
+         *
+         * <code>optional string email = 3;</code>
+         *
+         * @return the email
+         */
+        java.lang.String getEmail();
+
+        /**
+         * <pre>
+         * email（可选）
+         * </pre>
+         *
+         * <code>optional string email = 3;</code>
+         *
+         * @return the email bytes
+         */
+        com.google.protobuf.ByteString
         getEmailBytes();
 
-    /**
-     * <pre>
-     * 朋友（集合）  
-     * </pre>
-     *
-     * <code>optional string friends = 4;</code>
-     */
-    java.lang.String getFriends();
-    /**
-     * <pre>
-     * 朋友（集合）  
-     * </pre>
-     *
-     * <code>optional string friends = 4;</code>
-     */
-    com.google.protobuf.ByteString
+        /**
+         * <pre>
+         * 朋友（集合）
+         * </pre>
+         *
+         * <code>optional string friends = 4;</code>
+         *
+         * @return the friends
+         */
+        java.lang.String getFriends();
+
+        /**
+         * <pre>
+         * 朋友（集合）
+         * </pre>
+         *
+         * <code>optional string friends = 4;</code>
+         *
+         * @return the friends bytes
+         */
+        com.google.protobuf.ByteString
         getFriendsBytes();
   }
-  /**
-   * Protobuf type {@code Person}
-   */
-  public  static final class Person extends
+
+    /**
+     * Protobuf type {@code Person}
+     */
+    public  static final class Person extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:Person)
       PersonOrBuilder {
@@ -158,7 +194,13 @@ public final class PersonMsg2 {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
+
+        /**
+         * Gets descriptor.
+         *
+         * @return the descriptor
+         */
+        public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.pancm.test.protobufTest.protobuf3.PersonMsg2.internal_static_Person_descriptor;
     }
@@ -170,7 +212,10 @@ public final class PersonMsg2 {
               com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person.class, com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person.Builder.class);
     }
 
-    public static final int ID_FIELD_NUMBER = 1;
+        /**
+         * The constant ID_FIELD_NUMBER.
+         */
+        public static final int ID_FIELD_NUMBER = 1;
     private int id_;
     /**
      * <pre>
@@ -183,7 +228,10 @@ public final class PersonMsg2 {
       return id_;
     }
 
-    public static final int NAME_FIELD_NUMBER = 2;
+        /**
+         * The constant NAME_FIELD_NUMBER.
+         */
+        public static final int NAME_FIELD_NUMBER = 2;
     private volatile java.lang.Object name_;
     /**
      * <pre>
@@ -225,7 +273,10 @@ public final class PersonMsg2 {
       }
     }
 
-    public static final int EMAIL_FIELD_NUMBER = 3;
+        /**
+         * The constant EMAIL_FIELD_NUMBER.
+         */
+        public static final int EMAIL_FIELD_NUMBER = 3;
     private volatile java.lang.Object email_;
     /**
      * <pre>
@@ -267,7 +318,10 @@ public final class PersonMsg2 {
       }
     }
 
-    public static final int FRIENDS_FIELD_NUMBER = 4;
+        /**
+         * The constant FRIENDS_FIELD_NUMBER.
+         */
+        public static final int FRIENDS_FIELD_NUMBER = 4;
     private volatile java.lang.Object friends_;
     /**
      * <pre>
@@ -400,58 +454,142 @@ public final class PersonMsg2 {
       return hash;
     }
 
-    public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseFrom(
+        /**
+         * Parse from com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person.
+         *
+         * @param data the data
+         * @return the com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person
+         * @throws InvalidProtocolBufferException the invalid protocol buffer exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseFrom(
+
+        /**
+         * Parse from com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person.
+         *
+         * @param data              the data
+         * @param extensionRegistry the extension registry
+         * @return the com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person
+         * @throws InvalidProtocolBufferException the invalid protocol buffer exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseFrom(byte[] data)
+
+        /**
+         * Parse from com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person.
+         *
+         * @param data the data
+         * @return the com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person
+         * @throws InvalidProtocolBufferException the invalid protocol buffer exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseFrom(
+
+        /**
+         * Parse from com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person.
+         *
+         * @param data              the data
+         * @param extensionRegistry the extension registry
+         * @return the com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person
+         * @throws InvalidProtocolBufferException the invalid protocol buffer exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseFrom(java.io.InputStream input)
+
+        /**
+         * Parse from com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person.
+         *
+         * @param input the input
+         * @return the com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person
+         * @throws IOException the io exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseFrom(
+
+        /**
+         * Parse from com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person.
+         *
+         * @param input             the input
+         * @param extensionRegistry the extension registry
+         * @return the com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person
+         * @throws IOException the io exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseDelimitedFrom(java.io.InputStream input)
+
+        /**
+         * Parse delimited from com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person.
+         *
+         * @param input the input
+         * @return the com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person
+         * @throws IOException the io exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseDelimitedFrom(
+
+        /**
+         * Parse delimited from com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person.
+         *
+         * @param input             the input
+         * @param extensionRegistry the extension registry
+         * @return the com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person
+         * @throws IOException the io exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseFrom(
+
+        /**
+         * Parse from com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person.
+         *
+         * @param input the input
+         * @return the com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person
+         * @throws IOException the io exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseFrom(
+
+        /**
+         * Parse from com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person.
+         *
+         * @param input             the input
+         * @param extensionRegistry the extension registry
+         * @return the com . pancm . test . protobuf test . protobuf 3 . person msg 2 . person
+         * @throws IOException the io exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -460,10 +598,23 @@ public final class PersonMsg2 {
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
+
+        /**
+         * New builder builder.
+         *
+         * @return the builder
+         */
+        public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person prototype) {
+
+        /**
+         * New builder builder.
+         *
+         * @param prototype the prototype
+         * @return the builder
+         */
+        public static Builder newBuilder(com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -477,14 +628,20 @@ public final class PersonMsg2 {
       Builder builder = new Builder(parent);
       return builder;
     }
-    /**
-     * Protobuf type {@code Person}
-     */
-    public static final class Builder extends
+
+        /**
+         * Protobuf type {@code Person}
+         */
+        public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:Person)
         com.pancm.test.protobufTest.protobuf3.PersonMsg2.PersonOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
+            /**
+             * Gets descriptor.
+             *
+             * @return the descriptor
+             */
+            public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.pancm.test.protobufTest.protobuf3.PersonMsg2.internal_static_Person_descriptor;
       }
@@ -586,7 +743,13 @@ public final class PersonMsg2 {
         }
       }
 
-      public Builder mergeFrom(com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person other) {
+            /**
+             * Merge from builder.
+             *
+             * @param other the other
+             * @return the builder
+             */
+            public Builder mergeFrom(com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person other) {
         if (other == com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person.getDefaultInstance()) return this;
         if (other.getId() != 0) {
           setId(other.getId());
@@ -640,27 +803,34 @@ public final class PersonMsg2 {
       public int getId() {
         return id_;
       }
-      /**
-       * <pre>
-       * ID（必需）  
-       * </pre>
-       *
-       * <code>optional int32 id = 1;</code>
-       */
-      public Builder setId(int value) {
+
+            /**
+             * <pre>
+             * ID（必需）
+             * </pre>
+             *
+             * <code>optional int32 id = 1;</code>
+             *
+             * @param value the value
+             * @return the id
+             */
+            public Builder setId(int value) {
         
         id_ = value;
         onChanged();
         return this;
       }
-      /**
-       * <pre>
-       * ID（必需）  
-       * </pre>
-       *
-       * <code>optional int32 id = 1;</code>
-       */
-      public Builder clearId() {
+
+            /**
+             * <pre>
+             * ID（必需）
+             * </pre>
+             *
+             * <code>optional int32 id = 1;</code>
+             *
+             * @return the builder
+             */
+            public Builder clearId() {
         
         id_ = 0;
         onChanged();
@@ -707,14 +877,18 @@ public final class PersonMsg2 {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <pre>
-       * 姓名（必需）  
-       * </pre>
-       *
-       * <code>optional string name = 2;</code>
-       */
-      public Builder setName(
+
+            /**
+             * <pre>
+             * 姓名（必需）
+             * </pre>
+             *
+             * <code>optional string name = 2;</code>
+             *
+             * @param value the value
+             * @return the name
+             */
+            public Builder setName(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
@@ -724,27 +898,34 @@ public final class PersonMsg2 {
         onChanged();
         return this;
       }
-      /**
-       * <pre>
-       * 姓名（必需）  
-       * </pre>
-       *
-       * <code>optional string name = 2;</code>
-       */
-      public Builder clearName() {
+
+            /**
+             * <pre>
+             * 姓名（必需）
+             * </pre>
+             *
+             * <code>optional string name = 2;</code>
+             *
+             * @return the builder
+             */
+            public Builder clearName() {
         
         name_ = getDefaultInstance().getName();
         onChanged();
         return this;
       }
-      /**
-       * <pre>
-       * 姓名（必需）  
-       * </pre>
-       *
-       * <code>optional string name = 2;</code>
-       */
-      public Builder setNameBytes(
+
+            /**
+             * <pre>
+             * 姓名（必需）
+             * </pre>
+             *
+             * <code>optional string name = 2;</code>
+             *
+             * @param value the value
+             * @return the name bytes
+             */
+            public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
@@ -796,14 +977,18 @@ public final class PersonMsg2 {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <pre>
-       * email（可选）  
-       * </pre>
-       *
-       * <code>optional string email = 3;</code>
-       */
-      public Builder setEmail(
+
+            /**
+             * <pre>
+             * email（可选）
+             * </pre>
+             *
+             * <code>optional string email = 3;</code>
+             *
+             * @param value the value
+             * @return the email
+             */
+            public Builder setEmail(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
@@ -813,27 +998,34 @@ public final class PersonMsg2 {
         onChanged();
         return this;
       }
-      /**
-       * <pre>
-       * email（可选）  
-       * </pre>
-       *
-       * <code>optional string email = 3;</code>
-       */
-      public Builder clearEmail() {
+
+            /**
+             * <pre>
+             * email（可选）
+             * </pre>
+             *
+             * <code>optional string email = 3;</code>
+             *
+             * @return the builder
+             */
+            public Builder clearEmail() {
         
         email_ = getDefaultInstance().getEmail();
         onChanged();
         return this;
       }
-      /**
-       * <pre>
-       * email（可选）  
-       * </pre>
-       *
-       * <code>optional string email = 3;</code>
-       */
-      public Builder setEmailBytes(
+
+            /**
+             * <pre>
+             * email（可选）
+             * </pre>
+             *
+             * <code>optional string email = 3;</code>
+             *
+             * @param value the value
+             * @return the email bytes
+             */
+            public Builder setEmailBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
@@ -885,14 +1077,18 @@ public final class PersonMsg2 {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <pre>
-       * 朋友（集合）  
-       * </pre>
-       *
-       * <code>optional string friends = 4;</code>
-       */
-      public Builder setFriends(
+
+            /**
+             * <pre>
+             * 朋友（集合）
+             * </pre>
+             *
+             * <code>optional string friends = 4;</code>
+             *
+             * @param value the value
+             * @return the friends
+             */
+            public Builder setFriends(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
@@ -902,27 +1098,34 @@ public final class PersonMsg2 {
         onChanged();
         return this;
       }
-      /**
-       * <pre>
-       * 朋友（集合）  
-       * </pre>
-       *
-       * <code>optional string friends = 4;</code>
-       */
-      public Builder clearFriends() {
+
+            /**
+             * <pre>
+             * 朋友（集合）
+             * </pre>
+             *
+             * <code>optional string friends = 4;</code>
+             *
+             * @return the builder
+             */
+            public Builder clearFriends() {
         
         friends_ = getDefaultInstance().getFriends();
         onChanged();
         return this;
       }
-      /**
-       * <pre>
-       * 朋友（集合）  
-       * </pre>
-       *
-       * <code>optional string friends = 4;</code>
-       */
-      public Builder setFriendsBytes(
+
+            /**
+             * <pre>
+             * 朋友（集合）
+             * </pre>
+             *
+             * <code>optional string friends = 4;</code>
+             *
+             * @param value the value
+             * @return the friends bytes
+             */
+            public Builder setFriendsBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
@@ -953,7 +1156,12 @@ public final class PersonMsg2 {
       DEFAULT_INSTANCE = new com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person();
     }
 
-    public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person getDefaultInstance() {
+        /**
+         * Gets default instance.
+         *
+         * @return the default instance
+         */
+        public static com.pancm.test.protobufTest.protobuf3.PersonMsg2.Person getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -967,7 +1175,12 @@ public final class PersonMsg2 {
       }
     };
 
-    public static com.google.protobuf.Parser<Person> parser() {
+        /**
+         * Parser com . google . protobuf . parser.
+         *
+         * @return the com . google . protobuf . parser
+         */
+        public static com.google.protobuf.Parser<Person> parser() {
       return PARSER;
     }
 
@@ -988,7 +1201,12 @@ public final class PersonMsg2 {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_Person_fieldAccessorTable;
 
-  public static com.google.protobuf.Descriptors.FileDescriptor
+    /**
+     * Gets descriptor.
+     *
+     * @return the descriptor
+     */
+    public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
   }

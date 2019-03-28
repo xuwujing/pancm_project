@@ -5,19 +5,21 @@ import java.util.List;
 import redis.clients.jedis.Jedis;
 
 /**
- * 
-* Title: redisStringTest
-* Description: redis存储list示例
-* Version:1.0.0  
-* @author Administrator
-* @date 2017-8-19
+ * Title: redisStringTest
+ * Description: redis存储list示例
+ * Version:1.0.0
+ *
+ * @author Administrator
+ * @date 2017 -8-19
  */
 public class redisListTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		 //连接本地的 Redis 服务
         Jedis jedis = new Jedis("127.0.0.1");
         System.out.println("连接成功");

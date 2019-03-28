@@ -3,70 +3,100 @@
 
 package com.pancm.test.protobufTest.protobuf3;
 
+/**
+ * The type User info.
+ */
 public final class UserInfo {
   private UserInfo() {}
-  public static void registerAllExtensions(
+
+    /**
+     * Register all extensions.
+     *
+     * @param registry the registry
+     */
+    public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
-  public static void registerAllExtensions(
+    /**
+     * Register all extensions.
+     *
+     * @param registry the registry
+     */
+    public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
-  public interface UserMsgOrBuilder extends
+
+    /**
+     * The interface User msg or builder.
+     */
+    public interface UserMsgOrBuilder extends
       // @@protoc_insertion_point(interface_extends:UserMsg)
       com.google.protobuf.MessageOrBuilder {
 
-    /**
-     * <pre>
-     * ID  
-     * </pre>
-     *
-     * <code>optional int32 id = 1;</code>
-     */
-    int getId();
+        /**
+         * <pre>
+         * ID
+         * </pre>
+         *
+         * <code>optional int32 id = 1;</code>
+         *
+         * @return the id
+         */
+        int getId();
 
-    /**
-     * <pre>
-     * 姓名  
-     * </pre>
-     *
-     * <code>optional string name = 2;</code>
-     */
-    java.lang.String getName();
-    /**
-     * <pre>
-     * 姓名  
-     * </pre>
-     *
-     * <code>optional string name = 2;</code>
-     */
-    com.google.protobuf.ByteString
+        /**
+         * <pre>
+         * 姓名
+         * </pre>
+         *
+         * <code>optional string name = 2;</code>
+         *
+         * @return the name
+         */
+        java.lang.String getName();
+
+        /**
+         * <pre>
+         * 姓名
+         * </pre>
+         *
+         * <code>optional string name = 2;</code>
+         *
+         * @return the name bytes
+         */
+        com.google.protobuf.ByteString
         getNameBytes();
 
-    /**
-     * <pre>
-     * 年龄  
-     * </pre>
-     *
-     * <code>optional int32 age = 3;</code>
-     */
-    int getAge();
+        /**
+         * <pre>
+         * 年龄
+         * </pre>
+         *
+         * <code>optional int32 age = 3;</code>
+         *
+         * @return the age
+         */
+        int getAge();
+
+        /**
+         * <pre>
+         * 状态
+         * </pre>
+         *
+         * <code>optional int32 state = 4;</code>
+         *
+         * @return the state
+         */
+        int getState();
+  }
 
     /**
-     * <pre>
-     * 状态 
-     * </pre>
-     *
-     * <code>optional int32 state = 4;</code>
+     * Protobuf type {@code UserMsg}
      */
-    int getState();
-  }
-  /**
-   * Protobuf type {@code UserMsg}
-   */
-  public  static final class UserMsg extends
+    public  static final class UserMsg extends
       com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:UserMsg)
       UserMsgOrBuilder {
@@ -139,7 +169,13 @@ public final class UserInfo {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
+
+        /**
+         * Gets descriptor.
+         *
+         * @return the descriptor
+         */
+        public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return com.pancm.test.protobufTest.protobuf3.UserInfo.internal_static_UserMsg_descriptor;
     }
@@ -151,7 +187,10 @@ public final class UserInfo {
               com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg.class, com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg.Builder.class);
     }
 
-    public static final int ID_FIELD_NUMBER = 1;
+        /**
+         * The constant ID_FIELD_NUMBER.
+         */
+        public static final int ID_FIELD_NUMBER = 1;
     private int id_;
     /**
      * <pre>
@@ -164,7 +203,10 @@ public final class UserInfo {
       return id_;
     }
 
-    public static final int NAME_FIELD_NUMBER = 2;
+        /**
+         * The constant NAME_FIELD_NUMBER.
+         */
+        public static final int NAME_FIELD_NUMBER = 2;
     private volatile java.lang.Object name_;
     /**
      * <pre>
@@ -206,7 +248,10 @@ public final class UserInfo {
       }
     }
 
-    public static final int AGE_FIELD_NUMBER = 3;
+        /**
+         * The constant AGE_FIELD_NUMBER.
+         */
+        public static final int AGE_FIELD_NUMBER = 3;
     private int age_;
     /**
      * <pre>
@@ -219,7 +264,10 @@ public final class UserInfo {
       return age_;
     }
 
-    public static final int STATE_FIELD_NUMBER = 4;
+        /**
+         * The constant STATE_FIELD_NUMBER.
+         */
+        public static final int STATE_FIELD_NUMBER = 4;
     private int state_;
     /**
      * <pre>
@@ -326,58 +374,142 @@ public final class UserInfo {
       return hash;
     }
 
-    public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseFrom(
+        /**
+         * Parse from com . pancm . test . protobuf test . protobuf 3 . user info . user msg.
+         *
+         * @param data the data
+         * @return the com . pancm . test . protobuf test . protobuf 3 . user info . user msg
+         * @throws InvalidProtocolBufferException the invalid protocol buffer exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseFrom(
+
+        /**
+         * Parse from com . pancm . test . protobuf test . protobuf 3 . user info . user msg.
+         *
+         * @param data              the data
+         * @param extensionRegistry the extension registry
+         * @return the com . pancm . test . protobuf test . protobuf 3 . user info . user msg
+         * @throws InvalidProtocolBufferException the invalid protocol buffer exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseFrom(byte[] data)
+
+        /**
+         * Parse from com . pancm . test . protobuf test . protobuf 3 . user info . user msg.
+         *
+         * @param data the data
+         * @return the com . pancm . test . protobuf test . protobuf 3 . user info . user msg
+         * @throws InvalidProtocolBufferException the invalid protocol buffer exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseFrom(
+
+        /**
+         * Parse from com . pancm . test . protobuf test . protobuf 3 . user info . user msg.
+         *
+         * @param data              the data
+         * @param extensionRegistry the extension registry
+         * @return the com . pancm . test . protobuf test . protobuf 3 . user info . user msg
+         * @throws InvalidProtocolBufferException the invalid protocol buffer exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseFrom(java.io.InputStream input)
+
+        /**
+         * Parse from com . pancm . test . protobuf test . protobuf 3 . user info . user msg.
+         *
+         * @param input the input
+         * @return the com . pancm . test . protobuf test . protobuf 3 . user info . user msg
+         * @throws IOException the io exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseFrom(
+
+        /**
+         * Parse from com . pancm . test . protobuf test . protobuf 3 . user info . user msg.
+         *
+         * @param input             the input
+         * @param extensionRegistry the extension registry
+         * @return the com . pancm . test . protobuf test . protobuf 3 . user info . user msg
+         * @throws IOException the io exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseDelimitedFrom(java.io.InputStream input)
+
+        /**
+         * Parse delimited from com . pancm . test . protobuf test . protobuf 3 . user info . user msg.
+         *
+         * @param input the input
+         * @return the com . pancm . test . protobuf test . protobuf 3 . user info . user msg
+         * @throws IOException the io exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseDelimitedFrom(
+
+        /**
+         * Parse delimited from com . pancm . test . protobuf test . protobuf 3 . user info . user msg.
+         *
+         * @param input             the input
+         * @param extensionRegistry the extension registry
+         * @return the com . pancm . test . protobuf test . protobuf 3 . user info . user msg
+         * @throws IOException the io exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseFrom(
+
+        /**
+         * Parse from com . pancm . test . protobuf test . protobuf 3 . user info . user msg.
+         *
+         * @param input the input
+         * @return the com . pancm . test . protobuf test . protobuf 3 . user info . user msg
+         * @throws IOException the io exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseFrom(
+
+        /**
+         * Parse from com . pancm . test . protobuf test . protobuf 3 . user info . user msg.
+         *
+         * @param input             the input
+         * @param extensionRegistry the extension registry
+         * @return the com . pancm . test . protobuf test . protobuf 3 . user info . user msg
+         * @throws IOException the io exception
+         */
+        public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -386,10 +518,23 @@ public final class UserInfo {
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
+
+        /**
+         * New builder builder.
+         *
+         * @return the builder
+         */
+        public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg prototype) {
+
+        /**
+         * New builder builder.
+         *
+         * @param prototype the prototype
+         * @return the builder
+         */
+        public static Builder newBuilder(com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() {
@@ -403,14 +548,20 @@ public final class UserInfo {
       Builder builder = new Builder(parent);
       return builder;
     }
-    /**
-     * Protobuf type {@code UserMsg}
-     */
-    public static final class Builder extends
+
+        /**
+         * Protobuf type {@code UserMsg}
+         */
+        public static final class Builder extends
         com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:UserMsg)
         com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsgOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
+            /**
+             * Gets descriptor.
+             *
+             * @return the descriptor
+             */
+            public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.pancm.test.protobufTest.protobuf3.UserInfo.internal_static_UserMsg_descriptor;
       }
@@ -512,7 +663,13 @@ public final class UserInfo {
         }
       }
 
-      public Builder mergeFrom(com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg other) {
+            /**
+             * Merge from builder.
+             *
+             * @param other the other
+             * @return the builder
+             */
+            public Builder mergeFrom(com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg other) {
         if (other == com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg.getDefaultInstance()) return this;
         if (other.getId() != 0) {
           setId(other.getId());
@@ -564,27 +721,34 @@ public final class UserInfo {
       public int getId() {
         return id_;
       }
-      /**
-       * <pre>
-       * ID  
-       * </pre>
-       *
-       * <code>optional int32 id = 1;</code>
-       */
-      public Builder setId(int value) {
+
+            /**
+             * <pre>
+             * ID
+             * </pre>
+             *
+             * <code>optional int32 id = 1;</code>
+             *
+             * @param value the value
+             * @return the id
+             */
+            public Builder setId(int value) {
         
         id_ = value;
         onChanged();
         return this;
       }
-      /**
-       * <pre>
-       * ID  
-       * </pre>
-       *
-       * <code>optional int32 id = 1;</code>
-       */
-      public Builder clearId() {
+
+            /**
+             * <pre>
+             * ID
+             * </pre>
+             *
+             * <code>optional int32 id = 1;</code>
+             *
+             * @return the builder
+             */
+            public Builder clearId() {
         
         id_ = 0;
         onChanged();
@@ -631,14 +795,18 @@ public final class UserInfo {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <pre>
-       * 姓名  
-       * </pre>
-       *
-       * <code>optional string name = 2;</code>
-       */
-      public Builder setName(
+
+            /**
+             * <pre>
+             * 姓名
+             * </pre>
+             *
+             * <code>optional string name = 2;</code>
+             *
+             * @param value the value
+             * @return the name
+             */
+            public Builder setName(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
@@ -648,27 +816,34 @@ public final class UserInfo {
         onChanged();
         return this;
       }
-      /**
-       * <pre>
-       * 姓名  
-       * </pre>
-       *
-       * <code>optional string name = 2;</code>
-       */
-      public Builder clearName() {
+
+            /**
+             * <pre>
+             * 姓名
+             * </pre>
+             *
+             * <code>optional string name = 2;</code>
+             *
+             * @return the builder
+             */
+            public Builder clearName() {
         
         name_ = getDefaultInstance().getName();
         onChanged();
         return this;
       }
-      /**
-       * <pre>
-       * 姓名  
-       * </pre>
-       *
-       * <code>optional string name = 2;</code>
-       */
-      public Builder setNameBytes(
+
+            /**
+             * <pre>
+             * 姓名
+             * </pre>
+             *
+             * <code>optional string name = 2;</code>
+             *
+             * @param value the value
+             * @return the name bytes
+             */
+            public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
@@ -691,27 +866,34 @@ public final class UserInfo {
       public int getAge() {
         return age_;
       }
-      /**
-       * <pre>
-       * 年龄  
-       * </pre>
-       *
-       * <code>optional int32 age = 3;</code>
-       */
-      public Builder setAge(int value) {
+
+            /**
+             * <pre>
+             * 年龄
+             * </pre>
+             *
+             * <code>optional int32 age = 3;</code>
+             *
+             * @param value the value
+             * @return the age
+             */
+            public Builder setAge(int value) {
         
         age_ = value;
         onChanged();
         return this;
       }
-      /**
-       * <pre>
-       * 年龄  
-       * </pre>
-       *
-       * <code>optional int32 age = 3;</code>
-       */
-      public Builder clearAge() {
+
+            /**
+             * <pre>
+             * 年龄
+             * </pre>
+             *
+             * <code>optional int32 age = 3;</code>
+             *
+             * @return the builder
+             */
+            public Builder clearAge() {
         
         age_ = 0;
         onChanged();
@@ -729,27 +911,34 @@ public final class UserInfo {
       public int getState() {
         return state_;
       }
-      /**
-       * <pre>
-       * 状态 
-       * </pre>
-       *
-       * <code>optional int32 state = 4;</code>
-       */
-      public Builder setState(int value) {
+
+            /**
+             * <pre>
+             * 状态
+             * </pre>
+             *
+             * <code>optional int32 state = 4;</code>
+             *
+             * @param value the value
+             * @return the state
+             */
+            public Builder setState(int value) {
         
         state_ = value;
         onChanged();
         return this;
       }
-      /**
-       * <pre>
-       * 状态 
-       * </pre>
-       *
-       * <code>optional int32 state = 4;</code>
-       */
-      public Builder clearState() {
+
+            /**
+             * <pre>
+             * 状态
+             * </pre>
+             *
+             * <code>optional int32 state = 4;</code>
+             *
+             * @return the builder
+             */
+            public Builder clearState() {
         
         state_ = 0;
         onChanged();
@@ -775,7 +964,12 @@ public final class UserInfo {
       DEFAULT_INSTANCE = new com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg();
     }
 
-    public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg getDefaultInstance() {
+        /**
+         * Gets default instance.
+         *
+         * @return the default instance
+         */
+        public static com.pancm.test.protobufTest.protobuf3.UserInfo.UserMsg getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
@@ -789,7 +983,12 @@ public final class UserInfo {
       }
     };
 
-    public static com.google.protobuf.Parser<UserMsg> parser() {
+        /**
+         * Parser com . google . protobuf . parser.
+         *
+         * @return the com . google . protobuf . parser
+         */
+        public static com.google.protobuf.Parser<UserMsg> parser() {
       return PARSER;
     }
 
@@ -810,7 +1009,12 @@ public final class UserInfo {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_UserMsg_fieldAccessorTable;
 
-  public static com.google.protobuf.Descriptors.FileDescriptor
+    /**
+     * Gets descriptor.
+     *
+     * @return the descriptor
+     */
+    public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
   }

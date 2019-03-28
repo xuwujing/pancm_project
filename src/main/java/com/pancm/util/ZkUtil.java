@@ -15,13 +15,13 @@ import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher.Event;
 
 /**
- * 
-* @Title: ZookeeperUtils
-* @Description: 
-* zookeeper的工具类
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年5月2日
+ * The type Zk util.
+ *
+ * @author pancm
+ * @Title: ZookeeperUtils
+ * @Description: zookeeper的工具类
+ * @Version:1.0.0
+ * @date 2018年5月2日
  */
 public class ZkUtil {
 	
@@ -29,40 +29,52 @@ public class ZkUtil {
 	 * 斜杠
 	 */
 	private static final String SPRIT ="/";
-	/**
-	 * 创建目录并添加参数
-	 * @param zk
-	 * @param path
-	 * @param data
-	 * @return
-	 */
-	public static void create(ZkClient zk,String path,String data) throws ZkInterruptedException, IllegalArgumentException, ZkException, RuntimeException{
+
+    /**
+     * 创建目录并添加参数
+     *
+     * @param zk   the zk
+     * @param path the path
+     * @param data the data
+     * @return
+     * @throws ZkInterruptedException   the zk interrupted exception
+     * @throws IllegalArgumentException the illegal argument exception
+     * @throws ZkException              the zk exception
+     * @throws RuntimeException         the runtime exception
+     */
+    public static void create(ZkClient zk,String path,String data) throws ZkInterruptedException, IllegalArgumentException, ZkException, RuntimeException{
 		if(!zk.exists(path)){
 			zk.create(path,data,CreateMode.PERSISTENT);
 		}
 	}
-	
-	/**
-	 * 创建目录不添加参数
-	 * 也可以创建层级目录，格式: /test/test1/test1-1
-	 * @param zk
-	 * @param path
-	 * @return
-	 */
-	public static void create(ZkClient zk,String path) throws ZkInterruptedException, IllegalArgumentException, ZkException, RuntimeException{
+
+    /**
+     * 创建目录不添加参数
+     * 也可以创建层级目录，格式: /test/test1/test1-1
+     *
+     * @param zk   the zk
+     * @param path the path
+     * @return
+     * @throws ZkInterruptedException   the zk interrupted exception
+     * @throws IllegalArgumentException the illegal argument exception
+     * @throws ZkException              the zk exception
+     * @throws RuntimeException         the runtime exception
+     */
+    public static void create(ZkClient zk,String path) throws ZkInterruptedException, IllegalArgumentException, ZkException, RuntimeException{
 		if(!zk.exists(path)){
 			zk.createPersistent(path,true);
 		}
 	}
-	
-	/**
-	 * 更新参数，没有就新增
-	 * @param zk
-	 * @param path
-	 * @param data
-	 * @return
-	 */
-	public static boolean setData(ZkClient zk,String path,String data){
+
+    /**
+     * 更新参数，没有就新增
+     *
+     * @param zk   the zk
+     * @param path the path
+     * @param data the data
+     * @return boolean
+     */
+    public static boolean setData(ZkClient zk,String path,String data){
 		boolean falg=false;
 		if(zk.exists(path)){
 		   zk.writeData(path, data);
@@ -70,45 +82,49 @@ public class ZkUtil {
 		}
 		return falg;
 	}
-	
-	/**
-	 * 获取数据
-	 * @param zk
-	 * @param path
-	 * @return
-	 */
-	public static <T extends Object> T getData(ZkClient zk,String path){
+
+    /**
+     * 获取数据
+     *
+     * @param <T>  the type parameter
+     * @param zk   the zk
+     * @param path the path
+     * @return t
+     */
+    public static <T extends Object> T getData(ZkClient zk,String path){
 		T t=null;
 		if(zk.exists(path)){
 		   t=zk.readData(path);
 		}
 		return t;
 	}
-	
-	
-	/**
-	 * 获取子节点
-	 * @param zk
-	 * @param path
-	 * @return
-	 */
-	public static List<String> getChildNode(ZkClient zk,String path){
+
+
+    /**
+     * 获取子节点
+     *
+     * @param zk   the zk
+     * @param path the path
+     * @return list
+     */
+    public static List<String> getChildNode(ZkClient zk,String path){
 		List<String> list=null;
 		if(zk.exists(path)){
 			list=zk.getChildren(path);
 		}
 		return list;
 	}
-	
-	
-	/**
-	 * 获取父级目录下的所有数据
-	 * 注:仅限一级
-	 * @param zk
-	 * @param path
-	 * @return
-	 */
-	public static Map<String, String> getAll(ZkClient zk,String path){
+
+
+    /**
+     * 获取父级目录下的所有数据
+     * 注:仅限一级
+     *
+     * @param zk   the zk
+     * @param path the path
+     * @return map
+     */
+    public static Map<String, String> getAll(ZkClient zk,String path){
 		List<String> yardList =getChildNode(zk,path);
 		Map<String, String> map = new HashMap<String, String>();
 		for(String key : yardList){
@@ -117,26 +133,37 @@ public class ZkUtil {
 		}
 		return map;
 	}
-	
-	/**
-	 * 删除节点
-	 * 注:如果是该节点包含子节点，也会一并删除
-	 * @param zk
-	 * @param path
-	 * @return
-	 */
-	public static boolean delete(ZkClient zk,String path){
+
+    /**
+     * 删除节点
+     * 注:如果是该节点包含子节点，也会一并删除
+     *
+     * @param zk   the zk
+     * @param path the path
+     * @return boolean
+     */
+    public static boolean delete(ZkClient zk,String path){
 		return zk.deleteRecursive(path);
 	}
-	
-	public static void close(ZkClient zk){
+
+    /**
+     * Close.
+     *
+     * @param zk the zk
+     */
+    public static void close(ZkClient zk){
 		if(zk!=null){
 			zk.close();
 		}
 	}
-	
-	
-	public void process(WatchedEvent watchedEvent) {
+
+
+    /**
+     * Process.
+     *
+     * @param watchedEvent the watched event
+     */
+    public void process(WatchedEvent watchedEvent) {
 	    if (watchedEvent.getState() == Event.KeeperState.SyncConnected) { //与zk服务器处于连接状态
 	    	//如果没有就创建
 	        if(watchedEvent.getType() == Event.EventType.None && null == watchedEvent.getPath()) {

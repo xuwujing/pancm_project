@@ -21,16 +21,20 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * 
-* @Title: DateTools
-* @Description: 日期工具类
-* @since jdk1.8
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年11月21日
+ * The type Date tools.
+ *
+ * @author pancm
+ * @Title: DateTools
+ * @Description: 日期工具类
+ * @Version:1.0.0
+ * @date 2018年11月21日
+ * @since jdk1.8
  */
 public class DateTools {
 
+    /**
+     * The constant LOGGER.
+     */
     public static final Logger LOGGER = LoggerFactory.getLogger(DateTools.class);
 
     /**
@@ -38,12 +42,24 @@ public class DateTools {
      */
     public static final String DATE_FORMAT_DATEONLY = "yyyy-MM-dd";
 
+    /**
+     * The constant DATE_FORMAT_DATETIME.
+     */
     public static final String DATE_FORMAT_DATETIME = "yyyy-MM-dd HH:mm:ss";
 
+    /**
+     * The constant DATE_FORMAT_DATETIME14.
+     */
     public static final String DATE_FORMAT_DATETIME14 = "yyyyMMddHHmmss";
 
+    /**
+     * The constant SHORTDATEFORMAT.
+     */
     public static final String SHORTDATEFORMAT = "yyyyMMdd";
 
+    /**
+     * The constant HMS_FORMAT.
+     */
     public static final String HMS_FORMAT = "HH:mm:ss";
 
     private static final ZoneId UTC_ZONE = ZoneOffset.UTC.normalized();
@@ -63,14 +79,20 @@ public class DateTools {
      * 输入的日期格式:yyyy-MM-dd HH:mm:ss
      *
      * @param str 日期字符串
-     * @return 转换后的日期
-     * @throws ParseException  异常
+     * @return 转换后的日期 local date time
+     * @throws ParseException 异常
      * @see LocalDateTime
      */
     public static LocalDateTime parseLocalDateTime(final String str) throws ParseException {
         return LocalDateTime.parse(str, DateTimeFormatter.ofPattern(DATE_FORMAT_DATETIME));
     }
 
+    /**
+     * Gets date yyyy.
+     *
+     * @return the date yyyy
+     * @throws ParseException the parse exception
+     */
     public static Date getDateYYYY() throws  ParseException{
         LocalDateTime localDateTime = parseLocalDateTime(getCurrentDateTime());
         ZoneId zone = ZoneId.systemDefault();
@@ -78,6 +100,12 @@ public class DateTools {
         return Date.from(instant);
     }
 
+    /**
+     * Parse date string.
+     *
+     * @param date the date
+     * @return the string
+     */
     public static String parseDate(Date date) {
         Instant instant = date.toInstant();
         ZoneId zone = ZoneId.systemDefault();
@@ -89,9 +117,10 @@ public class DateTools {
     /**
      * 把字符串转成特定格式的日期类型.
      * 输入的日期格式:yyyy-MM-dd HH:mm:ss
+     *
+     * @param str        日期字符串
      * @param dateFormat 日期字符串
-     * @param str 日期字符串
-     * @return 转换后的日期
+     * @return 转换后的日期 local date time
      * @throws ParseException 转换异常
      * @see LocalDateTime
      */
@@ -106,7 +135,7 @@ public class DateTools {
      * 输入的日期格式:yyyy-MM-dd
      *
      * @param str 日期字符串
-     * @return 转换后的日期
+     * @return 转换后的日期 local date time
      * @throws ParseException 异常
      * @see LocalDateTime
      */
@@ -121,7 +150,7 @@ public class DateTools {
      * 输入的日期格式:yyyy-MM-dd
      *
      * @param str 日期字符串
-     * @return 转换后的日期
+     * @return 转换后的日期 local date
      * @throws ParseException 异常
      * @see LocalDateTime
      */
@@ -135,7 +164,7 @@ public class DateTools {
      *
      * @param str    日期字符串
      * @param format 日期格式
-     * @return 转换后的日期
+     * @return 转换后的日期 local date
      * @throws ParseException 异常
      * @see LocalDateTime
      */
@@ -147,7 +176,7 @@ public class DateTools {
     /**
      * 获得当前的日期毫秒.
      *
-     * @return 当前毫秒数
+     * @return 当前毫秒数 long
      */
     public static long nowTimeMillis() {
         return Clock.systemDefaultZone().millis();
@@ -156,7 +185,7 @@ public class DateTools {
     /**
      * 获取从1970年到现在的秒数.
      *
-     * @return 秒数
+     * @return 秒数 long
      */
     public static long nowEpochSecond() {
         return Clock.systemDefaultZone().instant().getEpochSecond();
@@ -165,7 +194,7 @@ public class DateTools {
     /**
      * 获得当前的时间戳.
      *
-     * @return 时间点
+     * @return 时间点 instant
      */
     public static Instant nowTimestamp() {
         return Instant.now(Clock.systemDefaultZone());
@@ -193,7 +222,7 @@ public class DateTools {
      * 获取当前日期时间.
      *
      * @param format 格式字符串
-     * @return 获取当前日期时间
+     * @return 获取当前日期时间 current date time
      */
     public static String getCurrentDateTime(final String format) {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern(format));
@@ -212,7 +241,7 @@ public class DateTools {
      * yyyy-MM-dd 格式化传入日期.
      *
      * @param date 日期
-     * @return yyyy-MM-dd 日期
+     * @return yyyy -MM-dd 日期
      */
     public static String formaterDate(final LocalDate date) {
         return date.format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATEONLY));
@@ -221,9 +250,9 @@ public class DateTools {
     /**
      * 将localDateTime 格式化成特定格式的字符串.
      *
-     * @param time 时间
+     * @param time       时间
      * @param dateFormat 格式化
-     * @return String
+     * @return String string
      */
     public static String formaterTime(final LocalTime time, final String dateFormat) {
         return time.format(DateTimeFormatter.ofPattern(dateFormat));
@@ -243,7 +272,7 @@ public class DateTools {
      * 将localDateTime 格式化成yyyy-MM-dd HH:mm:ss.
      *
      * @param dateTime 时间
-     * @return String
+     * @return String string
      */
     public static String formaterLocalDateTime(final LocalDateTime dateTime) {
         return dateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATETIME));
@@ -252,9 +281,9 @@ public class DateTools {
     /**
      * 将localDateTime 格式化成特定格式的字符串.
      *
-     * @param dateTime 时间
+     * @param dateTime   时间
      * @param dateFormat 格式化
-     * @return string
+     * @return string string
      */
     public static String formaterLocalDateTime(final LocalDateTime dateTime, final String dateFormat) {
         return dateTime.format(DateTimeFormatter.ofPattern(dateFormat));
@@ -287,7 +316,7 @@ public class DateTools {
      *
      * @param date   长日期
      * @param second 需要增加的秒数
-     * @return 增加后的日期
+     * @return 增加后的日期 local date time
      */
     public static LocalDateTime addSecond(final LocalDateTime date, final int second) {
         return date.plusSeconds(second);
@@ -298,7 +327,7 @@ public class DateTools {
      *
      * @param date   长日期
      * @param minute 需要增加的分钟数
-     * @return 增加后的日期
+     * @return 增加后的日期 local date time
      */
     public static LocalDateTime addMinute(final LocalDateTime date, final int minute) {
         return date.plusMinutes(minute);
@@ -309,7 +338,7 @@ public class DateTools {
      *
      * @param date 长日期
      * @param hour 增加的小时数
-     * @return 增加后的日期
+     * @return 增加后的日期 local date time
      */
     public static LocalDateTime addHour(final LocalDateTime date, final int hour) {
         return date.plusHours(hour);
@@ -320,7 +349,7 @@ public class DateTools {
      *
      * @param date 长日期
      * @param day  增加的天数
-     * @return 增加后的日期
+     * @return 增加后的日期 local date time
      */
     public static LocalDateTime addDay(final LocalDateTime date, final int day) {
         return date.plusDays(day);
@@ -331,7 +360,7 @@ public class DateTools {
      *
      * @param date  长日期
      * @param month 需要增加的月数
-     * @return 增加后的日期
+     * @return 增加后的日期 local date time
      */
     public static LocalDateTime addMoth(final LocalDateTime date, final int month) {
         return date.plusMonths(month);
@@ -342,7 +371,7 @@ public class DateTools {
      *
      * @param date 长日期
      * @param year 需要增加的年数
-     * @return 增加后的日期
+     * @return 增加后的日期 local date time
      */
     public static LocalDateTime addYear(final LocalDateTime date, final int year) {
         return date.plusYears(year);
@@ -353,7 +382,7 @@ public class DateTools {
      * 一天开始的时间为　0:0:0
      *
      * @param date 短日期
-     * @return yyyy-MM-dd HH:mm:ss 字符串
+     * @return yyyy -MM-dd HH:mm:ss 字符串
      */
     public static LocalDateTime getDayStart(final LocalDate date) {
         LocalDateTime localDateTime = LocalDateTime.of(date, LocalTime.of(0, 0, 0));
@@ -365,7 +394,7 @@ public class DateTools {
      * 一天结束的时间为 23:59:59
      *
      * @param date date 短日期
-     * @return yyyy-MM-dd HH:mm:ss 字符串
+     * @return yyyy -MM-dd HH:mm:ss 字符串
      */
     public static LocalDateTime getDayEnd(final LocalDate date) {
         LocalDateTime localDateTime = LocalDateTime.of(date, LocalTime.of(23, 59, 59));
@@ -376,7 +405,7 @@ public class DateTools {
      * 根据日期字符串获取时间戳.
      *
      * @param dateStr yyyy-MM-dd HH:mm:ss
-     * @return 时间信息
+     * @return 时间信息 instant
      * @throws ParseException 异常
      */
     public static Instant parseDataStrToInstant(final String dateStr) throws ParseException {
@@ -388,7 +417,7 @@ public class DateTools {
      *
      * @param date1 时间
      * @param date2 时间
-     * @return boolean
+     * @return boolean boolean
      */
     public static boolean isSameDate(final LocalDateTime date1, final LocalDateTime date2) {
         String date1Str = date1.format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATEONLY));
@@ -402,7 +431,7 @@ public class DateTools {
      *
      * @param t1 开始时间
      * @param t2 结果时间
-     * @return t1到t2间的年数，如果t2在 t1之后，返回正数，否则返回负数
+     * @return t1到t2间的年数 ，如果t2在 t1之后，返回正数，否则返回负数
      */
     public static long getYearsBetween(final LocalDate t1, final LocalDate t2) {
         return t1.until(t2, ChronoUnit.YEARS);
@@ -413,7 +442,7 @@ public class DateTools {
      *
      * @param t1 开始日期
      * @param t2 结束日期
-     * @return t1到t2间的日数，如果t2 在 t1之后，返回正数，否则返回负数
+     * @return t1到t2间的日数 ，如果t2 在 t1之后，返回正数，否则返回负数
      */
     public static long getDaysBetween(final LocalDate t1, final LocalDate t2) {
         return t1.until(t2, ChronoUnit.DAYS);
@@ -424,7 +453,7 @@ public class DateTools {
      *
      * @param t1 开始日期
      * @param t2 结束日期
-     * @return t1到t2间的日数，如果t2 在 t1之后，返回正数，否则返回负数
+     * @return t1到t2间的日数 ，如果t2 在 t1之后，返回正数，否则返回负数
      */
     public static long getMonthsBetween(final LocalDate t1, final LocalDate t2) {
         return t1.until(t2, ChronoUnit.MONTHS);
@@ -435,7 +464,7 @@ public class DateTools {
      *
      * @param t1 开始长日期
      * @param t2 结束长日期
-     * @return t1到t2间的日数，如果t2 在 t1之后，返回正数，否则返回负数
+     * @return t1到t2间的日数 ，如果t2 在 t1之后，返回正数，否则返回负数
      */
     public static long getHoursBetween(final LocalDateTime t1, final LocalDateTime t2) {
         return t1.until(t2, ChronoUnit.HOURS);
@@ -446,7 +475,7 @@ public class DateTools {
      *
      * @param t1 开始长日期
      * @param t2 结束长日期
-     * @return t1到t2间的日数，如果t2 在 t1之后，返回正数，否则返回负数
+     * @return t1到t2间的日数 ，如果t2 在 t1之后，返回正数，否则返回负数
      */
     public static long getSecondsBetween(final LocalDateTime t1, final LocalDateTime t2) {
         return t1.until(t2, ChronoUnit.SECONDS);
@@ -457,7 +486,7 @@ public class DateTools {
      *
      * @param t1 开始长日期
      * @param t2 结束长日期
-     * @return t1到t2间的日数，如果t2 在 t1之后，返回正数，否则返回负数
+     * @return t1到t2间的日数 ，如果t2 在 t1之后，返回正数，否则返回负数
      */
     public static long getMinutesBetween(final LocalDateTime t1, final LocalDateTime t2) {
         return t1.until(t2, ChronoUnit.MINUTES);
@@ -466,7 +495,7 @@ public class DateTools {
     /**
      * 获取今天是星期几.
      *
-     * @return 返回今天是周几
+     * @return 返回今天是周几 week
      * @see DayOfWeek
      */
     public static DayOfWeek getWeek() {
@@ -508,7 +537,7 @@ public class DateTools {
      * 这个方法定义:周一为一个星期开始的第一天
      *
      * @param date 日期
-     * @return 返回一周的第一天
+     * @return 返回一周的第一天 week start
      */
     public static LocalDate getWeekStart(final LocalDate date) {
         return date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
@@ -519,7 +548,7 @@ public class DateTools {
      * 这个方法定义:周日为一个星期开始的最后一天
      *
      * @param date 日期
-     * @return 返回一周的最后一天
+     * @return 返回一周的最后一天 week end
      */
     public static LocalDate getWeekEnd(final LocalDate date) {
         return date.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
@@ -529,7 +558,7 @@ public class DateTools {
      * 得到month的终止时间点..
      *
      * @param date 日期
-     * @return 传入的日期当月的结束日期
+     * @return 传入的日期当月的结束日期 month end
      */
     public static LocalDate getMonthEnd(final LocalDate date) {
         return date.with(TemporalAdjusters.lastDayOfMonth());
@@ -539,7 +568,7 @@ public class DateTools {
      * 得到当月起始时间.
      *
      * @param date 日期
-     * @return 传入的日期当月的开始日期
+     * @return 传入的日期当月的开始日期 month start
      */
     public static LocalDate getMonthStart(final LocalDate date) {
 
@@ -550,7 +579,7 @@ public class DateTools {
      * 得到当前年起始时间.
      *
      * @param date 日期
-     * @return 传入的日期当年的开始日期
+     * @return 传入的日期当年的开始日期 year start
      */
     public static LocalDate getYearStart(final LocalDate date) {
         return date.with(TemporalAdjusters.firstDayOfYear());
@@ -560,7 +589,7 @@ public class DateTools {
      * 得到当前年最后一天.
      *
      * @param date 日期
-     * @return 传入的日期当年的结束日期
+     * @return 传入的日期当年的结束日期 year end
      */
     public static LocalDate getYearEnd(final LocalDate date) {
         return date.with(TemporalAdjusters.lastDayOfYear());
@@ -570,7 +599,7 @@ public class DateTools {
      * 取得季度第一天.
      *
      * @param date 日期
-     * @return 传入的日期当季的开始日期
+     * @return 传入的日期当季的开始日期 season start
      */
     public static LocalDate getSeasonStart(final LocalDate date) {
         return getSeasonDate(date)[0];
@@ -580,7 +609,7 @@ public class DateTools {
      * 取得季度最后一天.
      *
      * @param date 日期
-     * @return 传入的日期当季的结束日期
+     * @return 传入的日期当季的结束日期 season end
      */
     public static LocalDate getSeasonEnd(final LocalDate date) {
         return getSeasonDate(date)[2].with(TemporalAdjusters.lastDayOfMonth());
@@ -590,7 +619,7 @@ public class DateTools {
      * 取得季度月的第一天.
      *
      * @param date 日期
-     * @return 返回一个当前季度月的数组
+     * @return 返回一个当前季度月的数组 local date [ ]
      */
     public static LocalDate[] getSeasonDate(final LocalDate date) {
         LocalDate[] season = new LocalDate[3];
@@ -663,7 +692,7 @@ public class DateTools {
      * 获取当前时间的前多少,yyyy-MM-dd.
      *
      * @param days 天数
-     * @return yyyy-MM-dd
+     * @return yyyy -MM-dd
      */
     public static String subDays(final int days) {
         return LocalDate.now().minusDays(days).format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATEONLY));
@@ -684,7 +713,7 @@ public class DateTools {
     /**
      * 获取昨天的日期 格式串:yyyy-MM-dd.
      *
-     * @return yyyy-MM-dd
+     * @return yyyy -MM-dd
      */
     public static String getYesterday() {
         return getYesterday(LocalDate.now());
@@ -692,8 +721,9 @@ public class DateTools {
 
     /**
      * 获取昨天的日期 格式串:yyyy-MM-dd.
-     * @param date   时间
-     * @return yyyy-MM-dd
+     *
+     * @param date 时间
+     * @return yyyy -MM-dd
      */
     public static String getYesterday(final LocalDate date) {
         return date.minusDays(1).format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATEONLY));
@@ -702,7 +732,7 @@ public class DateTools {
     /**
      * 上月第一天.
      *
-     * @return 日期
+     * @return 日期 previous month first day
      */
     public static LocalDate getPreviousMonthFirstDay() {
 
@@ -712,7 +742,7 @@ public class DateTools {
     /**
      * 上月最后一天.
      *
-     * @return 日期
+     * @return 日期 previous month last day
      */
     public static LocalDate getPreviousMonthLastDay() {
         return LocalDate.now().minusMonths(1).with(TemporalAdjusters.lastDayOfMonth());
@@ -721,7 +751,7 @@ public class DateTools {
     /**
      * 获得当天0点时间.
      *
-     * @return 日期
+     * @return 日期 timesmorning
      */
     public static Date getTimesmorning() {
         Calendar cal = Calendar.getInstance();
@@ -735,7 +765,7 @@ public class DateTools {
     /**
      * 获得当天近一周.
      *
-     * @return 日期
+     * @return 日期 a week from now
      */
     public static LocalDateTime getAWeekFromNow() {
         LocalDateTime date = LocalDateTime.now();
@@ -746,7 +776,7 @@ public class DateTools {
     /**
      * 获得当天近一月.
      *
-     * @return 日期
+     * @return 日期 a month from now
      */
     public static LocalDateTime getAMonthFromNow() {
         LocalDateTime date = LocalDateTime.now();
@@ -757,7 +787,7 @@ public class DateTools {
     /**
      * 获得当天近一年.
      *
-     * @return 日期
+     * @return 日期 a year from now
      */
     public static LocalDateTime getAYearFromNow() {
         LocalDateTime date = LocalDateTime.now();
@@ -769,7 +799,7 @@ public class DateTools {
     /**
      * 获取utc时间.
      *
-     * @return LocalDateTime
+     * @return LocalDateTime utc local date time
      */
     public static LocalDateTime getUTCLocalDateTime() {
         return LocalDateTime.now(UTC_ZONE);
@@ -780,7 +810,7 @@ public class DateTools {
      * 将当前时区时间转成UTC时间.
      *
      * @param dateTime 时间
-     * @return LocalDateTime
+     * @return LocalDateTime local date time
      */
     public static LocalDateTime toUTCDateTime(final LocalDateTime dateTime) {
         if (dateTime == null) {
@@ -796,7 +826,7 @@ public class DateTools {
      * 将UTC时间转成当前时区时间.
      *
      * @param dateTime 时间
-     * @return LocalDateTime
+     * @return LocalDateTime local date time
      */
     public static LocalDateTime toDefaultDateTime(final LocalDateTime dateTime) {
         return dateTime == null ? null : LocalDateTime.ofInstant(dateTime.toInstant(ZoneOffset.UTC), DEFAULT_ZONE);
@@ -805,9 +835,10 @@ public class DateTools {
 
     /**
      * 将数据库时间改成当前时区时间.
+     *
      * @param timestamp 时间
-     * @return  time
-     * @date 2018/5/9 18:25
+     * @return time local date time
+     * @date 2018 /5/9 18:25
      */
     public static LocalDateTime toDefaultDateTime(final Timestamp timestamp) {
         return timestamp == null ? null : toDefaultDateTime(timestamp.toLocalDateTime());

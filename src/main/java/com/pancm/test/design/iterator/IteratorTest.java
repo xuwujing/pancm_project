@@ -4,17 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Title: IteratorTest
- * @Description: 迭代器模式 迭代器模式（Iterator Pattern）是 Java 和 .Net
- *               编程环境中非常常用的设计模式。这种模式用于顺序访问集合对象的元素，不需要知道集合对象的底层表示。 迭代器模式属于行为型模式。
- *               提供一种方法顺序访问一个聚合对象中各个元素, 而又无须暴露该对象的内部表示。
- * @Version:1.0.0
+ * The type Iterator test.
+ *
  * @author pancm
+ * @Title: IteratorTest
+ * @Description: 迭代器模式 迭代器模式（Iterator Pattern）是 Java 和 .Net               编程环境中非常常用的设计模式。这种模式用于顺序访问集合对象的元素，不需要知道集合对象的底层表示。 迭代器模式属于行为型模式。               提供一种方法顺序访问一个聚合对象中各个元素, 而又无须暴露该对象的内部表示。
+ * @Version:1.0.0
  * @date 2018年8月8日
  */
 public class IteratorTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 
 		/*
 		 * 基本使用
@@ -81,32 +86,64 @@ public class IteratorTest {
 
 }
 
+/**
+ * The interface Iterator.
+ */
 /*
  * 定义一个迭代器
  */
 interface Iterator {
 
-	boolean hasNext();
+    /**
+     * Has next boolean.
+     *
+     * @return the boolean
+     */
+    boolean hasNext();
 
-	Object next();
+    /**
+     * Next object.
+     *
+     * @return the object
+     */
+    Object next();
 }
 
+/**
+ * The interface Container.
+ */
 /*
  * 定义一个容器
  * 
  */
 interface Container {
-	Iterator getIterator();
+    /**
+     * Gets iterator.
+     *
+     * @return the iterator
+     */
+    Iterator getIterator();
 }
 
 
+/**
+ * The type Name repository.
+ */
 /*
  * 定义一个
  */
 class NameRepository implements Container {
-	public String names[];
+    /**
+     * The Names.
+     */
+    public String names[];
 
-	public NameRepository(String names[]) {
+    /**
+     * Instantiates a new Name repository.
+     *
+     * @param names the names
+     */
+    public NameRepository(String names[]) {
 		this.names = names;
 	}
 	
@@ -118,7 +155,10 @@ class NameRepository implements Container {
 
 	private class NameIterator implements Iterator {
 
-		int index;
+        /**
+         * The Index.
+         */
+        int index;
 
 		@Override
 		public boolean hasNext() {
@@ -136,29 +176,64 @@ class NameRepository implements Container {
 }
 
 
+/**
+ * The interface My iterator.
+ */
 /*
  * 定义一个Iterator
  */
 interface MyIterator {
-	//判断是否还有下一个
+    /**
+     * Has next boolean.
+     *
+     * @return the boolean
+     */
+//判断是否还有下一个
 	boolean hasNext();
-	//返回信息
+
+    /**
+     * Next string.
+     *
+     * @return the string
+     */
+//返回信息
 	String next();
 }
 
+/**
+ * The interface My iterable.
+ */
 /*
  *  定义一个Iterable
  */
 interface MyIterable{
-	MyIterator getIterator();
-	
-	void add(String str);
-	
-	String get(int index);
+    /**
+     * Gets iterator.
+     *
+     * @return the iterator
+     */
+    MyIterator getIterator();
+
+    /**
+     * Add.
+     *
+     * @param str the str
+     */
+    void add(String str);
+
+    /**
+     * Get string.
+     *
+     * @param index the index
+     * @return the string
+     */
+    String get(int index);
 }
 
 
-
+/**
+ * The type List container.
+ */
 class ListContainer implements MyIterable {
 	
 	 private List<String> list =new ArrayList<>(); 
@@ -178,10 +253,16 @@ class ListContainer implements MyIterable {
 	public String get(int index) {
 		return list.get(index);
 	}
-	
-	
-	class ListIterator implements MyIterator{
-		int index;
+
+
+    /**
+     * The type List iterator.
+     */
+    class ListIterator implements MyIterator{
+        /**
+         * The Index.
+         */
+        int index;
 		@Override
 		public boolean hasNext() {
 			return index < list.size();

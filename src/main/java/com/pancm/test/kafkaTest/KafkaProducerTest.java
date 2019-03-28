@@ -7,25 +7,26 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 /**
- * 
-* Title: kafkaTest
-* Description:
-* kafka测试 
-* Version:1.0.0  
-* @author pancm
-* @date 2018年1月11日
+ * Title: kafkaTest
+ * Description:
+ * kafka测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年1月11日
  */
 public class KafkaProducerTest {
 	
 	private static KafkaProducer<String, String> producer;
 	private final String topic;
 	private int k=10;
-	
-	/**
-	 * @param topic      消息名称
-	 * @param
-	 */
-	public KafkaProducerTest(String topic) {
+
+    /**
+     * Instantiates a new Kafka producer test.
+     *
+     * @param topic 消息名称
+     */
+    public KafkaProducerTest(String topic) {
 		Properties props = new Properties();
 		props.put("bootstrap.servers", "192.169.0.23:9092,192.169.0.24:9092,192.169.0.25:9092");
 		props.put("acks", "all");
@@ -73,9 +74,14 @@ public class KafkaProducerTest {
 			producer.close();
 		}
 	}
-	
-	
-	public static void main(String[] args) {
+
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		KafkaProducerTest test =new KafkaProducerTest("INSERT_TOPIC11");
 		test.start();
 	}

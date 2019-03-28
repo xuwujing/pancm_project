@@ -6,16 +6,21 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 
-* Title: executorTest
-* Description:线程池 
-* Version:1.0.0  
-* @author pancm
-* @date 2017年11月20日
+ * Title: executorTest
+ * Description:线程池
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年11月20日
  */
 public class executorTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		//创建一个其线程池具有 10 个线程的ScheduledExecutorService
 		ScheduledExecutorService executor =Executors.newScheduledThreadPool(10);
 		System.out.println("开始...");

@@ -12,13 +12,18 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+
+/**
+ * The type Nio test.
+ */
 public class NioTest {
 
-	/**
-	 * @param args
-	 */
-	
-	 public static void main(String[] args)
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args)
 	 {
 	  FileChannel inChannel = null;
 	  FileChannel outChannel = null;

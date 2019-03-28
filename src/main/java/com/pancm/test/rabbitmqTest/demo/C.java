@@ -11,12 +11,21 @@ import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 
 
-//消费者 
+/**
+ * The type C.
+ */
+//消费者
 public class C {
 	
 	private final static String QUEUE_NAME = "RabbitMQ_Hello"; //消息队列名
 
-	public static void main(String[] argv) throws Exception {
+    /**
+     * The entry point of application.
+     *
+     * @param argv the input arguments
+     * @throws Exception the exception
+     */
+    public static void main(String[] argv) throws Exception {
 		// 创建连接工厂
 		ConnectionFactory factory = new ConnectionFactory();
 //		设置RabbitMQ地址

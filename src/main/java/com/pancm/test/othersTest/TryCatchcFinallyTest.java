@@ -5,18 +5,22 @@ import java.util.Map;
 
 
 /**
+ * The type Try catchc finally test.
+ *
+ * @author pancm
  * @Title: TryCatchcFinallyTest
  * @Description:
  * @Version:1.0.0
- * @author pancm
  * @date 2018年12月11日
  */
 public class TryCatchcFinallyTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		// try finally
 		System.out.println("====" + test1()); // ==== 1
 		

@@ -10,9 +10,8 @@ import org.apache.storm.utils.Utils;
 
 /**
  * 实现单词计数topology
- *
  */
-public class WordCountApp 
+public class WordCountApp
 {
     private static final String SENTENCE_SPOUT_ID = "sentence-spout";
     private static final String SPLIT_BOLT_ID = "split-bolt";
@@ -20,6 +19,11 @@ public class WordCountApp
     private static final String REPORT_BOLT_ID = "report-bolt";
     private static final String TOPOLOGY_NAME = "word-count-topology";
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main( String[] args ) //throws Exception
     {
         //System.out.println( "Hello World!" );

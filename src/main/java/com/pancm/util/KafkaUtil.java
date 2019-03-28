@@ -12,27 +12,28 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * 
-* @Title: kafkaUtil
-* @Description:
-* kafka工具类 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年4月2日
+ * The type Kafka util.
+ *
+ * @author pancm
+ * @Title: kafkaUtil
+ * @Description: kafka工具类
+ * @Version:1.0.0
+ * @date 2018年4月2日
  */
 public  final class KafkaUtil {
 	
 	private static final Logger logger = LoggerFactory.getLogger(KafkaUtil.class);
 
-	/**
-	 * 向kafka发送单条消息
-	 * @param msg 发送的消息
-	 * @param url 发送的地址
-	 * @param topicName 消息名称
-	 * @return
-	 * @throws Exception 
-	 */
-	public static boolean sendMessage(String msg,String url,String topicName) throws Exception{
+    /**
+     * 向kafka发送单条消息
+     *
+     * @param msg       发送的消息
+     * @param url       发送的地址
+     * @param topicName 消息名称
+     * @return boolean
+     * @throws Exception the exception
+     */
+    public static boolean sendMessage(String msg,String url,String topicName) throws Exception{
 		KafkaProducer<String, String> producer=null;
 		boolean falg=false;
 		try{
@@ -50,17 +51,18 @@ public  final class KafkaUtil {
 		}
 		return falg;
 	}
-	
 
-	/**
-	 * 向kafka发送批量消息
-	 * @param listMsg 发送的消息
-	 * @param url 发送的地址
-	 * @param topicName 消息名称
-	 * @return
-	 * @throws Exception 
-	 */
-	public static boolean sendMessage(List<String> listMsg,String url,String topicName) throws Exception{
+
+    /**
+     * 向kafka发送批量消息
+     *
+     * @param listMsg   发送的消息
+     * @param url       发送的地址
+     * @param topicName 消息名称
+     * @return boolean
+     * @throws Exception the exception
+     */
+    public static boolean sendMessage(List<String> listMsg,String url,String topicName) throws Exception{
 		KafkaProducer<String, String> producer=null;
 		boolean falg=false;
 		try{
@@ -80,18 +82,19 @@ public  final class KafkaUtil {
 		}
 		return falg;
 	}
-	
-	
-	/**
-	 * 向kafka发送批量消息
-	 * @param listMsg 发送的消息
-	 * @param url 发送的地址
-	 * @param topicName 消息名称
-	 * @param num 每次发送的条数
-	 * @return
-	 * @throws Exception 
-	 */
-	public static boolean sendMessage(List<String> listMsg,String url,String topicName,int num) throws Exception{
+
+
+    /**
+     * 向kafka发送批量消息
+     *
+     * @param listMsg   发送的消息
+     * @param url       发送的地址
+     * @param topicName 消息名称
+     * @param num       每次发送的条数
+     * @return boolean
+     * @throws Exception the exception
+     */
+    public static boolean sendMessage(List<String> listMsg,String url,String topicName,int num) throws Exception{
 		KafkaProducer<String, String> producer=null;
 		boolean falg=false;
 		try{

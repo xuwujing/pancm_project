@@ -4,18 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-* @Title: FilterTest
-* @Description: 过滤器模式
-* 过滤器模式（Filter Pattern）或标准模式（Criteria Pattern）是一种设计模式，
-* 这种模式允许开发人员使用不同的标准来过滤一组对象，通过逻辑运算以解耦的方式把它们连接起来。
-* 这种类型的设计模式属于结构型模式，它结合多个标准来获得单一标准。
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月8日
-*/
+ * The type Filter test.
+ *
+ * @author pancm
+ * @Title: FilterTest
+ * @Description: 过滤器模式  过滤器模式（Filter Pattern）或标准模式（Criteria Pattern）是一种设计模式， 这种模式允许开发人员使用不同的标准来过滤一组对象，通过逻辑运算以解耦的方式把它们连接起来。 这种类型的设计模式属于结构型模式，它结合多个标准来获得单一标准。
+ * @Version:1.0.0
+ * @date 2018年8月8日
+ */
 public class FilterTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		/*
 		 *  1.创建学生，有姓名、性别、年级这三个属性
 		 *  2.根据这三个属性进行过滤分组
@@ -54,38 +58,79 @@ public class FilterTest {
 	}
 }
 
+/**
+ * The type Student.
+ */
 class Student{
 	private String name; 
 	private String gender; 
 	private Integer grade;
-	public Student(String name, String gender, Integer grade) {
+
+    /**
+     * Instantiates a new Student.
+     *
+     * @param name   the name
+     * @param gender the gender
+     * @param grade  the grade
+     */
+    public Student(String name, String gender, Integer grade) {
 		super();
 		this.name = name;
 		this.gender = gender;
 		this.grade = grade;
 	}
-	
-	public String getName() {
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    public String getName() {
 		return name;
 	}
-	
-	public void setName(String name) {
+
+    /**
+     * Sets name.
+     *
+     * @param name the name
+     */
+    public void setName(String name) {
 		this.name = name;
 	}
-	
-	public String getGender() {
+
+    /**
+     * Gets gender.
+     *
+     * @return the gender
+     */
+    public String getGender() {
 		return gender;
 	}
-	
-	public void setGender(String gender) {
+
+    /**
+     * Sets gender.
+     *
+     * @param gender the gender
+     */
+    public void setGender(String gender) {
 		this.gender = gender;
 	}
-	
-	public Integer getGrade() {
+
+    /**
+     * Gets grade.
+     *
+     * @return the grade
+     */
+    public Integer getGrade() {
 		return grade;
 	}
-	
-	public void setGrade(Integer grade) {
+
+    /**
+     * Sets grade.
+     *
+     * @param grade the grade
+     */
+    public void setGrade(Integer grade) {
 		this.grade = grade;
 	}
 
@@ -95,10 +140,22 @@ class Student{
 	}
 }
 
+/**
+ * The interface Filterin grule.
+ */
 interface FilterinGrule {
-	List<Student>  filter(List<Student> students);
+    /**
+     * Filter list.
+     *
+     * @param students the students
+     * @return the list
+     */
+    List<Student>  filter(List<Student> students);
 }
 
+/**
+ * The type Male students.
+ */
 class MaleStudents implements FilterinGrule{
 	@Override
 	public List<Student> filter(List<Student> students) {
@@ -112,6 +169,9 @@ class MaleStudents implements FilterinGrule{
 	}
 }
 
+/**
+ * The type Female students.
+ */
 class FemaleStudents implements FilterinGrule{
 	@Override
 	public List<Student> filter(List<Student> students) {
@@ -125,6 +185,9 @@ class FemaleStudents implements FilterinGrule{
 	}
 }
 
+/**
+ * The type Second grade.
+ */
 class SecondGrade implements FilterinGrule{
 	@Override
 	public List<Student> filter(List<Student> students) {
@@ -140,11 +203,20 @@ class SecondGrade implements FilterinGrule{
 }
 
 
+/**
+ * The type And.
+ */
 class And implements FilterinGrule{
 	 private FilterinGrule filter;
 	 private FilterinGrule filter2;
-	
-	 public And(FilterinGrule filter,FilterinGrule filter2) {
+
+    /**
+     * Instantiates a new And.
+     *
+     * @param filter  the filter
+     * @param filter2 the filter 2
+     */
+    public And(FilterinGrule filter,FilterinGrule filter2) {
 		 this.filter=filter;
 		 this.filter2=filter2;
 	 }
@@ -156,11 +228,20 @@ class And implements FilterinGrule{
 	}
 }
 
+/**
+ * The type Or.
+ */
 class Or implements FilterinGrule{
 	 private FilterinGrule filter;
 	 private FilterinGrule filter2;
-	
-	 public Or(FilterinGrule filter,FilterinGrule filter2) {
+
+    /**
+     * Instantiates a new Or.
+     *
+     * @param filter  the filter
+     * @param filter2 the filter 2
+     */
+    public Or(FilterinGrule filter,FilterinGrule filter2) {
 		 this.filter=filter;
 		 this.filter2=filter2;
 	 }

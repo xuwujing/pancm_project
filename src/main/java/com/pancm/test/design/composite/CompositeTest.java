@@ -4,16 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-* @Title: CompositeTest
-* @Description: 组合模式
-* 将对象组合成树形结构以表示"部分-整体"的层次结构。组合模式使得用户对单个对象和组合对象的使用具有一致性。
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年8月8日
-*/
+ * The type Composite test.
+ *
+ * @author pancm
+ * @Title: CompositeTest
+ * @Description: 组合模式  将对象组合成树形结构以表示"部分-整体"的层次结构。组合模式使得用户对单个对象和组合对象的使用具有一致性。
+ * @Version:1.0.0
+ * @date 2018年8月8日
+ */
 public class CompositeTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		/*
 		 *  建立一个学生类，包含学生姓名和职位
 		 *  
@@ -44,6 +50,9 @@ public class CompositeTest {
 
 }
 
+/**
+ * The type Student.
+ */
 class Student{
 	private String name;
 	
@@ -51,22 +60,43 @@ class Student{
 	
 	private List<Student> students;
 
-	public Student(String name, String position) {
+    /**
+     * Instantiates a new Student.
+     *
+     * @param name     the name
+     * @param position the position
+     */
+    public Student(String name, String position) {
 		this.name = name;
 		this.position = position;
 		students=new ArrayList<Student>();
 	}
-	
-	
-	public void add(Student student){
+
+
+    /**
+     * Add.
+     *
+     * @param student the student
+     */
+    public void add(Student student){
 		students.add(student);
 	}
-	
-	public void remove(Student student){
+
+    /**
+     * Remove.
+     *
+     * @param student the student
+     */
+    public void remove(Student student){
 		students.remove(student);
 	}
-	
-	public List<Student> get(){
+
+    /**
+     * Get list.
+     *
+     * @return the list
+     */
+    public List<Student> get(){
 		return students;
 	}
 

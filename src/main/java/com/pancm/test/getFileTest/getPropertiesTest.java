@@ -15,12 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
-* Title: getPropertiesTest
-* Description:读取项目文件的数据 
-* Version:1.0.0  
-* @author pancm
-* @date 2017年9月22日
+ * Title: getPropertiesTest
+ * Description:读取项目文件的数据
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年9月22日
  */
 public class getPropertiesTest {
 	//当前应用程序的默认配置，test.properties的
@@ -60,14 +60,25 @@ public class getPropertiesTest {
 			}
 		}
 	}
-	public synchronized static Map<String, String> getAppSettings() {
+
+    /**
+     * Gets app settings.
+     *
+     * @return the app settings
+     */
+    public synchronized static Map<String, String> getAppSettings() {
 		if(null == appSettings || appSettings.isEmpty()){
 			new getPropertiesTest();
 		}
 		return appSettings;
 	}
 
-	public synchronized static void setAppSettings(Map<String, String> appSettings) {
+    /**
+     * Sets app settings.
+     *
+     * @param appSettings the app settings
+     */
+    public synchronized static void setAppSettings(Map<String, String> appSettings) {
 		if(null == appSettings || appSettings.isEmpty()){
 			new getPropertiesTest();
 		}

@@ -3,9 +3,17 @@ package com.pancm.test.concurrent.liveLock;
 import java.util.Random;
 
 
+/**
+ * The type Consumer.
+ */
 public  class Consumer implements Runnable {
     private Drop drop;
 
+    /**
+     * Instantiates a new Consumer.
+     *
+     * @param drop the drop
+     */
     public Consumer(Drop drop) {
         this.drop = drop;
     }

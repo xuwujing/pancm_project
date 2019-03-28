@@ -1,22 +1,33 @@
 package com.pancm.test.cloneTest;
+
 /**
- * 
-* Title: Student
-* Description: 浅克隆测试1
-* Version:1.0.0  
-* @author Administrator
-* @date 2017-7-24
+ * Title: Student
+ * Description: 浅克隆测试1
+ * Version:1.0.0
+ *
+ * @author Administrator
+ * @date 2017 -7-24
  */
 
 //被复制的类需要实现Cloneable接口 重写Object方法
 class Student implements Cloneable{  
-    private int number;  
+    private int number;
 
-    public int getNumber() {  
+    /**
+     * Gets number.
+     *
+     * @return the number
+     */
+    public int getNumber() {
         return number;  
-    }  
+    }
 
-    public void setNumber(int number) {  
+    /**
+     * Sets number.
+     *
+     * @param number the number
+     */
+    public void setNumber(int number) {
         this.number = number;  
     }  
 
@@ -30,9 +41,18 @@ class Student implements Cloneable{
         }  
         return stu;  
     }  
-}  
-public class cloneTest1 {  
-    public static void main(String args[]) {  
+}
+
+/**
+ * The type Clone test 1.
+ */
+public class cloneTest1 {
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
+    public static void main(String args[]) {
         Student stu1 = new Student();  
         stu1.setNumber(12345);  
         Student stu2 = (Student)stu1.clone();  

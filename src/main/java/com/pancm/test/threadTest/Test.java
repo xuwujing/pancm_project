@@ -8,15 +8,22 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 /**
-* @Title: Test
-* @Description: 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年5月17日
-*/
+ * The type Test.
+ *
+ * @author pancm
+ * @Title: Test
+ * @Description:
+ * @Version:1.0.0
+ * @date 2018年5月17日
+ */
 public class Test {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		ThreadTest threadTest=new ThreadTest();
 		threadTest.setPriority(1);
 		threadTest.start();
@@ -43,6 +50,9 @@ public class Test {
 }
 
 
+/**
+ * The type Thread test.
+ */
 class ThreadTest extends Thread{
 	 @Override
      public void run() {
@@ -60,6 +70,9 @@ class ThreadTest extends Thread{
 }
 
 
+/**
+ * The type Runalbe test.
+ */
 class RunalbeTest implements Runnable{
 	 @Override
      public void run() {
@@ -77,6 +90,9 @@ class RunalbeTest implements Runnable{
 }
 
 
+/**
+ * The type Callable test.
+ */
 class CallableTest implements Callable<Integer>{
 
 	@Override

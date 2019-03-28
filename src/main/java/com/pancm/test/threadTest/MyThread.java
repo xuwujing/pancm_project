@@ -1,15 +1,20 @@
 package com.pancm.test.threadTest;
+
 /**
+ * The type My thread.
+ *
  * @author ZERO
- * @Data 2017-5-24 下午2:20:29
- * @Description 
+ * @Data 2017 -5-24 下午2:20:29
+ * @Description
  */
 public class MyThread extends Thread{
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 	
 
 	}

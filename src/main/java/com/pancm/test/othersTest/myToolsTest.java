@@ -14,17 +14,21 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 /**
+ * The type My tools test.
+ *
  * @author ZERO
- * @Data 2017-5-15 上午10:51:13
+ * @Data 2017 -5-15 上午10:51:13
  * @Description 一些方法测试
  */
 public class myToolsTest {
 
-	/**
-	 * @param args
-	 * @throws Exception 
-	 */
-	public static void main(String[] args) throws Exception {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws Exception the exception
+     */
+    public static void main(String[] args) throws Exception {
 		
 		/**
 		 * 空数据判断
@@ -143,38 +147,62 @@ public class myToolsTest {
  	  String oldstr="abcd";
  	  System.out.println("反转:"+reverse(oldstr));
 	}
-  
-	/**
-	 * 判断String类型的数据是否为空
-	 * @return Boolean
-	 */
-	public static boolean isNull(String data){
+
+    /**
+     * 判断String类型的数据是否为空
+     *
+     * @param data the data
+     * @return Boolean boolean
+     */
+    public static boolean isNull(String data){
 		return null==data||"".equals(data);
 	}
-	
-	/**
-	 * 判断list类型的数据是否为空
-	 * @return Boolean
-	 */
-	@SuppressWarnings("rawtypes")
+
+    /**
+     * 判断list类型的数据是否为空
+     *
+     * @param list the list
+     * @return Boolean boolean
+     */
+    @SuppressWarnings("rawtypes")
 	public static boolean isNull(List list){
 		return list==null||list.size()==0;
 	}
-	
-	public static boolean isEmpty(List list){
+
+    /**
+     * Is empty boolean.
+     *
+     * @param list the list
+     * @return the boolean
+     */
+    public static boolean isEmpty(List list){
 		return list==null||list.size()==0;
 	}
-	
-	
-	public static String getNowTime(String format){
+
+
+    /**
+     * Get now time string.
+     *
+     * @param format the format
+     * @return the string
+     */
+    public static String getNowTime(String format){
 		if(null==format||"".equals(format)){//如果没有设置格式使用默认格式
 			format="yyyy-MM-dd HH:mm:ss";
 		}
 		return new SimpleDateFormat(format).format(new Date());
 	}
-	
-	
-	public static String getTimeAddmi(int mi,String time,String format) {
+
+
+    /**
+     * Gets time addmi.
+     *
+     * @param mi     the mi
+     * @param time   the time
+     * @param format the format
+     * @return the time addmi
+     */
+    public static String getTimeAddmi(int mi,String time,String format) {
 		if(null==format||"".equals(format)){//如果没有设置格式使用默认格式
 			format="yyyy-MM-dd HH:mm:ss";
 		}
@@ -194,9 +222,18 @@ public class myToolsTest {
 		String backTime = format1.format(ca.getTime());  //转化为String 的格式
 		return backTime;
 	}
-	
-	
-	  public static boolean compareDay(String time1,String time2,String format) throws Exception {
+
+
+    /**
+     * Compare day boolean.
+     *
+     * @param time1  the time 1
+     * @param time2  the time 2
+     * @param format the format
+     * @return the boolean
+     * @throws Exception the exception
+     */
+    public static boolean compareDay(String time1,String time2,String format) throws Exception {
 		  if(null==format||"".equals(format)){//如果没有设置格式使用默认格式
 				format="yyyy-MM-dd HH:mm:ss";
 			}
@@ -205,8 +242,15 @@ public class myToolsTest {
 			Date t2=s1.parse(time2);
 			return t2.after(t1);//当 t2 大于 t1 时，为 true，否则为 false
 	    }
-	
-	 public static Object containkey(JSONObject json,String key){
+
+    /**
+     * Containkey object.
+     *
+     * @param json the json
+     * @param key  the key
+     * @return the object
+     */
+    public static Object containkey(JSONObject json,String key){
 		  if(json.containsKey(key)){
 			  if(!isNull(json.getString(key))){
 				  return  json.get(key);
@@ -215,47 +259,90 @@ public class myToolsTest {
 		 return null;
 		 
 	 }
-	  
-	 //格式化double 并四舍五入
+
+    /**
+     * Doubleformat double.
+     *
+     * @param db     the db
+     * @param format the format
+     * @return the double
+     */
+//格式化double 并四舍五入
 	 public static  double doubleformat(double db,String format){
 		 DecimalFormat df = new DecimalFormat(format); //定义格式
 		 return Double.parseDouble(df.format(db));//你要格式化的数字
 	 }
-	  
-	 public static String repaceString1(String a,String b,int t){     
+
+    /**
+     * Repace string 1 string.
+     *
+     * @param a the a
+     * @param b the b
+     * @param t the t
+     * @return the string
+     */
+    public static String repaceString1(String a,String b,int t){
          return a.substring(0,t)+b+a.substring(t+b.length(),a.length());
-   } 
-  
-	 public static String repaceString2(String a,String b,int t){     
+   }
+
+    /**
+     * Repace string 2 string.
+     *
+     * @param a the a
+     * @param b the b
+     * @param t the t
+     * @return the string
+     */
+    public static String repaceString2(String a,String b,int t){
 	        StringBuilder  sb = new StringBuilder(a);  
 	        sb.replace(t, t+b.length(), b);   
 	        return sb.toString();   
-	    } 
+	    }
 
-	 
-	 public static String getTime(long lo){
+
+    /**
+     * Get time string.
+     *
+     * @param lo the lo
+     * @return the string
+     */
+    public static String getTime(long lo){
 		 return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(lo);
 	 }
-	 
-	 public static String getNowTime(){
+
+    /**
+     * Get now time string.
+     *
+     * @return the string
+     */
+    public static String getNowTime(){
 			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 		}
-	 
-	 public static long  getNowTime1(String format,String time) throws ParseException{
+
+    /**
+     * Gets now time 1.
+     *
+     * @param format the format
+     * @param time   the time
+     * @return the now time 1
+     * @throws ParseException the parse exception
+     */
+    public static long  getNowTime1(String format,String time) throws ParseException{
 		 SimpleDateFormat sd= new SimpleDateFormat(format);
 		 Date a=sd.parse(time);
 		 long l=a.getTime();
 		 return l;
 		}
-	 /**
-	  * 
-	  * @param a
-	  * 
-	  * @param b
-	  * @param c
-	  */
-	 
-	public static  void print(int a,int b,int c){
+
+    /**
+     * Print.
+     *
+     * @param a the a
+     * @param b the b
+     * @param c the c
+     */
+
+    public static  void print(int a,int b,int c){
 	    if(a<0||b<0||c<0){
 	    	System.out.println(" ");
 	    }else {
@@ -275,8 +362,16 @@ public class myToolsTest {
 	    	}
 	    }
 	}
-	 
-	public static String getData(JSONObject json,String key,String key1){
+
+    /**
+     * Get data string.
+     *
+     * @param json the json
+     * @param key  the key
+     * @param key1 the key 1
+     * @return the string
+     */
+    public static String getData(JSONObject json,String key,String key1){
 		String re="";
 		if(json.containsKey(key)){//判断是否有该key
 			if(json.getString(key).endsWith("}")&&json.getString(key).startsWith("{")){
@@ -287,13 +382,14 @@ public class myToolsTest {
 		}
 		return re;	
 	}
-	
-	/**
-	 * 字符串反转
-	 * @param originStr
-	 * @return
-	 */
-	public static String reverse(String originStr) {
+
+    /**
+     * 字符串反转
+     *
+     * @param originStr the origin str
+     * @return string
+     */
+    public static String reverse(String originStr) {
         if(originStr == null || originStr.length() <= 1){ 
             return originStr;
         }

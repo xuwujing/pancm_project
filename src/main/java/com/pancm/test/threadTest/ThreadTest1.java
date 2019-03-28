@@ -1,19 +1,30 @@
 package com.pancm.test.threadTest;
+
 /**
+ * The type Thread test 1.
+ *
  * @author ZERO
- * @Data 2017-5-24 下午2:22:41
- * @Description 
+ * @Data 2017 -5-24 下午2:22:41
+ * @Description
  */
 public class ThreadTest1 {
 
-	  public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		  myThread();
 		  System.out.println("\r\n");
 		  myRunnable();
       }
-   
-	  
-	  public static void myThread(){
+
+
+    /**
+     * My thread.
+     */
+    public static void myThread(){
 		  for (int i = 0; i < 10; i++) {
               System.out.println("myThreadTest:"+Thread.currentThread().getName() + " " + i);
              if (i == 3) {
@@ -24,8 +35,11 @@ public class ThreadTest1 {
              }
          }
 	  }
-	  
-	  public static void myRunnable(){
+
+    /**
+     * My runnable.
+     */
+    public static void myRunnable(){
 		  for (int i = 0; i < 10; i++) {
               System.out.println("myRunnableTest:"+Thread.currentThread().getName() + " " + i);
              if (i == 3) {

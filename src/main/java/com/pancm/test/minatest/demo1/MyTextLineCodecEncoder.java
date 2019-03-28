@@ -9,9 +9,10 @@ import org.apache.mina.filter.codec.ProtocolEncoder;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
 
 /**
+ * The type My text line codec encoder.
+ *
  * @author ZERO
- * @version 2017-3-28 上午11:30:55
- * 设置编码构造器
+ * @version 2017 -3-28 上午11:30:55 设置编码构造器
  */
 public class MyTextLineCodecEncoder implements ProtocolEncoder{
 
@@ -19,7 +20,14 @@ public class MyTextLineCodecEncoder implements ProtocolEncoder{
 	   
 	    private Charset charset; // 编码格式
 	    private String delimiter; // 文本分隔符
-	    public MyTextLineCodecEncoder(Charset charset, String delimiter) {
+
+    /**
+     * Instantiates a new My text line codec encoder.
+     *
+     * @param charset   the charset
+     * @param delimiter the delimiter
+     */
+    public MyTextLineCodecEncoder(Charset charset, String delimiter) {
 	        this.charset = charset;
 	        this.delimiter = delimiter;
 	    }

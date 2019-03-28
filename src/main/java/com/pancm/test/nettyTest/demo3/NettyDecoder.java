@@ -4,16 +4,16 @@ import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.ByteToMessageCodec;  
-  
+import io.netty.handler.codec.ByteToMessageCodec;
+
 /**
- * 
-* Description: Netty自定义解码器
-* Version:1.0.0  
-* @author pancm
-* @date 2017年9月21日
+ * Description: Netty自定义解码器
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年9月21日
  */
-public class NettyDecoder extends ByteToMessageCodec<NettyMsg> {  
+public class NettyDecoder extends ByteToMessageCodec<NettyMsg> {
       
     //判断传送客户端传送过来的数据是否按照协议传输，头部信息的大小应该是 byte+byte+int = 1+1+4 = 6  
     private static final int HEADER_SIZE = 6;  

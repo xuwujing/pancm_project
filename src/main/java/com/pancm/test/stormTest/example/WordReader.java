@@ -15,12 +15,12 @@ import org.apache.storm.tuple.Values;
 
 
 /**
- * 
-* Title: WordReader
-* Description: 该类主要用于从外部数据源words.txt中获取数据
-* Version:1.0.0  
-* @author pancm
-* @date 2017年12月28日
+ * Title: WordReader
+ * Description: 该类主要用于从外部数据源words.txt中获取数据
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年12月28日
  */
 public class WordReader implements IRichSpout {
 	/**
@@ -29,7 +29,10 @@ public class WordReader implements IRichSpout {
 	private static final long serialVersionUID = 6146631397258548505L;
 	private SpoutOutputCollector collector;
 	private FileReader fileReader;
-	BufferedReader reader;
+    /**
+     * The Reader.
+     */
+    BufferedReader reader;
 	private boolean completed = false;
 
 	/**

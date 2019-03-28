@@ -3,19 +3,26 @@ package com.pancm.test.protobufTest;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.List;  
+import java.util.List;
 
 /**
- * 
-* @Title: Test
-* @Description: 
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年5月2日
+ * The type Test.
+ *
+ * @author pancm
+ * @Title: Test
+ * @Description:
+ * @Version:1.0.0
+ * @date 2018年5月2日
  */
-public class Test {  
-  
-    public static void main(String[] args) throws IOException {  
+public class Test {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws IOException the io exception
+     */
+    public static void main(String[] args) throws IOException {
           
         // 按照定义的数据结构，创建一个Person  
         PersonMsg.Person.Builder personBuilder = PersonMsg.Person.newBuilder();  

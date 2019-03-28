@@ -3,16 +3,20 @@ package com.pancm.test.othersTest;
 import java.util.Arrays;
 
 /**
+ * The type Sort test.
+ *
  * @author ZERO
- * @Data 2017-5-31 下午5:30:29
- * @Description  数组排序
+ * @Data 2017 -5-31 下午5:30:29
+ * @Description 数组排序
  */
 public class SortTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		
 		int[] t={1,44,55,22,34,88,3};
 		for(int i=0,j=t.length;i<j;i++){
@@ -67,13 +71,14 @@ public class SortTest {
 //	    System.out.println("\r<br>执行耗时 : "+(System.currentTimeMillis()-a)+"毫秒 ");
 	}
 
-	/**
-	 * 插入排序  升序
-	 * 插入排序是循环数组，然后将前一位的数字和后一位的进行比较，将数值大的向后移一位
-	 * @param a
-	 * @return
-	 */
-	public static int[] ps(int[] a){
+    /**
+     * 插入排序  升序
+     * 插入排序是循环数组，然后将前一位的数字和后一位的进行比较，将数值大的向后移一位
+     *
+     * @param a the a
+     * @return int [ ]
+     */
+    public static int[] ps(int[] a){
 		for(int i=1,j=a.length;i<j;i++){
 			 int t=a[i];
 			 int k;
@@ -88,14 +93,15 @@ public class SortTest {
 		}
 		return a; 
 	}
-   
-	/**
-	 * 插入排序  降序
-	 * 插入排序是循环数组，然后将前一位的数字和后一位的进行比较，将数值大的向后移一位
-	 * @param a
-	 * @return
-	 */
-	public static int[] crps(int[] a){
+
+    /**
+     * 插入排序  降序
+     * 插入排序是循环数组，然后将前一位的数字和后一位的进行比较，将数值大的向后移一位
+     *
+     * @param a the a
+     * @return int [ ]
+     */
+    public static int[] crps(int[] a){
 		for(int i=1,j=a.length;i<j;i++){
 			 int t=a[i];
 			 int k;
@@ -110,13 +116,16 @@ public class SortTest {
 		}
 		return a; 
 	}
-	
-	
-	/**
-	 * 冒泡排序 升序
-	 * 冒泡排序 是双重循环数组，前一位和后一位进行比较，若前一位大于后一位，就交换位置
-	 */
-	public static int[] mp(int[] m){
+
+
+    /**
+     * 冒泡排序 升序
+     * 冒泡排序 是双重循环数组，前一位和后一位进行比较，若前一位大于后一位，就交换位置
+     *
+     * @param m the m
+     * @return the int [ ]
+     */
+    public static int[] mp(int[] m){
 		for(int i=0;i<m.length-1;i++){
 			for(int j=i+1;j<m.length;j++){
 				if(m[i]>m[j]){
@@ -128,12 +137,15 @@ public class SortTest {
 		}
 		return m;	
 	}
-	
-	/**
-	 * 冒泡排序 倒序
-	 * 冒泡排序 是双重循环数组，前一位和后一位进行比较，若前一位大于后一位，就交换位置
-	 */
-	public static int[] mpdx(int[] a){
+
+    /**
+     * 冒泡排序 倒序
+     * 冒泡排序 是双重循环数组，前一位和后一位进行比较，若前一位大于后一位，就交换位置
+     *
+     * @param a the a
+     * @return the int [ ]
+     */
+    public static int[] mpdx(int[] a){
 		for(int i=0;i<a.length-1;i++){
 			for(int j=i+1;j<a.length;j++){
 				if(a[i]<a[j]){
@@ -145,13 +157,14 @@ public class SortTest {
 		}
 		return a;	
 	}
-	
-	/**
-	 * 二分法排序  升序
-	 * @param a
-	 * @return
-	 */
-	public static int[] sort(int[] a) {
+
+    /**
+     * 二分法排序  升序
+     *
+     * @param a the a
+     * @return int [ ]
+     */
+    public static int[] sort(int[] a) {
 		for (int i = 0; i < a.length; i++) {
 		  int temp = a[i];
 		  int left = 0;

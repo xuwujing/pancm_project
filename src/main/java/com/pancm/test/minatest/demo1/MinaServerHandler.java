@@ -9,12 +9,16 @@ import org.apache.mina.core.session.IoSession;
 
 
 /**
- * @author ZERO:
- * @version 2017-3-27 下午3:59:33
- * 业务逻辑实现
+ * The type Mina server handler.
+ *
+ * @author ZERO :
+ * @version 2017 -3-27 下午3:59:33 业务逻辑实现
  */
 public class MinaServerHandler extends IoHandlerAdapter {
-	public static Logger logger=Logger.getLogger(MinaServerHandler.class);
+    /**
+     * The constant logger.
+     */
+    public static Logger logger=Logger.getLogger(MinaServerHandler.class);
 	
 	@Override
 	public void sessionCreated(IoSession session) throws Exception{ 

@@ -1,14 +1,21 @@
 package com.pancm.test.threadTest;
 
 /**
+ * The type Yield test.
+ *
+ * @author pancm
  * @Title: YaildTest
  * @Description: 线程中的 Yaild方法测试
  * @Version:1.0.0
- * @author pancm
  * @date 2018年5月22日
  */
 public class YieldTest {
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		Test1 t1 = new Test1("张三");
 		Test1 t2 = new Test1("李四");
 		
@@ -17,9 +24,18 @@ public class YieldTest {
 	}
 }
 
+/**
+ * The type Test 1.
+ */
 class Test1 implements Runnable {
 	private String name;
-	public Test1(String name) {
+
+    /**
+     * Instantiates a new Test 1.
+     *
+     * @param name the name
+     */
+    public Test1(String name) {
 		this.name=name;
 	}
 	@Override

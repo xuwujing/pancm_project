@@ -5,15 +5,21 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * 
-* @Title: ForTest
-* @Description: 循环测试 
-* @Version:1.0.0  
-* @author pancm
-* @date 2017年9月29日
+ * The type For test.
+ *
+ * @author pancm
+ * @Title: ForTest
+ * @Description: 循环测试
+ * @Version:1.0.0
+ * @date 2017年9月29日
  */
 public class ForTest {
-	 public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		  /*
 		   * 阿里巴巴开发手册中的遍历移除测试
 		   */

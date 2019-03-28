@@ -8,16 +8,27 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
- 
+
+/**
+ * The type Time test.
+ */
 public class TimeTest {
-  public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
     timer1();
     timer2();
     timer3();
     timer4();
   }
- 
-  // 第一种方法：设定指定任务task在指定时间time执行 schedule(TimerTask task, Date time)
+
+    /**
+     * Timer 1.
+     */
+// 第一种方法：设定指定任务task在指定时间time执行 schedule(TimerTask task, Date time)
   public static void timer1() {
     Timer timer = new Timer();
     timer.schedule(new TimerTask() {
@@ -26,8 +37,11 @@ public class TimeTest {
       }
     }, 2000);// 设定指定的时间time,此处为2000毫秒
   }
- 
-  // 第二种方法：设定指定任务task在指定延迟delay后进行固定延迟peroid的执行
+
+    /**
+     * Timer 2.
+     */
+// 第二种方法：设定指定任务task在指定延迟delay后进行固定延迟peroid的执行
   // schedule(TimerTask task, long delay, long period)
   public static void timer2() {
     Timer timer = new Timer();
@@ -37,8 +51,11 @@ public class TimeTest {
       }
     }, 1000, 5000);
   }
- 
-  // 第三种方法：设定指定任务task在指定延迟delay后进行固定频率peroid的执行。
+
+    /**
+     * Timer 3.
+     */
+// 第三种方法：设定指定任务task在指定延迟delay后进行固定频率peroid的执行。
   // scheduleAtFixedRate(TimerTask task, long delay, long period)
   public static void timer3() {
     Timer timer = new Timer();
@@ -48,8 +65,11 @@ public class TimeTest {
       }
     }, 1000, 2000);
   }
-   
-  // 第四种方法：安排指定的任务task在指定的时间firstTime开始进行重复的固定速率period执行．
+
+    /**
+     * Timer 4.
+     */
+// 第四种方法：安排指定的任务task在指定的时间firstTime开始进行重复的固定速率period执行．
   // Timer.scheduleAtFixedRate(TimerTask task,Date firstTime,long period)
   public static void timer4() {
     Calendar calendar = Calendar.getInstance();

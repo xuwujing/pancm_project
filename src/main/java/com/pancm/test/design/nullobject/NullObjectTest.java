@@ -1,21 +1,22 @@
 package com.pancm.test.design.nullobject;
 
 /**
- * @Title: NullObjectTest
- * @Description: 空对象模式 一个空对象取代 NULL 对象实例的检查。Null 对象不是检查空值，而是反应一个不做任何动作的关系。 这样的
- *               Null 对象也可以在数据不可用的时候提供默认的行为。
- *      核心: 其主要目的是在进行调用是不返回Null，而是返回一个空对象，防止空指针异常。 
- *             
- * @Version:1.0.0
+ * The type Null object test.
+ *
  * @author pancm
+ * @Title: NullObjectTest
+ * @Description: 空对象模式 一个空对象取代 NULL 对象实例的检查。Null 对象不是检查空值，而是反应一个不做任何动作的关系。 这样的               Null 对象也可以在数据不可用的时候提供默认的行为。      核心: 其主要目的是在进行调用是不返回Null，而是返回一个空对象，防止空指针异常。
+ * @Version:1.0.0
  * @date 2018年8月8日
  */
 public class NullObjectTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		
 		/*
 		 * 
@@ -47,18 +48,39 @@ public class NullObjectTest {
 
 }
 
+/**
+ * The interface Abstract user.
+ */
 //定义一个抽象类
 interface AbstractUser {
-	String getName();
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    String getName();
 
-	boolean isNull();
+    /**
+     * Is null boolean.
+     *
+     * @return the boolean
+     */
+    boolean isNull();
 }
 
+/**
+ * The type Real user.
+ */
 //实际用户
 class RealUser implements AbstractUser {
 	private String name;
 
-	public RealUser(String name) {
+    /**
+     * Instantiates a new Real user.
+     *
+     * @param name the name
+     */
+    public RealUser(String name) {
 		this.name = name;
 	}
 
@@ -73,6 +95,9 @@ class RealUser implements AbstractUser {
 	}
 }
 
+/**
+ * The type Null user.
+ */
 class NullUser implements AbstractUser {
 
 	@Override
@@ -86,12 +111,24 @@ class NullUser implements AbstractUser {
 	}
 }
 
+/**
+ * The type User factory.
+ */
 //定义一个工厂
 class UserFactory {
 
-	public static final String[] names = { "zhangsan", "lisi", "xuwujing" };
+    /**
+     * The constant names.
+     */
+    public static final String[] names = { "zhangsan", "lisi", "xuwujing" };
 
-	public static AbstractUser getUser(String name) {
+    /**
+     * Gets user.
+     *
+     * @param name the name
+     * @return the user
+     */
+    public static AbstractUser getUser(String name) {
 		for (int i = 0; i < names.length; i++) {
 			if (names[i].equalsIgnoreCase(name)) {
 				return new RealUser(name);

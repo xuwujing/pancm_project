@@ -39,8 +39,9 @@ public class QrCodeCreateUtil {
      * @param content      二维码携带信息
      * @param qrCodeSize   二维码图片大小
      * @param imageFormat  二维码的格式
-     * @throws WriterException
-     * @throws IOException
+     * @return the boolean
+     * @throws WriterException the writer exception
+     * @throws IOException     the io exception
      */
     public static boolean createQrCode(OutputStream outputStream, String content, int qrCodeSize, String imageFormat) throws WriterException, IOException {
         //设置二维码纠错级别ＭＡＰ
@@ -70,6 +71,9 @@ public class QrCodeCreateUtil {
 
     /**
      * 读二维码并输出携带的信息
+     *
+     * @param inputStream the input stream
+     * @throws IOException the io exception
      */
     public static void readQrCode(InputStream inputStream) throws IOException {
         //从输入流中获取字符串信息
@@ -90,7 +94,9 @@ public class QrCodeCreateUtil {
     /**
      * 测试代码
      *
-     * @throws WriterException
+     * @param args the input arguments
+     * @throws IOException     the io exception
+     * @throws WriterException the writer exception
      */
     public static void main(String[] args) throws IOException, WriterException {
         createQrCode(new FileOutputStream(new File("d:\\pancm.jpg")), "http://www.panchengming.com", 900, "JPEG");

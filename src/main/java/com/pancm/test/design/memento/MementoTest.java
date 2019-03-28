@@ -4,20 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Title: MementoTest
- * @Description: 备忘录模式 
-  备忘录模式（Memento Pattern）保存一个对象的某个状态，以便在适当的时候恢复对象。备忘录模式属于行为型模式。
-核心:  在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。
- * @Version:1.0.0
+ * The type Memento test.
+ *
  * @author pancm
+ * @Title: MementoTest
+ * @Description: 备忘录模式 备忘录模式（Memento Pattern）保存一个对象的某个状态，以便在适当的时候恢复对象。备忘录模式属于行为型模式。核心:  在不破坏封装性的前提下，捕获一个对象的内部状态，并在该对象之外保存这个状态。
+ * @Version:1.0.0
  * @date 2018年10月29日
  */
 public class MementoTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 
 		/*
 		 * 基本使用
@@ -120,89 +122,173 @@ public class MementoTest {
 	}
 }
 
+/**
+ * The type Memento.
+ */
 /*
  * 创建一个备忘录
  */
 class Memento {
 	private String state;
 
-	public Memento(String state) {
+    /**
+     * Instantiates a new Memento.
+     *
+     * @param state the state
+     */
+    public Memento(String state) {
 		this.state = state;
 	}
 
-	public String getState() {
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    public String getState() {
 		return state;
 	}
 }
 
+/**
+ * The type Originator.
+ */
 /*
  * 设置一个起因
  */
 class Originator {
 	private String state;
 
-	public void setState(String state) {
+    /**
+     * Sets state.
+     *
+     * @param state the state
+     */
+    public void setState(String state) {
 		this.state = state;
 	}
 
-	public String getState() {
+    /**
+     * Gets state.
+     *
+     * @return the state
+     */
+    public String getState() {
 		return state;
 	}
 
-	public Memento saveStateToMemento() {
+    /**
+     * Save state to memento memento.
+     *
+     * @return the memento
+     */
+    public Memento saveStateToMemento() {
 		return new Memento(state);
 	}
 
-	public void getStateFromMemento(Memento Memento) {
+    /**
+     * Gets state from memento.
+     *
+     * @param Memento the memento
+     */
+    public void getStateFromMemento(Memento Memento) {
 		state = Memento.getState();
 	}
 }
 
+/**
+ * The type Care taker.
+ */
 /*
  * 设置一个看门者
  */
 class CareTaker {
 	private List<Memento> mementoList = new ArrayList<Memento>();
 
-	public void add(Memento state) {
+    /**
+     * Add.
+     *
+     * @param state the state
+     */
+    public void add(Memento state) {
 		mementoList.add(state);
 	}
 
-	public Memento get(int index) {
+    /**
+     * Get memento.
+     *
+     * @param index the index
+     * @return the memento
+     */
+    public Memento get(int index) {
 		return mementoList.get(index);
 	}
 }
 
 
-
+/**
+ * The type Save msg.
+ */
 //创建一个存档 信息(备忘录)
 class SaveMsg{
 	//存档等级
 	private  int level;
 	//存档时的生命值
 	private int life;
-	
-	
-	public SaveMsg( int level, int life) {
+
+
+    /**
+     * Instantiates a new Save msg.
+     *
+     * @param level the level
+     * @param life  the life
+     */
+    public SaveMsg( int level, int life) {
 		super();
 		this.level = level;
 		this.life = life;
 	}
 
-	public int getLevel() {
+    /**
+     * Gets level.
+     *
+     * @return the level
+     */
+    public int getLevel() {
 		return level;
 	}
-	public void setLevel(int level) {
+
+    /**
+     * Sets level.
+     *
+     * @param level the level
+     */
+    public void setLevel(int level) {
 		this.level = level;
 	}
-	public int getLife() {
+
+    /**
+     * Gets life.
+     *
+     * @return the life
+     */
+    public int getLife() {
 		return life;
 	}
-	public void setLife(int life) {
+
+    /**
+     * Sets life.
+     *
+     * @param life the life
+     */
+    public void setLife(int life) {
 		this.life = life;
 	}
 }
 
+/**
+ * The type Player.
+ */
 //设置一个玩家(发起者)
 class Player {
 	//等级
@@ -210,36 +296,64 @@ class Player {
 	//生命值
 	private int life;
 
-	public Player( int level, int life) {
+    /**
+     * Instantiates a new Player.
+     *
+     * @param level the level
+     * @param life  the life
+     */
+    public Player( int level, int life) {
 		super();
 		this.level = level;
 		this.life = life;
 	}
-	//保存信息
+
+    /**
+     * Save state to memento save msg.
+     *
+     * @return the save msg
+     */
+//保存信息
 	public SaveMsg saveStateToMemento() {
 		return new SaveMsg(level,life);
 	}
-	
-	//恢复信息
+
+    /**
+     * Gets state from memento.
+     *
+     * @param sm the sm
+     */
+//恢复信息
 	public void getStateFromMemento(SaveMsg sm) {
 		this.level = sm.getLevel();
 		this.life = sm.getLife();
 	}
-	
-	//获取当前状态
+
+    /**
+     * Gets status.
+     */
+//获取当前状态
 	public void getStatus() {
 		System.out.println("玩家xuwujing当前信息:");
 		System.out.println("人物等级:"+level+",人物生命:"+life);
 	}
-	
-	//练级
+
+    /**
+     * Leveling.
+     */
+//练级
 	public void leveling() {
 		this.level = this.level+1;
 		this.life = this.life+10;
 		System.out.println("恭喜玩家xuwujing升级!等级提升了1,生命提升了10！");
 	}
-	
-	//挑战BOSS
+
+    /**
+     * Challenge boss boolean.
+     *
+     * @return the boolean
+     */
+//挑战BOSS
 	public boolean challengeBOSS() {
 		//设置条件
 		return this.level>2&&this.life>100;
@@ -247,14 +361,28 @@ class Player {
 }
 
 
+/**
+ * The type Game save page.
+ */
 //设置一个游戏存档页(负责人)
 class GameSavePage{
 	private SaveMsg sm;
 
-	public SaveMsg getSm() {
+    /**
+     * Gets sm.
+     *
+     * @return the sm
+     */
+    public SaveMsg getSm() {
 		return sm;
 	}
-	public void setSm(SaveMsg sm) {
+
+    /**
+     * Sets sm.
+     *
+     * @param sm the sm
+     */
+    public void setSm(SaveMsg sm) {
 		this.sm = sm;
 	}
 	

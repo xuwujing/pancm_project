@@ -21,28 +21,28 @@ import com.alibaba.fastjson.JSONObject;
 
 
 /**
- * 
-* @Title: HttpUtil
-* @Description:  Http请求工具类
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年4月3日
+ * The type Http client util.
+ *
+ * @author pancm
+ * @Title: HttpUtil
+ * @Description: Http请求工具类
+ * @Version:1.0.0
+ * @date 2018年4月3日
  */
 public class HttpClientUtil {
 	private static final Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
-	
-	 
-	
-	/**
+
+
+    /**
      * * 封装HTTP GET方法
      * 有参数的Get请求
-     * @param url
-     *            发送请求的URL
-     * @param map
-     *            请求Map参数，请求参数应该是 {"name1":"value1","name2":"value2"}的形式。
+     *
+     * @param url 发送请求的URL
+     * @param map 请求Map参数，请求参数应该是 {"name1":"value1","name2":"value2"}的形式。
      * @return URL 所代表远程资源的响应结果
+     * @throws Exception the exception
      */
-	public static String get(String url,Map<String,Object> map) throws Exception {
+    public static String get(String url,Map<String,Object> map) throws Exception {
 		 StringBuffer sb=new StringBuffer();
 		  //构建请求参数
 		 if(map!=null&&map.size()>0){
@@ -55,17 +55,16 @@ public class HttpClientUtil {
 		  }
 	   return  get(url+"?"+sb.toString());
 	}
-	
-	/**
-	 * 封装HTTP GET方法
-	 * @param url
-	 * 			发送请求的URL
-	 * @param json
-	 * 	               请求json参数，请求参数应该是 {"name1":"value1","name2":"value2"}的形式。
-	 * @return
-	 * @throws Exception
-	 */
-	public static String get(String url,JSONObject json) throws Exception {
+
+    /**
+     * 封装HTTP GET方法
+     *
+     * @param url  发送请求的URL
+     * @param json 请求json参数，请求参数应该是 {"name1":"value1","name2":"value2"}的形式。
+     * @return string
+     * @throws Exception the exception
+     */
+    public static String get(String url,JSONObject json) throws Exception {
 		 StringBuffer sb=new StringBuffer();
 		  //构建请求参数
 		 if(json!=null&&json.size()>0){
@@ -78,15 +77,16 @@ public class HttpClientUtil {
 		  }
 	     return  get(url+"?"+sb.toString());
 	}
-	
+
     /**
      * 封装HTTP GET方法
      * 有参数的Get请求
-     * @param url 请求url
-     *     请求参数应该是  localhost:8080/test?name1=value1&name2=value2 的形式。
-     * @return
+     *
+     * @param url 请求url     请求参数应该是  localhost:8080/test?name1=value1&name2=value2 的形式。
+     * @return string
+     * @throws Exception the exception
      */
-	public static String get(String url) throws Exception {
+    public static String get(String url) throws Exception {
 		CloseableHttpClient httpClient= null;
 		HttpGet method = null;
 		String body = null;
@@ -119,19 +119,17 @@ public class HttpClientUtil {
 		}
 		return body;
 	}
-	
-	
-	
 
-	
-	/**
-	 * post 请求
-	 * @param parameters
-	 * @param postUrl
-	 * @return
-	 * @throws Exception
-	 */
-	public static String post(String postUrl,String parameters) throws Exception {
+
+    /**
+     * post 请求
+     *
+     * @param postUrl    the post url
+     * @param parameters the parameters
+     * @return string
+     * @throws Exception the exception
+     */
+    public static String post(String postUrl,String parameters) throws Exception {
 		CloseableHttpClient httpClient= null;
 		HttpPost method = null;
 		String body = null;
@@ -173,15 +171,16 @@ public class HttpClientUtil {
 		}
 		return body;
 	}
-	
-	/**
-	 * put 请求
-	 * @param postUrl
-	 * @param parameters
-	 * @return
-	 * @throws Exception
-	 */
-	public static String put(String postUrl,String parameters) throws Exception {
+
+    /**
+     * put 请求
+     *
+     * @param postUrl    the post url
+     * @param parameters the parameters
+     * @return string
+     * @throws Exception the exception
+     */
+    public static String put(String postUrl,String parameters) throws Exception {
 		CloseableHttpClient httpClient= null;
 		HttpPut method = null;
 		String body = null;
@@ -218,8 +217,13 @@ public class HttpClientUtil {
 		}
 		return body;
 	}
-	
-	public static void main(String[] args) {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		String url="http://localhost:8080/montnets/validphone";
 		JSONObject json=new JSONObject();
 		JSONObject json2=new JSONObject();

@@ -7,20 +7,26 @@ import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.zookeeper.ZooKeeper;
 
 /**
- * 
-* @Title: ZookeeperTest
-* @Description: 
-* zookeeper测试
-* @Version:1.0.0  
-* @author pancm
-* @date 2018年4月28日
+ * The type Zookeeper test.
+ *
+ * @author pancm
+ * @Title: ZookeeperTest
+ * @Description: zookeeper测试
+ * @Version:1.0.0
+ * @date 2018年4月28日
  */
 public class ZookeeperTest {
 	private static String url="master:2181";
 	private static  ZooKeeper zk;
 	private static  int  CONNECTION_TIMEOUT=30000;
-	
-	public static void main(String[] args) throws Exception {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws Exception the exception
+     */
+    public static void main(String[] args) throws Exception {
 		// 创建一个与服务器的连接
 		 zk = new ZooKeeper(url , 
 				 CONNECTION_TIMEOUT, new Watcher() { 

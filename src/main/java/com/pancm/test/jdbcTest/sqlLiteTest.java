@@ -18,12 +18,12 @@ import org.sqlite.jdbc4.JDBC4Statement;
 
 
 /**
- * 
-* Title: sqlLiteTest
-* Description: sql测试
-* Version:1.0.0  
-* @author pancm
-* @date 2017年9月25日
+ * Title: sqlLiteTest
+ * Description: sql测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年9月25日
  */
 public class sqlLiteTest {
 	private static Logger logger = LoggerFactory.getLogger(sqlLiteTest.class);
@@ -44,10 +44,15 @@ public class sqlLiteTest {
 		} catch (ClassNotFoundException e) {
 			logger.error("静态加载驱动失败！",e);
 		}			
-	}	
-	
-	
-	public synchronized static Connection getConnection() {
+	}
+
+
+    /**
+     * Gets connection.
+     *
+     * @return the connection
+     */
+    public synchronized static Connection getConnection() {
 		if(null==connection){
 			try {
 				connection = DriverManager.getConnection(memory,null,null);//不适用用户名和密码	
@@ -57,8 +62,13 @@ public class sqlLiteTest {
 		}
 		return connection;
 	}
-	
-	public synchronized static  boolean closeConnetion(){
+
+    /**
+     * Close connetion boolean.
+     *
+     * @return the boolean
+     */
+    public synchronized static  boolean closeConnetion(){
 		try {
 			if(null!=connection){
 				connection.close();
@@ -68,13 +78,14 @@ public class sqlLiteTest {
 		}
     	return true;
 	}
-	
-	
-	/**
-	 * sqlLite
-	 * @return
-	 */
-	public synchronized static Connection getLiteConnection() {
+
+
+    /**
+     * sqlLite
+     *
+     * @return lite connection
+     */
+    public synchronized static Connection getLiteConnection() {
 		try { 
 			if(null==sqllite||sqllite.isClosed()){  //如果为空或者连接关闭
 				try {
@@ -88,8 +99,13 @@ public class sqlLiteTest {
 		}
 		return sqllite;
 	}
-	
-	public static void main(String[] args) {
+
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		creatTable();//创建有主键表     
 		creatTable1(); //创建无主键的表
 		long starTime=System.currentTimeMillis(); 
@@ -304,14 +320,15 @@ public class sqlLiteTest {
 			}
 		}
 	}
-	
-	/**
-	 * 将查询的数据转换成List类型
-	 * @param rs
-	 * @return
-	 * @throws SQLException
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+
+    /**
+     * 将查询的数据转换成List类型
+     *
+     * @param rs the rs
+     * @return list
+     * @throws SQLException the sql exception
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
 	public static List convertList(ResultSet rs) throws SQLException {
         if(null==rs){
         	return null;

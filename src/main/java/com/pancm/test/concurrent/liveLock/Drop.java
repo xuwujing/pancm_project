@@ -1,13 +1,13 @@
 package com.pancm.test.concurrent.liveLock;
 
 /**
- * 
-* Title: Drop
-* Description: 
-* 数据协同
-* Version:1.0.0  
-* @author pancm
-* @date 2018年3月8日
+ * Title: Drop
+ * Description:
+ * 数据协同
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年3月8日
  */
 public class Drop {
 	  // 发送的消息
@@ -15,8 +15,13 @@ public class Drop {
 	   //true 表示消费者应该等待生产者发送消息
 	  // flase 表示生产者应该等待消费者获取消息
 	  private boolean empty = true;
-	
-	  public synchronized String take() {
+
+    /**
+     * Take string.
+     *
+     * @return the string
+     */
+    public synchronized String take() {
 	      // 等待消息可用
 	      while (empty) {
 	          try {
@@ -31,8 +36,13 @@ public class Drop {
 	      notifyAll();
 	      return message;
 	  }
-	
-	  public synchronized void put(String message) {
+
+    /**
+     * Put.
+     *
+     * @param message the message
+     */
+    public synchronized void put(String message) {
 		   //等待消息被检索到 
 	      while (!empty) {
 	          try { 

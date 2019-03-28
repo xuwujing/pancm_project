@@ -11,33 +11,58 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Connection oracle.
+ */
 public class ConnectionOracle {
-	/**
-	 * 
-	 * @param args
-	 */
+    /**
+     * The Sd.
+     *
+     * @param args
+     */
 
-	String sd = "oracle.jdbc.driver.OracleDriver";
+    String sd = "oracle.jdbc.driver.OracleDriver";
 
-    //连接地址
+    /**
+     * The Sc.
+     */
+//连接地址
 	String sc = "jdbc:oracle:thin:@172.26.129.14:1521:ORCL";
-	
-	String userName = "pos_scm";
 
-	String password = "jlpos";
+    /**
+     * The User name.
+     */
+    String userName = "pos_scm";
+
+    /**
+     * The Password.
+     */
+    String password = "jlpos";
 
 	// String sd="com.mysql.jdbc.Driver";
 
 	// String
 	// sc="jdbc:mysql://localhost:3306/payManagerDB?useUnicode=true&amp;characterEncoding=utf8";
 
-	Connection con = null;
+    /**
+     * The Con.
+     */
+    Connection con = null;
 
-	Statement stmt = null;
+    /**
+     * The Stmt.
+     */
+    Statement stmt = null;
 
-	ResultSet rs = null;
+    /**
+     * The Rs.
+     */
+    ResultSet rs = null;
 
-	public ConnectionOracle()
+    /**
+     * Instantiates a new Connection oracle.
+     */
+    public ConnectionOracle()
 
 	{
 
@@ -59,13 +84,25 @@ public class ConnectionOracle {
 
 	}
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 
 		// TODO Auto-generated method stub
 
 	}
 
-	public List executeQuery(String sql) throws SQLException
+    /**
+     * Execute query list.
+     *
+     * @param sql the sql
+     * @return the list
+     * @throws SQLException the sql exception
+     */
+    public List executeQuery(String sql) throws SQLException
 
 	{
 
@@ -94,7 +131,13 @@ public class ConnectionOracle {
         return list;
 }
 
-	public void executeUpdate(String sql) throws SQLException
+    /**
+     * Execute update.
+     *
+     * @param sql the sql
+     * @throws SQLException the sql exception
+     */
+    public void executeUpdate(String sql) throws SQLException
 
 	{
 
@@ -106,7 +149,12 @@ public class ConnectionOracle {
 
 	}
 
-	public void close() throws SQLException
+    /**
+     * Close.
+     *
+     * @throws SQLException the sql exception
+     */
+    public void close() throws SQLException
 
 	{
 

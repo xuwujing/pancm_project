@@ -6,15 +6,15 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
- 
+
 /**
-  * 
  * Title: HelloServerInitializer
  * Description: Netty 服务端过滤器
- * Version:1.0.0  
+ * Version:1.0.0
+ *
  * @author Administrator
- * @date 2017-8-31
-  */
+ * @date 2017 -8-31
+ */
 public class NettyServerFilter extends ChannelInitializer<SocketChannel> {
  
      @Override

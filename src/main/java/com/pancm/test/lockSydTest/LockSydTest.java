@@ -8,15 +8,22 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
-* @Title: LockSydTest
-* @Description: Lock(显示锁)和synchronized(内部锁) 测试
-* @Version:1.0.0  
-* @author pancm
-* @date 2017年10月18日
+ * The type Lock syd test.
+ *
+ * @author pancm
+ * @Title: LockSydTest
+ * @Description: Lock(显示锁)和synchronized(内部锁) 测试
+ * @Version:1.0.0
+ * @date 2017年10月18日
  */
 public class LockSydTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		try {
 			runTasks(lockTest.class);
 			runTasks(synTest.class);
@@ -24,13 +31,14 @@ public class LockSydTest {
 			e.printStackTrace();
 		}
 	}
-	
-	/**
-	 * 任务执行器
-	 * @param cl 
-	 * @throws Exception
-	 */
-	public static void runTasks(Class <? extends Runnable> cl) throws Exception{
+
+    /**
+     * 任务执行器
+     *
+     * @param cl the cl
+     * @throws Exception the exception
+     */
+    public static void runTasks(Class <? extends Runnable> cl) throws Exception{
 		ExecutorService es=Executors.newCachedThreadPool(); //创建一个执行器
 		System.out.println("---开始执行---"+cl.getSimpleName()+" 任务");
 		//启动三个线程
@@ -69,8 +77,14 @@ public class LockSydTest {
 	}
 }
 
+/**
+ * The type Task.
+ */
 class Task{
-	public void doSomething(){
+    /**
+     * Do something.
+     */
+    public void doSomething(){
 		try{
 			Thread.sleep(2000); //等待2秒，此处线程状态转为WAITING
 		}catch(Exception e){
@@ -84,12 +98,12 @@ class Task{
 }
 
 /**
- * 
-* Title: lockTest
-* Description:  Lock（显示锁）测试
-* Version:1.0.0  
-* @author pancm
-* @date 2017年10月18日
+ * Title: lockTest
+ * Description:  Lock（显示锁）测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年10月18日
  */
 class lockTest extends Task implements Runnable{
 	private final Lock lock=new ReentrantLock();
@@ -107,12 +121,12 @@ class lockTest extends Task implements Runnable{
 }
 
 /**
- * 
-* Title: lockTest
-* Description:  synchronized（内部锁）测试
-* Version:1.0.0  
-* @author pancm
-* @date 2017年10月18日
+ * Title: lockTest
+ * Description:  synchronized（内部锁）测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年10月18日
  */
 class synTest extends Task implements Runnable{
 	@Override

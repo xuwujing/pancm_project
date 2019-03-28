@@ -1,18 +1,22 @@
 package com.pancm.test.characterEncode;
 
 /**
+ * The type Test.
+ *
+ * @author pancm
  * @Title: Test
  * @Description:编码测试
  * @Version:1.0.0
- * @author pancm
  * @date 2018年5月31日
  */
 public class Test {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		Test t=new Test();
 		t.testCode();
 	}
@@ -49,9 +53,15 @@ public class Test {
 		}
 		System.out.println("==:"+getcode("123"));
 	}
-	
-	
-	public String getcode(String str) {
+
+
+    /**
+     * Gets .
+     *
+     * @param str the str
+     * @return the
+     */
+    public String getcode(String str) {
 		String[] encodelist = {"UTF-8","ISO-8859-1",  "GB2312",  "GBK", "gb 18030", "Big5", "UTF-16LE", "Shift_JIS",
 				"EUC-JP", "ISO-2002-JP" };
 		for (int i = 0; i < encodelist.length; i++) {

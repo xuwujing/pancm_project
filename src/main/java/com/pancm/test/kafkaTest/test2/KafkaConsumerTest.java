@@ -12,14 +12,14 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 
 
 /**
- * 
-* Title: KafkaConsumerTest
-* Description: 
-* kafka消费者 demo
-* 手动提交测试
-* Version:1.0.0  
-* @author pancm
-* @date 2018年1月26日
+ * Title: KafkaConsumerTest
+ * Description:
+ * kafka消费者 demo
+ * 手动提交测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年1月26日
  */
 public class KafkaConsumerTest implements Runnable {
 
@@ -28,9 +28,13 @@ public class KafkaConsumerTest implements Runnable {
 	private  String topic;
 	private static final String GROUPID = "groupE4";
 
-	
-	
-	public KafkaConsumerTest(String topicName) {
+
+    /**
+     * Instantiates a new Kafka consumer test.
+     *
+     * @param topicName the topic name
+     */
+    public KafkaConsumerTest(String topicName) {
 		this.topic = topicName;
 		init();
 	}
@@ -101,10 +105,14 @@ public class KafkaConsumerTest implements Runnable {
 		
 		System.out.println("初始化!");
 	}
-	
-	
-   
-	public static void main(String args[]) {
+
+
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
+    public static void main(String args[]) {
 		KafkaConsumerTest test1 = new KafkaConsumerTest("KAFKA_TEST2");
 		Thread thread1 = new Thread(test1);
 		thread1.start();

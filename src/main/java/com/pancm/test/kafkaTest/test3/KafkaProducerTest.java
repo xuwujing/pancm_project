@@ -9,12 +9,12 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * 
-* Title: KafkaProducerTest
-* Description: kafka生产者的消息测试
-* Version:1.0.0  
-* @author pancm
-* @date 2018年1月9日
+ * Title: KafkaProducerTest
+ * Description: kafka生产者的消息测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年1月9日
  */
 public class KafkaProducerTest implements Runnable {
 
@@ -23,11 +23,13 @@ public class KafkaProducerTest implements Runnable {
 	private int k=10;
    private final String servers="192.169.0.23:9092,192.169.0.24:9092,192.169.0.25:9092";
 //    private final String servers="192.169.2.156:9092,192.169.2.98:9092,192.169.2.188:9092";
-	/**
-	 * @param topic 消息名称
-	 * @param
-	 */
-	public KafkaProducerTest(String topicName) {
+
+    /**
+     * Instantiates a new Kafka producer test.
+     *
+     * @param topicName the topic name
+     */
+    public KafkaProducerTest(String topicName) {
 		Properties props = new Properties();
 		props.put("bootstrap.servers", servers);
 		//acks=0：如果设置为0，生产者不会等待kafka的响应。
@@ -107,8 +109,13 @@ public class KafkaProducerTest implements Runnable {
 			producer.close();
 		}
 	}
-	
-	public static void main(String args[]) {
+
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
+    public static void main(String args[]) {
 		KafkaProducerTest test = new KafkaProducerTest("1002_INSERT");
 		KafkaProducerTest test1 = new KafkaProducerTest("1005_INSERT");
 		KafkaProducerTest test2 = new KafkaProducerTest("1001_INSERT");

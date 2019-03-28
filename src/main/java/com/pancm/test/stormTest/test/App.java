@@ -6,20 +6,25 @@ import org.apache.storm.StormSubmitter;
 import org.apache.storm.topology.TopologyBuilder;
 
 /**
- * 
-* Title: App
-* Description:
-* storm测试 
-* Version:1.0.0  
-* @author pancm
-* @date 2018年3月6日
+ * Title: App
+ * Description:
+ * storm测试
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2018年3月6日
  */
 public class App {
 	
 	private static final String str1="test1"; 
-	private static final String str2="test2"; 
+	private static final String str2="test2";
 
-	public static void main(String[] args)  {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args)  {
 		// TODO Auto-generated method stub
 		//定义一个拓扑
 		TopologyBuilder builder=new TopologyBuilder();

@@ -8,13 +8,22 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.MessageProperties;
 
+/**
+ * The type New task.
+ */
 //生产者    ( Producer:数据的发送方)
 //单发送多接收 Worker.java和NewTask.java
 public class NewTask {
 
 	private static final String TASK_QUEUE_NAME = "task_queue";
 
-	public static void main(String[] argv) throws Exception {
+    /**
+     * The entry point of application.
+     *
+     * @param argv the input arguments
+     * @throws Exception the exception
+     */
+    public static void main(String[] argv) throws Exception {
 		// 创建工厂类
 		ConnectionFactory factory = new ConnectionFactory();
 		//factory.setHost("localhost");

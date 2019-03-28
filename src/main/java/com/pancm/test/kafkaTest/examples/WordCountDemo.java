@@ -19,17 +19,23 @@ import org.apache.kafka.streams.kstream.ValueMapper;
 /**
  * Demonstrates, using the high-level KStream DSL, how to implement the WordCount program
  * that computes a simple word occurrence histogram from an input text.
- *
+ * <p>
  * In this example, the input stream reads from a topic named "streams-plaintext-input", where the values of messages
  * represent lines of text; and the histogram output is written to topic "streams-wordcount-output" where each record
  * is an updated count of a single word.
- *
+ * <p>
  * Before running this example you must create the input topic and the output topic (e.g. via
  * bin/kafka-topics.sh --create ...), and write some data to the input topic (e.g. via
  * bin/kafka-console-producer.sh). Otherwise you won't see any data arriving in the output topic.
  */
 public class WordCountDemo {
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws Exception the exception
+     */
     public static void main(String[] args) throws Exception {
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "streams-wordcount");

@@ -7,25 +7,25 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 /**
- * 
-* Title: Producer
-* Description: kafka生产者 由于生产消息 
-* Version:1.0.0  
-* @author pancm
-* @date 2017年12月29日
+ * Title: Producer
+ * Description: kafka生产者 由于生产消息
+ * Version:1.0.0
+ *
+ * @author pancm
+ * @date 2017年12月29日
  */
 public class Producer extends Thread {
 
 	private final KafkaProducer<String, String> producer;
 	private final String topic;
-   
-	/**
-	 * 
-	 * @param kafkaStr   kafka地址
-	 * @param topic      消息名称
-	 * @param
-	 */
-	public Producer(String kafkaStr, String topic) {
+
+    /**
+     * Instantiates a new Producer.
+     *
+     * @param kafkaStr kafka地址
+     * @param topic    消息名称
+     */
+    public Producer(String kafkaStr, String topic) {
 		Properties props = new Properties();
 		props.put("bootstrap.servers", kafkaStr);
 		props.put("acks", "all");

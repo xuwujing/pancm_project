@@ -6,19 +6,21 @@ import java.util.Set;
 import redis.clients.jedis.Jedis;
 
 /**
- * 
-* Title: redisStringTest
-* Description: redis存储set示例
-* Version:1.0.0  
-* @author Administrator
-* @date 2017-8-19
+ * Title: redisStringTest
+ * Description: redis存储set示例
+ * Version:1.0.0
+ *
+ * @author Administrator
+ * @date 2017 -8-19
  */
 public class redisSetTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		Jedis jedis=new Jedis("127.0.0.1");
 		System.out.println("连接成功");
 		//存储数据

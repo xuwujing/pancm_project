@@ -7,19 +7,22 @@ import java.util.Set;
 import redis.clients.jedis.Jedis;
 
 /**
- * 
- * @Title: RedisTest 
+ * The type Redis test.
+ *
+ * @author pancm
+ * @Title: RedisTest
  * @Description: redis测试代码
  * @Version:1.0.0
- * @author pancm
- * @date 2017-8-19
+ * @date 2017 -8-19
  */
 public class RedisTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		// 连接到本地的 redis服务
 		Jedis jedis = new Jedis("127.0.0.1");
 		System.out.println("连接成功");

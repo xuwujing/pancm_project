@@ -8,6 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Make test data util.
+ */
 public class MakeTestDataUtil {
 
 	private static String driverName = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
@@ -18,7 +21,13 @@ public class MakeTestDataUtil {
 
 	private static String userPwd = "123zxcvbnm,./";
 
-	public static void main(String[] args) throws SQLException {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     * @throws SQLException the sql exception
+     */
+    public static void main(String[] args) throws SQLException {
 		System.out.println("开始");
 		long start=System.currentTimeMillis();
 		test();
@@ -42,7 +51,14 @@ public class MakeTestDataUtil {
 		updateBatch(list);
 	}
 
-	public static int[] updateBatch(List<String> sqls) throws SQLException{
+    /**
+     * Update batch int [ ].
+     *
+     * @param sqls the sqls
+     * @return the int [ ]
+     * @throws SQLException the sql exception
+     */
+    public static int[] updateBatch(List<String> sqls) throws SQLException{
 		Statement stmt = null;
 		Connection connection = getCoonection();
 		int[] t={0,0};
@@ -84,7 +100,13 @@ public class MakeTestDataUtil {
 		return null;
 	}
 
-	public static ResultSet executeQuery(String SQL) {
+    /**
+     * Execute query result set.
+     *
+     * @param SQL the sql
+     * @return the result set
+     */
+    public static ResultSet executeQuery(String SQL) {
 		try {
 			Connection conn = getCoonection();
 			System.out.println("---------------连接数据库成功");

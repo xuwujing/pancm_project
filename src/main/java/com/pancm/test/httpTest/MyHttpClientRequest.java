@@ -15,46 +15,36 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
 
- 
 
+/**
+ * The type My http client request.
+ */
 public class MyHttpClientRequest {
 
     private static Logger logger = LoggerFactory.getLogger(MyHttpClientRequest.class);    //日志记录
 
     /**
-
      * httpPost
-
-     * @param url  路径
-
+     *
+     * @param url       路径
      * @param jsonParam 参数
-
-     * @return
-
+     * @return string
      */
-
     public static String httpPost(String url,String jsonParam){
 
         return httpPost(url, jsonParam, false);
 
     }
 
- 
 
     /**
-
      * post请求
-
-     * @param url         url地址
-
-     * @param jsonParam     参数
-
-     * @param noNeedResponse    不需要返回结果
-
-     * @return
-
+     *
+     * @param url            url地址
+     * @param jsonParam      参数
+     * @param noNeedResponse 不需要返回结果
+     * @return string
      */
-
     public static String httpPost(String url,String jsonParam, boolean noNeedResponse){
 
         //post请求返回结果
@@ -124,20 +114,13 @@ public class MyHttpClientRequest {
 
     }
 
- 
-
- 
 
     /**
-
      * 发送get请求
-
-     * @param url    路径
-
-     * @return
-
+     *
+     * @param url 路径
+     * @return json object
      */
-
     public static JSONObject httpGet(String url){
 
         //get请求返回结果
@@ -184,6 +167,11 @@ public class MyHttpClientRequest {
 
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static  void main(String [] args) {
     	System.out.println(httpGet("http://localhost:8080/testServlet/testQuery.do"));
 		

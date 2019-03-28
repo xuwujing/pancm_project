@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * 
  * 更新配置文件的工具类
  */
 public class SetSystemProperty {
@@ -20,15 +19,14 @@ public class SetSystemProperty {
 	 */
 	private SafeProperties props = new SafeProperties();
 
-	/**
-	 * 根据主键key读取主键的值value
-	 * 
-	 * @param filePath
-	 *            属性文件路径
-	 * @param key
-	 *            键名
-	 */
-	public String readValue(String profilepath, String key) {
+    /**
+     * 根据主键key读取主键的值value
+     *
+     * @param profilepath the profilepath
+     * @param key         键名
+     * @return the string
+     */
+    public String readValue(String profilepath, String key) {
 		Properties props = new Properties();
 		InputStream in = null;
 		try {
@@ -49,19 +47,15 @@ public class SetSystemProperty {
 		}
 	}
 
-	/**
-	 * 更新（或插入）一对properties信息(主键及其键值) 如果该主键已经存在，更新该主键的值； 如果该主键不存在，则插件一对键值。
-	 * 
-	 * @param profilepath
-	 *            文件路径
-	 * @param keyname
-	 *            键名
-	 * @param keyvalue
-	 *            键值
-	 * @param des
-	 *            说明
-	 */
-	public void writeProperties(String profilepath, String keyname, String keyvalue, String des) {
+    /**
+     * 更新（或插入）一对properties信息(主键及其键值) 如果该主键已经存在，更新该主键的值； 如果该主键不存在，则插件一对键值。
+     *
+     * @param profilepath 文件路径
+     * @param keyname     键名
+     * @param keyvalue    键值
+     * @param des         说明
+     */
+    public void writeProperties(String profilepath, String keyname, String keyvalue, String des) {
 		try {
 			// 调用 Hashtable 的方法 put，使用 getProperty 方法提供并行性。
 			// 强制要求为属性的键和值使用字符串。返回值是 Hashtable 调用 put 的结果。
@@ -75,19 +69,15 @@ public class SetSystemProperty {
 		}
 	}
 
-	/**
-	 * 更新properties文件的键值对 如果该主键已经存在，更新该主键的值； 如果该主键不存在，则插件一对键值。
-	 * 
-	 * @param profilepath
-	 *            文件路径
-	 * @param keyname
-	 *            键名
-	 * @param keyvalue
-	 *            键值
-	 * @param des
-	 *            说明
-	 */
-	public void updateProperties(String profilepath, String keyname, String keyvalue, String des) {
+    /**
+     * 更新properties文件的键值对 如果该主键已经存在，更新该主键的值； 如果该主键不存在，则插件一对键值。
+     *
+     * @param profilepath 文件路径
+     * @param keyname     键名
+     * @param keyvalue    键值
+     * @param des         说明
+     */
+    public void updateProperties(String profilepath, String keyname, String keyvalue, String des) {
 		try {
 			props.load(new FileInputStream(profilepath));
 			// 调用 Hashtable 的方法 put，使用 getProperty 方法提供并行性。
@@ -103,7 +93,14 @@ public class SetSystemProperty {
 		}
 	}
 
-	public void updateProperties(String profilepath, Map<String, String> map, String des) {
+    /**
+     * Update properties.
+     *
+     * @param profilepath the profilepath
+     * @param map         the map
+     * @param des         the des
+     */
+    public void updateProperties(String profilepath, Map<String, String> map, String des) {
 		InputStream in = null;
 		try {
 			// props.load(new FileInputStream(profilepath));

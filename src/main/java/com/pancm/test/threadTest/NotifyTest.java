@@ -3,16 +3,22 @@ package com.pancm.test.threadTest;
 import java.util.Random;
 
 /**
- * @Title: NotifyTest
- * @Description: 
- * wait 和 notify测试
- * @Version:1.0.0
+ * The type Notify test.
+ *
  * @author pancm
+ * @Title: NotifyTest
+ * @Description: wait  和 notify测试
+ * @Version:1.0.0
  * @date 2018年5月22日
  */
 public class NotifyTest {
 
-	public static void main(String[] args) {
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
 		Test4 t1 = new Test4("张三");
 		Test4 t2 = new Test4("李四");
 		t1.start();
@@ -20,9 +26,18 @@ public class NotifyTest {
 	}
 }
 
+/**
+ * The type Test 4.
+ */
 class Test4 extends Thread {
 	private String name;
-	public Test4(String name) {
+
+    /**
+     * Instantiates a new Test 4.
+     *
+     * @param name the name
+     */
+    public Test4(String name) {
 		super(name);
 		this.name=name;
 	}
