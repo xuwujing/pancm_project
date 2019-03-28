@@ -20,34 +20,13 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
-
-
 	<dependencies>
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.3.1</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- <dependency> <groupId>ring-cors</groupId> <artifactId>ring-cors</artifactId> 
-			<version>0.1.5</version> </dependency> -->
-
-		<dependency>
-			<groupId>jdk.tools</groupId>
-			<artifactId>jdk.tools</artifactId>
-			<version>1.8</version>
-			<scope>system</scope>
-			<systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
-		</dependency>
-
-		<!--日志 -->
+		<!-- 日志 -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.25</version>
 		</dependency>
-
 
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
@@ -62,146 +41,7 @@
 		</dependency>
 
 
-		<!-- 大数据相关jar -->
-
-		<!--hadoop 相关架包 -->
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-common</artifactId>
-			<version>2.8.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-client</artifactId>
-			<version>2.8.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-hdfs</artifactId>
-			<version>2.8.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-mapreduce-client-core</artifactId>
-			<version>2.8.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-yarn-common</artifactId>
-			<version>2.8.2</version>
-		</dependency>
-
-		<!--Hive相关jar -->
-		<dependency>
-			<groupId>org.apache.hive</groupId>
-			<artifactId>hive-jdbc</artifactId>
-			<version>3.1.1</version>
-		</dependency>
-
-		<!--HBase相关jar -->
-		<dependency>
-			<groupId>org.apache.hbase</groupId>
-			<artifactId>hbase-hadoop-compat</artifactId>
-			<version>1.3.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.hbase</groupId>
-			<artifactId>hbase-server</artifactId>
-			<version>1.4.8</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.hbase</groupId>
-			<artifactId>hbase-client</artifactId>
-			<version>1.4.8</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.hbase</groupId>
-			<artifactId>hbase-common</artifactId>
-			<version>1.4.8</version>
-		</dependency>
-
-		<!--Spark相关jar -->
-		<dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-core_2.11</artifactId>
-			<version>2.4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-sql_2.11</artifactId>
-			<version>2.4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-streaming_2.11</artifactId>
-			<version>2.4.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.sparkjava</groupId>
-			<artifactId>spark-core</artifactId>
-			<version>2.8.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-mllib_2.11</artifactId>
-			<version>2.4.0</version>
-			<scope>provided</scope>
-		</dependency>
-
-
-		<!--storm相关jar -->
-		<dependency>
-			<groupId>org.apache.storm</groupId>
-			<artifactId>storm-core</artifactId>
-			<version>1.2.2</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.storm</groupId>
-			<artifactId>storm-kafka</artifactId>
-			<version>1.2.2</version>
-		</dependency>
-
-		<!-- 大数据相关jar END -->
-
-		<!-- Spring 相关jar start -->
-
-		<!-- <dependency> <groupId>org.springframework</groupId> <artifactId>spring-context</artifactId> 
-			<version>4.3.5.RELEASE</version> </dependency> <dependency> <groupId>org.springframework</groupId> 
-			<artifactId>spring-orm</artifactId> <version>4.3.5.RELEASE</version> </dependency> 
-			<dependency> <groupId>org.springframework</groupId> <artifactId>spring-web</artifactId> 
-			<version>4.3.5.RELEASE</version> </dependency> <dependency> <groupId>org.springframework</groupId> 
-			<artifactId>spring-webmvc</artifactId> <version>4.3.5.RELEASE</version> </dependency> 
-			<dependency> <groupId>org.springframework.security</groupId> <artifactId>spring-security-core</artifactId> 
-			<version>4.2.1.RELEASE</version> </dependency> <dependency> <groupId>org.springframework.security</groupId> 
-			<artifactId>spring-security-web</artifactId> <version>4.2.1.RELEASE</version> 
-			</dependency> <dependency> <groupId>org.springframework.security</groupId> 
-			<artifactId>spring-security-config</artifactId> <version>4.2.1.RELEASE</version> 
-			</dependency> <dependency> <groupId>org.springframework.security</groupId> 
-			<artifactId>spring-security-ldap</artifactId> <version>4.2.1.RELEASE</version> 
-			</dependency> <dependency> <groupId>org.springframework.security</groupId> 
-			<artifactId>spring-security-acl</artifactId> <version>4.2.1.RELEASE</version> 
-			</dependency> <dependency> <groupId>org.springframework.security</groupId> 
-			<artifactId>spring-security-cas</artifactId> <version>4.2.1.RELEASE</version> 
-			</dependency> <dependency> <groupId>org.springframework.security</groupId> 
-			<artifactId>spring-security-taglibs</artifactId> <version>4.2.1.RELEASE</version> 
-			</dependency> <dependency> <groupId>org.springframework</groupId> <artifactId>spring-test</artifactId> 
-			<version>4.3.5.RELEASE</version> </dependency> -->
-
-
-		<!-- Spring 相关jar end -->
-
-
-		<!-- apache commons tools jar -->
-		<!-- <dependency> <groupId>commons-collections</groupId> <artifactId>commons-collections</artifactId> 
-			<version>3.1</version> </dependency> -->
-		<!-- <dependency> <groupId>commons-io</groupId> <artifactId>commons-io</artifactId> 
-			<version>2.6</version> </dependency> <dependency> <groupId>org.apache.commons</groupId> 
-			<artifactId>commons-lang3</artifactId> <version>3.7</version> </dependency> -->
-
-		<!--base 64加解密 -->
+		<!-- base 64加解密 -->
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
@@ -224,7 +64,7 @@
 
 
 
-		<!--redis 相关jar -->
+		<!-- redis 相关jar -->
 		<dependency>
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
@@ -237,14 +77,14 @@
 			<version>2.0.7.RELEASE</version>
 		</dependency>
 
-		<!--netty 相关jar -->
+		<!-- netty 相关jar -->
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty-all</artifactId>
 			<version>4.1.17.Final</version>
 		</dependency>
 
-		<!--mina 相关jar -->
+		<!-- mina 相关jar -->
 		<dependency>
 			<groupId>org.apache.mina</groupId>
 			<artifactId>mina-core</artifactId>
@@ -253,7 +93,7 @@
 
 
 
-		<!--Excel表格 相关jar -->
+		<!-- Excel表格 相关jar -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
@@ -267,7 +107,7 @@
 		</dependency>
 
 
-		<!--mysql驱动包 -->
+		<!-- mysql驱动包 -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -281,14 +121,14 @@
 			<version>0.9.5.2</version>
 		</dependency>
 
-		<!--sqlite相关jar -->
+		<!-- sqlite相关jar -->
 		<dependency>
 			<groupId>org.xerial</groupId>
 			<artifactId>sqlite-jdbc</artifactId>
 			<version>3.20.1</version>
 		</dependency>
 
-		<!--SQL Server 驱动包 -->
+		<!-- SQL Server 驱动包 -->
 		<dependency>
 			<groupId>com.microsoft.sqlserver</groupId>
 			<artifactId>sqljdbc4</artifactId>
@@ -303,25 +143,25 @@
 		</dependency>
 
 
-		<!--fastjson 相关jar -->
+		<!-- fastjson 相关jar -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
 			<version>1.2.41</version>
 		</dependency>
 
-		<!--json 相关jar -->
-		<!-- <dependency> <groupId>net.sf.json-lib</groupId> <artifactId>json-lib</artifactId> 
+		<!-- json 相关jar -->
+		<!-- <dependency> <groupId>net.sf.json-lib</groupId> <artifactId>json-lib</artifactId>
 			<version>2.2</version> </dependency> -->
 
-		<!--http相关jar -->
+		<!-- http相关jar -->
 		<dependency>
 			<groupId>com.github.kevinsawicki</groupId>
 			<artifactId>http-request</artifactId>
 			<version>6.0</version>
 		</dependency>
 
-		<!--rabbitmq 相关jar -->
+		<!-- rabbitmq 相关jar -->
 		<dependency>
 			<groupId>com.rabbitmq</groupId>
 			<artifactId>amqp-client</artifactId>
@@ -397,10 +237,10 @@
 		</dependency>
 
 
-		<!--springBoot jar -->
+		<!--s pringBoot jar -->
 
 
-		<!--核心启动器，包括自动配置支持、日志记录和YAML -->
+		<!-- 核心启动器，包括自动配置支持、日志记录和YAML -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
@@ -413,19 +253,18 @@
 			</exclusions>
 		</dependency>
 
-		<!--用于测试包括JUnit、Hamcrest和Hamcrest在内的图书馆的Spring引导应用程序。 -->
+		<!-- 用于测试包括JUnit、Hamcrest和Hamcrest在内的图书馆的Spring引导应用程序。 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 			<version>1.5.9.RELEASE</version>
 		</dependency>
-		<!--构建web的启动器，包括使用Spring MVC的RESTful应用程序。使用Tomcat作为默认的嵌入式容器 -->
+		<!-- 构建web的启动器，包括使用Spring MVC的RESTful应用程序。使用Tomcat作为默认的嵌入式容器 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-			<version>1.5.9.RELEASE</version>
-
+			<version>2.0.8.RELEASE</version>
 		</dependency>
 
 
@@ -433,33 +272,33 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<optional>true</optional>
-			<version>1.5.9.RELEASE</version>
+			<version>2.0.8.RELEASE</version>
 		</dependency>
 
-		<!--redis依赖 -->
+		<!-- redis依赖 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
-			<version>1.5.9.RELEASE</version>
+			<version>2.0.8.RELEASE</version>
 		</dependency>
 
 
 
-		<!--使用lombok 在pojo中可以免去写getter和setter -->
+		<!-- 使用lombok 在pojo中可以免去写getter和setter -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>1.16.18</version>
 		</dependency>
 
-		<!--gecco 爬虫 -->
+		<!-- gecco 爬虫 -->
 		<dependency>
 			<groupId>com.geccocrawler</groupId>
 			<artifactId>gecco</artifactId>
 			<version>1.2.8</version>
 		</dependency>
 
-		<!--protobuf jar -->
+		<!-- protobuf jar -->
 		<dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
@@ -467,7 +306,7 @@
 		</dependency>
 
 
-		<!--quartz定时器 -->
+		<!-- quartz定时器 -->
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
@@ -481,7 +320,6 @@
 		</dependency>
 
 		<!-- elasticsearch 相关jar -->
-
 		<dependency>
 			<groupId>org.elasticsearch.client</groupId>
 			<artifactId>elasticsearch-rest-high-level-client</artifactId>
@@ -490,7 +328,6 @@
 
 
 		<!-- Jest ES的工具包 -->
-
 		<dependency>
 			<groupId>io.searchbox</groupId>
 			<artifactId>jest</artifactId>
@@ -500,15 +337,65 @@
 
 
 
+
+
+
+		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-client</artifactId>
+			<version>2.1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-common</artifactId>
+			<version>2.1.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-client</artifactId>
+			<version>3.2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-core_2.12</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-sql_2.12</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+
+
+
+		<dependency>
+			<groupId>org.apache.storm</groupId>
+			<artifactId>storm-core</artifactId>
+			<version>1.2.2</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.storm</groupId>
+			<artifactId>storm-kafka</artifactId>
+			<version>1.2.2</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
 
-		<repositories>
+
+
+	<repositories>
 		<repository>
 			<id>spring-milestone</id>
 			<url>http://repo.spring.io/libs-release</url>
 		</repository>
 	</repositories>
-	
+
 
 
 </project>

@@ -1,10 +1,5 @@
 package com.pancm.test.esTest;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -35,6 +30,11 @@ import org.elasticsearch.search.suggest.SuggestionBuilder;
 import org.elasticsearch.search.suggest.term.TermSuggestion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -90,10 +90,9 @@ public class EsHighLevelRestSearchTest {
 				client.close();
 			} catch (IOException e) {
 				e.printStackTrace();
-			}finally{{
+			}finally{
 				client=null;
 			}
-		}
 		}
 	}
 
