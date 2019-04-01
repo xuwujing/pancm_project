@@ -1,15 +1,15 @@
 package com.pancm.test.esTest;
 
-<<<<<<< HEAD
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-=======
->>>>>>> origin/master
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
@@ -22,18 +22,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-<<<<<<< HEAD
-=======
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
->>>>>>> origin/master
 /**
  * @Title: EsUtil
  * @Description: ES工具类
@@ -46,22 +35,6 @@ public final class EsUtil {
 	private EsUtil() {
 
 	}
-
-<<<<<<< HEAD
-	/**
-	 * 创建链接
-	 * 
-	 * @param port
-	 * @param hosts
-	 * @return
-	 */
-	public static boolean build(int port, String... hosts) throws IOException {
-		boolean falg = false;
-		Objects.requireNonNull(hosts, "nodes can not null");
-		ArrayList<HttpHost> ahosts = new ArrayList<HttpHost>();
-		for (String host : hosts) {
-			ahosts.add(new HttpHost(host, port));
-=======
 
 
 
@@ -80,7 +53,6 @@ public final class EsUtil {
 			IpHandler addr = new  IpHandler();
 			addr.IpPortFromUrl(host);
 			ahosts.add(new HttpHost(addr.getIp(),addr.getPort()));
->>>>>>> origin/master
 		}
 		httpHosts = ahosts.toArray(new HttpHost[0]);
 		try {
@@ -94,8 +66,7 @@ public final class EsUtil {
 
 	}
 
-<<<<<<< HEAD
-=======
+
 	/**
 	 * @Author pancm
 	 * @Description //创建索引库(指定Mpping类型)
@@ -103,7 +74,7 @@ public final class EsUtil {
 	 * @Param [esBasicModelConfig]
 	 * @return boolean
 	 **/
->>>>>>> origin/master
+
 	public static boolean creatIndex(EsBasicModelConfig esBasicModelConfig) throws IOException {
 		boolean falg = true;
 		Objects.requireNonNull(esBasicModelConfig, "esBasicModelConfig is not null");
@@ -157,8 +128,7 @@ public final class EsUtil {
 		return exists2;
 	}
 
-<<<<<<< HEAD
-=======
+
 	/**
 	 * @Author pancm
 	 * @Description //新增/更新数据
@@ -187,7 +157,7 @@ public final class EsUtil {
 
 
 
->>>>>>> origin/master
+
 	/*
 	 * 初始化服务
 	 */
@@ -215,11 +185,11 @@ public final class EsUtil {
 	private static int elasticPort;
 	private static HttpHost[] httpHosts;
 	private static RestHighLevelClient client = null;
-<<<<<<< HEAD
-	private static final String COMMA_SIGN = ",";
-=======
 
->>>>>>> origin/master
+	private static final String COMMA_SIGN = ",";
+
+
+
 	private static Logger logger = LoggerFactory.getLogger(EsHighLevelRestSearchTest.class);
 
 	/**
@@ -230,11 +200,9 @@ public final class EsUtil {
 
 		try {
 
-<<<<<<< HEAD
-			EsUtil.build(9200, "192.169.0.23");
-=======
-			EsUtil.build( "192.169.0.23:9200");
->>>>>>> origin/master
+
+			EsUtil.build("192.169.0.23:9200");
+
 			System.out.println("ES连接初始化成功!");
 
 			// setting 的值
@@ -472,8 +440,6 @@ class SettingEntity implements Serializable {
 	}
 
 }
-<<<<<<< HEAD
-=======
 
 class IpHandler {
 
@@ -514,4 +480,3 @@ class IpHandler {
 		return port;
 	}
 }
->>>>>>> origin/master
