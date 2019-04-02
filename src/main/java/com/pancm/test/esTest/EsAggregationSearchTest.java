@@ -8,9 +8,12 @@ import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.rest.RestStatus;
+import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.histogram.Histogram;
+import org.elasticsearch.search.aggregations.bucket.histogram.ParsedDateHistogram;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.avg.Avg;
@@ -48,6 +51,9 @@ public class EsAggregationSearchTest {
 
         try {
             init();
+            avgSearch();
+            maxSearch();
+            sumSearch();
             avgGroupSearch();
             maxGroupSearch();
             sumGroupSearch();
@@ -93,17 +99,27 @@ public class EsAggregationSearchTest {
      **/
     private static  void avgSearch() throws IOException {
 
-
-        String agg="t_class_avg";
         String buk="t_grade_avg";
         //直接求平均数
         AggregationBuilder aggregation = AggregationBuilders.avg(buk).field("grade");
-        System.out.println("根据班级求平均分数:");
-        agg(aggregation,agg,buk);
+        logger.info("求班级的平均分数:");
+        agg(aggregation,buk);
 
     }
 
+    private static  void maxSearch() throws  IOException{
+        String buk="t_grade";
+        AggregationBuilder aggregation = AggregationBuilders.max(buk).field("grade");
+        logger.info("求班级的最分数:");
+        agg(aggregation,buk);
+    }
 
+    private static  void sumSearch() throws  IOException{
+        String buk="t_grade";
+        AggregationBuilder aggregation = AggregationBuilders.sum(buk).field("grade");
+        logger.info("求班级的总分数:");
+        agg(aggregation,buk);
+    }
 
     /**
      * @Author pancm
@@ -121,7 +137,7 @@ public class EsAggregationSearchTest {
         TermsAggregationBuilder aggregation = AggregationBuilders.terms(agg).field("class");
         aggregation.subAggregation(AggregationBuilders.avg(buk).field("grade"));
 
-        System.out.println("根据班级求平均分数:");
+        logger.info("根据班级求平均分数:");
         agg(aggregation,agg,buk);
 
     }
@@ -134,7 +150,7 @@ public class EsAggregationSearchTest {
         //terms 就是分组统计 根据student的grade成绩进行分组并创建一个新的聚合
         TermsAggregationBuilder aggregation = AggregationBuilders.terms(agg).field("class");
         aggregation.subAggregation(AggregationBuilders.max(buk).field("grade"));
-        System.out.println("根据班级求最大分数:");
+        logger.info("根据班级求最大分数:");
         agg(aggregation,agg,buk);
     }
 
@@ -146,19 +162,45 @@ public class EsAggregationSearchTest {
         TermsAggregationBuilder aggregation = AggregationBuilders.terms(agg).field("class");
         aggregation.subAggregation(AggregationBuilders.sum(buk).field("grade"));
 
-        System.out.println("根据班级求总分:");
+        logger.info("根据班级求总分:");
         agg(aggregation,agg,buk);
     }
 
 
-    /**
-     * @Author pancm
-     * @Description 进行聚合
-     * @Date  2019/4/2
-     * @Param []
-     * @return void
-     **/
-    protected  static  void agg(AggregationBuilder aggregation, String agg, String buk) throws  IOException{
+    protected  static  void agg(AggregationBuilder aggregation, String buk) throws  IOException{
+        SearchResponse searchResponse = search(aggregation);
+        if(RestStatus.OK.equals(searchResponse.status())) {
+            // 获取聚合结果
+            Aggregations aggregations = searchResponse.getAggregations();
+
+            if(buk.contains("avg")){
+                //取子聚合
+                Avg ba = aggregations.get(buk);
+                logger.info(buk+":" + ba.getValue());
+                logger.info("------------------------------------");
+            }else if(buk.contains("max")){
+                //取子聚合
+                Max ba = aggregations.get(buk);
+                logger.info(buk+":" + ba.getValue());
+                logger.info("------------------------------------");
+
+            }else if(buk.contains("min")){
+                //取子聚合
+                Min ba = aggregations.get(buk);
+                logger.info(buk+":" + ba.getValue());
+                logger.info("------------------------------------");
+            }else if(buk.contains("sum")){
+                //取子聚合
+                Sum ba = aggregations.get(buk);
+                logger.info(buk+":" + ba.getValue());
+                logger.info("------------------------------------");
+            }
+
+
+        }
+    }
+
+    private static SearchResponse search(AggregationBuilder aggregation) throws IOException {
         SearchRequest searchRequest = new SearchRequest();
         searchRequest.indices("student");
         searchRequest.types("_doc");
@@ -174,6 +216,20 @@ public class EsAggregationSearchTest {
         searchRequest.source(searchSourceBuilder);
         // 同步查询
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+        return  searchResponse;
+    }
+
+    /**
+     * @Author pancm
+     * @Description 进行聚合
+     * @Date  2019/4/2
+     * @Param []
+     * @return void
+     **/
+    protected  static  void agg(AggregationBuilder aggregation, String agg, String buk) throws  IOException{
+
+        // 同步查询
+        SearchResponse searchResponse = search(aggregation);
 
         //4、处理响应
         //搜索结果状态信息
@@ -182,6 +238,7 @@ public class EsAggregationSearchTest {
             Aggregations aggregations = searchResponse.getAggregations();
 
 
+            //分组
             Terms byAgeAggregation = aggregations.get(agg);
             logger.info(agg+" 结果");
             logger.info("name: " + byAgeAggregation.getName());
@@ -217,10 +274,7 @@ public class EsAggregationSearchTest {
                     logger.info(buk+":" + ba.getValue());
                     logger.info("------------------------------------");
                 }
-
             }
-
-
         }
     }
 }
