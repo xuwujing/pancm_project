@@ -16,11 +16,19 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.Aggregation;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
+import org.elasticsearch.search.aggregations.metrics.avg.Avg;
+import org.elasticsearch.search.aggregations.metrics.avg.InternalAvg;
+import org.elasticsearch.search.aggregations.metrics.max.Max;
+import org.elasticsearch.search.aggregations.metrics.min.Min;
+import org.elasticsearch.search.aggregations.metrics.sum.InternalSum;
+import org.elasticsearch.search.aggregations.metrics.sum.Sum;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.suggest.Suggest;
@@ -32,6 +40,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -62,7 +72,6 @@ public class EsHighLevelRestSearchTest {
 		try {
 			init();
 			search();
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -290,24 +299,28 @@ public class EsHighLevelRestSearchTest {
 		SearchResponse searchResponse4 = client.search(searchRequest4, RequestOptions.DEFAULT);
 		//聚合查询返回条件
 		Aggregations aggregations = searchResponse4.getAggregations();
-		List<Aggregation> aggregationList = aggregations.asList();
-		
+		System.out.println("聚合查询");
 		for (Aggregation agg : aggregations) {
 		    String type = agg.getType();
+		    String name =agg.getName();
+			
+			Terms terms=(Terms)aggregations.get(name);
+			for (Terms.Bucket bucket: terms.getBuckets()) {
+				System.out.println("条数:"+bucket.getDocCount());
+				System.out.println("key:"+bucket.getKey());
+				System.out.println("num:"+bucket.getKeyAsNumber());
+				Avg avg=bucket.getAggregations().get("average_age");
+				System.out.println("value:"+avg.getValue());
+			}
 		    if (type.equals(TermsAggregationBuilder.NAME)) {
-		        Bucket elasticBucket = ((Terms) agg).getBucketByKey("Elastic");
+		        Bucket elasticBucket = ((Terms) agg).getBucketByKey("average_age");
 		        long numberOfDocs = elasticBucket.getDocCount();
 		        System.out.println("条数:"+numberOfDocs);
 		    }
 		}
 		
 		
-//		Terms byCompanyAggregation = aggregations.get("user_"); 
-//		Bucket elasticBucket = byCompanyAggregation.getBucketByKey("Elastic"); 
-//		Avg averageAge = elasticBucket.getAggregations().get("average_age"); 
-//		double avg = averageAge.getValue();
-//		
-//		System.out.println("聚合查询返回的结果:"+avg);
+
 		
 		
 		/*
@@ -335,9 +348,6 @@ public class EsHighLevelRestSearchTest {
 		}
 		
 	}
-	
-	
-	
 	
 
 }
