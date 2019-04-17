@@ -213,6 +213,11 @@ public class Test {
   		while(br.ready()){
   			sb.append((char)br.read());
   		}
+  		String str=null;
+		while ((str = br.readLine()) != null) {
+			System.out.println("读取一行数据:"+str);
+		}
+
         System.out.println("输出:"+sb.toString());
         br.close();
         fr.close();
