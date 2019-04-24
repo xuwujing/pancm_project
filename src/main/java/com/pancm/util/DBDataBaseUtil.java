@@ -5,7 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author pancm
@@ -21,7 +23,12 @@ public class DBDataBaseUtil {
 
     private static final String DRIVER = "com.mysql.jdbc.Driver";
 
-    private static final String SQL = "SELECT * FROM ";// 数据库操作
+    private static final String SQL = "SELECT * FROM ";
+
+    private static  String URL = "";
+    private static  String USERNAME = "";
+    private static  String PASSWORD = "";
+
 
     static {
         try {
@@ -31,6 +38,14 @@ public class DBDataBaseUtil {
         }
     }
 
+    public static  void init(String url,String username,String pwd){
+        URL=url;
+        USERNAME=username;
+        PASSWORD=pwd;
+    }
+
+
+
     /**
      * 获取数据库连接
      *
@@ -39,7 +54,7 @@ public class DBDataBaseUtil {
     public static Connection getConnection() {
         Connection conn = null;
         try {
-            conn = ConnectionManager.getInstance().getConnection();
+            conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (SQLException e) {
             LOGGER.error("get connection failure", e);
         }
@@ -158,6 +173,44 @@ public class DBDataBaseUtil {
         return columnTypes;
     }
 
+
+    /**
+     * 获取表中所有字段名称和类型
+     * @param tableName 表名
+     * @return
+     */
+    public static List<Map<String,String>> getColumnNamesAndTypes(String tableName) {
+        List<Map<String,String>> column = new ArrayList<>();
+        //与数据库的连接
+        Connection conn = getConnection();
+        PreparedStatement pStemt = null;
+        String tableSql = SQL + tableName;
+        try {
+            pStemt = conn.prepareStatement(tableSql);
+            //结果集元数据
+            ResultSetMetaData rsmd = pStemt.getMetaData();
+            //表列数
+            int size = rsmd.getColumnCount();
+            for (int i = 0; i < size; i++) {
+                Map<String,String> map=new HashMap<>();
+                map.put(rsmd.getColumnName(i + 1),rsmd.getColumnTypeName(i + 1));
+                column.add(map);
+            }
+        } catch (SQLException e) {
+            LOGGER.error("getColumnNamesAndTypes failure", e);
+        } finally {
+            if (pStemt != null) {
+                try {
+                    pStemt.close();
+                    closeConnection(conn);
+                } catch (SQLException e) {
+                    LOGGER.error("getColumnNames close pstem and connection failure", e);
+                }
+            }
+        }
+        return column;
+    }
+
     /**
      * 获取表中字段的所有注释
      * @param tableName
@@ -197,6 +250,7 @@ public class DBDataBaseUtil {
         for (String tableName : tableNames) {
             System.out.println("ColumnNames:" + getColumnNames(tableName));
             System.out.println("ColumnTypes:" + getColumnTypes(tableName));
+            System.out.println("ColumnNamesAndTypes:" + getColumnNamesAndTypes(tableName));
             System.out.println("ColumnComments:" + getColumnComments(tableName));
         }
     }
