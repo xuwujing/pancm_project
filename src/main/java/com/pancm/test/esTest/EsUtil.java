@@ -224,7 +224,7 @@ public final class EsUtil {
 			message.put("type", "text");
 			Map<String, Object> properties = new HashMap<>();
 			// 设置字段message信息
-			properties.put("message", message);
+			properties.put("msg", message);
 			Map<String, Object> mapping = new HashMap<>();
 			mapping.put("properties", properties);
 			jsonMap2.put(type, mapping);
@@ -239,6 +239,7 @@ public final class EsUtil {
 			esBasicModelConfig.setAlias(alias);
 
 			EsUtil.creatIndex(esBasicModelConfig);
+			System.out.println("创建成功！");
 		}catch(IOException e) {
 			e.printStackTrace();
 		
