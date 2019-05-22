@@ -14,6 +14,7 @@ import org.elasticsearch.action.DocWriteResponse;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
 import org.elasticsearch.action.bulk.BackoffPolicy;
 import org.elasticsearch.action.bulk.BulkItemResponse;
@@ -65,6 +66,7 @@ public class EsHighLevelRestTest1 {
 		try {
 			init();
 			careatindex();
+			deleteindex();
 			get();
 			exists();
 			update();
@@ -248,6 +250,24 @@ public class EsHighLevelRestTest1 {
 
 		
 		
+	}
+
+
+	/**
+	 * 删除索引
+	 *
+	 * @throws IOException
+	 */
+	private static void deleteindex() throws IOException {
+		String index = "userindex";
+
+
+		DeleteIndexRequest  request = new DeleteIndexRequest(index);
+
+		// 同步删除
+		client.indices().delete(request,RequestOptions.DEFAULT);
+		System.out.println("删除索引库成功！"+index);
+
 	}
 
 	/**
