@@ -1,5 +1,15 @@
 package com.pancm.test.esTest;
 
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
@@ -12,14 +22,6 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @Title: EsUtil
@@ -33,7 +35,6 @@ public final class EsUtil {
 	private EsUtil() {
 
 	}
-
 
 
 
@@ -65,6 +66,7 @@ public final class EsUtil {
 
 	}
 
+
 	/**
 	 * @Author pancm
 	 * @Description //创建索引库(指定Mpping类型)
@@ -72,6 +74,7 @@ public final class EsUtil {
 	 * @Param [esBasicModelConfig]
 	 * @return boolean
 	 **/
+
 	public static boolean creatIndex(EsBasicModelConfig esBasicModelConfig) throws IOException {
 		boolean falg = true;
 		Objects.requireNonNull(esBasicModelConfig, "esBasicModelConfig is not null");
@@ -125,6 +128,7 @@ public final class EsUtil {
 		return exists2;
 	}
 
+
 	/**
 	 * @Author pancm
 	 * @Description //新增/更新数据
@@ -149,6 +153,7 @@ public final class EsUtil {
 
 		return  false;
 	}
+
 
 
 
@@ -181,6 +186,10 @@ public final class EsUtil {
 	private static HttpHost[] httpHosts;
 	private static RestHighLevelClient client = null;
 
+	private static final String COMMA_SIGN = ",";
+
+
+
 	private static Logger logger = LoggerFactory.getLogger(EsHighLevelRestSearchTest.class);
 
 	/**
@@ -191,7 +200,9 @@ public final class EsUtil {
 
 		try {
 
-			EsUtil.build( "192.169.0.23:9200");
+
+			EsUtil.build("192.169.0.23:9200");
+
 			System.out.println("ES连接初始化成功!");
 
 			// setting 的值
@@ -213,7 +224,7 @@ public final class EsUtil {
 			message.put("type", "text");
 			Map<String, Object> properties = new HashMap<>();
 			// 设置字段message信息
-			properties.put("message", message);
+			properties.put("msg", message);
 			Map<String, Object> mapping = new HashMap<>();
 			mapping.put("properties", properties);
 			jsonMap2.put(type, mapping);
@@ -228,6 +239,7 @@ public final class EsUtil {
 			esBasicModelConfig.setAlias(alias);
 
 			EsUtil.creatIndex(esBasicModelConfig);
+			System.out.println("创建成功！");
 		}catch(IOException e) {
 			e.printStackTrace();
 		

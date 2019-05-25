@@ -42,8 +42,13 @@ public class JestTest {
 		}
 	    
 	    private static  JestClient getJestClient() {  
-	    	JestClientFactory factory = new JestClientFactory();  
-			factory.setHttpClientConfig(new HttpClientConfig.Builder(elasticIps).connTimeout(60000).readTimeout(60000).multiThreaded(true).build());  
+	    	JestClientFactory factory = new JestClientFactory();
+	    	//指定集群地址，设置超时时间，开启多线程，并发连接最多两个，最大连接数
+			factory.setHttpClientConfig(new HttpClientConfig.Builder(elasticIps)
+					.connTimeout(60000).readTimeout(60000).multiThreaded(true)
+					.defaultMaxTotalConnectionPerRoute(2)
+					.maxTotalConnection(10)
+					.build());
 	        return factory.getObject();  
 	    }  
 	    

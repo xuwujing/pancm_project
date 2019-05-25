@@ -94,7 +94,7 @@ public class LocalDateTimeTest {
 		 */
 		LocalDate ld=LocalDate.parse("2017-11-17");
 		LocalDate ld2=LocalDate.parse("2018-01-05");
-		
+
 		/**
 		 * 创建指定日期
 		 */
@@ -108,8 +108,17 @@ public class LocalDateTimeTest {
 		
 		System.out.println("增加2个月: "+ld.plusMonths(2));
 		Period p2=Period.between(ld3, ld4);
-		System.out.println("相差年: "+p2.getYears()+" 相差月 :"+p2.getMonths() +" 相差天:"+p2.getDays()+"--"+p2.toTotalMonths());
+		System.out.println("相差年: "+p2.getYears()+" 相差月 :"+p2.getMonths() +" 相差天:"+p2.getDays()+","+p2.toTotalMonths());
 		//相差年: 0 相差月 :2 相差天:25
+
+		LocalDate ld33=LocalDate.of(2017, 01, 01);
+		LocalDate ld44=LocalDate.of(2018, 12, 01);
+		//jdk1.8的类，用于比较时间
+		//可以得到相差年、月、日
+		Period p3=Period.between(ld33, ld44);
+		System.out.println("相差年: "+p3.getYears()+" 相差月 :"+p3.getMonths() +" 相差天:"+p3.getDays());
+		// 相差年: 0 相差月 :1 相差天:19
+
 	}
 	
 	/**

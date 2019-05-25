@@ -1,18 +1,12 @@
 package com.pancm.test.spring;
 
-import static org.hamcrest.CoreMatchers.nullValue;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Proxy;
+import java.lang.reflect.*;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Objects;
 
-import sun.reflect.Reflection;
+
 
 /**
  * The type Spring aop test.
@@ -24,6 +18,10 @@ import sun.reflect.Reflection;
  * @date 2019年1月18日
  */
 public class SpringAopTest {
+
+
+
+
 
     /**
      * The entry point of application.
@@ -44,6 +42,11 @@ public class SpringAopTest {
 		proxy.sayBye("xuwujing");
 
 	}
+
+	
+	
+	
+
 
 
     /**
@@ -116,8 +119,7 @@ public class SpringAopTest {
      * 生成代理类
      * 在调用此函数之前执行权限检查.
      */
-    private static Class<?> getProxyClass0(ClassLoader loader,
-                                           Class<?>... interfaces) {
+    private static Class<?> getProxyClass0(ClassLoader loader, Class<?>... interfaces) {
         if (interfaces.length > 65535) {
             throw new IllegalArgumentException("interface limit exceeded");
         }
@@ -137,18 +139,16 @@ public class SpringAopTest {
 }
 
 /**
- * The type Proxy hello.
- *
- * @author pancm
+ * 
  * @Title: ProxyHello
  * @Description:实现代理
  * @Version:1.0.0
+ * @author pancm
  * @date 2019年1月18日
  */
 class ProxyHello implements InvocationHandler {
 
 	private Object object;
-
     /**
      * 指定
      *

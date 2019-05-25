@@ -1,6 +1,8 @@
 package com.pancm.test.calculate;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.DecimalFormat;
 
 /**
  * The type Calculate test.
@@ -13,7 +15,9 @@ import java.math.BigInteger;
  */
 public class CalculateTest {
 
-    /**
+	private String result;
+
+	/**
      * The entry point of application.
      *
      * @param args the input arguments
@@ -27,6 +31,30 @@ public class CalculateTest {
 		test3();
 		//赋值运算符
 		test4();
+
+		test5();
+	}
+
+	private static void test5() {
+
+
+	 // 方式一： 这个四舍五入有点问题，实际是五舍六入
+		double f = 0.0500285;
+		BigDecimal b = new BigDecimal(f);
+		double f1 = b.setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
+
+		// 方式二： 这个四舍五入有点问题，实际是五舍六入
+		String s= new DecimalFormat("#.000000").format(f);
+// #.00 表示两位小数 #.0000四位小数 以此类推…
+
+		// 方式三：这个是符合四舍五入
+		double d = 0.0500285;
+		String result = String.format("%.6f", d);
+
+		System.out.println("f1:"+f1);
+		System.out.println("s:"+s);
+		System.out.println("result:"+result);
+
 	}
 
 	private static void test4() {

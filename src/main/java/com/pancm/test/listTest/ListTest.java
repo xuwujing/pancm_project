@@ -37,7 +37,6 @@ public class ListTest {
 		test4();
 //		test5();
 		
-		Vector<String> v=new Vector<>();
 	}
 	 
 	

@@ -1,31 +1,5 @@
 package com.pancm.test.sparkTest;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.Scan;
-import org.apache.hadoop.hbase.io.ImmutableBytesWritable;
-import org.apache.hadoop.hbase.mapreduce.TableInputFormat;
-import org.apache.hadoop.hbase.protobuf.ProtobufUtil;
-import org.apache.hadoop.hbase.util.Base64;
-import org.apache.hadoop.hbase.util.Bytes;
-import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.RowFactory;
-import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.types.DataTypes;
-import org.apache.spark.sql.types.StructField;
-import org.apache.spark.sql.types.StructType;
-
-import scala.Tuple2;
-
 /**
  * Title: sparkSqlTest
  * Description: SparkOnHbase 的测试
@@ -47,7 +21,7 @@ public class sparkSqlTest {
 //        System.setProperty("hadoop.home.dir", "E:\\hadoop");
 //        System.setProperty("HADOOP_USER_NAME", "root"); 
 //        System.setProperty("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
-
+/*
         SparkSession spark=SparkSession.builder()  
                 .appName("lcc_java_read_hbase_register_to_table")  
                 .master("local[*]")  
@@ -102,7 +76,7 @@ public class sparkSqlTest {
         stuDf.printSchema();  
         stuDf.createOrReplaceTempView("Person");  
         Dataset<Row> nameDf=spark.sql("select * from Person ");  
-        nameDf.show();  
+        nameDf.show();  */
 
     }
 

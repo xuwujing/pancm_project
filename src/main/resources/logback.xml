@@ -8,8 +8,9 @@
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<Pattern>
+				<!-- %d{yyyy-MM-dd HH:mm:ss} %c %-5level - %msg%n -->
 				<!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符--> 
-				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%class:%line] %-5level %logger{50} - %msg%n
+				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n
 			</Pattern>
 		</layout>
 	</appender>
@@ -24,7 +25,7 @@
 		</rollingPolicy>
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<Pattern>
-				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%class:%line] %-5level %logger{50} - %msg%n
+				%d{yyyy-MM-dd HH:mm:ss} -%msg%n
 			</Pattern>
 		</layout>
 	</appender>
@@ -41,7 +42,7 @@
 		</rollingPolicy>
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<Pattern>
-				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%class:%line] %-5level %logger{50} - %msg%n
+				%d{yyyy-MM-dd HH:mm:ss} -%msg%n
 			</Pattern>
 		</layout>
 	</appender>
@@ -58,12 +59,10 @@
 		</rollingPolicy>
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<Pattern>
-				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%class:%line] %-5level %logger{50} - %msg%n
+				%d{yyyy-MM-dd HH:mm:ss} -%msg%n
 			</Pattern>
 		</layout>
 	</appender>
-	
-	
 	
 	<!-- 自定义定义日志文件可以从这获取 例如 logTest -->
 	<logger name="oneInfo" level="DEBUG" additivity="false">
@@ -72,9 +71,6 @@
 	<logger name="twoInfo" level="WARN" additivity="true">
 	   <appender-ref ref="TWO_INFO" />
 	</logger>
-	
-	<!-- 设置该包打印日志的级别  -->
-	<logger name="org.apache.kafka" level="WARN"/>
 	
 	<!--日志主级别  -->	
 	<root level="INFO">
