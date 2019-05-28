@@ -3,21 +3,13 @@ package com.pancm.test.jdk8;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.IntSummaryStatistics;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Random;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import clojure.lang.Obj;
 import com.pancm.test.pojoTest.User;
 
 /**
@@ -457,8 +449,23 @@ public class StreamTest {
 		//	id 10 = [{"id":10,"name":"pancm1"}]	
 		//	id 11 = [{"id":11,"name":"pancm3"}, {"id":11,"name":"pancm6"}, {"id":11,"name":"pancm4"}, {"id":11,"name":"pancm7"}]
 
-		
-		
+		Map<String,Object> stringObjectMap =new HashMap<>();
+		stringObjectMap.put("1","11");
+		Map<String,Object> stringObjectMap2 =new HashMap<>();
+		stringObjectMap.put("1","12");
+		Map<String,Object> stringObjectMap3=new HashMap<>();
+		stringObjectMap.put("2","21");
+		Map<String,Object> stringObjectMap4 =new HashMap<>();
+		stringObjectMap.put("2","22");
+		List<Map<String,Object>> list = new ArrayList<>();
+		list.add(stringObjectMap);
+		list.add(stringObjectMap2);
+		list.add(stringObjectMap3);
+		list.add(stringObjectMap4);
+
+
+
+
 		//通过年龄排序
 		System.out.println("通过年龄进行分区排序:");
 		Map<Boolean, List<User>> children = Stream.generate(new UserSupplier3()).limit(5)
