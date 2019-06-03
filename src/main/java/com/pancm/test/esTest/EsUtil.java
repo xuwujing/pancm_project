@@ -1,42 +1,109 @@
 package com.pancm.test.esTest;
 
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
  * @Title: EsUtil
- * @Description: ES工具类
+ * @Description: ES的工具类
  * @Version:1.0.0
  * @author pancm
  * @date 2019年3月19日
  */
 public final class EsUtil {
+	private static Logger logger = LoggerFactory.getLogger(EsHighLevelRestSearchTest.class);
 
 	private EsUtil() {
 
 	}
 
 
+	/**
+	 * @param args
+	 * @throws IOException
+	 */
+	public static void main(String[] args) {
+
+		try {
+
+			EsUtil.build("192.169.0.23:9200");
+			System.out.println("ES连接初始化成功!");
+			createIndexTest();
+			System.out.println("ES索引库创建成功！");
+
+
+
+		}catch(IOException e) {
+			e.printStackTrace();
+
+		} finally {
+			// TODO: handle finally clause
+			try {
+				close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private static void createIndexTest() throws IOException {
+		// setting 的值
+		Map<String, Object> setmapping = new HashMap<>();
+
+		// 分区数、路由分片数、副本数、缓存刷新时间
+		setmapping.put("number_of_shards", 12);
+		setmapping.put("number_of_routing_shards", 24);
+		setmapping.put("number_of_replicas", 1);
+		setmapping.put("refresh_interval", "5s");
+
+		String index = "test5";
+		String type = "test5";
+		String alias = "test";
+
+		Map<String, Object> jsonMap2 = new HashMap<>();
+		Map<String, Object> message = new HashMap<>();
+		// 设置类型
+		message.put("type", "text");
+		Map<String, Object> properties = new HashMap<>();
+		// 设置字段message信息
+		properties.put("msg", message);
+		Map<String, Object> mapping = new HashMap<>();
+		mapping.put("properties", properties);
+		jsonMap2.put(type, mapping);
+
+		String mappings = jsonMap2.toString();
+
+		EsBasicModelConfig esBasicModelConfig = new EsBasicModelConfig();
+		esBasicModelConfig.setIndex(index);
+		esBasicModelConfig.setType(type);
+		esBasicModelConfig.setMappings(mappings);
+		esBasicModelConfig.setSettings(setmapping);
+		esBasicModelConfig.setAlias(alias);
+
+		EsUtil.creatIndex(esBasicModelConfig);
+	}
 
 
 	/**
@@ -61,10 +128,10 @@ public final class EsUtil {
 		} catch (IOException e) {
 			throw e;
 		}
-
 		return falg;
-
 	}
+
+
 
 
 	/**
@@ -107,6 +174,10 @@ public final class EsUtil {
 			falg = createIndexResponse.isAcknowledged();
 		} catch (IOException e) {
 			throw e;
+		}finally {
+			if(isAutoClose){
+				client.close();
+			}
 		}
 		return falg;
 
@@ -129,14 +200,41 @@ public final class EsUtil {
 	}
 
 
+	public static boolean saveBulk(List<Map<String,Object>> mapList,String index,String type) throws  IOException{
+		return saveBulk(mapList, index, type,null);
+	}
+
 	/**
 	 * @Author pancm
-	 * @Description //新增/更新数据
+	 * @Description 批量新增/更新数据
 	 * @Date  2019/3/21
 	 * @Param []
 	 * @return boolean
 	 **/
-	public static boolean insert() throws  IOException{
+	public static boolean saveBulk(List<Map<String,Object>> mapList,String index,String type,String key) throws  IOException{
+		if(mapList==null||mapList.size()==0){
+			return  true;
+		}
+		if(index==null||index.trim().length()==0||type==null||type.trim().length()==0){
+			return  false;
+		}
+
+		BulkRequest request = new BulkRequest();
+		mapList.forEach(map->{
+			if(key!=null){
+				String id = map.get(key)+"";
+				if(id==null||id.trim().length()==0){
+					request.add(new IndexRequest(index,type).source(map,XContentType.JSON));
+				}else{
+					request.add(new IndexRequest(index,type,id).source(map, XContentType.JSON));
+				}
+			}else{
+				request.add(new IndexRequest(index,type).source(map,XContentType.JSON));
+			}
+		});
+
+		BulkResponse bulkResponse = client.bulk(request,RequestOptions.DEFAULT);
+
 
 		return  false;
 	}
@@ -185,74 +283,13 @@ public final class EsUtil {
 	private static int elasticPort;
 	private static HttpHost[] httpHosts;
 	private static RestHighLevelClient client = null;
+	/** 是否自动关闭连接 */
+	private static boolean isAutoClose = true;
 
 	private static final String COMMA_SIGN = ",";
 
 
 
-	private static Logger logger = LoggerFactory.getLogger(EsHighLevelRestSearchTest.class);
-
-	/**
-	 * @param args
-	 * @throws IOException
-	 */
-	public static void main(String[] args) {
-
-		try {
-
-
-			EsUtil.build("192.169.0.23:9200");
-
-			System.out.println("ES连接初始化成功!");
-
-			// setting 的值
-			Map<String, Object> setmapping = new HashMap<>();
-
-			// 分区数、路由分片数、副本数、缓存刷新时间
-			setmapping.put("number_of_shards", 12);
-			setmapping.put("number_of_routing_shards", 24);
-			setmapping.put("number_of_replicas", 1);
-			setmapping.put("refresh_interval", "5s");
-
-			String index = "test5";
-			String type = "test5";
-			String alias = "test";
-
-			Map<String, Object> jsonMap2 = new HashMap<>();
-			Map<String, Object> message = new HashMap<>();
-			// 设置类型
-			message.put("type", "text");
-			Map<String, Object> properties = new HashMap<>();
-			// 设置字段message信息
-			properties.put("msg", message);
-			Map<String, Object> mapping = new HashMap<>();
-			mapping.put("properties", properties);
-			jsonMap2.put(type, mapping);
-
-			String mappings = jsonMap2.toString();
-
-			EsBasicModelConfig esBasicModelConfig = new EsBasicModelConfig();
-			esBasicModelConfig.setIndex(index);
-			esBasicModelConfig.setType(type);
-			esBasicModelConfig.setMappings(mappings);
-			esBasicModelConfig.setSettings(setmapping);
-			esBasicModelConfig.setAlias(alias);
-
-			EsUtil.creatIndex(esBasicModelConfig);
-			System.out.println("创建成功！");
-		}catch(IOException e) {
-			e.printStackTrace();
-		
-		} finally {
-			// TODO: handle finally clause
-			try {
-				close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
 
 }
 
