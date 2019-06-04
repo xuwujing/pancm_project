@@ -51,7 +51,16 @@ public final class EsUtil {
             System.out.println("ES连接初始化成功!");
             createIndexTest();
             System.out.println("ES索引库创建成功！");
+            String index="student";
+            String type="student";
+            List<Map<String,Object>> list=new ArrayList<>();
+            for (int i = 0; i <10 ; i++) {
+                Map<String,Object> map=new HashMap<>();
+                map.put("","");
+            }
 
+
+            saveBulk(list,index,type);
 
         } catch (IOException e) {
             e.printStackTrace();
