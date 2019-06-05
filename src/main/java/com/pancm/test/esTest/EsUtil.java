@@ -182,12 +182,15 @@ public final class EsUtil {
             throw e;
         } finally {
             if (isAutoClose) {
-                client.close();
+                close();
             }
         }
         return falg;
 
     }
+
+
+
 
     /**
      * 判断索引库是否存在
@@ -205,7 +208,13 @@ public final class EsUtil {
         return exists2;
     }
 
-
+    /**
+     * @Author pancm
+     * @Description  批量新增/更新数据
+     * @Date  2019/6/5
+     * @Param [mapList, index, type]
+     * @return boolean
+     **/
     public static boolean saveBulk(List<Map<String, Object>> mapList, String index, String type) throws IOException {
         return saveBulk(mapList, index, type, null);
     }
@@ -215,7 +224,7 @@ public final class EsUtil {
      * @Author pancm
      * @Description 批量新增/更新数据
      * @Date 2019/3/21
-     * @Param []
+     * @Param [mapList:存储参数, index:索引库名, type:索引库类型,key:存储的主键，为空表示使用ES主键]
      **/
     public static boolean saveBulk(List<Map<String, Object>> mapList, String index, String type, String key) throws IOException {
 
@@ -250,7 +259,9 @@ public final class EsUtil {
 
             return true;
         } finally {
-            close();
+            if (isAutoClose) {
+                close();
+            }
         }
     }
 
@@ -263,7 +274,13 @@ public final class EsUtil {
      * @Param []
      **/
     public static boolean delete() throws IOException {
+        try{
 
+        }finally {
+            if (isAutoClose) {
+                close();
+            }
+        }
         return false;
     }
 
@@ -290,6 +307,15 @@ public final class EsUtil {
             }
         }
     }
+
+    public static boolean isIsAutoClose() {
+        return isAutoClose;
+    }
+
+    public static void setIsAutoClose(boolean isAutoClose) {
+        EsUtil.isAutoClose = isAutoClose;
+    }
+
 
     private static String[] elasticIps;
     private static int elasticPort;
