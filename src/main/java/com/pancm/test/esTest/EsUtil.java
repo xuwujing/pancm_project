@@ -1,6 +1,7 @@
 package com.pancm.test.esTest;
 
 
+import io.searchbox.core.Delete;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
@@ -8,12 +9,24 @@ import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.support.IndicesOptions;
+import org.elasticsearch.action.support.WriteRequest;
+import org.elasticsearch.action.support.replication.ReplicationResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
+import org.elasticsearch.index.reindex.ReindexRequest;
+import org.elasticsearch.index.reindex.UpdateByQueryRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,16 +64,16 @@ public final class EsUtil {
             System.out.println("ES连接初始化成功!");
             createIndexTest();
             System.out.println("ES索引库创建成功！");
-            String index="student";
-            String type="student";
-            List<Map<String,Object>> list=new ArrayList<>();
-            for (int i = 0; i <10 ; i++) {
-                Map<String,Object> map=new HashMap<>();
-                map.put("","");
+            String index = "student";
+            String type = "student";
+            List<Map<String, Object>> list = new ArrayList<>();
+            for (int i = 0; i < 10; i++) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("", "");
             }
 
 
-            saveBulk(list,index,type);
+            saveBulk(list, index, type);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -147,7 +160,6 @@ public final class EsUtil {
      * @Date 2019/3/21
      * @Param [esBasicModelConfig]
      **/
-
     public static boolean creatIndex(EsBasicModelConfig esBasicModelConfig) throws IOException {
         boolean falg = true;
         Objects.requireNonNull(esBasicModelConfig, "esBasicModelConfig is not null");
@@ -190,8 +202,6 @@ public final class EsUtil {
     }
 
 
-
-
     /**
      * 判断索引库是否存在
      *
@@ -200,20 +210,27 @@ public final class EsUtil {
      * @throws IOException
      */
     public static boolean exitsIndex(String index) throws IOException {
-        GetIndexRequest getRequest2 = new GetIndexRequest();
-        getRequest2.indices(index);
-        getRequest2.local(false);
-        getRequest2.humanReadable(true);
-        boolean exists2 = client.indices().exists(getRequest2, RequestOptions.DEFAULT);
-        return exists2;
+        try {
+            GetIndexRequest getRequest = new GetIndexRequest();
+            getRequest.indices(index);
+            getRequest.local(false);
+            getRequest.humanReadable(true);
+            return client.indices().exists(getRequest, RequestOptions.DEFAULT);
+        } finally {
+            if (isAutoClose) {
+                close();
+            }
+        }
     }
 
+
+
     /**
-     * @Author pancm
-     * @Description  批量新增/更新数据
-     * @Date  2019/6/5
-     * @Param [mapList, index, type]
      * @return boolean
+     * @Author pancm
+     * @Description 批量新增/更新数据
+     * @Date 2019/6/5
+     * @Param [mapList, index, type]
      **/
     public static boolean saveBulk(List<Map<String, Object>> mapList, String index, String type) throws IOException {
         return saveBulk(mapList, index, type, null);
@@ -270,13 +287,22 @@ public final class EsUtil {
      * @return boolean
      * @Author pancm
      * @Description //删除数据
+     * 根据ID进行单条删除
      * @Date 2019/3/21
      * @Param []
      **/
-    public static boolean delete() throws IOException {
-        try{
-
-        }finally {
+    public static boolean deleteById(String index,String type,String id) throws IOException {
+        if (index == null || type == null || id==null) {
+            return true;
+        }
+        try {
+            DeleteRequest deleteRequest = new DeleteRequest();
+            deleteRequest.id(id);
+            deleteRequest.index(index);
+            deleteRequest.type(type);
+            // 同步删除
+            client.delete(deleteRequest, RequestOptions.DEFAULT);
+        } finally {
             if (isAutoClose) {
                 close();
             }
@@ -284,6 +310,126 @@ public final class EsUtil {
         return false;
     }
 
+
+    /**
+     * @return boolean
+     * @Author pancm
+     * @Description //批量删除数据
+     * 根据ID进行批量删除
+     * @Date 2019/3/21
+     * @Param []
+     **/
+    public static boolean deleteByIds(String index,String type,Set<String> ids) throws IOException {
+        if (index == null || type == null || ids ==null) {
+            return true;
+        }
+        try {
+            BulkRequest requestBulk = new BulkRequest();
+            ids.forEach(id->{
+                DeleteRequest deleteRequest = new DeleteRequest(index,type,id);
+                requestBulk.add(deleteRequest);
+            });
+            // 同步删除
+            client.bulk(requestBulk, RequestOptions.DEFAULT);
+        } finally {
+            if (isAutoClose) {
+                close();
+            }
+        }
+        return false;
+    }
+
+
+
+
+    /**
+     * @return Map
+     * @Author pancm
+     * @Description //根据条件删除数据
+     * @Date 2019/3/21
+     * @Param []
+     **/
+    public static  Map<String,Object> deleteByQuery(String index, String type, QueryBuilder[] queryBuilders) throws IOException {
+        if (index == null || type == null || queryBuilders==null) {
+            return null;
+        }
+        Map<String,Object> map = new HashMap<>();
+        try {
+            DeleteByQueryRequest request = new DeleteByQueryRequest(index,type);
+            if(queryBuilders!=null){
+                for(QueryBuilder queryBuilder:queryBuilders){
+                    request.setQuery(queryBuilder);
+                }
+            }
+            // 同步执行
+            BulkByScrollResponse bulkResponse = client.deleteByQuery(request, RequestOptions.DEFAULT);
+            // 响应结果处理
+            map.put("time",bulkResponse.getTook().getMillis());
+            map.put("total",bulkResponse.getTotal());
+
+        } finally {
+            if (isAutoClose) {
+                close();
+            }
+        }
+        return map;
+    }
+
+
+
+    /**
+     * @return Map
+     * @Author pancm
+     * @Description //重索引
+     * @Date 2019/3/21
+     * @Param []
+     **/
+    public static  Map<String,Object> reindexByQuery(String index, String destIndex, QueryBuilder[] queryBuilders) throws IOException {
+        if (index == null || destIndex == null ) {
+            return null;
+        }
+        Map<String,Object> map = new HashMap<>();
+        try {
+            // 创建索引复制请求并进行索引复制
+            ReindexRequest request = new ReindexRequest();
+            // 需要复制的索引
+            request.setSourceIndices(index);
+            /* 复制的目标索引 */
+            request.setDestIndex(destIndex);
+            if(queryBuilders!=null){
+                for(QueryBuilder queryBuilder:queryBuilders){
+                    request.setSourceQuery(queryBuilder);
+                }
+            }
+            // 表示如果在复制索引的时候有缺失的文档的话会进行创建,默认是index
+            request.setDestOpType("create");
+            // 如果在复制的过程中发现版本冲突，那么会继续进行复制
+            request.setConflicts("proceed");
+
+
+            // 设置复制文档的数量
+            // request.setSize(10);
+            // 设置一次批量处理的条数，默认是1000
+            //   request.setSourceBatchSize(10000);
+
+            //设置超时时间
+            request.setTimeout(TimeValue.timeValueMinutes(2));
+            // 同步执行
+            BulkByScrollResponse bulkResponse = client.reindex(request, RequestOptions.DEFAULT);
+
+            // 响应结果处理
+            map.put("time",bulkResponse.getTook().getMillis());
+            map.put("total",bulkResponse.getTotal());
+            map.put("createdDocs",bulkResponse.getCreated());
+            map.put("updatedDocs",bulkResponse.getUpdated());
+
+        } finally {
+            if (isAutoClose) {
+                close();
+            }
+        }
+        return map;
+    }
 
     /*
      * 初始化服务
