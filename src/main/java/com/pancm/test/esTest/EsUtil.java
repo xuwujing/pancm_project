@@ -2,6 +2,7 @@ package com.pancm.test.esTest;
 
 
 import io.searchbox.core.Delete;
+import io.searchbox.core.UpdateByQueryResult;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
@@ -340,7 +341,42 @@ public final class EsUtil {
     }
 
 
+    /**
+     * @return boolean
+     * @Author pancm
+     * @Description 根据条件更新
+     * @Date 2019/3/21
+     * @Param []
+     **/
+    public static  Map<String,Object>  updateByQuery(String index, String type, QueryBuilder[] queryBuilders) throws IOException {
+        if (index == null || type == null ) {
+            return null;
+        }
+        Map<String,Object> map = new HashMap<>();
+        try {
+            UpdateByQueryRequest request = new UpdateByQueryRequest();
+            request.indices(index);
+            request.setDocTypes(type);
 
+            if(queryBuilders!=null){
+                for(QueryBuilder queryBuilder:queryBuilders){
+                    request.setQuery(queryBuilder);
+                }
+            }
+            // 同步执行
+            BulkByScrollResponse bulkResponse = client.updateByQuery(request, RequestOptions.DEFAULT);
+
+            // 响应结果处理
+            map.put("time",bulkResponse.getTook().getMillis());
+            map.put("total",bulkResponse.getTotal());
+
+        } finally {
+            if (isAutoClose) {
+                close();
+            }
+        }
+        return map;
+    }
 
     /**
      * @return Map
@@ -430,6 +466,10 @@ public final class EsUtil {
         }
         return map;
     }
+
+
+
+
 
     /*
      * 初始化服务
