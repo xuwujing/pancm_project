@@ -17,6 +17,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.index.reindex.ReindexRequest;
@@ -56,18 +57,22 @@ public final class EsUtil {
 
             EsUtil.build("192.169.0.23:9200");
             System.out.println("ES连接初始化成功!");
-            createIndexTest();
-            System.out.println("ES索引库创建成功！");
+//            createIndexTest();
+//            System.out.println("ES索引库创建成功！");
             String index = "student";
             String type = "student";
             List<Map<String, Object>> list = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 Map<String, Object> map = new HashMap<>();
-                map.put("", "");
+                map.put("id", i);
+                map.put("name", "张三"+i);
+                map.put("age", 10+i);
             }
-
-
             saveBulk(list, index, type);
+            System.out.println("批量写入成功!");
+            QueryBuilder queryBuilder = QueryBuilders.termQuery("id","3");
+            updateByQuery(index, type,queryBuilder);
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -218,7 +223,18 @@ public final class EsUtil {
     }
 
 
-
+    /**
+     * @return boolean
+     * @Author pancm
+     * @Description 单条新增/更新数据
+     * @Date 2019/6/5
+     * @Param [mapList, index, type]
+     **/
+    public static boolean save(Map<String, Object> map, String index, String type) throws IOException {
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        mapList.add(map);
+        return saveBulk(mapList, index, type, null);
+    }
     /**
      * @return boolean
      * @Author pancm
@@ -341,7 +357,7 @@ public final class EsUtil {
      * @Date 2019/3/21
      * @Param []
      **/
-    public static  Map<String,Object>  updateByQuery(String index, String type, QueryBuilder[] queryBuilders) throws IOException {
+    public static  Map<String,Object>  updateByQuery(String index, String type, QueryBuilder ... queryBuilders) throws IOException {
         if (index == null || type == null ) {
             return null;
         }
