@@ -74,6 +74,8 @@ public final class EsUtil {
             updateByQuery(index, type,queryBuilder);
 
 
+
+
         } catch (IOException e) {
             e.printStackTrace();
 
@@ -347,6 +349,43 @@ public final class EsUtil {
             }
         }
         return false;
+    }
+
+    /**
+     * @return boolean
+     * @Author pancm
+     * @Description 根据条件更新
+     * @Date 2019/3/21
+     * @Param []
+     **/
+    public static  List<Map<String,Object>>  query(String index, String type, QueryBuilder ... queryBuilders) throws IOException {
+        if (index == null || type == null ) {
+            return null;
+        }
+        Map<String,Object> map = new HashMap<>();
+        try {
+            UpdateByQueryRequest request = new UpdateByQueryRequest();
+            request.indices(index);
+            request.setDocTypes(type);
+
+            if(queryBuilders!=null){
+                for(QueryBuilder queryBuilder:queryBuilders){
+                    request.setQuery(queryBuilder);
+                }
+            }
+            // 同步执行
+            BulkByScrollResponse bulkResponse = client.updateByQuery(request, RequestOptions.DEFAULT);
+
+            // 响应结果处理
+            map.put("time",bulkResponse.getTook().getMillis());
+            map.put("total",bulkResponse.getTotal());
+
+        } finally {
+            if (isAutoClose) {
+                close();
+            }
+        }
+        return null;
     }
 
 
