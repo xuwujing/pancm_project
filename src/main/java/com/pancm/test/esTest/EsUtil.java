@@ -9,6 +9,8 @@ import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
@@ -18,6 +20,7 @@ import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.index.reindex.ReindexRequest;
@@ -60,21 +63,22 @@ public final class EsUtil {
 //            createIndexTest();
 //            System.out.println("ES索引库创建成功！");
             String index = "student";
-            String type = "student";
+            String type = "_doc";
             List<Map<String, Object>> list = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("id", i);
-                map.put("name", "张三"+i);
-                map.put("age", 10+i);
+                map.put("name", "张三" + i);
+                map.put("age", 10 + i);
+                list.add(map);
             }
-            saveBulk(list, index, type);
+            EsUtil.setIsAutoClose(false);
+            saveBulk(list, index, type,"id");
             System.out.println("批量写入成功!");
-            QueryBuilder queryBuilder = QueryBuilders.termQuery("id","3");
-            updateByQuery(index, type,queryBuilder);
-
-
-
+            System.out.println("查询的结果1:"+queryById(index,type,"1"));
+            QueryBuilder queryBuilder =new TermQueryBuilder("name", "xuwujing");
+            System.out.println("更新的结果:"+updateByQuery(index, type, queryBuilder));
+            System.out.println("查询的结果2:"+queryById(index,type,"1"));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -134,8 +138,7 @@ public final class EsUtil {
      * @param nodes
      * @return
      */
-    public static boolean build(String... nodes) throws IOException {
-        boolean falg = false;
+    public static void build(String... nodes)  {
         Objects.requireNonNull(nodes, "hosts can not null");
         ArrayList<HttpHost> ahosts = new ArrayList<HttpHost>();
         for (String host : nodes) {
@@ -144,13 +147,7 @@ public final class EsUtil {
             ahosts.add(new HttpHost(addr.getIp(), addr.getPort()));
         }
         httpHosts = ahosts.toArray(new HttpHost[0]);
-        try {
-            init();
-            falg = true;
-        } catch (IOException e) {
-            throw e;
-        }
-        return falg;
+        init();
     }
 
 
@@ -237,6 +234,7 @@ public final class EsUtil {
         mapList.add(map);
         return saveBulk(mapList, index, type, null);
     }
+
     /**
      * @return boolean
      * @Author pancm
@@ -257,15 +255,13 @@ public final class EsUtil {
      **/
     public static boolean saveBulk(List<Map<String, Object>> mapList, String index, String type, String key) throws IOException {
 
+        if (mapList == null || mapList.size() == 0) {
+            return true;
+        }
+        if (index == null || index.trim().length() == 0 || type == null || type.trim().length() == 0) {
+            return false;
+        }
         try {
-
-            if (mapList == null || mapList.size() == 0) {
-                return true;
-            }
-            if (index == null || index.trim().length() == 0 || type == null || type.trim().length() == 0) {
-                return false;
-            }
-
             BulkRequest request = new BulkRequest();
             mapList.forEach(map -> {
                 if (key != null) {
@@ -303,8 +299,8 @@ public final class EsUtil {
      * @Date 2019/3/21
      * @Param []
      **/
-    public static boolean deleteById(String index,String type,String id) throws IOException {
-        if (index == null || type == null || id==null) {
+    public static boolean deleteById(String index, String type, String id) throws IOException {
+        if (index == null || type == null || id == null) {
             return true;
         }
         try {
@@ -319,7 +315,7 @@ public final class EsUtil {
                 close();
             }
         }
-        return false;
+        return true;
     }
 
 
@@ -331,14 +327,14 @@ public final class EsUtil {
      * @Date 2019/3/21
      * @Param []
      **/
-    public static boolean deleteByIds(String index,String type,Set<String> ids) throws IOException {
-        if (index == null || type == null || ids ==null) {
+    public static boolean deleteByIds(String index, String type, Set<String> ids) throws IOException {
+        if (index == null || type == null || ids == null) {
             return true;
         }
         try {
             BulkRequest requestBulk = new BulkRequest();
-            ids.forEach(id->{
-                DeleteRequest deleteRequest = new DeleteRequest(index,type,id);
+            ids.forEach(id -> {
+                DeleteRequest deleteRequest = new DeleteRequest(index, type, id);
                 requestBulk.add(deleteRequest);
             });
             // 同步删除
@@ -354,38 +350,31 @@ public final class EsUtil {
     /**
      * @return boolean
      * @Author pancm
-     * @Description 根据条件更新
+     * @Description 根据id查询
      * @Date 2019/3/21
      * @Param []
      **/
-    public static  List<Map<String,Object>>  query(String index, String type, QueryBuilder ... queryBuilders) throws IOException {
-        if (index == null || type == null ) {
+    public static Map<String, Object> queryById(String index, String type, String id) throws IOException {
+        if (index == null || type == null) {
             return null;
         }
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         try {
-            UpdateByQueryRequest request = new UpdateByQueryRequest();
-            request.indices(index);
-            request.setDocTypes(type);
-
-            if(queryBuilders!=null){
-                for(QueryBuilder queryBuilder:queryBuilders){
-                    request.setQuery(queryBuilder);
-                }
+            GetRequest request = new GetRequest();
+            request.index(index);
+            request.type(type);
+            request.id(id);
+            GetResponse getResponse = client.get(request, RequestOptions.DEFAULT);
+            // 如果存在该数据则返回对应的结果
+            if (getResponse.isExists()) {
+                map = getResponse.getSourceAsMap();
             }
-            // 同步执行
-            BulkByScrollResponse bulkResponse = client.updateByQuery(request, RequestOptions.DEFAULT);
-
-            // 响应结果处理
-            map.put("time",bulkResponse.getTook().getMillis());
-            map.put("total",bulkResponse.getTotal());
-
         } finally {
             if (isAutoClose) {
                 close();
             }
         }
-        return null;
+        return map;
     }
 
 
@@ -396,18 +385,18 @@ public final class EsUtil {
      * @Date 2019/3/21
      * @Param []
      **/
-    public static  Map<String,Object>  updateByQuery(String index, String type, QueryBuilder ... queryBuilders) throws IOException {
-        if (index == null || type == null ) {
+    public static Map<String, Object> updateByQuery(String index, String type, QueryBuilder... queryBuilders) throws IOException {
+        if (index == null || type == null) {
             return null;
         }
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         try {
             UpdateByQueryRequest request = new UpdateByQueryRequest();
             request.indices(index);
             request.setDocTypes(type);
 
-            if(queryBuilders!=null){
-                for(QueryBuilder queryBuilder:queryBuilders){
+            if (queryBuilders != null) {
+                for (QueryBuilder queryBuilder : queryBuilders) {
                     request.setQuery(queryBuilder);
                 }
             }
@@ -415,8 +404,8 @@ public final class EsUtil {
             BulkByScrollResponse bulkResponse = client.updateByQuery(request, RequestOptions.DEFAULT);
 
             // 响应结果处理
-            map.put("time",bulkResponse.getTook().getMillis());
-            map.put("total",bulkResponse.getTotal());
+            map.put("time", bulkResponse.getTook().getMillis());
+            map.put("total", bulkResponse.getTotal());
 
         } finally {
             if (isAutoClose) {
@@ -433,23 +422,23 @@ public final class EsUtil {
      * @Date 2019/3/21
      * @Param []
      **/
-    public static  Map<String,Object> deleteByQuery(String index, String type, QueryBuilder[] queryBuilders) throws IOException {
-        if (index == null || type == null || queryBuilders==null) {
+    public static Map<String, Object> deleteByQuery(String index, String type, QueryBuilder[] queryBuilders) throws IOException {
+        if (index == null || type == null || queryBuilders == null) {
             return null;
         }
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         try {
-            DeleteByQueryRequest request = new DeleteByQueryRequest(index,type);
-            if(queryBuilders!=null){
-                for(QueryBuilder queryBuilder:queryBuilders){
+            DeleteByQueryRequest request = new DeleteByQueryRequest(index, type);
+            if (queryBuilders != null) {
+                for (QueryBuilder queryBuilder : queryBuilders) {
                     request.setQuery(queryBuilder);
                 }
             }
             // 同步执行
             BulkByScrollResponse bulkResponse = client.deleteByQuery(request, RequestOptions.DEFAULT);
             // 响应结果处理
-            map.put("time",bulkResponse.getTook().getMillis());
-            map.put("total",bulkResponse.getTotal());
+            map.put("time", bulkResponse.getTook().getMillis());
+            map.put("total", bulkResponse.getTotal());
 
         } finally {
             if (isAutoClose) {
@@ -460,7 +449,6 @@ public final class EsUtil {
     }
 
 
-
     /**
      * @return Map
      * @Author pancm
@@ -468,11 +456,11 @@ public final class EsUtil {
      * @Date 2019/3/21
      * @Param []
      **/
-    public static  Map<String,Object> reindexByQuery(String index, String destIndex, QueryBuilder[] queryBuilders) throws IOException {
-        if (index == null || destIndex == null ) {
+    public static Map<String, Object> reindexByQuery(String index, String destIndex, QueryBuilder[] queryBuilders) throws IOException {
+        if (index == null || destIndex == null) {
             return null;
         }
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         try {
             // 创建索引复制请求并进行索引复制
             ReindexRequest request = new ReindexRequest();
@@ -480,8 +468,8 @@ public final class EsUtil {
             request.setSourceIndices(index);
             /* 复制的目标索引 */
             request.setDestIndex(destIndex);
-            if(queryBuilders!=null){
-                for(QueryBuilder queryBuilder:queryBuilders){
+            if (queryBuilders != null) {
+                for (QueryBuilder queryBuilder : queryBuilders) {
                     request.setSourceQuery(queryBuilder);
                 }
             }
@@ -502,10 +490,10 @@ public final class EsUtil {
             BulkByScrollResponse bulkResponse = client.reindex(request, RequestOptions.DEFAULT);
 
             // 响应结果处理
-            map.put("time",bulkResponse.getTook().getMillis());
-            map.put("total",bulkResponse.getTotal());
-            map.put("createdDocs",bulkResponse.getCreated());
-            map.put("updatedDocs",bulkResponse.getUpdated());
+            map.put("time", bulkResponse.getTook().getMillis());
+            map.put("total", bulkResponse.getTotal());
+            map.put("createdDocs", bulkResponse.getCreated());
+            map.put("updatedDocs", bulkResponse.getUpdated());
 
         } finally {
             if (isAutoClose) {
@@ -516,17 +504,19 @@ public final class EsUtil {
     }
 
 
-
-
-
     /*
      * 初始化服务
      */
-    private static void init() throws IOException {
-        if (client == null) {
-            RestClientBuilder restClientBuilder = RestClient.builder(httpHosts);
-            client = new RestHighLevelClient(restClientBuilder);
+    private static void init() {
+        if(client == null){
+            synchronized (EsUtil.class){
+               if (client == null) {
+                RestClientBuilder restClientBuilder = RestClient.builder(httpHosts);
+                client = new RestHighLevelClient(restClientBuilder);
+              }
+            }
         }
+
     }
 
     /*
@@ -554,7 +544,7 @@ public final class EsUtil {
     private static String[] elasticIps;
     private static int elasticPort;
     private static HttpHost[] httpHosts;
-    private static RestHighLevelClient client = null;
+    private static volatile RestHighLevelClient client = null;
     /**
      * 是否自动关闭连接
      */
