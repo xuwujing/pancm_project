@@ -12,6 +12,10 @@ import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.ShardSearchFailure;
+import org.elasticsearch.action.support.IndicesOptions;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
@@ -25,12 +29,15 @@ import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.index.reindex.ReindexRequest;
 import org.elasticsearch.index.reindex.UpdateByQueryRequest;
+import org.elasticsearch.rest.RestStatus;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,12 +80,12 @@ public final class EsUtil {
                 list.add(map);
             }
             EsUtil.setIsAutoClose(false);
-            saveBulk(list, index, type,"id");
+            saveBulk(list, index, type, "id");
             System.out.println("批量写入成功!");
-            System.out.println("查询的结果1:"+queryById(index,type,"1"));
-            QueryBuilder queryBuilder =new TermQueryBuilder("name", "xuwujing");
-            System.out.println("更新的结果:"+updateByQuery(index, type, queryBuilder));
-            System.out.println("查询的结果2:"+queryById(index,type,"1"));
+            System.out.println("查询的结果1:" + queryById(index, type, "1"));
+            QueryBuilder queryBuilder = new TermQueryBuilder("name", "xuwujing");
+            System.out.println("更新的结果:" + updateByQuery(index, type, queryBuilder));
+            System.out.println("查询的结果2:" + queryById(index, type, "1"));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -138,7 +145,7 @@ public final class EsUtil {
      * @param nodes
      * @return
      */
-    public static void build(String... nodes)  {
+    public static void build(String... nodes) {
         Objects.requireNonNull(nodes, "hosts can not null");
         ArrayList<HttpHost> ahosts = new ArrayList<HttpHost>();
         for (String host : nodes) {
@@ -377,6 +384,96 @@ public final class EsUtil {
         return map;
     }
 
+    /**
+     * @return boolean
+     * @Author pancm
+     * @Description 根据条件查询
+     * @Date 2019/3/21
+     * @Param []
+     **/
+    public static List<Map<String, Object>> query(String index, String type, EsQueryCondition esQueryCondition,QueryBuilder... queryBuilders) throws IOException {
+        if (index == null || type == null) {
+            return null;
+        }
+        List<Map<String, Object>> list = new ArrayList<>();
+        try {
+            // 查询指定的索引库
+            SearchRequest searchRequest = new SearchRequest(index);
+            searchRequest.types(type);
+            SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+            Integer form = esQueryCondition.getIndex();
+            Integer pagesize = esQueryCondition.getPagesize();
+            if(form!=null && form >0 && pagesize!=null && pagesize>0 ){
+                form = (form-1)*pagesize;
+                pagesize = form + pagesize;
+                // 设置起止和结束
+                sourceBuilder.from(form);
+                sourceBuilder.size(pagesize);
+            }
+            if (queryBuilders != null) {
+                for (QueryBuilder queryBuilder : queryBuilders) {
+                    sourceBuilder.query(queryBuilder);
+                }
+            }
+            String routing = esQueryCondition.getRouting();
+            if(routing!=null && routing.length()>0){
+                // 设置路由
+                searchRequest.routing(routing);
+            }
+
+
+            // 设置索引库表达式
+            searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
+
+            // 排序
+            // 根据默认值进行降序排序
+//		sourceBuilder.sort(new ScoreSortBuilder().order(SortOrder.DESC));
+            // 根据字段进行升序排序
+//		sourceBuilder.sort(new FieldSortBuilder("id").order(SortOrder.ASC));
+
+            // 关闭suorce查询
+//		sourceBuilder.fetchSource(false);
+
+            String[] includeFields = new String[]{"title", "user", "innerObject.*"};
+            String[] excludeFields = new String[]{"_type"};
+            // 包含或排除字段
+//		sourceBuilder.fetchSource(includeFields, excludeFields);
+
+            searchRequest.source(sourceBuilder);
+
+            // 同步查询
+            SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+
+            // HTTP状态代码、执行时间或请求是否提前终止或超时
+            RestStatus status = searchResponse.status();
+            TimeValue took = searchResponse.getTook();
+            Boolean terminatedEarly = searchResponse.isTerminatedEarly();
+            boolean timedOut = searchResponse.isTimedOut();
+
+            // 供关于受搜索影响的切分总数的统计信息，以及成功和失败的切分
+            int totalShards = searchResponse.getTotalShards();
+            int successfulShards = searchResponse.getSuccessfulShards();
+            int failedShards = searchResponse.getFailedShards();
+            // 失败的原因
+            for (ShardSearchFailure failure : searchResponse.getShardFailures()) {
+                // failures should be handled here
+            }
+
+            // 结果
+            searchResponse.getHits().forEach(hit -> {
+                Map<String, Object> map = hit.getSourceAsMap();
+                String string = hit.getSourceAsString();
+                System.out.println("普通查询的Map结果:" + map);
+                System.out.println("普通查询的String结果:" + string);
+            });
+        } finally {
+            if (isAutoClose) {
+                close();
+            }
+        }
+        return list;
+    }
+
 
     /**
      * @return boolean
@@ -508,12 +605,12 @@ public final class EsUtil {
      * 初始化服务
      */
     private static void init() {
-        if(client == null){
-            synchronized (EsUtil.class){
-               if (client == null) {
-                RestClientBuilder restClientBuilder = RestClient.builder(httpHosts);
-                client = new RestHighLevelClient(restClientBuilder);
-              }
+        if (client == null) {
+            synchronized (EsUtil.class) {
+                if (client == null) {
+                    RestClientBuilder restClientBuilder = RestClient.builder(httpHosts);
+                    client = new RestHighLevelClient(restClientBuilder);
+                }
             }
         }
 
@@ -554,6 +651,60 @@ public final class EsUtil {
 
 
 }
+
+/**
+ * @Author pancm
+ * @Description 查询条件的类
+ * @Date  2019/6/19
+ * @Param
+ * @return
+ **/
+class EsQueryCondition implements  Serializable{
+    private static final long serialVersionUID = 1L;
+
+    /** 下标和条数  都为null或小于0表示不分页 */
+    private Integer index;
+    private Integer pagesize;
+
+    /** 排序规则 asc:升序，desc:降序，为空表示不排序*/
+    private String order;
+
+    /** 路由 为空表示不设置*/
+    private String routing;
+
+    public Integer getIndex() {
+        return index;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
+
+    public Integer getPagesize() {
+        return pagesize;
+    }
+
+    public void setPagesize(Integer pagesize) {
+        this.pagesize = pagesize;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
+    }
+
+    public String getRouting() {
+        return routing;
+    }
+
+    public void setRouting(String routing) {
+        this.routing = routing;
+    }
+}
+
 
 /*
  * ES的mapping创建的基础类
