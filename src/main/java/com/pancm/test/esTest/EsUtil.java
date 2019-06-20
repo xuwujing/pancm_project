@@ -22,6 +22,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
@@ -85,6 +86,12 @@ public final class EsUtil {
             QueryBuilder queryBuilder = new TermQueryBuilder("name", "xuwujing");
             System.out.println("更新的结果:" + updateByQuery(index, type, queryBuilder));
             System.out.println("查询的结果2:" + queryById(index, type, "1"));
+            QueryBuilder queryBuilder3 = QueryBuilders.matchAllQuery();
+            System.out.println("查询的结果3:" + query(index, type, queryBuilder3));
+            QueryBuilder queryBuilder4 = QueryBuilders.rangeQuery("age").from(15);
+            QueryBuilder queryBuilder5 = QueryBuilders.rangeQuery("id").from(5);
+            System.out.println("查询的结果4:" + query(index, type, queryBuilder4,queryBuilder5));
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -383,6 +390,11 @@ public final class EsUtil {
         return map;
     }
 
+
+    public static List<Map<String, Object>> query(String index, String type, QueryBuilder... queryBuilders) throws IOException {
+        return query(index, type, null , queryBuilders);
+    }
+
     /**
      * @return boolean
      * @Author pancm
@@ -390,7 +402,7 @@ public final class EsUtil {
      * @Date 2019/3/21
      * @Param []
      **/
-    public static List<Map<String, Object>> query(String index, String type, EsQueryCondition esQueryCondition,QueryBuilder... queryBuilders) throws IOException {
+    public static List<Map<String, Object>> query(String index, String type, EsQueryCondition esQueryCondition, QueryBuilder... queryBuilders) throws IOException {
         if (index == null || type == null) {
             return null;
         }
@@ -400,14 +412,46 @@ public final class EsUtil {
             SearchRequest searchRequest = new SearchRequest(index);
             searchRequest.types(type);
             SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-            Integer form = esQueryCondition.getIndex();
-            Integer pagesize = esQueryCondition.getPagesize();
-            if(form!=null && form >0 && pagesize!=null && pagesize>0 ){
-                form = (form-1)*pagesize;
-                pagesize = form + pagesize;
-                // 设置起止和结束
-                sourceBuilder.from(form);
-                sourceBuilder.size(pagesize);
+
+            if (esQueryCondition != null) {
+                Integer form = esQueryCondition.getIndex();
+                Integer pagesize = esQueryCondition.getPagesize();
+                if (form != null && form > 0 && pagesize != null && pagesize > 0) {
+                    form = (form - 1) * pagesize;
+                    pagesize = form + pagesize;
+                    // 设置起止和结束
+                    sourceBuilder.from(form);
+                    sourceBuilder.size(pagesize);
+                }
+                String routing = esQueryCondition.getRouting();
+                if (routing != null && routing.length() > 0) {
+                    // 设置路由
+                    searchRequest.routing(routing);
+                }
+
+                // 设置索引库表达式
+                searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
+
+                //设置排序
+                String order = esQueryCondition.getOrder();
+                if (order != null) {
+                    String[] orderField = esQueryCondition.getOrderField();
+                    SortOrder order2 = order.equals(SortOrder.DESC) ? SortOrder.DESC : SortOrder.ASC;
+                    //如果设置了排序字段则用排序的字段进行排序，否则就默认排序
+                    if (orderField != null) {
+                        for (String field : orderField) {
+                            sourceBuilder.sort(new FieldSortBuilder(field).order(order2));
+                        }
+                    } else {
+                        sourceBuilder.sort(new ScoreSortBuilder().order(order2));
+                    }
+                }
+                String[] includeFields = esQueryCondition.getIncludeFields();
+                String[] excludeFields = esQueryCondition.getExcludeFields();
+                if (includeFields != null && includeFields.length > 0 && excludeFields != null && excludeFields.length > 0) {
+                    sourceBuilder.fetchSource(includeFields, excludeFields);
+                }
+                sourceBuilder.fetchSource(esQueryCondition.isCloseSource());
             }
             //设置条件
             if (queryBuilders != null) {
@@ -415,36 +459,7 @@ public final class EsUtil {
                     sourceBuilder.query(queryBuilder);
                 }
             }
-            String routing = esQueryCondition.getRouting();
-            if(routing!=null && routing.length()>0){
-                // 设置路由
-                searchRequest.routing(routing);
-            }
 
-            // 设置索引库表达式
-            searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
-
-            //设置排序
-            String order = esQueryCondition.getOrder();
-            if(order!=null){
-                String[] orderField = esQueryCondition.getOrderField();
-                SortOrder order2 = order.equals(SortOrder.DESC)?SortOrder.DESC:SortOrder.ASC;
-                //如果设置了排序字段则用排序的字段进行排序，否则就默认排序
-                if(orderField!=null){
-                    for (String field:orderField) {
-                        sourceBuilder.sort(new FieldSortBuilder(field).order(order2));
-                    }
-                }else{
-                    sourceBuilder.sort(new ScoreSortBuilder().order(order2));
-                }
-            }
-            String[] includeFields = esQueryCondition.getIncludeFields();
-            String[] excludeFields = esQueryCondition.getExcludeFields();
-            if(includeFields!=null&&includeFields.length>0&&excludeFields!=null&&excludeFields.length>0){
-                sourceBuilder.fetchSource(includeFields,excludeFields);
-            }
-
-	        sourceBuilder.fetchSource(esQueryCondition.isCloseSource());
             searchRequest.source(sourceBuilder);
             // 同步查询
             SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
@@ -610,6 +625,7 @@ public final class EsUtil {
         if (client != null) {
             try {
                 client.close();
+                setIsAutoClose(true);
             } catch (IOException e) {
                 throw e;
             }
@@ -642,31 +658,45 @@ public final class EsUtil {
 /**
  * @Author pancm
  * @Description 查询条件的类
- * @Date  2019/6/19
+ * @Date 2019/6/19
  * @Param
  * @return
  **/
-class EsQueryCondition implements  Serializable{
+class EsQueryCondition implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    /** 下标和条数  都为null或小于0表示不分页 */
+    /**
+     * 下标和条数  都为null或小于0表示不分页
+     */
     private Integer index;
     private Integer pagesize;
 
-    /** 排序规则 asc:升序，desc:降序，为空表示不排序*/
+    /**
+     * 排序规则 asc:升序，desc:降序，为空表示不排序
+     */
     private String order;
-    /** 排序字段 */
+    /**
+     * 排序字段
+     */
     private String[] orderField;
 
-    /** 路由 为空表示不设置*/
+    /**
+     * 路由 为空表示不设置
+     */
     private String routing;
 
-    /**  返回的字段 */
+    /**
+     * 返回的字段
+     */
     private String[] includeFields;
-    /**  排除的字段 */
+    /**
+     * 排除的字段
+     */
     private String[] excludeFields;
 
-    /**  是否关闭source查询 */
+    /**
+     * 是否关闭source查询
+     */
     private boolean isCloseSource;
 
     public boolean isCloseSource() {
