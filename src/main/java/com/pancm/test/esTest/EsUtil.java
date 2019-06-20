@@ -14,7 +14,6 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.ShardSearchFailure;
 import org.elasticsearch.action.support.IndicesOptions;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
@@ -23,21 +22,21 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.index.reindex.ReindexRequest;
 import org.elasticsearch.index.reindex.UpdateByQueryRequest;
-import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.ScoreSortBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -410,6 +409,7 @@ public final class EsUtil {
                 sourceBuilder.from(form);
                 sourceBuilder.size(pagesize);
             }
+            //设置条件
             if (queryBuilders != null) {
                 for (QueryBuilder queryBuilder : queryBuilders) {
                     sourceBuilder.query(queryBuilder);
@@ -421,50 +421,37 @@ public final class EsUtil {
                 searchRequest.routing(routing);
             }
 
-
             // 设置索引库表达式
             searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
 
-            // 排序
-            // 根据默认值进行降序排序
-//		sourceBuilder.sort(new ScoreSortBuilder().order(SortOrder.DESC));
-            // 根据字段进行升序排序
-//		sourceBuilder.sort(new FieldSortBuilder("id").order(SortOrder.ASC));
-
-            // 关闭suorce查询
-//		sourceBuilder.fetchSource(false);
-
-            String[] includeFields = new String[]{"title", "user", "innerObject.*"};
-            String[] excludeFields = new String[]{"_type"};
-            // 包含或排除字段
-//		sourceBuilder.fetchSource(includeFields, excludeFields);
-
-            searchRequest.source(sourceBuilder);
-
-            // 同步查询
-            SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-
-            // HTTP状态代码、执行时间或请求是否提前终止或超时
-            RestStatus status = searchResponse.status();
-            TimeValue took = searchResponse.getTook();
-            Boolean terminatedEarly = searchResponse.isTerminatedEarly();
-            boolean timedOut = searchResponse.isTimedOut();
-
-            // 供关于受搜索影响的切分总数的统计信息，以及成功和失败的切分
-            int totalShards = searchResponse.getTotalShards();
-            int successfulShards = searchResponse.getSuccessfulShards();
-            int failedShards = searchResponse.getFailedShards();
-            // 失败的原因
-            for (ShardSearchFailure failure : searchResponse.getShardFailures()) {
-                // failures should be handled here
+            //设置排序
+            String order = esQueryCondition.getOrder();
+            if(order!=null){
+                String[] orderField = esQueryCondition.getOrderField();
+                SortOrder order2 = order.equals(SortOrder.DESC)?SortOrder.DESC:SortOrder.ASC;
+                //如果设置了排序字段则用排序的字段进行排序，否则就默认排序
+                if(orderField!=null){
+                    for (String field:orderField) {
+                        sourceBuilder.sort(new FieldSortBuilder(field).order(order2));
+                    }
+                }else{
+                    sourceBuilder.sort(new ScoreSortBuilder().order(order2));
+                }
+            }
+            String[] includeFields = esQueryCondition.getIncludeFields();
+            String[] excludeFields = esQueryCondition.getExcludeFields();
+            if(includeFields!=null&&includeFields.length>0&&excludeFields!=null&&excludeFields.length>0){
+                sourceBuilder.fetchSource(includeFields,excludeFields);
             }
 
+	        sourceBuilder.fetchSource(esQueryCondition.isCloseSource());
+            searchRequest.source(sourceBuilder);
+            // 同步查询
+            SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
             // 结果
             searchResponse.getHits().forEach(hit -> {
                 Map<String, Object> map = hit.getSourceAsMap();
-                String string = hit.getSourceAsString();
-                System.out.println("普通查询的Map结果:" + map);
-                System.out.println("普通查询的String结果:" + string);
+                list.add(map);
             });
         } finally {
             if (isAutoClose) {
@@ -668,9 +655,43 @@ class EsQueryCondition implements  Serializable{
 
     /** 排序规则 asc:升序，desc:降序，为空表示不排序*/
     private String order;
+    /** 排序字段 */
+    private String[] orderField;
 
     /** 路由 为空表示不设置*/
     private String routing;
+
+    /**  返回的字段 */
+    private String[] includeFields;
+    /**  排除的字段 */
+    private String[] excludeFields;
+
+    /**  是否关闭source查询 */
+    private boolean isCloseSource;
+
+    public boolean isCloseSource() {
+        return isCloseSource;
+    }
+
+    public void setCloseSource(boolean closeSource) {
+        isCloseSource = closeSource;
+    }
+
+    public String[] getIncludeFields() {
+        return includeFields;
+    }
+
+    public void setIncludeFields(String[] includeFields) {
+        this.includeFields = includeFields;
+    }
+
+    public String[] getExcludeFields() {
+        return excludeFields;
+    }
+
+    public void setExcludeFields(String[] excludeFields) {
+        this.excludeFields = excludeFields;
+    }
 
     public Integer getIndex() {
         return index;
@@ -702,6 +723,14 @@ class EsQueryCondition implements  Serializable{
 
     public void setRouting(String routing) {
         this.routing = routing;
+    }
+
+    public String[] getOrderField() {
+        return orderField;
+    }
+
+    public void setOrderField(String[] orderField) {
+        this.orderField = orderField;
     }
 }
 
