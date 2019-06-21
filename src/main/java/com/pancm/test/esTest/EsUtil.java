@@ -2,6 +2,7 @@ package com.pancm.test.esTest;
 
 
 import org.apache.http.HttpHost;
+import org.apache.storm.command.list;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
@@ -91,7 +92,19 @@ public final class EsUtil {
             QueryBuilder queryBuilder4 = QueryBuilders.rangeQuery("age").from(15);
             QueryBuilder queryBuilder5 = QueryBuilders.rangeQuery("id").from(5);
             System.out.println("查询的结果4:" + query(index, type, queryBuilder4,queryBuilder5));
+            EsQueryCondition esQueryCondition = new EsQueryCondition();
+            esQueryCondition.setCloseSource(true);
+            esQueryCondition.setIndex(1);
+            esQueryCondition.setPagesize(3);
+            esQueryCondition.setOrder("desc");
+            esQueryCondition.setOrderField(new String[]{"age"});
+            String [] incStrings = new String[]{"age","name"};
+            esQueryCondition.setIncludeFields(incStrings);
+            esQueryCondition.setExcludeFields(new String[]{"id"});
+            System.out.println("查询的结果5:" + query(index, type,esQueryCondition, queryBuilder4));
 
+
+            // TODO:
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -463,11 +476,21 @@ public final class EsUtil {
             searchRequest.source(sourceBuilder);
             // 同步查询
             SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-            // 结果
-            searchResponse.getHits().forEach(hit -> {
-                Map<String, Object> map = hit.getSourceAsMap();
-                list.add(map);
-            });
+
+            if(queryBuilders != null|| (esQueryCondition != null && esQueryCondition.isQueryData())){
+                // 结果
+                searchResponse.getHits().forEach(hit -> {
+                    Map<String, Object> map = hit.getSourceAsMap();
+                    list.add(map);
+                });
+            }
+
+              if(esQueryCondition != null && esQueryCondition.isNeedTotal()){
+                  Map<String, Object> mapTotal = new HashMap<>();
+                  mapTotal.put("total", searchResponse.getHits().getTotalHits());
+                  list.add(mapTotal);
+              }
+
         } finally {
             if (isAutoClose) {
                 close();
@@ -698,6 +721,29 @@ class EsQueryCondition implements Serializable {
      * 是否关闭source查询
      */
     private boolean isCloseSource;
+
+    /**  是否需要查询数据 */
+    private boolean isQueryData = true;
+
+    /** 是否需要 返回总数 */
+    private boolean isNeedTotal = true;
+
+
+    public boolean isQueryData() {
+        return isQueryData;
+    }
+
+    public void setQueryData(boolean queryData) {
+        isQueryData = queryData;
+    }
+
+    public boolean isNeedTotal() {
+        return isNeedTotal;
+    }
+
+    public void setNeedTotal(boolean needTotal) {
+        isNeedTotal = needTotal;
+    }
 
     public boolean isCloseSource() {
         return isCloseSource;
