@@ -95,7 +95,7 @@ public final class EsUtil {
             EsQueryCondition esQueryCondition = new EsQueryCondition();
             esQueryCondition.setCloseSource(true);
             esQueryCondition.setIndex(1);
-            esQueryCondition.setPagesize(3);
+            esQueryCondition.setPagesize(4);
             esQueryCondition.setOrder("desc");
             esQueryCondition.setOrderField(new String[]{"age"});
             String [] incStrings = new String[]{"age","name"};
