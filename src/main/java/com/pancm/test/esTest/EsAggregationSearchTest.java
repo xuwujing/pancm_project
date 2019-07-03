@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author pancm
@@ -52,6 +53,7 @@ public class EsAggregationSearchTest {
 
         try {
             init();
+            groupbySearch();
             avgSearch();
             maxSearch();
             sumSearch();
@@ -66,6 +68,7 @@ public class EsAggregationSearchTest {
         }
 
     }
+
 
     /*
      * 初始化服务
@@ -89,6 +92,24 @@ public class EsAggregationSearchTest {
                 client=null;
             }
         }
+    }
+
+
+    /**
+     * @Author pancm
+     * @Description 多个聚合条件测试
+     * SQL: select team, position, count(*) as pos_count from player group by team, position;
+     * @Date  2019/7/3
+     * @Param []
+     * @return void
+     **/
+    private static void groupbySearch() throws IOException{
+        String buk="group";
+        AggregationBuilder aggregation = AggregationBuilders.terms("age").field("age");
+        AggregationBuilder aggregation2 = AggregationBuilders.terms("name").field("name");
+        aggregation.subAggregation(aggregation2);
+        agg(aggregation,buk);
+
     }
 
     /**
@@ -195,10 +216,14 @@ public class EsAggregationSearchTest {
                 Sum ba = aggregations.get(buk);
                 logger.info(buk+":" + ba.getValue());
                 logger.info("------------------------------------");
-            }else{
-                //取子聚合
+            }else if(buk.contains("top")){
+                //取子聚合TopHits
                 TopHits ba = aggregations.get(buk);
                 logger.info(buk+":" + ba.getHits().totalHits);
+                logger.info("------------------------------------");
+            }else if (buk.contains("group")){
+               Map<String,Object> map =  aggregations.get(buk).getMetaData();
+                logger.info(buk+":" + map);
                 logger.info("------------------------------------");
             }
 

@@ -73,11 +73,20 @@ public final class EsUtil {
             String index = "student";
             String type = "_doc";
             List<Map<String, Object>> list = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 20; i++) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("id", i);
-                map.put("name", "张三" + i);
-                map.put("age", 10 + i);
+                if(i%2==0){
+                    map.put("name", "张三");
+                    map.put("age", 16+i%4);
+                }else if(i%3==0){
+                    map.put("name", "李四");
+                    map.put("age", 17+i%6);
+                }else{
+                    map.put("name", "王五");
+                    map.put("age", 18);
+                }
+
                 list.add(map);
             }
             EsUtil.setIsAutoClose(false);
