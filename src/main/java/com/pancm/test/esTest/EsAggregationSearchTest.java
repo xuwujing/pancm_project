@@ -8,12 +8,9 @@ import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.rest.RestStatus;
-import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
-import org.elasticsearch.search.aggregations.bucket.histogram.Histogram;
-import org.elasticsearch.search.aggregations.bucket.histogram.ParsedDateHistogram;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.avg.Avg;
@@ -98,7 +95,7 @@ public class EsAggregationSearchTest {
     /**
      * @Author pancm
      * @Description 多个聚合条件测试
-     * SQL: select team, position, count(*) as pos_count from player group by team, position;
+     * SQL: select age, name, count(*) as pos_count from student group by age, name;
      * @Date  2019/7/3
      * @Param []
      * @return void
