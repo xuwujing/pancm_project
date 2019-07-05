@@ -81,7 +81,7 @@ public class KafkaConsumerTest implements Runnable {
 	private void init() {
 		Properties props = new Properties();
 		//kafka消费的的地址
-		props.put("bootstrap.servers", "master:9092,slave1:9092,slave2:9092");
+		props.put("bootstrap.servers", "192.169.2.98:9092,192.169.2.188:9092,192.169.2.156:9092");
 		//组名 不同组名可以重复消费
 		props.put("group.id", GROUPID);
 		//是否自动提交
@@ -113,7 +113,7 @@ public class KafkaConsumerTest implements Runnable {
      * @param args the args
      */
     public static void main(String args[]) {
-		KafkaConsumerTest test1 = new KafkaConsumerTest("KAFKA_TEST2");
+		KafkaConsumerTest test1 = new KafkaConsumerTest("KAFKA_TEST11");
 		Thread thread1 = new Thread(test1);
 		thread1.start();
 	}
