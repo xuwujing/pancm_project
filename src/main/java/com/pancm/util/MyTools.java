@@ -40,6 +40,8 @@ public final class MyTools {
 	private static final String sdf = "yyyy-MM-dd HH:mm:ss";
 	/** 时间戳格式 */
 	private static final String sd = "yyyyMMddHHmmss";
+	/** 年月格式 */
+	private static final String ym= "yyyyMM";
 	/** 检查是否为整型 */
 	private static Pattern p = Pattern.compile("^\\d+$");
 
@@ -373,7 +375,23 @@ public final class MyTools {
 		}
 	}
 
-    /**
+
+	/**
+	 * @Author pancm
+	 * @Description  获取月份的天数
+	 * @Date  2019/7/12
+	 * @Param [ym2]
+	 * @return int
+	 **/
+	public static int getMonthDays(String time) throws ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat(ym);
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(sdf.parse(time));
+		return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+	}
+
+
+	/**
      * 获取几天之前的时间
      *
      * @param day the day
