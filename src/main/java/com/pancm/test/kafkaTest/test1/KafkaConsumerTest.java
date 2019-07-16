@@ -30,13 +30,14 @@ public class KafkaConsumerTest implements Runnable {
 	private ConsumerRecords<String, String> msgList;
 	private  String[] topic;
 	private  String topic1;
-	private static final String GROUPID = "groupzx7";
+	private static final String GROUPID = "groupzx4";
 
     //主程序的日志打印
     private static Logger LOG = LoggerFactory.getLogger(KafkaConsumerTest.class);
 
     private long pause=1;
-    private String url= "192.169.2.30:9092,192.169.2.121:9092,192.169.2.184:9092";
+//    private String url= "192.169.2.30:9092,192.169.2.121:9092,192.169.2.184:9092";
+	private String url= "192.169.0.23:9092,192.169.0.24:9092,192.169.0.25:9092";
     /**
      * Instantiates a new Kafka consumer test.
      *
@@ -116,7 +117,8 @@ public class KafkaConsumerTest implements Runnable {
 
 					}
 				}else{	
-					Thread.sleep(1000);
+					Thread.sleep(5000);
+						System.out.println("====");
 				}
 			}		
 		} catch (InterruptedException e) {

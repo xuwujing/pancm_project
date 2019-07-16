@@ -22,7 +22,8 @@ public class KafkaProducerTest implements Runnable {
 	private final String topic;
 
 //	private String url= "192.169.2.98:2181,192.169.2.188:2181,192.169.2.156:2181";
-	private String url= "192.169.2.30:9092,192.169.2.121:9092,192.169.2.184:9092";
+//	private String url= "192.169.2.30:9092,192.169.2.121:9092,192.169.2.184:9092";
+	private String url= "192.169.0.23:9092,192.169.0.24:9092,192.169.0.25:9092";
 
 
 	/**

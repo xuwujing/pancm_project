@@ -95,7 +95,7 @@ public class EsAggregationSearchTest {
     /**
      * @Author pancm
      * @Description 多个聚合条件测试
-     * SQL: select age, name, count(*) as pos_count from student group by age, name;
+     * SQL: select age, name, count(*) as count1 from student group by age, name;
      * @Date  2019/7/3
      * @Param []
      * @return void

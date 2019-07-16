@@ -23,8 +23,9 @@ public class KafkaConsumerTest extends Thread {
 	private ConsumerRecords<String, String> msgList;
 	private final String topic;
 	private static final String GROUPID = "groupA1";
-	private final String servers="192.169.0.23:9092,192.169.0.24:9092,192.169.0.25:9092";
-//    private final String servers="192.169.2.156:9092,192.169.2.98:9092,192.169.2.188:9092";
+	private final String servers="192.169.0.23:9092";
+//	private final String servers="192.169.0.23:2181";
+//  private final String servers="192.169.2.156:9092,192.169.2.98:9092,192.169.2.188:9092";
 
     /**
      * Instantiates a new Kafka consumer test.
@@ -104,7 +105,7 @@ public class KafkaConsumerTest extends Thread {
      * @param args the args
      */
     public static void main(String args[]) {
-		KafkaConsumerTest test1 = new KafkaConsumerTest("TEST_INSERT");
+		KafkaConsumerTest test1 = new KafkaConsumerTest("t4");
 		KafkaConsumerTest test2 = new KafkaConsumerTest("1001_INSERT");
 		KafkaConsumerTest test3 = new KafkaConsumerTest("1002_INSERT");
 		Thread thread1 = new Thread(test1);

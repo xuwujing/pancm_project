@@ -136,12 +136,15 @@ public class LocalDateTimeTest {
 		 System.out.println("当前月:"+ldt.getMonthValue());
 		 System.out.println("当前时:"+ldt.getHour());
 		 System.out.println("当前分:"+ldt.getMinute());
-		 System.out.println("当前时间:"+ldt.toString());
+		System.out.println("当前月份的天数:"+ldt.getDayOfMonth());
+		System.out.println("当前时间:"+ldt.toString());
+
 		//		 当前年:2018
 		//		 当前年份天数:353
 		//		 当前月:12
 		//		 当前时:15
 		//		 当前分:24
+		//		 当前月份的天数:12
 		//		 当前时间:2018-12-19T15:24:35.833
 		 
 		 
