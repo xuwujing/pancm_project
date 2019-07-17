@@ -1,12 +1,15 @@
 package com.pancm.test.esTest;
 
 
+
+
+import io.searchbox.cluster.UpdateSettings;
 import org.apache.http.HttpHost;
-import org.apache.storm.command.list;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
+import org.elasticsearch.action.admin.indices.template.put.PutIndexTemplateRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
@@ -111,6 +114,7 @@ public final class EsUtil {
             esQueryCondition.setIncludeFields(incStrings);
             esQueryCondition.setExcludeFields(new String[]{"id"});
             System.out.println("查询的结果5:" + query(index, type,esQueryCondition, queryBuilder4));
+
 
 
             // TODO:
