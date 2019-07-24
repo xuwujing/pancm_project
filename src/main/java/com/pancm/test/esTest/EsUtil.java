@@ -54,7 +54,7 @@ import java.util.regex.Pattern;
  * @date 2019年3月19日
  */
 public final class EsUtil {
-    private static Logger logger = LoggerFactory.getLogger(EsHighLevelRestSearchTest.class);
+    private static Logger logger = LoggerFactory.getLogger(EsUtil.class);
 
     private EsUtil() {
 
