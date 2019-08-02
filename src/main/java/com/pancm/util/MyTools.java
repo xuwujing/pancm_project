@@ -125,6 +125,18 @@ public final class MyTools {
 		return !isEmpty(json);
 	}
 
+
+	/**
+	 * @Author pancm
+	 * @Description char 类型转成int类型
+	 * @Date  2019/8/2
+	 * @Param []
+	 * @return int
+	 **/
+	public  static  int charTransformInt(char c){
+		return Character.getNumericValue(c);
+	}
+
     /**
      * 字符串反转 如:入参为abc，出参则为cba
      *
