@@ -1,15 +1,11 @@
 package com.pancm.test.esTest;
 
 
-
-
-import io.searchbox.cluster.UpdateSettings;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
-import org.elasticsearch.action.admin.indices.template.put.PutIndexTemplateRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
@@ -177,7 +173,7 @@ public final class EsUtil {
      * @param nodes
      * @return
      */
-    public static void build(String... nodes) {
+    public static RestHighLevelClient build(String... nodes) {
         Objects.requireNonNull(nodes, "hosts can not null");
         ArrayList<HttpHost> ahosts = new ArrayList<HttpHost>();
         for (String host : nodes) {
@@ -186,7 +182,7 @@ public final class EsUtil {
             ahosts.add(new HttpHost(addr.getIp(), addr.getPort()));
         }
         httpHosts = ahosts.toArray(new HttpHost[0]);
-        init();
+        return init();
     }
 
 
@@ -642,7 +638,7 @@ public final class EsUtil {
     /*
      * 初始化服务
      */
-    private static void init() {
+    private static RestHighLevelClient init() {
         if (client == null) {
             synchronized (EsUtil.class) {
                 if (client == null) {
@@ -651,7 +647,7 @@ public final class EsUtil {
                 }
             }
         }
-
+        return  client;
     }
 
     /*
