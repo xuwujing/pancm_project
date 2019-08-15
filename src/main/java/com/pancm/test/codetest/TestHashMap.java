@@ -46,6 +46,7 @@ public class TestHashMap {
 		}
 		for(int i=100;i<200;i++) {
 			map.get("a"+i);
+
 		}
 		long endTime=System.currentTimeMillis();
 		
