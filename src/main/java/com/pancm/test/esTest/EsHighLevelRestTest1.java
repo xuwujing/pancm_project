@@ -445,13 +445,14 @@ public class EsHighLevelRestTest1 {
 		String type = "estest";
 
 		BulkRequest request = new BulkRequest();
-		// 批量新增
+		// 批量新增,存在会直接覆盖
 		request.add(new IndexRequest(index, type, "1").source(XContentType.JSON, "field", "foo"));
 		request.add(new IndexRequest(index, type, "2").source(XContentType.JSON, "field", "bar"));
 		request.add(new IndexRequest(index, type, "3").source(XContentType.JSON, "field", "baz"));
 
 		// 可以进行修改/删除/新增 操作
-		request.add(new UpdateRequest(index, type, "2").doc(XContentType.JSON, "field", "test"));
+		//docAsUpsert 为true表示存在更新，不存在插入，为false表示不存在就是不做更新
+		request.add(new UpdateRequest(index, type, "2").doc(XContentType.JSON, "field", "test").docAsUpsert(true));
 		request.add(new DeleteRequest(index, type, "3"));
 		request.add(new IndexRequest(index, type, "4").source(XContentType.JSON, "field", "baz"));
 
