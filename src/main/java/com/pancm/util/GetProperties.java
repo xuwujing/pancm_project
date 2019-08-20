@@ -25,7 +25,8 @@ import org.slf4j.LoggerFactory;
 public class GetProperties {
 	private static Map<String,String> appSettings = new HashMap<String,String>();
 	private static final Logger LOG = LoggerFactory.getLogger(GetProperties.class);
-	private String pathName="application.properties";
+//	private String pathName="application.properties";
+	private String pathName="jdbc.properties";
 	/**
 	 * 初始化系统默认参数
 	 */
@@ -37,9 +38,9 @@ public class GetProperties {
 		InputStream in = null;
 		try{
 			//获取resource中的配置
-//			in=InsertTopologyConfig.class.getClassLoader().getResourceAsStream(pathName);
+			in=this.getClass().getClassLoader().getResourceAsStream(pathName);
 			//获取项目同级的配置
-			in=new FileInputStream(new File(pathName));
+//			in=new FileInputStream(new File(pathName));
 			Properties prop = new Properties();
 			prop.load(in);
 			Set<Entry<Object, Object>> buf = prop.entrySet();

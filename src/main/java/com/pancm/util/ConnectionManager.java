@@ -38,23 +38,23 @@ public class ConnectionManager {
 	
 	
 	/** 密码的key */
-	private final String sysKey = "cluster.datasource.password";
+	private final String sysKey = "password";
 
 	
 
 	/** 配置文件名称 */
-	private final String fileName = "application.properties";
+	private final String fileName = "jdbc.properties";
 	/**
 	 * 在构造函数初始化的时候获取数据库连接
 	 */
 	private ConnectionManager() {
 		if (ec_pool == null) {
 			/** 获取属性文件中的值 **/
-			String driverName = conf.get("cluster.datasource.driverClassName");
-			String url = conf.get("cluster.datasource.url");
-			String username = conf.get("cluster.datasource.username");
-			String password = conf.get("cluster.datasource.password");
-			int maxPoolSize = Integer.valueOf(conf.get("spring.datasource.maxActive").trim());
+			String driverName = conf.get("driverClassName");
+			String url = conf.get("url");
+			String username = conf.get("username");
+			String password = conf.get("password");
+			int maxPoolSize = 100;
 		
 			ec_pool = new DruidDataSource();
 			ec_pool.setName("ec_pool");
