@@ -476,12 +476,16 @@ public class EsHighLevelRestTest1 {
 			if (bulkItemResponse.getOpType() == DocWriteRequest.OpType.INDEX
 					|| bulkItemResponse.getOpType() == DocWriteRequest.OpType.CREATE) {
 				IndexResponse indexResponse = (IndexResponse) itemResponse;
+				System.out.println("新增失败!"+indexResponse.toString());
 
 			} else if (bulkItemResponse.getOpType() == DocWriteRequest.OpType.UPDATE) {
 				UpdateResponse updateResponse = (UpdateResponse) itemResponse;
+				System.out.println("更新失败!"+updateResponse.toString());
 
 			} else if (bulkItemResponse.getOpType() == DocWriteRequest.OpType.DELETE) {
 				DeleteResponse deleteResponse = (DeleteResponse) itemResponse;
+				System.out.println("删除失败!"+deleteResponse.toString());
+
 			}
 		}
 
