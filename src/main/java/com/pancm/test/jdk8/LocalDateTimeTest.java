@@ -1,5 +1,6 @@
 package com.pancm.test.jdk8;
 
+import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -10,7 +11,9 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalField;
 
 /**
  * The type Local date time test.
@@ -129,6 +132,7 @@ public class LocalDateTimeTest {
 		 String time2="2018-01-04T09:19:29.499";
 		 //格式化时间
 		 LocalDateTime ldt2=LocalDateTime.parse(time2);
+
 		 //获取当前的时间，包括毫秒
 		 LocalDateTime ldt = LocalDateTime.now();
 		 System.out.println("当前年:"+ldt.getYear());   //2018
@@ -156,6 +160,13 @@ public class LocalDateTimeTest {
 		 System.out.println("前一个月的时间:"+ldt2.minusMonths(1).format(DateTimeFormatter.ofPattern("yyyyMM"))); //2018-06-16
 		 System.out.println("后一个月的时间:"+ldt2.plusMonths(1)); //2018-06-16
 		 System.out.println("指定2099年的当前时间:"+ldt.withYear(2099)); //2099-06-21T15:07:39.506
+		 System.out.println("获取这个时间的年:"+ldt2.getLong(ChronoField.YEAR)); //2018
+		 System.out.println("获取这个时间的月:"+ldt2.getLong(ChronoField.MONTH_OF_YEAR)); //1
+		 System.out.println("获取这个时间的天:"+ldt2.getLong(ChronoField.DAY_OF_MONTH)); //4
+		 System.out.println("获取这个时间的小时:"+ldt2.getLong(ChronoField.HOUR_OF_DAY)); //9
+		 System.out.println("转换成时间戳:"+ Timestamp.valueOf(ldt2).getTime()); //1515028769499
+
+
 		//		后5天时间:2018-12-24T15:50:37.508
 		//		前5天时间并格式化:2018-12-14
 		//		前一个月的时间:201712
@@ -164,7 +175,7 @@ public class LocalDateTimeTest {
 		 
 		 System.out.println("得到的时间:"+ldt2.toString());
 		 System.out.println("格式化时间:"+ldt2.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-		 
+
 		 
 		 /*
 		  * 
