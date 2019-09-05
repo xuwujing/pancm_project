@@ -1,6 +1,7 @@
 package com.pancm.test.esTest;
 
 import org.apache.http.HttpHost;
+import org.apache.storm.command.list;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -8,6 +9,7 @@ import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.rest.RestStatus;
+import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
@@ -22,8 +24,12 @@ import org.elasticsearch.search.aggregations.metrics.tophits.TopHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -113,6 +119,10 @@ public class EsAggregationSearchTest {
 
         aggregation2.subAggregation(aggregation3);
         aggregation.subAggregation(aggregation2);
+
+
+
+
         agg(aggregation,buk);
 
     }
@@ -227,14 +237,40 @@ public class EsAggregationSearchTest {
                 logger.info(buk+":" + ba.getHits().totalHits);
                 logger.info("------------------------------------");
             }else if (buk.contains("group")){
-               Map<String,Object> map =  aggregations.get(buk).getMetaData();
-                logger.info(buk+":" + map);
+               Map<String,Object> map =  new HashMap<>();
+                List<Map<String,Object>> list = new ArrayList<>();
+                agg(map,list,aggregations);
+                logger.info("聚合查询结果:"+list);
                 logger.info("------------------------------------");
             }
 
-
         }
     }
+
+    private static void agg(Map<String,Object> map, List<Map<String,Object>> list, Aggregations aggregations) {
+        aggregations.forEach(aggregation -> {
+            String name = aggregation.getName();
+            Terms genders = aggregations.get(name);
+            for (Terms.Bucket entry : genders.getBuckets()) {
+                String key = entry.getKey().toString();
+                long t = entry.getDocCount();
+                map.put(name,key);
+                map.put(name+"_"+"count",t);
+
+                //判断里面是否还有嵌套的数据
+                List<Aggregation> list2 = entry.getAggregations().asList();
+                if (list2.isEmpty()) {
+                    Map<String,Object> map2 = new HashMap<>();
+                    BeanUtils.copyProperties(map,map2);
+                    list.add(map2);
+                }else{
+                    agg(map, list, entry.getAggregations());
+                }
+            }
+        });
+    }
+
+
 
     private static SearchResponse search(AggregationBuilder aggregation) throws IOException {
         SearchRequest searchRequest = new SearchRequest();
