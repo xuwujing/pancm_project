@@ -76,7 +76,8 @@ public class EsHighLevelRestSearchTest {
 		try {
 			init();
 //			search();
-			search2();
+//			search2();
+			orSearch();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
@@ -85,7 +86,42 @@ public class EsHighLevelRestSearchTest {
 
 	}
 
-	/*
+	/**
+	 * @Author pancm
+	 * @Description  或查询
+	 * @Date  2019/9/6
+	 * @Param []
+	 * @return void
+	 **/
+    private static void orSearch() throws IOException {
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices("p_test");
+        searchRequest.types("_doc");
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        BoolQueryBuilder boolQueryBuilder2 = new BoolQueryBuilder();
+        /**
+         *  SELECT * FROM p_test where (uid = 1 or uid =2)  and phone = 12345678919
+         * */
+        boolQueryBuilder2.should(QueryBuilders.termQuery("uid",1));
+        boolQueryBuilder2.should(QueryBuilders.termQuery("uid",2));
+        boolQueryBuilder.must(boolQueryBuilder2);
+        boolQueryBuilder.must(QueryBuilders.termQuery("phone","12345678919"));
+        searchSourceBuilder.query(boolQueryBuilder);
+
+        System.out.println("或查询语句:"+searchSourceBuilder.toString());
+        searchRequest.source(searchSourceBuilder);
+        // 同步查询
+        SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+
+        searchResponse.getHits().forEach(documentFields -> {
+
+            System.out.println("查询结果:"+ documentFields.getSourceAsMap());
+        });
+
+    }
+
+    /*
 	 * 初始化服务
 	 */
 	private static void init() {
