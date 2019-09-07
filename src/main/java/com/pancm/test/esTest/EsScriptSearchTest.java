@@ -4,19 +4,29 @@ import org.apache.http.HttpHost;
 import org.elasticsearch.action.admin.cluster.storedscripts.GetStoredScriptRequest;
 import org.elasticsearch.action.admin.cluster.storedscripts.GetStoredScriptResponse;
 import org.elasticsearch.action.admin.cluster.storedscripts.PutStoredScriptRequest;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.bytes.BytesReference;
+import org.elasticsearch.common.document.DocumentField;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.script.Script;
+import org.elasticsearch.script.ScriptType;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author pancm
@@ -43,7 +53,7 @@ public class EsScriptSearchTest {
             init();
 //            search();
             putApi();
-
+            scriptSearch();
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
@@ -53,7 +63,103 @@ public class EsScriptSearchTest {
     }
 
 
+    /**
+     * @Author pancm
+     * @Description  通过脚本进行查询
+     * @Date  2019/9/6
+     * @Param []
+     * @return void
+     **/
+    private static void scriptSearch() throws IOException {
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices("p_test");
+        searchRequest.types("_doc");
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
+
+        /**
+         *
+         *{
+         *     "settings" : {
+         *         "number_of_shards" : 10,
+         *          "refresh_interval" : "1s"
+         *     },
+         *     "mappings" : {
+         *         "_doc" : {
+         *             "properties" : {
+         *                 "uid" : { "type" : "long" },
+         *                 "phone" : { "type" : "long" },
+         *                 "userid" : { "type" : "keyword" },
+         *                 "sendday" : { "type" : "long" },
+         *                 "message" : { "type" : "keyword" },
+         *                 "msgcode" : { "type" : "long" },
+         *                 "price" : { "type" : "double","index": "false" },
+         *              "sendtime" : {
+         *                   "type" : "date",
+         *                   "format" : "yyyy-MM-dd HH:mm:ss.SSS"
+         *               },
+         *              "sendtime2" : {
+         *                   "type" : "date",
+         *                   "format" : "yyyy-MM-dd HH:mm:ss.SSS"
+         *               },
+         *                 "sendtm" : { "type" : "long" },
+         *                   "sendtm2" : { "type" : "long" }
+         *             }
+         *         }
+         *     }
+         * }
+         *
+         *
+         *
+         *  对应查询语句
+         *  SELECT userid,sendday, (sendtm2-sendtm)as t FROM p_test where phone=12345678919 and (sendtm2-sendtm)>3801
+         **/
+
+        String id="InternalSqlScriptUtils.nullSafeFilter(InternalSqlScriptUtils.gt(InternalSqlScriptUtils.sub(InternalSqlScriptUtils.docValue(doc,params.v0)," +
+                "InternalSqlScriptUtils.docValue(doc,params.v1)),params.v2))";
+        String lang="painless";
+        Map<String,Object> map = new HashMap<>();
+        map.put("v0","sendtm2");
+        map.put("v1","sendtm");
+        map.put("v2",3800);
+        Script script = new Script(ScriptType.INLINE,lang,id,map);
+
+//		searchSourceBuilder.scriptField("script",script);
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        boolQueryBuilder.must(QueryBuilders.termQuery("phone", "12345678919"));
+        boolQueryBuilder.must(QueryBuilders.scriptQuery(script));
+
+
+        //设置查询条件
+        searchSourceBuilder.query(boolQueryBuilder);
+
+        searchSourceBuilder.storedField("_none_");
+        searchSourceBuilder.docValueField("userid","use_field_mapping");
+        searchSourceBuilder.docValueField("sendday","use_field_mapping");
+        searchSourceBuilder.docValueField("sendtm2","use_field_mapping");
+        searchSourceBuilder.docValueField("sendtm","use_field_mapping");
+        System.out.println("查询语句:"+searchSourceBuilder.toString());
+        searchRequest.source(searchSourceBuilder);
+
+        // 同步查询
+        SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+
+        searchResponse.getHits().forEach(hit -> {
+            Map<String, DocumentField> map1 =  hit.getFields();
+            Map<String,Object> map2 = new HashMap<>();
+            System.out.println("\n查询的Map结果:" + map1);
+
+            map1.forEach((s, objects) -> {
+                map2.put(objects.getName(),objects.getValue());
+            });
+
+            System.out.println("\n查询的Map结果2:" + map2);
+
+
+        });
+
+
+    }
 
 
     private static void putApi() throws IOException {
