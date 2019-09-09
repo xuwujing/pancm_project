@@ -75,6 +75,7 @@ public class EsHighLevelRestSearchTest {
 
 		try {
 			init();
+			allSearch();
 //			search();
 //			search2();
 			orSearch();
@@ -84,6 +85,21 @@ public class EsHighLevelRestSearchTest {
 			close();
 		}
 
+	}
+
+	private static void allSearch() throws IOException {
+		/*
+		 * 查询集群所有的索引
+		 *
+		 */
+		SearchRequest searchRequestAll = new SearchRequest();
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		searchSourceBuilder.query(QueryBuilders.matchAllQuery());
+		searchRequestAll.source(searchSourceBuilder);
+		// 同步查询
+		SearchResponse searchResponseAll = client.search(searchRequestAll, RequestOptions.DEFAULT);
+
+		System.out.println("所有查询总数:" + searchResponseAll.getHits().getTotalHits());
 	}
 
 	/**
@@ -154,20 +170,7 @@ public class EsHighLevelRestSearchTest {
 	 */
 	private static void search() throws IOException {
 
-		/*
-		 * 查询集群所有的索引
-		 * 
-		 */
-		SearchRequest searchRequestAll = new SearchRequest();
 
-		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		searchSourceBuilder.query(QueryBuilders.matchAllQuery());
-		searchRequestAll.source(searchSourceBuilder);
-
-		// 同步查询
-		SearchResponse searchResponseAll = client.search(searchRequestAll, RequestOptions.DEFAULT);
-
-		System.out.println("所有查询总数:" + searchResponseAll.getHits().getTotalHits());
 
 		// 查询指定的索引库
 		SearchRequest searchRequest = new SearchRequest("user");
