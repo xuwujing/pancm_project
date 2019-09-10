@@ -76,6 +76,7 @@ public class EsHighLevelRestSearchTest {
 		try {
 			init();
 			allSearch();
+			genSearch();
 //			search();
 //			search2();
 			orSearch();
@@ -84,6 +85,75 @@ public class EsHighLevelRestSearchTest {
 		}finally {
 			close();
 		}
+
+	}
+
+
+
+
+	private static void genSearch() throws IOException {
+
+
+		// 查询指定的索引库
+		SearchRequest searchRequest = new SearchRequest("user");
+		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+		// 设置查询条件
+		sourceBuilder.query(QueryBuilders.termQuery("user", "pancm"));
+		// 设置起止和结束
+		sourceBuilder.from(0);
+		sourceBuilder.size(5);
+		sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
+		// 设置路由
+//		searchRequest.routing("routing");
+		// 设置索引库表达式
+		searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
+		// 查询选择本地分片，默认是集群分片
+		searchRequest.preference("_local");
+
+		// 排序
+		// 根据默认值进行降序排序
+//		sourceBuilder.sort(new ScoreSortBuilder().order(SortOrder.DESC));
+		// 根据字段进行升序排序
+//		sourceBuilder.sort(new FieldSortBuilder("id").order(SortOrder.ASC));
+
+		// 关闭suorce查询
+//		sourceBuilder.fetchSource(false);
+
+		String[] includeFields = new String[] { "title", "user", "innerObject.*" };
+		String[] excludeFields = new String[] { "_type" };
+		// 包含或排除字段
+//		sourceBuilder.fetchSource(includeFields, excludeFields);
+
+		searchRequest.source(sourceBuilder);
+
+		// 同步查询
+		SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+
+		// HTTP状态代码、执行时间或请求是否提前终止或超时
+		RestStatus status = searchResponse.status();
+		TimeValue took = searchResponse.getTook();
+		Boolean terminatedEarly = searchResponse.isTerminatedEarly();
+		boolean timedOut = searchResponse.isTimedOut();
+
+		// 供关于受搜索影响的切分总数的统计信息，以及成功和失败的切分
+		int totalShards = searchResponse.getTotalShards();
+		int successfulShards = searchResponse.getSuccessfulShards();
+		int failedShards = searchResponse.getFailedShards();
+		// 失败的原因
+		for (ShardSearchFailure failure : searchResponse.getShardFailures()) {
+			// failures should be handled here
+		}
+
+		// 结果
+		searchResponse.getHits().forEach(hit -> {
+			Map<String, Object> map = hit.getSourceAsMap();
+			String string = hit.getSourceAsString();
+			System.out.println("普通查询的Map结果:" + map);
+			System.out.println("普通查询的String结果:" + string);
+		});
+
+
+		System.out.println("\n=================\n");
 
 	}
 
@@ -172,71 +242,12 @@ public class EsHighLevelRestSearchTest {
 
 
 
-		// 查询指定的索引库
-		SearchRequest searchRequest = new SearchRequest("user");
-		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-		// 设置查询条件
-		sourceBuilder.query(QueryBuilders.termQuery("user", "pancm"));
-		// 设置起止和结束
-		sourceBuilder.from(0);
-		sourceBuilder.size(5);
-		sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
-		// 设置路由
-//		searchRequest.routing("routing");
-		// 设置索引库表达式
-		searchRequest.indicesOptions(IndicesOptions.lenientExpandOpen());
-		// 查询选择本地分片，默认是集群分片
-		searchRequest.preference("_local");
-
-		// 排序
-		// 根据默认值进行降序排序
-//		sourceBuilder.sort(new ScoreSortBuilder().order(SortOrder.DESC)); 
-		// 根据字段进行升序排序
-//		sourceBuilder.sort(new FieldSortBuilder("id").order(SortOrder.ASC));  
-
-		// 关闭suorce查询
-//		sourceBuilder.fetchSource(false);
-
-		String[] includeFields = new String[] { "title", "user", "innerObject.*" };
-		String[] excludeFields = new String[] { "_type" };
-		// 包含或排除字段
-//		sourceBuilder.fetchSource(includeFields, excludeFields);
-
-		searchRequest.source(sourceBuilder);
-
-		// 同步查询
-		SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-
-		// HTTP状态代码、执行时间或请求是否提前终止或超时
-		RestStatus status = searchResponse.status();
-		TimeValue took = searchResponse.getTook();
-		Boolean terminatedEarly = searchResponse.isTerminatedEarly();
-		boolean timedOut = searchResponse.isTimedOut();
-
-		// 供关于受搜索影响的切分总数的统计信息，以及成功和失败的切分
-		int totalShards = searchResponse.getTotalShards();
-		int successfulShards = searchResponse.getSuccessfulShards();
-		int failedShards = searchResponse.getFailedShards();
-		// 失败的原因
-		for (ShardSearchFailure failure : searchResponse.getShardFailures()) {
-			// failures should be handled here
-		}
-
-		// 结果
-		searchResponse.getHits().forEach(hit -> {
-			Map<String, Object> map = hit.getSourceAsMap();
-			String string = hit.getSourceAsString();
-			System.out.println("普通查询的Map结果:" + map);
-			System.out.println("普通查询的String结果:" + string);
-		});
-
-		
-		System.out.println("\n=================\n");
-
 		/*
 		 * 全文查询使用示例
 		 */
-
+		// 查询指定的索引库
+		SearchRequest searchRequest = new SearchRequest("user");
+		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
 		// 搜索字段user为pancm的数据
 		MatchQueryBuilder matchQueryBuilder = new MatchQueryBuilder("user", "pancm");
 
@@ -264,7 +275,7 @@ public class EsHighLevelRestSearchTest {
 		// 同步查询
 		SearchResponse searchResponse2 = client.search(searchRequest, RequestOptions.DEFAULT);
 		
-		SearchHits hits = searchResponse.getHits();
+		SearchHits hits = searchResponse2.getHits();
 		//总条数和分值
 		long totalHits = hits.getTotalHits();
 		float maxScore = hits.getMaxScore();
