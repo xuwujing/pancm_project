@@ -76,21 +76,92 @@ public class EsHighLevelRestSearchTest {
 		try {
 			init();
 			allSearch();
+			//普通查询
 			genSearch();
+			orSearch();
+			likeSearch();
 //			search();
 //			search2();
-			orSearch();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
 			close();
 		}
 
+		/**
+		 * p_test
+		 *{
+         *     "settings" : {
+         *         "number_of_shards" : 10,
+         *          "refresh_interval" : "1s"
+						*     },
+         *     "mappings" : {
+         *         "_doc" : {
+         *             "properties" : {
+         *                 "uid" : { "type" : "long" },
+         *                 "phone" : { "type" : "long" },
+         *                 "userid" : { "type" : "keyword" },
+         *                 "sendday" : { "type" : "long" },
+         *                 "message" : { "type" : "keyword" },
+         *                 "msgcode" : { "type" : "long" },
+         *                 "price" : { "type" : "double","index": "false" },
+         *              "sendtime" : {
+         *                   "type" : "date",
+         *                   "format" : "yyyy-MM-dd HH:mm:ss.SSS"
+									*               },
+         *              "sendtime2" : {
+         *                   "type" : "date",
+         *                   "format" : "yyyy-MM-dd HH:mm:ss.SSS"
+									*               },
+         *                 "sendtm" : { "type" : "long" },
+         *                   "sendtm2" : { "type" : "long" }
+         *             }
+         *         }
+         *     }
+         * }
+         */
+
+	}
+
+	/**
+	 * @Author pancm
+	 * @Description 模糊查询
+	 * @Date  2019/9/12
+	 * @Param []
+	 * @return void
+	 **/
+	private static void likeSearch() throws IOException {
+		SearchRequest searchRequest = new SearchRequest();
+		searchRequest.indices("p_test");
+		searchRequest.types("_doc");
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+		BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+		/**
+		 *  SELECT * FROM p_test where  message like '%pan%';
+		 * */
+		boolQueryBuilder.must(QueryBuilders.wildcardQuery("message","pan"));
+		searchSourceBuilder.query(boolQueryBuilder);
+
+		System.out.println("模糊查询语句:"+searchSourceBuilder.toString());
+		searchRequest.source(searchSourceBuilder);
+		// 同步查询
+		SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+		searchResponse.getHits().forEach(documentFields -> {
+
+			System.out.println("查询结果:"+ documentFields.getSourceAsMap());
+		});
+
 	}
 
 
-
-
+	/**
+	 * @Author pancm
+	 * @Description  普通查询
+	 * @Date  2019/9/12
+	 * @Param []
+	 * @return void
+	 **/
 	private static void genSearch() throws IOException {
 
 
