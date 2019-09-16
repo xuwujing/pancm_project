@@ -148,7 +148,6 @@ public class EsHighLevelRestSearchTest {
 		// 同步查询
 		SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
 		searchResponse.getHits().forEach(documentFields -> {
-
 			System.out.println("查询结果:"+ documentFields.getSourceAsMap());
 		});
 
