@@ -170,7 +170,7 @@ public class EsHighLevelRestTest2 {
 		BulkByScrollResponse bulkResponse = client.reindex(request, RequestOptions.DEFAULT);
 
 		// 异步执行
-//		client.reindexAsync(request, RequestOptions.DEFAULT, listener); 
+//		client.reindexAsync(request, RequestOptions.DEFAULT, listener);
 
 		// 响应结果处理
 
@@ -328,7 +328,7 @@ public class EsHighLevelRestTest2 {
 		client.reindexRethrottleAsync(request, RequestOptions.DEFAULT, listener);       
 		client.updateByQueryRethrottleAsync(request, RequestOptions.DEFAULT, listener); 
 		client.deleteByQueryRethrottleAsync(request, RequestOptions.DEFAULT, listener);
-	
+
 		System.out.println("已成功设置!");
 
 	}

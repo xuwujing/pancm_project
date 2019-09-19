@@ -11,6 +11,7 @@ import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.DocWriteRequest;
 import org.elasticsearch.action.DocWriteResponse;
+import org.elasticsearch.action.admin.cluster.node.tasks.list.ListTasksResponse;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
@@ -457,6 +458,21 @@ public class EsHighLevelRestTest1 {
 		request.add(new IndexRequest(index, type, "4").source(XContentType.JSON, "field", "baz"));
 
 		BulkResponse bulkResponse = client.bulk(request, RequestOptions.DEFAULT);
+
+
+		ActionListener<BulkResponse> listener3 = new ActionListener<BulkResponse>() {
+			@Override
+			public void onResponse(BulkResponse response) {
+				System.out.println("===="+response.buildFailureMessage());
+			}
+
+			@Override
+			public void onFailure(Exception e) {
+				System.out.println("====---"+e.getMessage());
+			}
+		};
+
+		client.bulkAsync(request, RequestOptions.DEFAULT,listener3);
 
 		// 可以快速检查一个或多个操作是否失败 true是有至少一个失败！
 		if (bulkResponse.hasFailures()) {

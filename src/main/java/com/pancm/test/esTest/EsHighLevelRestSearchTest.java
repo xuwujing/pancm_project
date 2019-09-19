@@ -80,6 +80,8 @@ public class EsHighLevelRestSearchTest {
 			genSearch();
 			orSearch();
 			likeSearch();
+			inSearch();
+			existSearch();
 //			search();
 //			search2();
 
@@ -95,7 +97,7 @@ public class EsHighLevelRestSearchTest {
          *     "settings" : {
          *         "number_of_shards" : 10,
          *          "refresh_interval" : "1s"
-						*     },
+		 *     },
          *     "mappings" : {
          *         "_doc" : {
          *             "properties" : {
@@ -109,11 +111,11 @@ public class EsHighLevelRestSearchTest {
          *              "sendtime" : {
          *                   "type" : "date",
          *                   "format" : "yyyy-MM-dd HH:mm:ss.SSS"
-									*               },
+		 *               },
          *              "sendtime2" : {
          *                   "type" : "date",
          *                   "format" : "yyyy-MM-dd HH:mm:ss.SSS"
-									*               },
+		 *               },
          *                 "sendtm" : { "type" : "long" },
          *                   "sendtm2" : { "type" : "long" }
          *             }
@@ -122,6 +124,26 @@ public class EsHighLevelRestSearchTest {
          * }
          */
 
+	}
+
+	/**
+	 * @Author pancm
+	 * @Description exist查询
+	 * @Date  2019/9/17
+	 * @Param []
+	 * @return void
+	 **/
+	private static void existSearch() {
+	}
+
+	/**
+	 * @Author pancm
+	 * @Description in查询
+	 * @Date  2019/9/16
+	 * @Param []
+	 * @return void
+	 **/
+	private static void inSearch() {
 	}
 
 	/**
@@ -140,7 +162,7 @@ public class EsHighLevelRestSearchTest {
 		/**
 		 *  SELECT * FROM p_test where  message like '%pan%';
 		 * */
-		boolQueryBuilder.must(QueryBuilders.wildcardQuery("message","pan"));
+		boolQueryBuilder.must(QueryBuilders.wildcardQuery("message","*pan*"));
 		searchSourceBuilder.query(boolQueryBuilder);
 
 		System.out.println("模糊查询语句:"+searchSourceBuilder.toString());
