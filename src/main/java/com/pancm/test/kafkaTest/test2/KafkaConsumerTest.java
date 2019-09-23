@@ -58,8 +58,11 @@ public class KafkaConsumerTest implements Runnable {
 						messageNo++;
 					}
 					if(list.size()==50){
-						// 手动提交
+						// 手动提交 同步提交
 						consumer.commitSync();
+						// 异步提交
+//						consumer.commitAsync();
+
 						System.out.println("成功提交"+list.size()+"条,此时的offset为:"+list2.get(49));
 					}else if(list.size()>50){
 						consumer.close();
