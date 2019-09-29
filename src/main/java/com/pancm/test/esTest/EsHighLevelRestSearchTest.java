@@ -143,7 +143,28 @@ public class EsHighLevelRestSearchTest {
 	 * @Param []
 	 * @return void
 	 **/
-	private static void inSearch() {
+	private static void inSearch() throws IOException {
+		// 查询指定的索引库
+		SearchRequest searchRequest = new SearchRequest("user");
+		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+		/**
+		 *  SELECT * FROM p_test where uid in (1,2)
+		 * */
+		// 设置查询条件
+		sourceBuilder.query(QueryBuilders.termsQuery("uid",1,2));
+		searchRequest.source(sourceBuilder);
+		// 同步查询
+		SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+		// 结果
+		searchResponse.getHits().forEach(hit -> {
+			Map<String, Object> map = hit.getSourceAsMap();
+			String string = hit.getSourceAsString();
+			System.out.println("in查询的Map结果:" + map);
+			System.out.println("in查询的String结果:" + string);
+		});
+
+
+		System.out.println("\n=================\n");
 	}
 
 	/**
