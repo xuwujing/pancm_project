@@ -68,9 +68,9 @@ public class EsHighLevelRestTest1 {
 	public static void main(String[] args) {
 		try {
 			init();
-			insert();
-			careatindex();
-			deleteindex();
+//			insert();
+			careatIndex();
+			deleteIndex();
 			get();
 			exists();
 			update();
@@ -180,28 +180,23 @@ public class EsHighLevelRestTest1 {
 	 * 
 	 * @throws IOException
 	 */
-	private static void careatindex() throws IOException {
+	private static void careatIndex() throws IOException {
 
 		// 类型
-		String type = "test1";
-		String index = "doc_";
-
+		String type = "doc_";
+		String index = "test1";
 		// setting 的值
 		Map<String, Object> setmapping = new HashMap<>();
-
-		// 分区数、路由分片数、副本数、缓存刷新时间
+		// 分区数、副本数、缓存刷新时间
 		setmapping.put("number_of_shards", 10);
-		setmapping.put("number_of_routing_shards", 10);
 		setmapping.put("number_of_replicas", 1);
 		setmapping.put("refresh_interval", "5s");
-
-
 		Map<String, Object> keyword = new HashMap<>();
 		//设置类型
 		keyword.put("type", "keyword");
-		Map<String, Object> l = new HashMap<>();
+		Map<String, Object> lon = new HashMap<>();
 		//设置类型
-		l.put("type", "long");
+		lon.put("type", "long");
 		Map<String, Object> date = new HashMap<>();
 		//设置类型
 		date.put("type", "date");
@@ -210,56 +205,43 @@ public class EsHighLevelRestTest1 {
 		Map<String, Object> jsonMap2 = new HashMap<>();
 		Map<String, Object> properties = new HashMap<>();
 		//设置字段message信息
-		properties.put("uid", l);
+		properties.put("uid", lon);
+		properties.put("phone", lon);
+		properties.put("msgcode", lon);
 		properties.put("message", keyword);
-		properties.put("message", keyword);
-		properties.put("message", keyword);
-		properties.put("message", keyword);
-		properties.put("message", keyword);
+		properties.put("sendtime", date);
 		Map<String, Object> mapping = new HashMap<>();
 		mapping.put("properties", properties);
 		jsonMap2.put(type, mapping);
 
-		GetIndexRequest getRequest2 = new GetIndexRequest();
-		getRequest2.indices(index);
-		getRequest2.local(false); 
-		getRequest2.humanReadable(true); 
-		boolean exists2 = client.indices().exists(getRequest2, RequestOptions.DEFAULT);
+		GetIndexRequest getRequest = new GetIndexRequest();
+		getRequest.indices(index);
+		getRequest.local(false);
+		getRequest.humanReadable(true);
+		boolean exists2 = client.indices().exists(getRequest, RequestOptions.DEFAULT);
 		//如果存在就不创建了
 		if(exists2) {
 			System.out.println(type+"索引库已经存在!");
 			return;
 		}
-		
 		// 开始创建库
-		CreateIndexRequest request2 = new CreateIndexRequest(index);
+		CreateIndexRequest request = new CreateIndexRequest(index);
 		try {
 			// 加载数据类型
-			request2.settings(setmapping);
-			//第二种方式
-//			request2.settings(Settings.builder() 
-//				    .put("index.number_of_shards", 3)
-//				    .put("index.number_of_replicas", 1));
-
-
+			request.settings(setmapping);
 			//设置mapping参数
-			request2.mapping(type, jsonMap2);
-			
+			request.mapping(type, jsonMap2);
 			//设置别名
-			request2.alias(new Alias("user_alias"));
-			
-			
-			CreateIndexResponse createIndexResponse = client.indices().create(request2, RequestOptions.DEFAULT);
+			request.alias(new Alias("pancm_alias"));
+			CreateIndexResponse createIndexResponse = client.indices().create(request, RequestOptions.DEFAULT);
 			boolean falg = createIndexResponse.isAcknowledged();
-			logger.info("创建索引库" + index + ",状态为:" + falg);
+			if(falg){
+				logger.info("创建索引库:{}成功！",index );
+			}
 		} catch (IOException e) {
 			logger.error("创建INDEX报错", e);
-		} catch (NullPointerException e) {
-			logger.error("模板文件中的mappings或settings不能为空", e);
 		}
 
-		
-		
 	}
 
 
@@ -268,12 +250,9 @@ public class EsHighLevelRestTest1 {
 	 *
 	 * @throws IOException
 	 */
-	private static void deleteindex() throws IOException {
+	private static void deleteIndex() throws IOException {
 		String index = "userindex";
-
-
 		DeleteIndexRequest  request = new DeleteIndexRequest(index);
-
 		// 同步删除
 		client.indices().delete(request,RequestOptions.DEFAULT);
 		System.out.println("删除索引库成功！"+index);
