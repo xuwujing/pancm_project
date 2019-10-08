@@ -45,6 +45,8 @@ import org.elasticsearch.rest.RestStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.POST;
+
 /**
  * @Title: EsHighLevelRestTest1
  * @Description: Java High Level REST Client Es高级客户端使用教程一 (基本CRUD使用) 官方文档地址:
@@ -66,6 +68,7 @@ public class EsHighLevelRestTest1 {
 	public static void main(String[] args) {
 		try {
 			init();
+			insert();
 			careatindex();
 			deleteindex();
 			get();
@@ -78,6 +81,76 @@ public class EsHighLevelRestTest1 {
 			e.printStackTrace();
 		}
 
+	}
+
+	private static void insert() throws IOException {
+		String index = "test1";
+		String type = "_doc";
+		// 唯一编号
+		String id = "1";
+		IndexRequest request = new IndexRequest(index, type, id);
+		/*
+		 * 第一种方式，通过jsonString进行创建
+		 */
+		// json
+		String jsonString = "{" + "\"uid\":\"1234\","+ "\"phone\":\"12345678909\","+ "\"msgcode\":\"1\"," + "\"sendtime\":\"2019-03-14 01:57:04\","
+				+ "\"message\":\"xuwujing study Elasticsearch\"" + "}";
+		request.source(jsonString, XContentType.JSON);
+
+		/*
+		 * 第二种方式，通过map创建,，会自动转换成json的数据
+		 */
+		Map<String, Object> jsonMap = new HashMap<>();
+		jsonMap.put("uid", 1234);
+		jsonMap.put("phone", 12345678909L);
+		jsonMap.put("msgcode", 1);
+		jsonMap.put("sendtime", "2019-03-14 01:57:04");
+		jsonMap.put("message", "xuwujing study Elasticsearch");
+		request.source(jsonMap);
+
+		/*
+		 * 第三种方式 : 通过XContentBuilder对象进行创建
+		 */
+
+		XContentBuilder builder = XContentFactory.jsonBuilder();
+		builder.startObject();
+		{
+			builder.field("uid", 1234);
+			builder.field("phone", 12345678909L);
+			builder.field("msgcode", 1);
+			builder.timeField("sendtime", "2019-03-14 01:57:04");
+			builder.field("message", "xuwujing study Elasticsearch");
+		}
+		builder.endObject();
+		request.source(builder);
+
+		IndexResponse indexResponse = client.index(request, RequestOptions.DEFAULT);
+
+		//如果是200则表示成功，否则就是失败
+		if(200 == indexResponse.status().getStatus()){
+
+		}
+
+		// 对响应结果进行处理
+		String index1 = indexResponse.getIndex();
+		String type1 = indexResponse.getType();
+		String id1 = indexResponse.getId();
+		long version = indexResponse.getVersion();
+		// 如果是新增/修改的话的话
+		if (indexResponse.getResult() == DocWriteResponse.Result.CREATED) {
+
+		} else if (indexResponse.getResult() == DocWriteResponse.Result.UPDATED) {
+
+		}
+		ReplicationResponse.ShardInfo shardInfo = indexResponse.getShardInfo();
+		if (shardInfo.getTotal() != shardInfo.getSuccessful()) {
+
+		}
+		if (shardInfo.getFailed() > 0) {
+			for (ReplicationResponse.ShardInfo.Failure failure : shardInfo.getFailures()) {
+				String reason = failure.reason();
+			}
+		}
 	}
 
 	/*
@@ -108,109 +181,45 @@ public class EsHighLevelRestTest1 {
 	 * @throws IOException
 	 */
 	private static void careatindex() throws IOException {
-		String index = "user";
-		String type = "userindex";
-		// 唯一编号
-		String id = "1";
-
-		IndexRequest request = new IndexRequest(index, type, id);
-
-		/*
-		 * 第一种方式，通过jsonString进行创建
-		 */
-		// json
-		String jsonString = "{" + "\"user\":\"pancm\"," + "\"postDate\":\"2019-03-08\"," + "\"age\":\"18\","
-				+ "\"message\":\"study Elasticsearch\"" + "}";
-
-		request.source(jsonString, XContentType.JSON);
-
-		/*
-		 * 第二种方式，通过map创建,，会自动转换成json的数据
-		 */
-
-		Map<String, Object> jsonMap = new HashMap<>();
-		jsonMap.put("user", "pancm");
-		jsonMap.put("postDate", "2019-03-08");
-		jsonMap.put("age", "18");
-		jsonMap.put("message", "study Elasticsearch");
-
-		request.source(jsonMap);
-
-		/*
-		 * 第三种方式 : 通过XContentBuilder对象进行创建
-		 */
-
-		XContentBuilder builder = XContentFactory.jsonBuilder();
-		builder.startObject();
-		{
-			builder.field("user", "pancm");
-			builder.timeField("postDate", "2019-03-08");
-			builder.field("age", "18");
-			builder.field("message", "study Elasticsearch");
-		}
-		builder.endObject();
-		request.source(builder);
-
-		IndexResponse indexResponse = client.index(request, RequestOptions.DEFAULT);
-
-		// 对响应结果进行处理
-
-		String index1 = indexResponse.getIndex();
-		String type1 = indexResponse.getType();
-		String id1 = indexResponse.getId();
-		long version = indexResponse.getVersion();
-		// 如果是新增/修改的话的话
-		if (indexResponse.getResult() == DocWriteResponse.Result.CREATED) {
-
-		} else if (indexResponse.getResult() == DocWriteResponse.Result.UPDATED) {
-
-		}
-		ReplicationResponse.ShardInfo shardInfo = indexResponse.getShardInfo();
-		if (shardInfo.getTotal() != shardInfo.getSuccessful()) {
-
-		}
-		if (shardInfo.getFailed() > 0) {
-			for (ReplicationResponse.ShardInfo.Failure failure : shardInfo.getFailures()) {
-				String reason = failure.reason();
-			}
-		}
-
-		System.out.println("创建索引库成功！");
 
 		// 类型
-		String type2 = "student";
-		String index2 = "student";
+		String type = "test1";
+		String index = "doc_";
 
 		// setting 的值
 		Map<String, Object> setmapping = new HashMap<>();
 
 		// 分区数、路由分片数、副本数、缓存刷新时间
-		setmapping.put("number_of_shards", 12);
-		setmapping.put("number_of_routing_shards", 24);
+		setmapping.put("number_of_shards", 10);
+		setmapping.put("number_of_routing_shards", 10);
 		setmapping.put("number_of_replicas", 1);
 		setmapping.put("refresh_interval", "5s");
 
-		
-		
-		// mapping 的值
-//		Map<String, Object> mapping = new HashMap<>();
-//
-//		mapping.put("id", "long");
-//		mapping.put("name", "keyword");
-		
-		
+
+		Map<String, Object> keyword = new HashMap<>();
+		//设置类型
+		keyword.put("type", "keyword");
+		Map<String, Object> l = new HashMap<>();
+		//设置类型
+		l.put("type", "long");
+		Map<String, Object> date = new HashMap<>();
+		//设置类型
+		date.put("type", "date");
+		date.put("format", "yyyy-MM-dd HH:mm:ss");
+
 		Map<String, Object> jsonMap2 = new HashMap<>();
-		Map<String, Object> message = new HashMap<>();
-		//设置类型 
-		message.put("type", "text");
 		Map<String, Object> properties = new HashMap<>();
 		//设置字段message信息
-		properties.put("message", message);
+		properties.put("uid", l);
+		properties.put("message", keyword);
+		properties.put("message", keyword);
+		properties.put("message", keyword);
+		properties.put("message", keyword);
+		properties.put("message", keyword);
 		Map<String, Object> mapping = new HashMap<>();
 		mapping.put("properties", properties);
-		jsonMap2.put(type2, mapping);
-		
-		
+		jsonMap2.put(type, mapping);
+
 		GetIndexRequest getRequest2 = new GetIndexRequest();
 		getRequest2.indices(index);
 		getRequest2.local(false); 
@@ -218,12 +227,12 @@ public class EsHighLevelRestTest1 {
 		boolean exists2 = client.indices().exists(getRequest2, RequestOptions.DEFAULT);
 		//如果存在就不创建了
 		if(exists2) {
-			System.out.println(type2+"索引库已经存在!");
+			System.out.println(type+"索引库已经存在!");
 			return;
 		}
 		
 		// 开始创建库
-		CreateIndexRequest request2 = new CreateIndexRequest(index2);
+		CreateIndexRequest request2 = new CreateIndexRequest(index);
 		try {
 			// 加载数据类型
 			request2.settings(setmapping);
@@ -231,10 +240,10 @@ public class EsHighLevelRestTest1 {
 //			request2.settings(Settings.builder() 
 //				    .put("index.number_of_shards", 3)
 //				    .put("index.number_of_replicas", 1));
-			
-			
+
+
 			//设置mapping参数
-			request2.mapping(type2, jsonMap2);
+			request2.mapping(type, jsonMap2);
 			
 			//设置别名
 			request2.alias(new Alias("user_alias"));
