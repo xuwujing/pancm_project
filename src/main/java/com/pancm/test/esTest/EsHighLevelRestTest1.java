@@ -2,6 +2,7 @@ package com.pancm.test.esTest;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
@@ -28,6 +29,7 @@ import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.support.IndicesOptions;
 import org.elasticsearch.action.support.WriteRequest;
 import org.elasticsearch.action.support.replication.ReplicationResponse;
 import org.elasticsearch.action.update.UpdateRequest;
@@ -41,6 +43,13 @@ import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
+import org.elasticsearch.index.reindex.ScrollableHitSource;
+import org.elasticsearch.index.reindex.UpdateByQueryRequest;
 import org.elasticsearch.rest.RestStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,10 +77,10 @@ public class EsHighLevelRestTest1 {
 	public static void main(String[] args) {
 		try {
 			init();
-//			insert();
-			careatIndex();
+			createIndex();
+			insert();
 			deleteIndex();
-			get();
+			queryById();
 			exists();
 			update();
 			delete();
@@ -180,7 +189,7 @@ public class EsHighLevelRestTest1 {
 	 * 
 	 * @throws IOException
 	 */
-	private static void careatIndex() throws IOException {
+	private static void createIndex() throws IOException {
 
 		// 类型
 		String type = "doc_";
@@ -264,9 +273,9 @@ public class EsHighLevelRestTest1 {
 	 * 
 	 * @throws IOException
 	 */
-	private static void get() {
-		String index = "user";
-		String type = "userindex";
+	private static void queryById() {
+		String type = "doc_";
+		String index = "test1";
 		// 唯一编号
 		String id = "1";
 		// 创建查询请求
@@ -304,8 +313,8 @@ public class EsHighLevelRestTest1 {
 	 * @throws IOException
 	 */
 	private static void exists() throws IOException {
-		String index = "user";
-		String type = "userindex";
+		String type = "doc_";
+		String index = "test1";
 		// 唯一编号
 		String id = "1";
 		// 创建查询请求
@@ -337,8 +346,8 @@ public class EsHighLevelRestTest1 {
 	 * @throws IOException
 	 */
 	private static void update() throws IOException {
-		String index = "user";
-		String type = "userindex";
+		String type = "doc_";
+		String index = "test1";
 		// 唯一编号
 		String id = "1";
 		UpdateRequest upateRequest = new UpdateRequest();
@@ -348,18 +357,66 @@ public class EsHighLevelRestTest1 {
 
 		// 依旧可以使用Map这种集合作为更新条件
 		Map<String, Object> jsonMap = new HashMap<>();
-		jsonMap.put("user", "xuwujing");
-		jsonMap.put("postDate", "2019-03-11");
-
+		jsonMap.put("uid", 12345);
+		jsonMap.put("phone", 123456789019L);
+		jsonMap.put("msgcode", 2);
+		jsonMap.put("sendtime", "2019-03-14 01:57:04");
+		jsonMap.put("message", "xuwujing study Elasticsearch");
 		upateRequest.doc(jsonMap);
-
-		//
-		upateRequest.docAsUpsert(true);
 		// upsert 方法表示如果数据不存在，那么就新增一条
-		upateRequest.upsert(jsonMap);
-
+		upateRequest.docAsUpsert(true);
 		client.update(upateRequest, RequestOptions.DEFAULT);
 		System.out.println("更新成功！");
+
+	}
+
+
+
+	/**
+	 * 根据查询条件更新
+	 *
+	 * @throws IOException
+	 */
+	private static void updateByQuery() throws IOException {
+		String type = "doc_";
+		String index = "test1";
+		//
+		UpdateByQueryRequest request = new UpdateByQueryRequest(index,type);
+		// 设置查询条件
+		request.setQuery(new TermQueryBuilder("user", "pancm"));
+		BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+
+		// 设置复制文档的数量
+		request.setSize(10);
+		// 设置一次批量处理的条数，默认是1000
+		request.setBatchSize(100);
+		//设置超时时间
+		request.setTimeout(TimeValue.timeValueMinutes(2));
+		//索引选项
+		request.setIndicesOptions(IndicesOptions.LENIENT_EXPAND_OPEN);
+
+		// 同步执行
+		BulkByScrollResponse bulkResponse = client.updateByQuery(request, RequestOptions.DEFAULT);
+
+		// 异步执行
+//		client.updateByQueryAsync(request, RequestOptions.DEFAULT, listener);
+
+		// 返回结果
+		TimeValue timeTaken = bulkResponse.getTook();
+		boolean timedOut = bulkResponse.isTimedOut();
+		long totalDocs = bulkResponse.getTotal();
+		long updatedDocs = bulkResponse.getUpdated();
+		long deletedDocs = bulkResponse.getDeleted();
+		long batches = bulkResponse.getBatches();
+		long noops = bulkResponse.getNoops();
+		long versionConflicts = bulkResponse.getVersionConflicts();
+		long bulkRetries = bulkResponse.getBulkRetries();
+		long searchRetries = bulkResponse.getSearchRetries();
+		TimeValue throttledMillis = bulkResponse.getStatus().getThrottled();
+		TimeValue throttledUntilMillis = bulkResponse.getStatus().getThrottledUntil();
+		List<ScrollableHitSource.SearchFailure> searchFailures = bulkResponse.getSearchFailures();
+		List<BulkItemResponse.Failure> bulkFailures = bulkResponse.getBulkFailures();
+		System.out.println("查询更新总共花费了:" + timeTaken.getMillis() + " 毫秒，总条数:" + totalDocs + ",更新数:" + updatedDocs);
 
 	}
 
@@ -371,21 +428,19 @@ public class EsHighLevelRestTest1 {
 	 */
 	private static void delete() throws IOException {
 
-		String index = "user";
-		String type = "userindex";
+		String type = "doc_";
+		String index = "test1";
 		// 唯一编号
 		String id = "1";
 		DeleteRequest deleteRequest = new DeleteRequest();
 		deleteRequest.id(id);
 		deleteRequest.index(index);
 		deleteRequest.type(type);
-
 		// 设置超时时间
 		deleteRequest.timeout(TimeValue.timeValueMinutes(2));
 		// 设置刷新策略"wait_for"
 		// 保持此请求打开，直到刷新使此请求的内容可以搜索为止。此刷新策略与高索引和搜索吞吐量兼容，但它会导致请求等待响应，直到发生刷新
 		deleteRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);
-
 		// 同步删除
 		DeleteResponse deleteResponse = client.delete(deleteRequest, RequestOptions.DEFAULT);
 
@@ -422,6 +477,43 @@ public class EsHighLevelRestTest1 {
 			}
 		}
 		System.out.println("删除成功!");
+	}
+
+
+	/**
+	 * 根据查询条件删除
+	 *
+	 * @throws IOException
+	 */
+	private static void deleteByQuery() throws IOException {
+		String type = "doc_";
+		String index = "test1";
+		DeleteByQueryRequest request = new DeleteByQueryRequest(index,type);
+		// 设置查询条件
+		request.setQuery(QueryBuilders.termsQuery("uid",1234));
+		// 同步执行
+		BulkByScrollResponse bulkResponse = client.deleteByQuery(request, RequestOptions.DEFAULT);
+
+		// 异步执行
+//		client.updateByQueryAsync(request, RequestOptions.DEFAULT, listener);
+
+		// 返回结果
+		TimeValue timeTaken = bulkResponse.getTook();
+		boolean timedOut = bulkResponse.isTimedOut();
+		long totalDocs = bulkResponse.getTotal();
+		long updatedDocs = bulkResponse.getUpdated();
+		long deletedDocs = bulkResponse.getDeleted();
+		long batches = bulkResponse.getBatches();
+		long noops = bulkResponse.getNoops();
+		long versionConflicts = bulkResponse.getVersionConflicts();
+		long bulkRetries = bulkResponse.getBulkRetries();
+		long searchRetries = bulkResponse.getSearchRetries();
+		TimeValue throttledMillis = bulkResponse.getStatus().getThrottled();
+		TimeValue throttledUntilMillis = bulkResponse.getStatus().getThrottledUntil();
+		List<ScrollableHitSource.SearchFailure> searchFailures = bulkResponse.getSearchFailures();
+		List<BulkItemResponse.Failure> bulkFailures = bulkResponse.getBulkFailures();
+		System.out.println("查询更新总共花费了:" + timeTaken.getMillis() + " 毫秒，总条数:" + totalDocs + ",更新数:" + updatedDocs);
+
 	}
 
 	/**
