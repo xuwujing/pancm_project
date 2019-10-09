@@ -79,12 +79,13 @@ public class EsHighLevelRestTest1 {
 			init();
 			createIndex();
 			insert();
-			deleteIndex();
 			queryById();
 			exists();
 			update();
-			delete();
-			bulk();
+//			deleteByQuery();
+//			deleteIndex();
+//			delete();
+//			bulk();
 			close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -192,7 +193,7 @@ public class EsHighLevelRestTest1 {
 	private static void createIndex() throws IOException {
 
 		// 类型
-		String type = "doc_";
+		String type = "_doc";
 		String index = "test1";
 		// setting 的值
 		Map<String, Object> setmapping = new HashMap<>();
@@ -225,12 +226,13 @@ public class EsHighLevelRestTest1 {
 
 		GetIndexRequest getRequest = new GetIndexRequest();
 		getRequest.indices(index);
+		getRequest.types(type);
 		getRequest.local(false);
 		getRequest.humanReadable(true);
 		boolean exists2 = client.indices().exists(getRequest, RequestOptions.DEFAULT);
 		//如果存在就不创建了
 		if(exists2) {
-			System.out.println(type+"索引库已经存在!");
+			System.out.println(index+"索引库已经存在!");
 			return;
 		}
 		// 开始创建库
@@ -245,10 +247,10 @@ public class EsHighLevelRestTest1 {
 			CreateIndexResponse createIndexResponse = client.indices().create(request, RequestOptions.DEFAULT);
 			boolean falg = createIndexResponse.isAcknowledged();
 			if(falg){
-				logger.info("创建索引库:{}成功！",index );
+				System.out.println("创建索引库:"+index+"成功！" );
 			}
 		} catch (IOException e) {
-			logger.error("创建INDEX报错", e);
+			e.printStackTrace();
 		}
 
 	}
@@ -274,7 +276,7 @@ public class EsHighLevelRestTest1 {
 	 * @throws IOException
 	 */
 	private static void queryById() {
-		String type = "doc_";
+		String type = "_doc";
 		String index = "test1";
 		// 唯一编号
 		String id = "1";
@@ -313,7 +315,7 @@ public class EsHighLevelRestTest1 {
 	 * @throws IOException
 	 */
 	private static void exists() throws IOException {
-		String type = "doc_";
+		String type = "_doc";
 		String index = "test1";
 		// 唯一编号
 		String id = "1";
@@ -346,7 +348,7 @@ public class EsHighLevelRestTest1 {
 	 * @throws IOException
 	 */
 	private static void update() throws IOException {
-		String type = "doc_";
+		String type = "_doc";
 		String index = "test1";
 		// 唯一编号
 		String id = "1";
@@ -378,7 +380,7 @@ public class EsHighLevelRestTest1 {
 	 * @throws IOException
 	 */
 	private static void updateByQuery() throws IOException {
-		String type = "doc_";
+		String type = "_doc";
 		String index = "test1";
 		//
 		UpdateByQueryRequest request = new UpdateByQueryRequest(index,type);
@@ -428,7 +430,7 @@ public class EsHighLevelRestTest1 {
 	 */
 	private static void delete() throws IOException {
 
-		String type = "doc_";
+		String type = "_doc";
 		String index = "test1";
 		// 唯一编号
 		String id = "1";
@@ -486,11 +488,11 @@ public class EsHighLevelRestTest1 {
 	 * @throws IOException
 	 */
 	private static void deleteByQuery() throws IOException {
-		String type = "doc_";
+		String type = "_doc";
 		String index = "test1";
 		DeleteByQueryRequest request = new DeleteByQueryRequest(index,type);
 		// 设置查询条件
-		request.setQuery(QueryBuilders.termsQuery("uid",1234));
+		request.setQuery(QueryBuilders.termQuery("uid",1234));
 		// 同步执行
 		BulkByScrollResponse bulkResponse = client.deleteByQuery(request, RequestOptions.DEFAULT);
 
