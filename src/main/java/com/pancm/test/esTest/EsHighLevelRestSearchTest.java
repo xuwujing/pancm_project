@@ -72,9 +72,8 @@ public class EsHighLevelRestSearchTest {
             rangeSearch();
             regexpSearch();
             boolSearch();
-//			search();
+			search();
 //			search2();
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
