@@ -30,7 +30,10 @@ public class DBUtil {
 	
 	private static Logger logger = LoggerFactory.getLogger(DBUtil.class);
 
-    /**
+	private static Connection getConnection() throws SQLException {
+		return getConnection();
+	}
+	/**
      * 新增/修改
      *
      * @param sql the sql
@@ -42,7 +45,7 @@ public class DBUtil {
 		Connection connection = null;
 		int i = 0;
 		try {
-			connection = ConnectionManager.getInstance().getConnection();
+			connection = getConnection();
 			stmt = connection.createStatement();
 			i = stmt.executeUpdate(sql);
 		} catch (SQLException e) {
@@ -65,7 +68,7 @@ public class DBUtil {
 		Connection connection = null;
 		int[] t={0,0};
 		try {
-			connection = ConnectionManager.getInstance().getConnection();
+			connection = getConnection();
 			stmt = connection.createStatement();
 			  /**设置不自动提交，以便于在出现异常的时候数据库回滚**/
             connection.setAutoCommit(false);
@@ -102,7 +105,7 @@ public class DBUtil {
 		ResultSet rs = null;
 		List<Map<String, Object>>  list= null;
 		try {
-			connection = ConnectionManager.getInstance().getConnection();
+			connection = getConnection();
 			stmt = connection.createStatement();
 			rs = stmt.executeQuery(sql);
 			list = convertList(rs);
@@ -198,7 +201,7 @@ public class DBUtil {
 		PreparedStatement preparedStatement = null;
 		try {
 			/** 从数据库连接池中获取数据库连接 **/
-			connection = ConnectionManager.getInstance().getConnection();
+			connection = getConnection();
 
 			Map<String, Object> valueMap = datas.get(0);
 			/** 获取数据库插入的Map的键值对的值 **/
@@ -365,7 +368,7 @@ public class DBUtil {
 		PreparedStatement preparedStatement = null;
 		try {
 			/** 从数据库连接池中获取数据库连接 **/
-			connection = ConnectionManager.getInstance().getConnection();
+			connection = getConnection();
 			/** 执行SQL预编译 **/
 			preparedStatement = connection.prepareStatement(sql.toString());
 			/** 设置不自动提交，以便于在出现异常的时候数据库回滚 **/
@@ -497,7 +500,7 @@ public class DBUtil {
 
 		try {
 			/** 获取数据库连接池中的连接 **/
-			connection = ConnectionManager.getInstance().getConnection();
+			connection = getConnection();
 			preparedStatement = connection.prepareStatement(sql);
 			if (bindArgs != null) {
 				/** 设置sql占位符中的值 **/
