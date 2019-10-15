@@ -1,7 +1,6 @@
 package com.pancm.test.esTest;
 
 import org.apache.http.HttpHost;
-import org.apache.storm.command.list;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -80,7 +79,6 @@ public class EsAggregationSearchTest {
     private static void init() {
         RestClientBuilder restClientBuilder = RestClient.builder(new HttpHost(elasticIp, elasticPort));
         client = new RestHighLevelClient(restClientBuilder);
-
     }
 
     /*
