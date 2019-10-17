@@ -824,6 +824,18 @@ public final class MyTools {
 
 
 	/**
+	 *  获取2^n-1的平方 n=1时返回1
+	 *
+	 * */
+	public  static  int getNum(int num){
+		if(num==1){
+			return 1;
+		}
+		return (int) Math.pow(2,num-1);
+	}
+
+
+	/**
      * 匹配号段
      *
      * @param phone the phone
