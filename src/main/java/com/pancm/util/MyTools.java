@@ -1,5 +1,8 @@
 package com.pancm.util;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -20,9 +23,6 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 
 /**
  * The type My tools.
@@ -676,6 +676,16 @@ public final class MyTools {
 		return JSON.parseArray(text, clazz).toArray();
 	}
 
+
+	/**
+	 * String转换为List
+	 *
+	 * @param text
+	 * @return
+	 */
+	public static <T> List<T> toList(String text, Class<T> clazz) {
+		return JSON.parseArray(text, clazz);
+	}
     /**
      * name1=value1&name2=value2格式的数据转换成json数据格式
      *
