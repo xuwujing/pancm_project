@@ -1,9 +1,11 @@
 package com.pancm.test.jdbcTest;
 
-import com.pancm.util.DBUtil;
+import com.pancm.util.*;
+import org.apache.storm.command.list;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,18 +21,36 @@ public class SQLTEST {
 
     public static void main(String[] args) {
         try {
+            initDb();
             //新增平台
 //            test1();
             //新增订阅服务
 //            test2();
             //创建表
 //            test3();
-            test4();
+            //创建存储过程
+//            test4();
+            //查询数据
+//            test5();
+            //清除表
+//            test6();
+            //查询条数
+            test7();
+            //修改数据
+//            test8();
+//            test7();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    private static void initDb() {
+        int dbNum = Integer.valueOf(GetProperties.getAppSettings().get("sql.num").trim());
+        for (int i = 1; i <= dbNum; i++) {
+            new ConnectionManager2(i);
+        }
+    }
 
     private  static  void test1() throws SQLException {
         String tb="Platform";
@@ -58,7 +78,7 @@ public class SQLTEST {
             map.put("SVRTYPE",1);
             map.put("PLATCLASS",4);
             map.put("PLATTYPE",3);
-            DBUtil.insert(tb,map);
+            DBUtil1.insert(tb,map);
             System.out.println("插入数据成功！");
         }
         System.out.println("在表:"+tb+"插入条:"+k+"数据成功！");
@@ -79,7 +99,7 @@ public class SQLTEST {
             map.put("OBJECTFLAG",2);
             map.put("SVRTBNAME","CORP_ADCCPNO_SVR");
             map.put("REMARK",t);
-            DBUtil.insert(tb,map);
+            DBUtil1.insert(tb,map);
             System.out.println("插入数据成功！");
         }
         System.out.println("在表:"+tb+"插入条:"+k+"数据成功！");
@@ -221,5 +241,61 @@ public class SQLTEST {
 //            System.out.println("创建表数据成功！");
         }
         System.out.println("创建:"+k+"个存储成功！");
+    }
+
+
+    private  static  void test5() throws SQLException {
+        int k =50;
+        for (int i = 1; i <= k; i++) {
+            String tb="CORP_ADCCPNO_SVR";
+            tb+=i;
+//            String sql="SELECT COUNT(1) AS COUNT FROM "+tb;
+            String sql="SELECT COUNT(1) AS COUNT FROM "+tb +" where status=1";
+            System.out.println(sql);
+        }
+    }
+
+
+
+
+    private  static  void test6() throws SQLException {
+        int k =50;
+        for (int i = 1; i <= k; i++) {
+            String tb="CORP_ADCCPNO_SVR";
+            tb+=i;
+            String sql="TRUNCATE TABLE "+tb;
+            System.out.println(sql);
+        }
+    }
+
+
+    private  static  void test7() throws SQLException {
+        int k =50;
+        DBUtil dbUtil = new DBUtil(2);
+        for (int i = 1; i <= k; i++) {
+            String tb="CORP_ADCCPNO_SVR";
+            tb+=i;
+//            String sql="SELECT COUNT(1) AS COUNT FROM "+tb;
+            String sql="SELECT COUNT(1) AS COUNT FROM "+tb +" ";
+             sql="SELECT COUNT(1) AS COUNT FROM "+tb +" where status=0 ";
+            List<Map<String,Object>> list=  dbUtil.executeQuery(sql);
+            System.out.println(tb+":status = 0 "+list.get(0).get("COUNT"));
+             sql="SELECT COUNT(1) AS COUNT FROM "+tb +" where status=1 ";
+            List<Map<String,Object>> list2=  dbUtil.executeQuery(sql);
+            System.out.println(tb+":status = 1 "+list2.get(0).get("COUNT"));
+        }
+    }
+
+
+    private  static  void test8() throws SQLException {
+        int k =10;
+        DBUtil dbUtil = new DBUtil(2);
+        for (int i = 1; i <= k; i++) {
+            String tb="CORP_ADCCPNO_SVR";
+            tb+=i;
+//            String sql="SELECT COUNT(1) AS COUNT FROM "+tb;
+            String sql="update "+tb +" set status = 1 ";
+            dbUtil.executeUpdate(sql);
+        }
     }
 }

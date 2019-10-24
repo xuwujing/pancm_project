@@ -21,7 +21,7 @@ import java.util.Map;
  * @date 2018年1月4日
  */
 public class ConnectionManager2 {
-	private static Logger logger = LoggerFactory.getLogger(ConnectionManager.class);
+	private static Logger logger = LoggerFactory.getLogger(ConnectionManager2.class);
 	/** 获取jdbc配置文件参数 */
 	private static Map<String, String> conf = GetProperties.getAppSettings();
 

@@ -250,7 +250,6 @@ public class DataToMap {
 
         Map<String,Object> map = analysisMt_rvok_msg(msg);
 
-        DBUtil.insert("MT_TASK_HH",map);
 
     }
 }
