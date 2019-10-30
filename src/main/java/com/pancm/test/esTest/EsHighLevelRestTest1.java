@@ -51,6 +51,8 @@ import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.index.reindex.ScrollableHitSource;
 import org.elasticsearch.index.reindex.UpdateByQueryRequest;
 import org.elasticsearch.rest.RestStatus;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -491,8 +493,21 @@ public class EsHighLevelRestTest1 {
 		String type = "_doc";
 		String index = "test1";
 		DeleteByQueryRequest request = new DeleteByQueryRequest(index,type);
+
+		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+
+
+		sourceBuilder.sort("sendtime", SortOrder.ASC);
+
+
+		// 设置索引库表达式
+		BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+		boolQueryBuilder.must(QueryBuilders.termQuery("uid",123456));
+		sourceBuilder.query(boolQueryBuilder);
 		// 设置查询条件
-		request.setQuery(QueryBuilders.termQuery("uid",1234));
+		request.setQuery(sourceBuilder.query());
+		request.setSize(1);
+
 		// 同步执行
 		BulkByScrollResponse bulkResponse = client.deleteByQuery(request, RequestOptions.DEFAULT);
 
