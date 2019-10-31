@@ -1,6 +1,7 @@
 package com.pancm.util;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -677,6 +678,7 @@ public final class MyTools {
 	}
 
 
+
 	/**
 	 * String转换为List
 	 *
@@ -686,6 +688,7 @@ public final class MyTools {
 	public static <T> List<T> toList(String text, Class<T> clazz) {
 		return JSON.parseArray(text, clazz);
 	}
+
     /**
      * name1=value1&name2=value2格式的数据转换成json数据格式
      *
@@ -987,6 +990,27 @@ public final class MyTools {
 		System.out.println("list :" + isEmpty(list)); // list :true
 		System.out.println("list2 :" + isEmpty(list2)); // list2 :true
 		System.out.println("list3 :" + isEmpty(list3)); // list3 :false
+
+		/*
+		 * List转换
+		 **/
+		List<Map<String,Object>> mapList = new ArrayList<>();
+		List mapList2 = new ArrayList<>();
+		List<Map<String,Object>> mapList3 = new ArrayList<>();
+		Map<String,Object> map = new HashMap<>();
+		map.put("1",1);
+		mapList.add(map);
+		String s= toString(mapList);
+		mapList2 =  toList(s,null);
+		mapList3= mapList2;
+		System.out.println("=========="+mapList);
+		System.out.println("=========="+mapList2);
+		System.out.println("=========="+mapList3);
+
+
+
+
+
 
 		/*
 		 * 时间
