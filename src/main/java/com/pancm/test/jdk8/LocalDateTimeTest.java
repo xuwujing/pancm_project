@@ -202,15 +202,17 @@ public class LocalDateTimeTest {
 		 //	美国纽约此时的时间 和时区: 2018-12-19T03:52:22.494-05:00[America/New_York]
 				 
 		 /**
-		  *
 		  * 时间比较
 		  */
 		 LocalDateTime ldt4 = LocalDateTime.now();
 		 LocalDateTime ldt5 = ldt4.plusMinutes(10);
 		 System.out.println("当前时间是否大于:"+ldt4.isAfter(ldt5));
+		 System.out.println("当前时间是否大于或等于:"+(ldt4.compareTo(ldt4)>=-1));
+		 System.out.println("当前时间是否大于或等于:"+(ldt4.compareTo(ldt5)>=-1));
 		 System.out.println("当前时间是否小于"+ldt4.isBefore(ldt5));
 		 // false
 		 // true
+
 	}
 	
 	
