@@ -145,7 +145,7 @@ public class EsAggregationSearchTest {
         Map<String, Object> date = new HashMap<>();
         //设置类型
         date.put("type", "date");
-        date.put("format", "yyyy-MM-dd HH:mm:ss");
+        date.put("format", "yyyy-MM-dd");
 
         Map<String, Object> jsonMap2 = new HashMap<>();
         Map<String, Object> properties = new HashMap<>();
