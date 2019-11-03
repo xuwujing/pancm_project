@@ -189,7 +189,7 @@ public class EsHighLevelRestTest1 {
 
 	/**
 	 * 创建索引
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	private static void createIndex() throws IOException {

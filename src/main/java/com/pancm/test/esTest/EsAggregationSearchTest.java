@@ -1,12 +1,30 @@
 package com.pancm.test.esTest;
 
 import org.apache.http.HttpHost;
+import org.elasticsearch.action.ActionListener;
+import org.elasticsearch.action.DocWriteRequest;
+import org.elasticsearch.action.DocWriteResponse;
+import org.elasticsearch.action.admin.indices.alias.Alias;
+import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
+import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
+import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
+import org.elasticsearch.action.bulk.*;
+import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.unit.ByteSizeUnit;
+import org.elasticsearch.common.unit.ByteSizeValue;
+import org.elasticsearch.common.unit.TimeValue;
+import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
@@ -26,10 +44,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 
 /**
  * @author pancm
@@ -43,7 +65,7 @@ public class EsAggregationSearchTest {
 
 
 
-    private static String elasticIp = "192.169.2.98";
+    private static String elasticIp = "192.169.0.23";
     private static int elasticPort = 9200;
     private static Logger logger = LoggerFactory.getLogger(EsHighLevelRestSearchTest.class);
 
@@ -56,6 +78,8 @@ public class EsAggregationSearchTest {
 
         try {
             init();
+            createIndex();
+            bulk();
             groupbySearch();
             avgSearch();
             maxSearch();
@@ -96,6 +120,119 @@ public class EsAggregationSearchTest {
         }
     }
 
+    /**
+     * 创建索引
+     *
+     * @throws IOException
+     */
+    private static void createIndex() throws IOException {
+
+        // 类型
+        String type = "_doc";
+        String index = "student";
+        // setting 的值
+        Map<String, Object> setmapping = new HashMap<>();
+        // 分区数、副本数、缓存刷新时间
+        setmapping.put("number_of_shards", 10);
+        setmapping.put("number_of_replicas", 1);
+        setmapping.put("refresh_interval", "5s");
+        Map<String, Object> keyword = new HashMap<>();
+        //设置类型
+        keyword.put("type", "keyword");
+        Map<String, Object> lon = new HashMap<>();
+        //设置类型
+        lon.put("type", "long");
+        Map<String, Object> date = new HashMap<>();
+        //设置类型
+        date.put("type", "date");
+        date.put("format", "yyyy-MM-dd HH:mm:ss");
+
+        Map<String, Object> jsonMap2 = new HashMap<>();
+        Map<String, Object> properties = new HashMap<>();
+        //设置字段message信息
+        properties.put("uid", lon);
+        properties.put("grade", lon);
+        properties.put("class", lon);
+        properties.put("age", lon);
+        properties.put("name", keyword);
+        properties.put("createtm", date);
+        Map<String, Object> mapping = new HashMap<>();
+        mapping.put("properties", properties);
+        jsonMap2.put(type, mapping);
+
+        GetIndexRequest getRequest = new GetIndexRequest();
+        getRequest.indices(index);
+        getRequest.types(type);
+        getRequest.local(false);
+        getRequest.humanReadable(true);
+        boolean exists2 = client.indices().exists(getRequest, RequestOptions.DEFAULT);
+        //如果存在就不创建了
+        if(exists2) {
+            System.out.println(index+"索引库已经存在!");
+            return;
+        }
+        // 开始创建库
+        CreateIndexRequest request = new CreateIndexRequest(index);
+        try {
+            // 加载数据类型
+            request.settings(setmapping);
+            //设置mapping参数
+            request.mapping(type, jsonMap2);
+            //设置别名
+            request.alias(new Alias("pancm_alias"));
+            CreateIndexResponse createIndexResponse = client.indices().create(request, RequestOptions.DEFAULT);
+            boolean falg = createIndexResponse.isAcknowledged();
+            if(falg){
+                System.out.println("创建索引库:"+index+"成功！" );
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+    /**
+     * 批量操作示例
+     *
+     * @throws InterruptedException
+     */
+    private static void bulk() throws IOException{
+        // 类型
+        String type = "_doc";
+        String index = "student";
+
+        BulkRequest request = new BulkRequest();
+        int k =100;
+        List<Map<String,Object>> mapList = new ArrayList<>();
+        LocalDateTime ldt = LocalDateTime.now();
+        for (int i = 1; i <=k ; i++) {
+            Map<String,Object> map = new HashMap<>();
+            map.put("uid",i);
+            map.put("age",i);
+            map.put("name","虚无境"+(i%3));
+            map.put("class",i%10);
+            map.put("grade",400+i);
+            map.put("createtm",ldt.plusDays(i).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            mapList.add(map);
+        }
+
+
+        for (int i = 0; i <mapList.size() ; i++) {
+            Map<String,Object> map = mapList.get(i);
+            String id = map.get("uid").toString();
+            // 可以进行修改/删除/新增 操作
+            //docAsUpsert 为true表示存在更新，不存在插入，为false表示不存在就是不做更新
+            request.add(new UpdateRequest(index, type, id).doc(map, XContentType.JSON).docAsUpsert(true).retryOnConflict(5));
+        }
+
+        client.bulk(request, RequestOptions.DEFAULT);
+
+        System.out.println("批量执行成功！");
+
+
+    }
 
     /**
      * @Author pancm
@@ -117,12 +254,7 @@ public class EsAggregationSearchTest {
 
         aggregation2.subAggregation(aggregation3);
         aggregation.subAggregation(aggregation2);
-
-
-
-
         agg(aggregation,buk);
-
     }
 
     /**
