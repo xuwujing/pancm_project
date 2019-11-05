@@ -1,6 +1,7 @@
 package com.pancm.test.esTest;
 
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +88,7 @@ public class EsHighLevelRestTest1 {
 //			deleteByQuery();
 //			deleteIndex();
 //			delete();
-//			bulk();
+			bulk();
 			close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -539,10 +540,19 @@ public class EsHighLevelRestTest1 {
 	 * @throws InterruptedException
 	 */
 	private static void bulk() throws IOException, InterruptedException {
-		String index = "estest";
-		String type = "estest";
+		// 类型
+		String type = "_doc";
+		String index = "student";
 
 		BulkRequest request = new BulkRequest();
+		Map<String,Object> map = new HashMap<>();
+		map.put("uid",123);
+		map.put("age",11);
+		map.put("name","虚无境");
+		map.put("class",9);
+		map.put("grade",400);
+		map.put("createtm","2019-11-04");
+		map.put("updatetm","2019-11-05 21:04:55.268");
 		// 批量新增,存在会直接覆盖
 		request.add(new IndexRequest(index, type, "1").source(XContentType.JSON, "field", "foo"));
 		request.add(new IndexRequest(index, type, "2").source(XContentType.JSON, "field", "bar"));

@@ -147,6 +147,10 @@ public class EsAggregationSearchTest {
         date.put("type", "date");
         date.put("format", "yyyy-MM-dd");
 
+        Map<String, Object> date2 = new HashMap<>();
+        //设置类型
+        date2.put("type", "date");
+        date2.put("format", "yyyy-MM-dd HH:mm:ss.SSS");
         Map<String, Object> jsonMap2 = new HashMap<>();
         Map<String, Object> properties = new HashMap<>();
         //设置字段message信息
@@ -156,6 +160,7 @@ public class EsAggregationSearchTest {
         properties.put("age", lon);
         properties.put("name", keyword);
         properties.put("createtm", date);
+        properties.put("updatetm", date2);
         Map<String, Object> mapping = new HashMap<>();
         mapping.put("properties", properties);
         jsonMap2.put(type, mapping);
@@ -204,7 +209,7 @@ public class EsAggregationSearchTest {
         String index = "student";
 
         BulkRequest request = new BulkRequest();
-        int k =100;
+        int k =10;
         List<Map<String,Object>> mapList = new ArrayList<>();
         LocalDateTime ldt = LocalDateTime.now();
         for (int i = 1; i <=k ; i++) {
@@ -215,6 +220,10 @@ public class EsAggregationSearchTest {
             map.put("class",i%10);
             map.put("grade",400+i);
             map.put("createtm",ldt.plusDays(i).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            map.put("updatetm",ldt.plusDays(i).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
+            if(i==5){
+                map.put("updatetm","2019-11-31 21:04:55.268");
+            }
             mapList.add(map);
         }
 
@@ -228,10 +237,7 @@ public class EsAggregationSearchTest {
         }
 
         client.bulk(request, RequestOptions.DEFAULT);
-
         System.out.println("批量执行成功！");
-
-
     }
 
     /**
