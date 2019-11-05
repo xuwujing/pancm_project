@@ -67,12 +67,12 @@ public class EsHighLevelRestSearchTest {
             genSearch();
             orSearch();
             likeSearch();
-//            inSearch();
+            inSearch();
             existSearch();
             rangeSearch();
             regexpSearch();
             boolSearch();
-			search();
+//			search();
 //			search2();
         } catch (Exception e) {
             e.printStackTrace();
@@ -248,13 +248,15 @@ public class EsHighLevelRestSearchTest {
         String type = "_doc";
         String index = "test1";
         // 查询指定的索引库
-        SearchRequest searchRequest = new SearchRequest(index,type);
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         /**
-         *  SELECT * FROM p_test where uid in (1,2)
+         *  SELECT * FROM p_test where uid in (123,1234)
          * */
+        String uids[] = {"123","1234"};
         // 设置查询条件
-//        sourceBuilder.query(QueryBuilders.termsQuery("uid", 1, 2));
+       sourceBuilder.query(QueryBuilders.termsQuery("uid", uids));
         searchRequest.source(sourceBuilder);
         System.out.println("in查询的DSL语句:"+sourceBuilder.toString());
         // 同步查询
