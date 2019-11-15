@@ -9,10 +9,7 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 
 /**
@@ -84,6 +81,9 @@ public class KafkaConsumerTest implements Runnable {
             TopicPartition partitions = new TopicPartition(topic1,part);
             list2.add(partitions);
         }
+		//最大的offset
+		Map<TopicPartition, Long> map= consumer.endOffsets(list2);
+		LOG.info("最大的offset:{}",map);
         System.out.println("---------开始消费---------");
 		try {
 			for (;;) {
@@ -118,7 +118,7 @@ public class KafkaConsumerTest implements Runnable {
 					}
 				}else{	
 					Thread.sleep(5000);
-						System.out.println("====");
+					System.out.println("====");
 				}
 			}		
 		} catch (InterruptedException e) {
