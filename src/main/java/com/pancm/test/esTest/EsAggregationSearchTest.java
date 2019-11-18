@@ -19,7 +19,6 @@ import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
-import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.avg.Avg;
@@ -240,12 +239,12 @@ public class EsAggregationSearchTest {
         AggregationBuilder aggregation = AggregationBuilders.terms("age").field("age");
         AggregationBuilder aggregation2 = AggregationBuilders.terms("name").field("name");
         //根据创建时间按天分组
-        AggregationBuilder aggregation3 = AggregationBuilders.dateHistogram("createtm")
-                .field("createtm")
-                .format("yyyy-MM-dd")
-                .dateHistogramInterval(DateHistogramInterval.DAY);
-
-        aggregation2.subAggregation(aggregation3);
+//        AggregationBuilder aggregation3 = AggregationBuilders.dateHistogram("createtm")
+//                .field("createtm")
+//                .format("yyyy-MM-dd")
+//                .dateHistogramInterval(DateHistogramInterval.DAY);
+//
+//        aggregation2.subAggregation(aggregation3);
         aggregation.subAggregation(aggregation2);
         agg(aggregation,buk);
     }

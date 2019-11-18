@@ -72,6 +72,7 @@ public class EsHighLevelRestSearchTest {
             rangeSearch();
             regexpSearch();
             boolSearch();
+            countSearch();
 //			search();
 //			search2();
         } catch (Exception e) {
@@ -113,6 +114,28 @@ public class EsHighLevelRestSearchTest {
          * }
          */
 
+    }
+
+    private static void countSearch() throws IOException {
+        String type = "_doc";
+        String index = "test1";
+        // 查询指定的索引库
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        // 设置查询条件
+        sourceBuilder.query(QueryBuilders.termQuery("uid", "1234"));
+
+        // 包含或排除字段
+//		sourceBuilder.fetchSource(includeFields, excludeFields);
+        sourceBuilder.fetchSource(false);
+        searchRequest.source(sourceBuilder);
+        System.out.println("总数查询的DSL语句:"+sourceBuilder.toString());
+        // 同步查询
+        SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+        System.out.println("总数查询的结果:"+searchResponse.getHits().getTotalHits());
+
+        System.out.println("\n=================\n");
     }
 
 
