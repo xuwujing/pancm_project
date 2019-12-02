@@ -1,7 +1,6 @@
 package com.pancm.util;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -20,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -179,6 +179,52 @@ public final class MyTools {
      */
     public static String longTime2StringTime(long lo, String format) {
 		return new SimpleDateFormat(format).format(lo);
+	}
+
+
+	/**
+	 * @Author pancm
+	 * @Description 获取月份的第一天
+	 * @Date  2019/12/2
+	 * @Param [time] yyyy-MM-dd
+	 * @return java.lang.String
+	 **/
+	public  static  String getFirstDay(String time){
+		return  LocalDate.parse(time).with(TemporalAdjusters.firstDayOfMonth()).toString();
+	}
+
+	/**
+	 * @Author pancm
+	 * @Description 获取月份的最后一天
+	 * @Date  2019/12/2
+	 * @Param [time] yyyy-MM-dd
+	 * @return java.lang.String
+	 **/
+	public  static  String getLastDay(String time){
+		return  LocalDate.parse(time).with(TemporalAdjusters.lastDayOfMonth()).toString();
+	}
+
+
+	/**
+	 * @Author pancm
+	 * @Description 获取上个月份的最后一天
+	 * @Date  2019/12/2
+	 * @Param [time] yyyy-MM-dd
+	 * @return java.lang.String
+	 **/
+	public  static  String getAgoLastDay(String time){
+		return  LocalDate.parse(time).with(TemporalAdjusters.firstDayOfMonth()).minusDays(1).toString();
+	}
+
+	/**
+	 * @Author pancm
+	 * @Description 获取下个月份的第一天
+	 * @Date  2019/12/2
+	 * @Param [time] yyyy-MM-dd
+	 * @return java.lang.String
+	 **/
+	public  static  String getOffFirstDay(String time){
+		return  LocalDate.parse(time).with(TemporalAdjusters.lastDayOfMonth()).plusDays(1).toString();
 	}
 
     /**
