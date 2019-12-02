@@ -1,19 +1,11 @@
 package com.pancm.test.jdk8;
 
 import java.sql.Timestamp;
-import java.time.Clock;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.Period;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalField;
+import java.time.temporal.TemporalAdjusters;
 
 /**
  * The type Local date time test.
@@ -176,6 +168,11 @@ public class LocalDateTimeTest {
 		System.out.println("得到的时间:"+ldt2.toString());
 		System.out.println("格式化时间:"+ldt2.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
+		//获取月份的第一天和最后一天
+		String firstDay = LocalDate.parse("2018-12-24").with(TemporalAdjusters.firstDayOfMonth()).toString();
+		String endDay = LocalDate.parse("2018-12-24").with(TemporalAdjusters.lastDayOfMonth()).toString();
+		System.out.println("firstDay:"+firstDay);
+		System.out.println("endDay:"+endDay);
 
 		 /*
 		  *
@@ -212,6 +209,8 @@ public class LocalDateTimeTest {
 		System.out.println("当前时间是否小于"+ldt4.isBefore(ldt5));
 		// false
 		// true
+
+
 
 	}
 	
