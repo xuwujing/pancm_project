@@ -41,4 +41,19 @@ public class BloomFilterTest {
         }
         System.out.println("错判率为:" + sum);
     }
+
+    public String getByKey(String key) {
+//        // 通过key获取value
+//        String value = redisService.get(key);
+//        if (StringUtil.isEmpty(value)) {
+//            if (bloomFilter.mightContain(key)) {
+//                value = userService.getById(key);
+//                redisService.set(key, value);
+//                return value;
+//            } else {
+//                return null;
+//            }
+//        }
+        return null;
+    }
 }

@@ -1,12 +1,12 @@
 package com.pancm.test.redisTest;
 
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.CollectionUtils;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.util.CollectionUtils;
 
 /**
  * The type Redis util.
@@ -39,6 +39,7 @@ public class RedisUtil {
      * @return boolean
      */
     public boolean expire(String key,long time){
+
         try {  
             if(time>0){  
                 redisTemplate.expire(key, time, TimeUnit.SECONDS);  
