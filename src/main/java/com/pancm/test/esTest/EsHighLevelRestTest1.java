@@ -1,29 +1,16 @@
 package com.pancm.test.esTest;
 
-import java.io.IOException;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.function.BiConsumer;
-
 import org.apache.http.HttpHost;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.DocWriteRequest;
 import org.elasticsearch.action.DocWriteResponse;
-import org.elasticsearch.action.admin.cluster.node.tasks.list.ListTasksResponse;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
-import org.elasticsearch.action.bulk.BackoffPolicy;
-import org.elasticsearch.action.bulk.BulkItemResponse;
-import org.elasticsearch.action.bulk.BulkProcessor;
-import org.elasticsearch.action.bulk.BulkRequest;
-import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.bulk.*;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequest;
@@ -57,7 +44,12 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ws.rs.POST;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 
 /**
  * @Title: EsHighLevelRestTest1
@@ -387,9 +379,12 @@ public class EsHighLevelRestTest1 {
 		String index = "test1";
 		//
 		UpdateByQueryRequest request = new UpdateByQueryRequest(index,type);
+		BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+
 		// 设置查询条件
 		request.setQuery(new TermQueryBuilder("user", "pancm"));
-		BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+
+
 
 		// 设置复制文档的数量
 		request.setSize(10);
