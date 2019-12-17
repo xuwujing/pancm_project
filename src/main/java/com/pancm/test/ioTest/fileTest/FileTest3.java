@@ -42,16 +42,29 @@ public class FileTest3 {
 
     public static boolean writeToFile(List<Map<String, Object>> lists) {
         StringBuffer sb = new StringBuffer();
+        if(count==0){
+            l++;
+            LOG.info("开始第{}个文件写入！",l);
+        }
+        count+=lists.size();
+        long lag = count-fileCount;
+        if(lag>=0){
+            lists=lists.subList(0, (int) (lists.size()-lag));
+            count=0;
+        }
+
         // String tableName = MyTools.isEmpty(conf.get("tableName")) ?
         // Constant.PA_TABLE_NAME : conf.get("tableName");
         // 拼接sql
+
+
         lists.forEach(m -> {
-            // 如果达到了一亿条就换一个文件
-            if (count % fileCount == 0) {
-                l++;
-                LOG.info("开始第{}个文件写入！",l);
-            }
-            count++;
+//            // 如果达到了一亿条就换一个文件
+//            if (count % fileCount == 0) {
+//                l++;
+//                LOG.info("开始第{}个文件写入！",l);
+//            }
+//            count++;
 
             String sql = packageTxt(m);
             // 换行
