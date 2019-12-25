@@ -42,7 +42,7 @@
 		</rollingPolicy>
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<Pattern>
-				%d{yyyy-MM-dd HH:mm:ss} -%msg%n
+				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n
 			</Pattern>
 		</layout>
 	</appender>
@@ -59,7 +59,7 @@
 		</rollingPolicy>
 		<layout class="ch.qos.logback.classic.PatternLayout">
 			<Pattern>
-				%d{yyyy-MM-dd HH:mm:ss} -%msg%n
+				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n
 			</Pattern>
 		</layout>
 	</appender>
