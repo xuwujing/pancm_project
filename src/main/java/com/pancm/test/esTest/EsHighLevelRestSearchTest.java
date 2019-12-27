@@ -202,15 +202,17 @@ public class EsHighLevelRestSearchTest {
         String msg= "rl.com/l/1RIth6";
         String msg1 = "中rl.com/l/1RIth6";
         String msg2 = "【招商银行】您已获得账单分期手续费5折权益限时优惠！回复#ZDFQ申请将最高21992.98元分12期还，每期本金1832.75元、每期手续费72.58元，实时测评为准。单笔优惠最高2500元，活动有效期至2019/12/31。12月达标还可抢罗莱澳洲羊毛冬被，戳 cmbt.cn/iJI?4=1 。退订回#A";
+        String msg3 = "";
 
         System.out.println("== "+p.matcher(msg).find());
         System.out.println("== "+p.matcher(msg1).find());
         System.out.println("== "+p.matcher(msg2).find());
+        System.out.println("== "+p.matcher(msg3).find());
 
 
 
 //         regexp = regexp.replace("\\\\","\\");
-        sourceBuilder.query(QueryBuilders.regexpQuery("message",regexp));
+        sourceBuilder.query(QueryBuilders.regexpQuery("message",".*"+regexp));
         searchRequest.source(sourceBuilder);
         System.out.println("正则查询的DSL语句:"+sourceBuilder.toString());
         // 同步查询
