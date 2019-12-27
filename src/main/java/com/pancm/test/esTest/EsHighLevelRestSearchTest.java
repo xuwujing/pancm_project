@@ -1,5 +1,6 @@
 package com.pancm.test.esTest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -36,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
 
 /**
@@ -49,7 +51,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class EsHighLevelRestSearchTest {
 
-    private static String elasticIp = "192.169.0.23";
+    private static String elasticIp = "192.169.2.98";
     private static int elasticPort = 9200;
     private static Logger logger = LoggerFactory.getLogger(EsHighLevelRestSearchTest.class);
 
@@ -62,17 +64,17 @@ public class EsHighLevelRestSearchTest {
 
         try {
             init();
-            allSearch();
-            //普通查询
-            genSearch();
-            orSearch();
-            likeSearch();
-            inSearch();
-            existSearch();
-            rangeSearch();
+//            allSearch();
+//            //普通查询
+//            genSearch();
+//            orSearch();
+//            likeSearch();
+//            inSearch();
+//            existSearch();
+//            rangeSearch();
             regexpSearch();
-            boolSearch();
-            countSearch();
+//            boolSearch();
+//            countSearch();
 //			search();
 //			search2();
         } catch (Exception e) {
@@ -179,13 +181,36 @@ public class EsHighLevelRestSearchTest {
      **/
     private static void regexpSearch() throws IOException{
         String type = "_doc";
-        String index = "test1";
+        String index = "p_test2";
         // 查询指定的索引库
         SearchRequest searchRequest = new SearchRequest(index);
         searchRequest.types(type);
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+
+
+
         // 设置查询条件
-        sourceBuilder.query(QueryBuilders.regexpQuery("message","xu[0-9]"));
+//        sourceBuilder.query(QueryBuilders.regexpQuery("message","xu[0-9]"));
+        //全匹配正则
+//        sourceBuilder.query(QueryBuilders.regexpQuery("message",".*"+"xu[0-9]"+".*"));
+
+
+        String regexp = "(((http[s]{0,1}|ftp)://)?[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,6})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|((25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))\\.){3}(25[0-5]|2[0-4]\\d|((1\\d{2})|([1-9]?\\d)))";
+
+        Pattern p = Pattern.compile(regexp);
+
+        String msg= "rl.com/l/1RIth6";
+        String msg1 = "中rl.com/l/1RIth6";
+        String msg2 = "【招商银行】您已获得账单分期手续费5折权益限时优惠！回复#ZDFQ申请将最高21992.98元分12期还，每期本金1832.75元、每期手续费72.58元，实时测评为准。单笔优惠最高2500元，活动有效期至2019/12/31。12月达标还可抢罗莱澳洲羊毛冬被，戳 cmbt.cn/iJI?4=1 。退订回#A";
+
+        System.out.println("== "+p.matcher(msg).find());
+        System.out.println("== "+p.matcher(msg1).find());
+        System.out.println("== "+p.matcher(msg2).find());
+
+
+
+//         regexp = regexp.replace("\\\\","\\");
+        sourceBuilder.query(QueryBuilders.regexpQuery("message",regexp));
         searchRequest.source(sourceBuilder);
         System.out.println("正则查询的DSL语句:"+sourceBuilder.toString());
         // 同步查询
@@ -193,13 +218,43 @@ public class EsHighLevelRestSearchTest {
         // 结果
         searchResponse.getHits().forEach(hit -> {
             Map<String, Object> map = hit.getSourceAsMap();
-            String string = hit.getSourceAsString();
             System.out.println("正则查询的Map结果:" + map);
-            System.out.println("正则查询的String结果:" + string);
         });
 
         System.out.println("\n=================\n");
     }
+
+    /**
+     * 转义正则特殊字符 （$()*+.[]?\^{}
+     * \\需要第一个替换，否则replace方法替换时会有逻辑bug
+     */
+    public static String makeQueryStringAllRegExp(String str) {
+
+
+        return str.replace("\\", "\\\\").replace("*", "\\*")
+                .replace("+", "\\+").replace("|", "\\|")
+                .replace("{", "\\{").replace("}", "\\}")
+                .replace("(", "\\(").replace(")", "\\)")
+                .replace("^", "\\^").replace("$", "\\$")
+                .replace("[", "\\[").replace("]", "\\]")
+                .replace("?", "\\?").replace(",", "\\,")
+                .replace(".", "\\.").replace("&", "\\&");
+    }
+
+    public static String escapeExprSpecialWord(String keyword) {
+        if (StringUtils.isNotBlank(keyword)) {
+            String[] fbsArr = {"\\", "$", "(", ")", "*", "+", ".", "[", "]", "?", "^", "{", "}", "|"};
+            for (String key : fbsArr) {
+                if (keyword.contains(key)) {
+                    keyword = keyword.replace(key, "\\" + key);
+                }
+            }
+        }
+        return keyword;
+    }
+
+
+
 
     /**
      * @Author pancm
