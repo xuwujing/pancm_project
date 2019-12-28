@@ -51,7 +51,8 @@ import java.util.regex.Pattern;
  */
 public class EsHighLevelRestSearchTest {
 
-    private static String elasticIp = "192.169.2.98";
+//    private static String elasticIp = "192.169.2.98";
+    private static String elasticIp = "192.169.0.23";
     private static int elasticPort = 9200;
     private static Logger logger = LoggerFactory.getLogger(EsHighLevelRestSearchTest.class);
 
@@ -72,7 +73,8 @@ public class EsHighLevelRestSearchTest {
 //            inSearch();
 //            existSearch();
 //            rangeSearch();
-            regexpSearch();
+//            regexpSearch();
+            spanSearch();
 //            boolSearch();
 //            countSearch();
 //			search();
@@ -117,6 +119,8 @@ public class EsHighLevelRestSearchTest {
          */
 
     }
+
+    
 
     private static void countSearch() throws IOException {
         String type = "_doc";
@@ -225,7 +229,41 @@ public class EsHighLevelRestSearchTest {
 
         System.out.println("\n=================\n");
     }
+    
+    /**
+     * @Author pancm
+     * @Description
+     * Span queries are low-level positional queries which provide expert control over the order and proximity of the specified terms. These are typically used to implement very specific queries on legal documents or patents.
+     * Span queries cannot be mixed with non-span queries (with the exception of the span_multi query)
+     * @Date  2019/12/28
+     * @Param []
+     * @return void
+     **/
+    private static void spanSearch() throws IOException {
 
+        String type = "_doc";
+        String index = "test1";
+        // 查询指定的索引库
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+
+
+
+        searchRequest.source(sourceBuilder);
+        System.out.println("span查询的DSL语句:"+sourceBuilder.toString());
+        // 同步查询
+        SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+        // 结果
+        searchResponse.getHits().forEach(hit -> {
+            Map<String, Object> map = hit.getSourceAsMap();
+            System.out.println("span查询的Map结果:" + map);
+        });
+
+        System.out.println("\n=================\n");
+    }
+    
+    
     /**
      * 转义正则特殊字符 （$()*+.[]?\^{}
      * \\需要第一个替换，否则replace方法替换时会有逻辑bug
