@@ -1,29 +1,33 @@
 package com.pancm.test.esTest;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.nio.entity.NStringEntity;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.admin.cluster.node.tasks.list.ListTasksResponse;
 import org.elasticsearch.action.bulk.BulkItemResponse;
-import org.elasticsearch.action.get.GetResponse;
-import org.elasticsearch.action.get.MultiGetItemResponse;
-import org.elasticsearch.action.get.MultiGetRequest;
-import org.elasticsearch.action.get.MultiGetResponse;
+import org.elasticsearch.action.get.*;
 import org.elasticsearch.action.support.IndicesOptions;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.RethrottleRequest;
 import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.TermQueryBuilder;
-import org.elasticsearch.index.reindex.*;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
+import org.elasticsearch.index.reindex.ReindexRequest;
+import org.elasticsearch.index.reindex.ScrollableHitSource;
 import org.elasticsearch.tasks.TaskId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.junit.Assert.assertNull;
 
@@ -283,8 +287,52 @@ public class EsHighLevelRestTest2 {
 		System.out.println("已成功设置!");
 
 	}
-	
-	
-	
+
+	/**
+	 * @Author pancm
+	 * @Description  设置该节点为冷节点
+	 * @Date  2020/1/2
+	 * @Param [index]
+	 * @return void
+	 **/
+	public static void setCool(String index) throws IOException {
+		RestClient restClient = null;
+		try {
+			Objects.requireNonNull(index, "index is not null");
+			restClient = client.getLowLevelClient();
+			String source = "{\"index.routing.allocation.require.box_type\": \"%s\"}";
+			source = String.format(source, "cool");
+			HttpEntity entity = new NStringEntity(source, ContentType.APPLICATION_JSON);
+			restClient.performRequest("PUT", "/" + index + "/_settings", Collections.<String, String>emptyMap(), entity);
+		} catch (IOException e) {
+			throw e;
+		} finally {
+			if (restClient != null) {
+				restClient.close();
+			}
+		}
+	}
+
+	/**
+	 * @Author pancm
+	 * @Description  设置该节点为冷节点
+	 * @Date  2020/1/2
+	 * @Param [index]
+	 * @return void
+	 **/
+	public static void cat(String index) throws IOException {
+		try {
+			GetRequest getRequest = new GetRequest();
+
+
+
+
+		} finally {
+
+		}
+	}
+
+
+
 	
 }
