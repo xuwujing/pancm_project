@@ -33,7 +33,6 @@ import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.index.reindex.ScrollableHitSource;
@@ -380,9 +379,12 @@ public class EsHighLevelRestTest1 {
 		//
 		UpdateByQueryRequest request = new UpdateByQueryRequest(index,type);
 		BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
-
-		// 设置查询条件
-		request.setQuery(new TermQueryBuilder("user", "pancm"));
+		boolQueryBuilder.must(QueryBuilders.termQuery("user", "pancm"));
+//		Script script = new Script(ScriptType.INLINE, SCRIPT_NAME, id, map);
+//		boolQueryBuilder.must(QueryBuilders.scriptQuery(script));
+//		boolQueryBuilder.must(QueryBuilders.scriptQuery(script));
+//		// 设置查询条件
+//		request.setQuery(new TermQueryBuilder("user", "pancm"));
 
 
 

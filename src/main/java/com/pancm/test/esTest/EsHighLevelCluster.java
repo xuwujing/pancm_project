@@ -206,9 +206,7 @@ public class EsHighLevelCluster {
     public static void clusterGetSetting() throws IOException {
 
         ClusterGetSettingsRequest request = new ClusterGetSettingsRequest();
-
         ClusterGetSettingsResponse response = client.cluster().getSettings(request, RequestOptions.DEFAULT);
-
         Settings setting = response.getPersistentSettings();
         Settings setting2 = response.getTransientSettings();
         logger.info("setting:{}",setting);
