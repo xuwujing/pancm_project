@@ -31,6 +31,7 @@ public class DynamicEncrypt {
         String msg="123";
         String msg2= bCryptPasswordEncoder.encode(msg);
         System.out.println(msg2);
+        System.out.println(msg2.length());
         System.out.println(bCryptPasswordEncoder.upgradeEncoding(msg2));
         System.out.println(bCryptPasswordEncoder.matches(msg,msg2));
         /*
