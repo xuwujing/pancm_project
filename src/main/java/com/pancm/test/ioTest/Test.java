@@ -45,6 +45,9 @@ public class Test {
 			System.out.println("path:"+path);
 			String os=System.getProperty("os.name").toLowerCase();
 			System.out.println("os:"+os);
+			//获取tomcat的目录
+			String path2=System.getProperty("catalina.home");
+
 			//获取文件的行数
 			String paths =path+File.separator+"pom.xml";
 			long lines = Files.lines(Paths.get(new File(paths).getPath())).count();
