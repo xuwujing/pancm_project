@@ -178,6 +178,36 @@ public class EsHighLevelRestSearchTest {
 
     /**
      * @Author pancm
+     * @Description  前缀查询
+     * @Date  2019/9/30
+     * @Param []
+     * @return void
+     **/
+    private static void prefixSearch() throws IOException{
+        String type = "_doc";
+        String index = "p_test2";
+        // 查询指定的索引库
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+
+        sourceBuilder.query(QueryBuilders.prefixQuery("uid","1"));
+        searchRequest.source(sourceBuilder);
+        System.out.println("前缀查询的DSL语句:"+sourceBuilder.toString());
+        // 同步查询
+        SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+        // 结果
+        searchResponse.getHits().forEach(hit -> {
+            Map<String, Object> map = hit.getSourceAsMap();
+            System.out.println("前缀查询的Map结果:" + map);
+        });
+
+        System.out.println("\n=================\n");
+    }
+
+
+    /**
+     * @Author pancm
      * @Description  正则查询
      * @Date  2019/9/30
      * @Param []
