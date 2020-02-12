@@ -385,6 +385,37 @@ public class EsHighLevelRestSearchTest {
         System.out.println("\n=================\n");
     }
 
+
+    /**
+     * @return void
+     * @Author pancm
+     * @Description exist查询
+     * @Date 2019/9/17
+     * @Param []
+     **/
+    private static void missingSearch() throws IOException {
+        String type = "_doc";
+        String index = "test1";
+        // 查询指定的索引库
+        SearchRequest searchRequest = new SearchRequest(index);
+        searchRequest.types(type);
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+
+        // 设置查询条件
+        sourceBuilder.query(QueryBuilders.existsQuery("msgcode"));
+        searchRequest.source(sourceBuilder);
+        System.out.println("存在查询的DSL语句:"+sourceBuilder.toString());
+        // 同步查询
+        SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+        // 结果
+        searchResponse.getHits().forEach(hit -> {
+            Map<String, Object> map = hit.getSourceAsMap();
+            String string = hit.getSourceAsString();
+            System.out.println("存在查询的Map结果:" + map);
+            System.out.println("存在查询的String结果:" + string);
+        });
+        System.out.println("\n=================\n");
+    }
     /**
      * @return void
      * @Author pancm
