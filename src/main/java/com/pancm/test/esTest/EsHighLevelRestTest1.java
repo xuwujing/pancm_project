@@ -1,11 +1,5 @@
 package com.pancm.test.esTest;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.function.BiConsumer;
-
 import org.apache.http.HttpHost;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.ActionListener;
@@ -16,17 +10,14 @@ import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
-import org.elasticsearch.action.bulk.BackoffPolicy;
-import org.elasticsearch.action.bulk.BulkItemResponse;
-import org.elasticsearch.action.bulk.BulkProcessor;
-import org.elasticsearch.action.bulk.BulkRequest;
-import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.bulk.*;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.support.IndicesOptions;
 import org.elasticsearch.action.support.WriteRequest;
 import org.elasticsearch.action.support.replication.ReplicationResponse;
 import org.elasticsearch.action.update.UpdateRequest;
@@ -40,9 +31,24 @@ import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
+import org.elasticsearch.index.reindex.ScrollableHitSource;
+import org.elasticsearch.index.reindex.UpdateByQueryRequest;
 import org.elasticsearch.rest.RestStatus;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 
 /**
  * @Title: EsHighLevelRestTest1
@@ -65,18 +71,90 @@ public class EsHighLevelRestTest1 {
 	public static void main(String[] args) {
 		try {
 			init();
-			careatindex();
-			deleteindex();
-			get();
+			createIndex();
+			insert();
+			queryById();
 			exists();
 			update();
-			delete();
+//			deleteByQuery();
+//			deleteIndex();
+//			delete();
 			bulk();
 			close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+	}
+
+	private static void insert() throws IOException {
+		String index = "test1";
+		String type = "_doc";
+		// 唯一编号
+		String id = "1";
+		IndexRequest request = new IndexRequest(index, type, id);
+		/*
+		 * 第一种方式，通过jsonString进行创建
+		 */
+		// json
+		String jsonString = "{" + "\"uid\":\"1234\","+ "\"phone\":\"12345678909\","+ "\"msgcode\":\"1\"," + "\"sendtime\":\"2019-03-14 01:57:04\","
+				+ "\"message\":\"xuwujing study Elasticsearch\"" + "}";
+		request.source(jsonString, XContentType.JSON);
+
+		/*
+		 * 第二种方式，通过map创建,，会自动转换成json的数据
+		 */
+		Map<String, Object> jsonMap = new HashMap<>();
+		jsonMap.put("uid", 1234);
+		jsonMap.put("phone", 12345678909L);
+		jsonMap.put("msgcode", 1);
+		jsonMap.put("sendtime", "2019-03-14 01:57:04");
+		jsonMap.put("message", "xuwujing study Elasticsearch");
+		request.source(jsonMap);
+
+		/*
+		 * 第三种方式 : 通过XContentBuilder对象进行创建
+		 */
+
+		XContentBuilder builder = XContentFactory.jsonBuilder();
+		builder.startObject();
+		{
+			builder.field("uid", 1234);
+			builder.field("phone", 12345678909L);
+			builder.field("msgcode", 1);
+			builder.timeField("sendtime", "2019-03-14 01:57:04");
+			builder.field("message", "xuwujing study Elasticsearch");
+		}
+		builder.endObject();
+		request.source(builder);
+
+		IndexResponse indexResponse = client.index(request, RequestOptions.DEFAULT);
+
+		//如果是200则表示成功，否则就是失败
+		if(200 == indexResponse.status().getStatus()){
+
+		}
+
+		// 对响应结果进行处理
+		String index1 = indexResponse.getIndex();
+		String type1 = indexResponse.getType();
+		String id1 = indexResponse.getId();
+		long version = indexResponse.getVersion();
+		// 如果是新增/修改的话的话
+		if (indexResponse.getResult() == DocWriteResponse.Result.CREATED) {
+
+		} else if (indexResponse.getResult() == DocWriteResponse.Result.UPDATED) {
+
+		}
+		ReplicationResponse.ShardInfo shardInfo = indexResponse.getShardInfo();
+		if (shardInfo.getTotal() != shardInfo.getSuccessful()) {
+
+		}
+		if (shardInfo.getFailed() > 0) {
+			for (ReplicationResponse.ShardInfo.Failure failure : shardInfo.getFailures()) {
+				String reason = failure.reason();
+			}
+		}
 	}
 
 	/*
@@ -103,153 +181,72 @@ public class EsHighLevelRestTest1 {
 
 	/**
 	 * 创建索引
-	 * 
+	 *
 	 * @throws IOException
 	 */
-	private static void careatindex() throws IOException {
-		String index = "user";
-		String type = "userindex";
-		// 唯一编号
-		String id = "1";
-
-		IndexRequest request = new IndexRequest(index, type, id);
-
-		/*
-		 * 第一种方式，通过jsonString进行创建
-		 */
-		// json
-		String jsonString = "{" + "\"user\":\"pancm\"," + "\"postDate\":\"2019-03-08\"," + "\"age\":\"18\","
-				+ "\"message\":\"study Elasticsearch\"" + "}";
-
-		request.source(jsonString, XContentType.JSON);
-
-		/*
-		 * 第二种方式，通过map创建,，会自动转换成json的数据
-		 */
-
-		Map<String, Object> jsonMap = new HashMap<>();
-		jsonMap.put("user", "pancm");
-		jsonMap.put("postDate", "2019-03-08");
-		jsonMap.put("age", "18");
-		jsonMap.put("message", "study Elasticsearch");
-
-		request.source(jsonMap);
-
-		/*
-		 * 第三种方式 : 通过XContentBuilder对象进行创建
-		 */
-
-		XContentBuilder builder = XContentFactory.jsonBuilder();
-		builder.startObject();
-		{
-			builder.field("user", "pancm");
-			builder.timeField("postDate", "2019-03-08");
-			builder.field("age", "18");
-			builder.field("message", "study Elasticsearch");
-		}
-		builder.endObject();
-		request.source(builder);
-
-		IndexResponse indexResponse = client.index(request, RequestOptions.DEFAULT);
-
-		// 对响应结果进行处理
-
-		String index1 = indexResponse.getIndex();
-		String type1 = indexResponse.getType();
-		String id1 = indexResponse.getId();
-		long version = indexResponse.getVersion();
-		// 如果是新增/修改的话的话
-		if (indexResponse.getResult() == DocWriteResponse.Result.CREATED) {
-
-		} else if (indexResponse.getResult() == DocWriteResponse.Result.UPDATED) {
-
-		}
-		ReplicationResponse.ShardInfo shardInfo = indexResponse.getShardInfo();
-		if (shardInfo.getTotal() != shardInfo.getSuccessful()) {
-
-		}
-		if (shardInfo.getFailed() > 0) {
-			for (ReplicationResponse.ShardInfo.Failure failure : shardInfo.getFailures()) {
-				String reason = failure.reason();
-			}
-		}
-
-		System.out.println("创建索引库成功！");
+	private static void createIndex() throws IOException {
 
 		// 类型
-		String type2 = "student";
-		String index2 = "student";
-
+		String type = "_doc";
+		String index = "test1";
 		// setting 的值
 		Map<String, Object> setmapping = new HashMap<>();
-
-		// 分区数、路由分片数、副本数、缓存刷新时间
-		setmapping.put("number_of_shards", 12);
-		setmapping.put("number_of_routing_shards", 24);
+		// 分区数、副本数、缓存刷新时间
+		setmapping.put("number_of_shards", 10);
 		setmapping.put("number_of_replicas", 1);
 		setmapping.put("refresh_interval", "5s");
+		Map<String, Object> keyword = new HashMap<>();
+		//设置类型
+		keyword.put("type", "keyword");
+		Map<String, Object> lon = new HashMap<>();
+		//设置类型
+		lon.put("type", "long");
+		Map<String, Object> date = new HashMap<>();
+		//设置类型
+		date.put("type", "date");
+		date.put("format", "yyyy-MM-dd HH:mm:ss");
 
-		
-		
-		// mapping 的值
-//		Map<String, Object> mapping = new HashMap<>();
-//
-//		mapping.put("id", "long");
-//		mapping.put("name", "keyword");
-		
-		
 		Map<String, Object> jsonMap2 = new HashMap<>();
-		Map<String, Object> message = new HashMap<>();
-		//设置类型 
-		message.put("type", "text");
 		Map<String, Object> properties = new HashMap<>();
 		//设置字段message信息
-		properties.put("message", message);
+		properties.put("uid", lon);
+		properties.put("phone", lon);
+		properties.put("msgcode", lon);
+		properties.put("message", keyword);
+		properties.put("sendtime", date);
 		Map<String, Object> mapping = new HashMap<>();
 		mapping.put("properties", properties);
-		jsonMap2.put(type2, mapping);
-		
-		
-		GetIndexRequest getRequest2 = new GetIndexRequest();
-		getRequest2.indices(index);
-		getRequest2.local(false); 
-		getRequest2.humanReadable(true); 
-		boolean exists2 = client.indices().exists(getRequest2, RequestOptions.DEFAULT);
+		jsonMap2.put(type, mapping);
+
+		GetIndexRequest getRequest = new GetIndexRequest();
+		getRequest.indices(index);
+		getRequest.types(type);
+		getRequest.local(false);
+		getRequest.humanReadable(true);
+		boolean exists2 = client.indices().exists(getRequest, RequestOptions.DEFAULT);
 		//如果存在就不创建了
 		if(exists2) {
-			System.out.println(type2+"索引库已经存在!");
+			System.out.println(index+"索引库已经存在!");
 			return;
 		}
-		
 		// 开始创建库
-		CreateIndexRequest request2 = new CreateIndexRequest(index2);
+		CreateIndexRequest request = new CreateIndexRequest(index);
 		try {
 			// 加载数据类型
-			request2.settings(setmapping);
-			//第二种方式
-//			request2.settings(Settings.builder() 
-//				    .put("index.number_of_shards", 3)
-//				    .put("index.number_of_replicas", 1));
-			
-			
+			request.settings(setmapping);
 			//设置mapping参数
-			request2.mapping(type2, jsonMap2);
-			
+			request.mapping(type, jsonMap2);
 			//设置别名
-			request2.alias(new Alias("user_alias"));
-			
-			
-			CreateIndexResponse createIndexResponse = client.indices().create(request2, RequestOptions.DEFAULT);
+			request.alias(new Alias("pancm_alias"));
+			CreateIndexResponse createIndexResponse = client.indices().create(request, RequestOptions.DEFAULT);
 			boolean falg = createIndexResponse.isAcknowledged();
-			logger.info("创建索引库" + index + ",状态为:" + falg);
+			if(falg){
+				System.out.println("创建索引库:"+index+"成功！" );
+			}
 		} catch (IOException e) {
-			logger.error("创建INDEX报错", e);
-		} catch (NullPointerException e) {
-			logger.error("模板文件中的mappings或settings不能为空", e);
+			e.printStackTrace();
 		}
 
-		
-		
 	}
 
 
@@ -258,12 +255,9 @@ public class EsHighLevelRestTest1 {
 	 *
 	 * @throws IOException
 	 */
-	private static void deleteindex() throws IOException {
+	private static void deleteIndex() throws IOException {
 		String index = "userindex";
-
-
 		DeleteIndexRequest  request = new DeleteIndexRequest(index);
-
 		// 同步删除
 		client.indices().delete(request,RequestOptions.DEFAULT);
 		System.out.println("删除索引库成功！"+index);
@@ -275,9 +269,9 @@ public class EsHighLevelRestTest1 {
 	 * 
 	 * @throws IOException
 	 */
-	private static void get() {
-		String index = "user";
-		String type = "userindex";
+	private static void queryById() {
+		String type = "_doc";
+		String index = "test1";
 		// 唯一编号
 		String id = "1";
 		// 创建查询请求
@@ -315,8 +309,8 @@ public class EsHighLevelRestTest1 {
 	 * @throws IOException
 	 */
 	private static void exists() throws IOException {
-		String index = "user";
-		String type = "userindex";
+		String type = "_doc";
+		String index = "test1";
 		// 唯一编号
 		String id = "1";
 		// 创建查询请求
@@ -348,8 +342,8 @@ public class EsHighLevelRestTest1 {
 	 * @throws IOException
 	 */
 	private static void update() throws IOException {
-		String index = "user";
-		String type = "userindex";
+		String type = "_doc";
+		String index = "test1";
 		// 唯一编号
 		String id = "1";
 		UpdateRequest upateRequest = new UpdateRequest();
@@ -359,18 +353,72 @@ public class EsHighLevelRestTest1 {
 
 		// 依旧可以使用Map这种集合作为更新条件
 		Map<String, Object> jsonMap = new HashMap<>();
-		jsonMap.put("user", "xuwujing");
-		jsonMap.put("postDate", "2019-03-11");
-
+		jsonMap.put("uid", 12345);
+		jsonMap.put("phone", 123456789019L);
+		jsonMap.put("msgcode", 2);
+		jsonMap.put("sendtime", "2019-03-14 01:57:04");
+		jsonMap.put("message", "xuwujing study Elasticsearch");
 		upateRequest.doc(jsonMap);
-
-		//
-		upateRequest.docAsUpsert(true);
 		// upsert 方法表示如果数据不存在，那么就新增一条
-		upateRequest.upsert(jsonMap);
-
+		upateRequest.docAsUpsert(true);
 		client.update(upateRequest, RequestOptions.DEFAULT);
 		System.out.println("更新成功！");
+
+	}
+
+
+
+	/**
+	 * 根据查询条件更新
+	 *
+	 * @throws IOException
+	 */
+	private static void updateByQuery() throws IOException {
+		String type = "_doc";
+		String index = "test1";
+		//
+		UpdateByQueryRequest request = new UpdateByQueryRequest(index,type);
+		BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+		boolQueryBuilder.must(QueryBuilders.termQuery("user", "pancm"));
+//		Script script = new Script(ScriptType.INLINE, SCRIPT_NAME, id, map);
+//		boolQueryBuilder.must(QueryBuilders.scriptQuery(script));
+//		boolQueryBuilder.must(QueryBuilders.scriptQuery(script));
+//		// 设置查询条件
+//		request.setQuery(new TermQueryBuilder("user", "pancm"));
+
+
+
+		// 设置复制文档的数量
+		request.setSize(10);
+		// 设置一次批量处理的条数，默认是1000
+		request.setBatchSize(100);
+		//设置超时时间
+		request.setTimeout(TimeValue.timeValueMinutes(2));
+		//索引选项
+		request.setIndicesOptions(IndicesOptions.LENIENT_EXPAND_OPEN);
+
+		// 同步执行
+		BulkByScrollResponse bulkResponse = client.updateByQuery(request, RequestOptions.DEFAULT);
+
+		// 异步执行
+//		client.updateByQueryAsync(request, RequestOptions.DEFAULT, listener);
+
+		// 返回结果
+		TimeValue timeTaken = bulkResponse.getTook();
+		boolean timedOut = bulkResponse.isTimedOut();
+		long totalDocs = bulkResponse.getTotal();
+		long updatedDocs = bulkResponse.getUpdated();
+		long deletedDocs = bulkResponse.getDeleted();
+		long batches = bulkResponse.getBatches();
+		long noops = bulkResponse.getNoops();
+		long versionConflicts = bulkResponse.getVersionConflicts();
+		long bulkRetries = bulkResponse.getBulkRetries();
+		long searchRetries = bulkResponse.getSearchRetries();
+		TimeValue throttledMillis = bulkResponse.getStatus().getThrottled();
+		TimeValue throttledUntilMillis = bulkResponse.getStatus().getThrottledUntil();
+		List<ScrollableHitSource.SearchFailure> searchFailures = bulkResponse.getSearchFailures();
+		List<BulkItemResponse.Failure> bulkFailures = bulkResponse.getBulkFailures();
+		System.out.println("查询更新总共花费了:" + timeTaken.getMillis() + " 毫秒，总条数:" + totalDocs + ",更新数:" + updatedDocs);
 
 	}
 
@@ -382,21 +430,19 @@ public class EsHighLevelRestTest1 {
 	 */
 	private static void delete() throws IOException {
 
-		String index = "user";
-		String type = "userindex";
+		String type = "_doc";
+		String index = "test1";
 		// 唯一编号
 		String id = "1";
 		DeleteRequest deleteRequest = new DeleteRequest();
 		deleteRequest.id(id);
 		deleteRequest.index(index);
 		deleteRequest.type(type);
-
 		// 设置超时时间
 		deleteRequest.timeout(TimeValue.timeValueMinutes(2));
 		// 设置刷新策略"wait_for"
 		// 保持此请求打开，直到刷新使此请求的内容可以搜索为止。此刷新策略与高索引和搜索吞吐量兼容，但它会导致请求等待响应，直到发生刷新
 		deleteRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);
-
 		// 同步删除
 		DeleteResponse deleteResponse = client.delete(deleteRequest, RequestOptions.DEFAULT);
 
@@ -435,27 +481,102 @@ public class EsHighLevelRestTest1 {
 		System.out.println("删除成功!");
 	}
 
+
+	/**
+	 * 根据查询条件删除
+	 *
+	 * @throws IOException
+	 */
+	private static void deleteByQuery() throws IOException {
+		String type = "_doc";
+		String index = "test1";
+		DeleteByQueryRequest request = new DeleteByQueryRequest(index,type);
+
+		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+
+
+		sourceBuilder.sort("sendtime", SortOrder.ASC);
+
+
+		// 设置索引库表达式
+		BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+		boolQueryBuilder.must(QueryBuilders.termQuery("uid",123456));
+		sourceBuilder.query(boolQueryBuilder);
+		// 设置查询条件
+		request.setQuery(sourceBuilder.query());
+		request.setSize(1);
+
+		// 同步执行
+		BulkByScrollResponse bulkResponse = client.deleteByQuery(request, RequestOptions.DEFAULT);
+
+		// 异步执行
+//		client.updateByQueryAsync(request, RequestOptions.DEFAULT, listener);
+
+		// 返回结果
+		TimeValue timeTaken = bulkResponse.getTook();
+		boolean timedOut = bulkResponse.isTimedOut();
+		long totalDocs = bulkResponse.getTotal();
+		long updatedDocs = bulkResponse.getUpdated();
+		long deletedDocs = bulkResponse.getDeleted();
+		long batches = bulkResponse.getBatches();
+		long noops = bulkResponse.getNoops();
+		long versionConflicts = bulkResponse.getVersionConflicts();
+		long bulkRetries = bulkResponse.getBulkRetries();
+		long searchRetries = bulkResponse.getSearchRetries();
+		TimeValue throttledMillis = bulkResponse.getStatus().getThrottled();
+		TimeValue throttledUntilMillis = bulkResponse.getStatus().getThrottledUntil();
+		List<ScrollableHitSource.SearchFailure> searchFailures = bulkResponse.getSearchFailures();
+		List<BulkItemResponse.Failure> bulkFailures = bulkResponse.getBulkFailures();
+		System.out.println("查询更新总共花费了:" + timeTaken.getMillis() + " 毫秒，总条数:" + totalDocs + ",更新数:" + updatedDocs);
+
+	}
+
 	/**
 	 * 批量操作示例
 	 * 
 	 * @throws InterruptedException
 	 */
 	private static void bulk() throws IOException, InterruptedException {
-		String index = "estest";
-		String type = "estest";
+		// 类型
+		String type = "_doc";
+		String index = "student";
 
 		BulkRequest request = new BulkRequest();
-		// 批量新增
+		Map<String,Object> map = new HashMap<>();
+		map.put("uid",123);
+		map.put("age",11);
+		map.put("name","虚无境");
+		map.put("class",9);
+		map.put("grade",400);
+		map.put("createtm","2019-11-04");
+		map.put("updatetm","2019-11-05 21:04:55.268");
+		// 批量新增,存在会直接覆盖
 		request.add(new IndexRequest(index, type, "1").source(XContentType.JSON, "field", "foo"));
 		request.add(new IndexRequest(index, type, "2").source(XContentType.JSON, "field", "bar"));
 		request.add(new IndexRequest(index, type, "3").source(XContentType.JSON, "field", "baz"));
 
 		// 可以进行修改/删除/新增 操作
-		request.add(new UpdateRequest(index, type, "2").doc(XContentType.JSON, "field", "test"));
+		//docAsUpsert 为true表示存在更新，不存在插入，为false表示不存在就是不做更新
+		request.add(new UpdateRequest(index, type, "2").doc(XContentType.JSON, "field", "test").docAsUpsert(true));
 		request.add(new DeleteRequest(index, type, "3"));
 		request.add(new IndexRequest(index, type, "4").source(XContentType.JSON, "field", "baz"));
 
 		BulkResponse bulkResponse = client.bulk(request, RequestOptions.DEFAULT);
+
+
+		ActionListener<BulkResponse> listener3 = new ActionListener<BulkResponse>() {
+			@Override
+			public void onResponse(BulkResponse response) {
+				System.out.println("===="+response.buildFailureMessage());
+			}
+
+			@Override
+			public void onFailure(Exception e) {
+				System.out.println("====---"+e.getMessage());
+			}
+		};
+
+		client.bulkAsync(request, RequestOptions.DEFAULT,listener3);
 
 		// 可以快速检查一个或多个操作是否失败 true是有至少一个失败！
 		if (bulkResponse.hasFailures()) {
@@ -475,12 +596,16 @@ public class EsHighLevelRestTest1 {
 			if (bulkItemResponse.getOpType() == DocWriteRequest.OpType.INDEX
 					|| bulkItemResponse.getOpType() == DocWriteRequest.OpType.CREATE) {
 				IndexResponse indexResponse = (IndexResponse) itemResponse;
+				System.out.println("新增失败!"+indexResponse.toString());
 
 			} else if (bulkItemResponse.getOpType() == DocWriteRequest.OpType.UPDATE) {
 				UpdateResponse updateResponse = (UpdateResponse) itemResponse;
+				System.out.println("更新失败!"+updateResponse.toString());
 
 			} else if (bulkItemResponse.getOpType() == DocWriteRequest.OpType.DELETE) {
 				DeleteResponse deleteResponse = (DeleteResponse) itemResponse;
+				System.out.println("删除失败!"+deleteResponse.toString());
+
 			}
 		}
 

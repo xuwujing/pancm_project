@@ -1,17 +1,8 @@
 package com.pancm.test.ioTest;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 /**
@@ -54,6 +45,13 @@ public class Test {
 			System.out.println("path:"+path);
 			String os=System.getProperty("os.name").toLowerCase();
 			System.out.println("os:"+os);
+			//获取tomcat的目录
+			String path2=System.getProperty("catalina.home");
+
+			//获取文件的行数
+			String paths =path+File.separator+"pom.xml";
+			long lines = Files.lines(Paths.get(new File(paths).getPath())).count();
+			System.out.println("行数:"+lines);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

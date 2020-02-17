@@ -1,16 +1,11 @@
 package com.pancm.test.jdk8;
 
-import java.time.Clock;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.Period;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.sql.Timestamp;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 
 /**
  * The type Local date time test.
@@ -126,77 +121,97 @@ public class LocalDateTimeTest {
 	 */
 	private static void test2(){
 //		 String time="2018-06-29 09:19:45.498";
-		 String time2="2018-01-04T09:19:29.499";
-		 //格式化时间
-		 LocalDateTime ldt2=LocalDateTime.parse(time2);
-		 //获取当前的时间，包括毫秒
-		 LocalDateTime ldt = LocalDateTime.now();
-		 System.out.println("当前年:"+ldt.getYear());   //2018
-		 System.out.println("当前年份天数:"+ldt.getDayOfYear());//172 
-		 System.out.println("当前月:"+ldt.getMonthValue());
-		 System.out.println("当前时:"+ldt.getHour());
-		 System.out.println("当前分:"+ldt.getMinute());
-		 System.out.println("当前时间:"+ldt.toString());
+		String time2="2018-01-04T09:19:29.499";
+		//格式化时间
+		LocalDateTime ldt2=LocalDateTime.parse(time2);
+
+		//获取当前的时间，包括毫秒
+		LocalDateTime ldt = LocalDateTime.now();
+		System.out.println("当前年:"+ldt.getYear());   //2018
+		System.out.println("当前年份天数:"+ldt.getDayOfYear());//172
+		System.out.println("当前月:"+ldt.getMonthValue());
+		System.out.println("当前时:"+ldt.getHour());
+		System.out.println("当前分:"+ldt.getMinute());
+		System.out.println("当前月份的天数:"+ldt.getDayOfMonth());
+		System.out.println("当前时间:"+ldt.toString());
+
 		//		 当前年:2018
 		//		 当前年份天数:353
 		//		 当前月:12
 		//		 当前时:15
 		//		 当前分:24
+		//		 当前月份的天数:12
 		//		 当前时间:2018-12-19T15:24:35.833
-		 
-		 
-		 System.out.println("格式化时间: "+ ldt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
-		 //格式化时间:2018-12-19 15:37:47.119
-		 
-		 System.out.println("后5天时间:"+ldt.plusDays(5));
-		 System.out.println("前5天时间并格式化:"+ldt.minusDays(5).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))); //2018-06-16
-		 System.out.println("前一个月的时间:"+ldt2.minusMonths(1).format(DateTimeFormatter.ofPattern("yyyyMM"))); //2018-06-16
-		 System.out.println("后一个月的时间:"+ldt2.plusMonths(1)); //2018-06-16
-		 System.out.println("指定2099年的当前时间:"+ldt.withYear(2099)); //2099-06-21T15:07:39.506
+
+
+		System.out.println("格式化时间: "+ ldt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
+		//格式化时间:2018-12-19 15:37:47.119
+
+		System.out.println("后5天时间:"+ldt.plusDays(5));
+		System.out.println("前5天时间并格式化:"+ldt.minusDays(5).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))); //2018-06-16
+		System.out.println("前一个月的时间:"+ldt2.minusMonths(1).format(DateTimeFormatter.ofPattern("yyyyMM"))); //2018-06-16
+		System.out.println("后一个月的时间:"+ldt2.plusMonths(1)); //2018-06-16
+		System.out.println("指定2099年的当前时间:"+ldt.withYear(2099)); //2099-06-21T15:07:39.506
+		System.out.println("获取这个时间的年:"+ldt2.getLong(ChronoField.YEAR)); //2018
+		System.out.println("获取这个时间的月:"+ldt2.getLong(ChronoField.MONTH_OF_YEAR)); //1
+		System.out.println("获取这个时间的天:"+ldt2.getLong(ChronoField.DAY_OF_MONTH)); //4
+		System.out.println("获取这个时间的小时:"+ldt2.getLong(ChronoField.HOUR_OF_DAY)); //9
+		System.out.println("转换成时间戳:"+ Timestamp.valueOf(ldt2).getTime()); //1515028769499
+
+
 		//		后5天时间:2018-12-24T15:50:37.508
 		//		前5天时间并格式化:2018-12-14
 		//		前一个月的时间:201712
 		//		后一个月的时间:2018-02-04T09:19:29.499
 		//		指定2099年的当前时间:2099-12-19T15:50:37.508
-		 
-		 System.out.println("得到的时间:"+ldt2.toString());
-		 System.out.println("格式化时间:"+ldt2.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-		 
-		 
+
+		System.out.println("得到的时间:"+ldt2.toString());
+		System.out.println("格式化时间:"+ldt2.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+
+		//获取月份的第一天和最后一天
+		String firstDay = LocalDate.parse("2018-12-24").with(TemporalAdjusters.firstDayOfMonth()).toString();
+		String endDay = LocalDate.parse("2018-12-24").with(TemporalAdjusters.lastDayOfMonth()).toString();
+		System.out.println("firstDay:"+firstDay);
+		System.out.println("endDay:"+endDay);
+
 		 /*
-		  * 
+		  *
 		 通过  Clock时钟类用于获取当时的时间戳，或当前时区下的日期时间信息。
 		  */
-		 Clock clock = Clock.systemUTC();
-		 System.out.println("当前时间戳 : " + clock.millis());
-		 Clock clock2 = Clock.system(ZoneId.of("Asia/Shanghai"));
-		 System.out.println("亚洲上海此时的时间戳:"+clock2.millis());
-		 Clock clock3 = Clock.system(ZoneId.of("America/New_York"));
-		 System.out.println("美国纽约此时的时间戳:"+clock3.millis());
+		Clock clock = Clock.systemUTC();
+		System.out.println("当前时间戳 : " + clock.millis());
+		Clock clock2 = Clock.system(ZoneId.of("Asia/Shanghai"));
+		System.out.println("亚洲上海此时的时间戳:"+clock2.millis());
+		Clock clock3 = Clock.system(ZoneId.of("America/New_York"));
+		System.out.println("美国纽约此时的时间戳:"+clock3.millis());
 		//	当前时间戳 : 1545209277657
 		//	 亚洲上海此时的时间戳:1545209277657
 		//	 美国纽约此时的时间戳:1545209277658
-		 
-		 /*
-		  * 时区计算
-		  */
-		 ZoneId zoneId= ZoneId.of("America/New_York");
-		 ZonedDateTime dateTime=ZonedDateTime.now(zoneId);
-		 System.out.println("美国纽约此时的时间 : " + dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
-		 System.out.println("美国纽约此时的时间 和时区: " + dateTime);
-		 //	 美国纽约此时的时间 : 2018-12-19 03:52:22.494
-		 //	美国纽约此时的时间 和时区: 2018-12-19T03:52:22.494-05:00[America/New_York]
-				 
-		 /**
-		  *
-		  * 时间比较
-		  */
-		 LocalDateTime ldt4 = LocalDateTime.now();
-		 LocalDateTime ldt5 = ldt4.plusMinutes(10);
-		 System.out.println("当前时间是否大于:"+ldt4.isAfter(ldt5));
-		 System.out.println("当前时间是否小于"+ldt4.isBefore(ldt5));
-		 // false
-		 // true
+
+		/*
+		 * 时区计算
+		 */
+		ZoneId zoneId= ZoneId.of("America/New_York");
+		ZonedDateTime dateTime=ZonedDateTime.now(zoneId);
+		System.out.println("美国纽约此时的时间 : " + dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
+		System.out.println("美国纽约此时的时间 和时区: " + dateTime);
+		//	 美国纽约此时的时间 : 2018-12-19 03:52:22.494
+		//	美国纽约此时的时间 和时区: 2018-12-19T03:52:22.494-05:00[America/New_York]
+
+		/**
+		 * 时间比较
+		 */
+		LocalDateTime ldt4 = LocalDateTime.now();
+		LocalDateTime ldt5 = ldt4.plusMinutes(10);
+		System.out.println("当前时间是否大于:"+ldt4.isAfter(ldt5));
+		System.out.println("当前时间是否大于或等于:"+(ldt4.compareTo(ldt4)>=-1));
+		System.out.println("当前时间是否大于或等于:"+(ldt4.compareTo(ldt5)>=-1));
+		System.out.println("当前时间是否小于"+ldt4.isBefore(ldt5));
+		// false
+		// true
+
+
+
 	}
 	
 	

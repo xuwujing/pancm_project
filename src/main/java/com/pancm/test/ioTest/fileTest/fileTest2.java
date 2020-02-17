@@ -41,6 +41,9 @@ public class fileTest2 {
     public static void createNewFile(String path){
 		File file=new File(path); //实例化File文件，给出路径
 		try {
+			if(file.exists()){
+				return;
+			}
 			file.createNewFile();  //创建文件
 			System.out.println("创建成功");
 		} catch (IOException e) {

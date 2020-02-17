@@ -58,8 +58,11 @@ public class KafkaConsumerTest implements Runnable {
 						messageNo++;
 					}
 					if(list.size()==50){
-						// 手动提交
+						// 手动提交 同步提交
 						consumer.commitSync();
+						// 异步提交
+//						consumer.commitAsync();
+
 						System.out.println("成功提交"+list.size()+"条,此时的offset为:"+list2.get(49));
 					}else if(list.size()>50){
 						consumer.close();
@@ -81,7 +84,7 @@ public class KafkaConsumerTest implements Runnable {
 	private void init() {
 		Properties props = new Properties();
 		//kafka消费的的地址
-		props.put("bootstrap.servers", "master:9092,slave1:9092,slave2:9092");
+		props.put("bootstrap.servers", "192.169.2.98:9092,192.169.2.188:9092,192.169.2.156:9092");
 		//组名 不同组名可以重复消费
 		props.put("group.id", GROUPID);
 		//是否自动提交
@@ -113,7 +116,7 @@ public class KafkaConsumerTest implements Runnable {
      * @param args the args
      */
     public static void main(String args[]) {
-		KafkaConsumerTest test1 = new KafkaConsumerTest("KAFKA_TEST2");
+		KafkaConsumerTest test1 = new KafkaConsumerTest("KAFKA_TEST11");
 		Thread thread1 = new Thread(test1);
 		thread1.start();
 	}

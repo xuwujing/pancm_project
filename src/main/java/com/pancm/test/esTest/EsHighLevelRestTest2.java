@@ -15,7 +15,10 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.RethrottleRequest;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.TermQueryBuilder;
-import org.elasticsearch.index.reindex.*;
+import org.elasticsearch.index.reindex.BulkByScrollResponse;
+import org.elasticsearch.index.reindex.DeleteByQueryRequest;
+import org.elasticsearch.index.reindex.ReindexRequest;
+import org.elasticsearch.index.reindex.ScrollableHitSource;
 import org.elasticsearch.tasks.TaskId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +39,8 @@ import static org.junit.Assert.assertNull;
  */
 public class EsHighLevelRestTest2 {
 
-	private static String elasticIp = "192.169.0.23";
+//	private static String elasticIp = "192.169.0.23";
+	private static String elasticIp = "192.169.2.98";
 	private static int elasticPort = 9200;
 
 	private static Logger logger = LoggerFactory.getLogger(EsHighLevelRestTest2.class);
@@ -49,11 +53,10 @@ public class EsHighLevelRestTest2 {
 	public static void main(String[] args) {
 		try {
 			init();
-			multiGet();
-			reindex();
-			updataByQuery();
-			deleteByQuery();
-			rethrottleByQuery();
+//			multiGet();
+//			reindex();
+//			deleteByQuery();
+//			rethrottleByQuery();
 			close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -170,7 +173,7 @@ public class EsHighLevelRestTest2 {
 		BulkByScrollResponse bulkResponse = client.reindex(request, RequestOptions.DEFAULT);
 
 		// 异步执行
-//		client.reindexAsync(request, RequestOptions.DEFAULT, listener); 
+//		client.reindexAsync(request, RequestOptions.DEFAULT, listener);
 
 		// 响应结果处理
 
@@ -195,56 +198,7 @@ public class EsHighLevelRestTest2 {
 	}
 
 	
-	
-	/**
-	 * 根据查询条件更新
-	 * 
-	 * @throws IOException
-	 */
-	private static void updataByQuery() throws IOException {
-		//
-		UpdateByQueryRequest request = new UpdateByQueryRequest("user");
 
-		// 设置查询条件
-		request.setQuery(new TermQueryBuilder("user", "pancm"));
-
-		// 设置复制文档的数量
-		request.setSize(10);
-		// 设置一次批量处理的条数，默认是1000
-		request.setBatchSize(100);
-		//设置路由
-		request.setRouting("=cat");
-		//设置超时时间
-		request.setTimeout(TimeValue.timeValueMinutes(2));
-		//允许刷新
-		request.setRefresh(true);
-		//索引选项
-		request.setIndicesOptions(IndicesOptions.LENIENT_EXPAND_OPEN);
-		
-		// 同步执行
-		BulkByScrollResponse bulkResponse = client.updateByQuery(request, RequestOptions.DEFAULT);
-
-		// 异步执行
-//		client.updateByQueryAsync(request, RequestOptions.DEFAULT, listener); 
-
-		// 返回结果
-		TimeValue timeTaken = bulkResponse.getTook();
-		boolean timedOut = bulkResponse.isTimedOut();
-		long totalDocs = bulkResponse.getTotal();
-		long updatedDocs = bulkResponse.getUpdated();
-		long deletedDocs = bulkResponse.getDeleted();
-		long batches = bulkResponse.getBatches();
-		long noops = bulkResponse.getNoops();
-		long versionConflicts = bulkResponse.getVersionConflicts();
-		long bulkRetries = bulkResponse.getBulkRetries();
-		long searchRetries = bulkResponse.getSearchRetries();
-		TimeValue throttledMillis = bulkResponse.getStatus().getThrottled();
-		TimeValue throttledUntilMillis = bulkResponse.getStatus().getThrottledUntil();
-		List<ScrollableHitSource.SearchFailure> searchFailures = bulkResponse.getSearchFailures();
-		List<BulkItemResponse.Failure> bulkFailures = bulkResponse.getBulkFailures();
-		System.out.println("查询更新总共花费了:" + timeTaken.getMillis() + " 毫秒，总条数:" + totalDocs + ",更新数:" + updatedDocs);
-
-	}
 	
 	
 	/**
@@ -328,12 +282,10 @@ public class EsHighLevelRestTest2 {
 		client.reindexRethrottleAsync(request, RequestOptions.DEFAULT, listener);       
 		client.updateByQueryRethrottleAsync(request, RequestOptions.DEFAULT, listener); 
 		client.deleteByQueryRethrottleAsync(request, RequestOptions.DEFAULT, listener);
-	
+
 		System.out.println("已成功设置!");
 
 	}
-	
-	
-	
-	
+
+
 }

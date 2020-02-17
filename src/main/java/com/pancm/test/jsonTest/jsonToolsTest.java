@@ -1,6 +1,9 @@
 package com.pancm.test.jsonTest;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.pancm.util.JsonTools;
 
 /**
@@ -40,5 +43,18 @@ public class jsonToolsTest {
 	   json3.put("age", 22);
  	   System.out.println("json3:"+json3);
  	   System.out.println("json3:"+json3.getString("qq"));
+		gson();
 	}
+
+
+	private static void gson(){
+		Gson gson = new Gson();
+
+		String m="{\"face_token\":\"377287f36db84114b752cc2e232551f4\",\"user_list\":[{\"score\":91.08332824707,\"group_id\":\"muen_001\",\"user_id\":\"user1\",\"user_info\":\"user's info\"}]}";
+		JsonObject jsonObject= gson.fromJson(m, JsonObject.class);
+		String k =jsonObject.get("user_list").toString();
+		JsonArray jsonArray = gson.fromJson(k,JsonArray.class);
+		System.out.println("结果:"+jsonArray.get(0));
+
+    }
 }

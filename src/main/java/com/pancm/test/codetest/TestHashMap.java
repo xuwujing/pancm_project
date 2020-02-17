@@ -33,12 +33,9 @@ public class TestHashMap {
 	      HashMap(int initialCapacity, float loadFactor)：构造一个带指定初始容量和加载因子的空 HashMap。
 		  
 		  初始容量是创建哈希表时的容量，加载因子是哈希表在其容量自动增加之前可以达到多满的一种尺度。
-		  
-		  
+
 		 */
-		
-		
-		
+
 		/*
 		 * 性能测试
 		 */
@@ -47,14 +44,17 @@ public class TestHashMap {
 		for(int i=0;i<1000000;i++) {
 			map.put("a"+i, "b"+i);
 		}
-		
 		for(int i=100;i<200;i++) {
 			map.get("a"+i);
+
 		}
 		long endTime=System.currentTimeMillis();
 		
 		System.out.println("用时:"+ (endTime-startime)+"ms");
-		
+
+
+
+
 	}
 	
 }

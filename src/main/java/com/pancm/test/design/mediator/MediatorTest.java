@@ -43,9 +43,9 @@ public class MediatorTest {
 		XuWuJing xwj = new XuWuJing("xuwujing", jq);
 		jq.setZs(zs);
 		jq.setXwj(xwj);
-        
-		zs.talk("大家好！我是张三!");;
-		xwj.talk("欢迎你！张三！");
+		zs.exchange("大家好！我是张三!");
+		xwj.exchange("欢迎你！张三！");
+
 		
 		
 		/*

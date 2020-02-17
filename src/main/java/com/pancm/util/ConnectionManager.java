@@ -1,18 +1,16 @@
 package com.pancm.util;
 
+import com.alibaba.druid.pool.DruidDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.sql.DataSource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.alibaba.druid.pool.DruidDataSource;
 
 
 /**
@@ -32,43 +30,43 @@ public class ConnectionManager {
 	private static volatile ConnectionManager dbConnection;
 
 	//  连接池
-	private DruidDataSource ec_pool = null;
+	private DruidDataSource dataSource = null;
 
 	private String msg = "";
 	
 	
 	/** 密码的key */
-	private final String sysKey = "cluster.datasource.password";
+	private final String sysKey = "password";
 
 	
 
 	/** 配置文件名称 */
-	private final String fileName = "application.properties";
+	private final String fileName = "jdbc.properties";
 	/**
 	 * 在构造函数初始化的时候获取数据库连接
 	 */
 	private ConnectionManager() {
-		if (ec_pool == null) {
+		if (dataSource == null) {
 			/** 获取属性文件中的值 **/
-			String driverName = conf.get("cluster.datasource.driverClassName");
-			String url = conf.get("cluster.datasource.url");
-			String username = conf.get("cluster.datasource.username");
-			String password = conf.get("cluster.datasource.password");
-			int maxPoolSize = Integer.valueOf(conf.get("spring.datasource.maxActive").trim());
+			String driverName = conf.get("driverClassName");
+			String url = conf.get("url");
+			String username = conf.get("username");
+			String password = conf.get("password");
+			int maxPoolSize = 100;
 		
-			ec_pool = new DruidDataSource();
-			ec_pool.setName("ec_pool");
-			ec_pool.setUrl(url);
+			dataSource = new DruidDataSource();
+			dataSource.setName("_pool");
+			dataSource.setUrl(url);
 			// 数据库驱动
-			ec_pool.setDriverClassName(driverName);
-			ec_pool.setUsername(username);// 用户名
+			dataSource.setDriverClassName(driverName);
+			dataSource.setUsername(username);// 用户名
 			String	password2 = AESEncryptDecrypt.decode(password);
 			// 如果为空,说明解密失败,那么就直接连接，若还是失败，说明密码错误，直接退出程序
-			ec_pool.setPassword(password2 == null ? password : password2);
+			dataSource.setPassword(password2 == null ? password : password2);
 
 			// 如果连接失败，则直接退出程序!
-			if (!testCon(ec_pool)) {
-				logger.error("从数据库连接失败!程序退出!");
+			if (!testCon(dataSource)) {
+				logger.error("数据库连接失败!程序退出!");
 				System.exit(1);
 			}
 			
@@ -83,14 +81,14 @@ public class ConnectionManager {
 			}else{
 				logger.info("从数据库的密码是密文!");
 			}
-			ec_pool.setMaxActive(maxPoolSize);// 连接池中保留的最大连接数
-//			ec_pool.setInitialSize(1);// 连初始创建
+			dataSource.setMaxActive(maxPoolSize);// 连接池中保留的最大连接数
+//			dataSource.setInitialSize(1);// 连初始创建
 
-			ec_pool.setTimeBetweenEvictionRunsMillis(60000);
-			ec_pool.setMaxWait(30000);
+			dataSource.setTimeBetweenEvictionRunsMillis(60000);
+			dataSource.setMaxWait(30000);
 			// 每次连接不校验有效性，提升性能
-			ec_pool.setTestOnBorrow(false);
-			ec_pool.setTestOnReturn(false);
+			dataSource.setTestOnBorrow(false);
+			dataSource.setTestOnReturn(false);
 
 		}
 
@@ -136,9 +134,9 @@ public class ConnectionManager {
     public final Connection getConnection() throws SQLException {
 		Connection conn = null;
 		try {
-			conn = ec_pool.getConnection();
+			conn = dataSource.getConnection();
 		} catch (SQLException e) {
-			msg = "从库连接失败!";
+			msg = "数据库连接失败!";
 			throw new SQLException(msg);
 		}
 		return conn;
