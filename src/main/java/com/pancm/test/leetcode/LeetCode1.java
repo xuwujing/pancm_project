@@ -9,4 +9,8 @@ package com.pancm.test.leetcode;
  * @date 2020/2/17 0017
  */
 public class LeetCode1 {
+
+    public static void main(String[] args) {
+
+    }
 }
