@@ -17,4 +17,8 @@ public class LeetCode1 {
      private static  void test1(){
 
      }
+
+    private static  void test2(){
+
+    }
 }
