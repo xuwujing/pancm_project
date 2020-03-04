@@ -1,10 +1,10 @@
 package com.pancm.test.kafkaTest.test1;
 
-import java.util.Properties;
-
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
+
+import java.util.Properties;
 
 
 /**
@@ -23,7 +23,8 @@ public class KafkaProducerTest implements Runnable {
 
 //	private String url= "192.169.2.98:2181,192.169.2.188:2181,192.169.2.156:2181";
 //	private String url= "192.169.2.30:9092,192.169.2.121:9092,192.169.2.184:9092";
-	private String url= "192.169.0.23:9092,192.169.0.24:9092,192.169.0.25:9092";
+//	private String url= "192.169.0.23:9092,192.169.0.24:9092,192.169.0.25:9092";
+	private String url= "192.169.2.202:9092,192.169.2.248:9092,192.169.2.249:9092";
 
 
 	/**
@@ -61,7 +62,7 @@ public class KafkaProducerTest implements Runnable {
 
 				}
 				//生产1000条就退出
-				if(messageNo%10000==0){
+				if(messageNo%1000==0){
 					System.out.println("成功发送了"+messageNo+"条");
 					break;
 				}
@@ -81,9 +82,9 @@ public class KafkaProducerTest implements Runnable {
      * @param args the args
      */
     public static void main(String args[]) {
-		KafkaProducerTest test1 = new KafkaProducerTest("t4");
-		KafkaProducerTest test2 = new KafkaProducerTest("t5");
-		KafkaProducerTest test3= new KafkaProducerTest("t6");
+		KafkaProducerTest test1 = new KafkaProducerTest("t1");
+		KafkaProducerTest test2 = new KafkaProducerTest("t2");
+		KafkaProducerTest test3= new KafkaProducerTest("t3");
 		Thread thread1 = new Thread(test1);
 		Thread thread2 = new Thread(test2);
 		Thread thread3 = new Thread(test3);

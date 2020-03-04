@@ -27,14 +27,15 @@ public class KafkaConsumerTest implements Runnable {
 	private ConsumerRecords<String, String> msgList;
 	private  String[] topic;
 	private  String topic1;
-	private static final String GROUPID = "groupzx4";
+	private static final String GROUPID = "group1";
 
     //主程序的日志打印
     private static Logger LOG = LoggerFactory.getLogger(KafkaConsumerTest.class);
 
     private long pause=1;
 //    private String url= "192.169.2.30:9092,192.169.2.121:9092,192.169.2.184:9092";
-	private String url= "192.169.0.23:9092,192.169.0.24:9092,192.169.0.25:9092";
+//	private String url= "192.169.0.23:9092,192.169.0.24:9092,192.169.0.25:9092";
+	private String url= "192.169.2.202:9092,192.169.2.248:9092,192.169.2.249:9092";
     /**
      * Instantiates a new Kafka consumer test.
      *
@@ -81,6 +82,7 @@ public class KafkaConsumerTest implements Runnable {
             TopicPartition partitions = new TopicPartition(topic1,part);
             list2.add(partitions);
         }
+
 		//最大的offset
 		Map<TopicPartition, Long> map= consumer.endOffsets(list2);
 		LOG.info("最大的offset:{}",map);
