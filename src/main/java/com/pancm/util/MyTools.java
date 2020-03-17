@@ -3,6 +3,10 @@ package com.pancm.util;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -1028,6 +1032,65 @@ public final class MyTools {
         return data3;
 
     }
+
+
+
+    /**
+     * @Author pancm
+     * @Description 获取请求的body数据
+     * @Date  2020/3/15
+     * @Param [request]
+     * @return java.lang.String
+     **/
+    public static String ReadAsChars(HttpServletRequest request) {
+
+        BufferedReader br = null;
+        StringBuilder sb = new StringBuilder("");
+        try {
+            br = request.getReader();
+            String str;
+            while ((str = br.readLine()) != null) {
+                sb.append(str);
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (null != br) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String ReadAsChars2(HttpServletRequest request) {
+        InputStream is = null;
+        StringBuilder sb = new StringBuilder();
+        try {
+            is = request.getInputStream();
+            byte[] b = new byte[4096];
+            for (int n; (n = is.read(b)) != -1; ) {
+                sb.append(new String(b, 0, n));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (null != is) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+
 
     /**
      * 本方法的测试示例
