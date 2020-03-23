@@ -60,6 +60,12 @@ public final class MyTools {
      */
     private static Pattern p = Pattern.compile("^\\d+$");
 
+
+    private static Pattern linePattern = Pattern.compile("_([a-z])");
+
+    private static Pattern humpPattern = Pattern.compile("\\B(\\p{Upper})(\\p{Lower}*)");
+
+
     /**
      * 判断String类型的数据是否为空 null,""," " 为true "A"为false
      *
@@ -488,11 +494,11 @@ public final class MyTools {
     }
 
     /**
+     * @return java.lang.String
      * @Author pancm
      * @Description 获取指定时间前几天的数据
      * @Date
      * @Param [day, time, format]
-     * @return java.lang.String
      **/
     public static String getMinusDays(int day, String time, String format) {
         return LocalDateTime.parse(time, DateTimeFormatter.ofPattern(format)).minusDays(day).format(DateTimeFormatter.ofPattern(format));
@@ -1034,13 +1040,12 @@ public final class MyTools {
     }
 
 
-
     /**
+     * @return java.lang.String
      * @Author pancm
      * @Description 获取请求的body数据
-     * @Date  2020/3/15
+     * @Date 2020/3/15
      * @Param [request]
-     * @return java.lang.String
      **/
     public static String ReadAsChars(HttpServletRequest request) {
 
@@ -1090,6 +1095,141 @@ public final class MyTools {
         return sb.toString();
     }
 
+
+    /**
+     * 下划线转驼峰
+     *
+     * @param str
+     * @return
+     */
+    public static String lineToHump(String str) {
+        Matcher matcher = linePattern.matcher(str);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            matcher.appendReplacement(sb, matcher.group(1).toUpperCase());
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
+    }
+
+    /**
+     * 下划线转驼峰 (Map)
+     *
+     * @param map
+     * @return
+     */
+    public static Map<String, Object> lineToHump(Map<String, Object> map) {
+        Map<String, Object> newMap = new HashMap<>();
+        Iterator<Map.Entry<String, Object>> it = map.entrySet().iterator();
+        while (it.hasNext()) {
+            StringBuffer sb = new StringBuffer();
+            Map.Entry<String, Object> entry = it.next();
+            String key = entry.getKey();
+            Matcher matcher = linePattern.matcher(key);
+            while (matcher.find()) {
+                matcher.appendReplacement(sb, matcher.group(1).toUpperCase());
+            }
+            matcher.appendTail(sb);
+            newMap.put(sb.toString(), entry.getValue());
+        }
+        return newMap;
+    }
+
+    /**
+     * 下划线转驼峰(List)
+     *
+     * @param list
+     * @return
+     */
+    public static List<Map<String, Object>> lineToHumpList(List<Map<String, Object>> list) {
+        List<Map<String, Object>> res = new ArrayList<>();
+        list.stream().forEach(p -> {
+            Map<String, Object> newMap = new HashMap<>();
+            Iterator<Map.Entry<String, Object>> it = p.entrySet().iterator();
+            while (it.hasNext()) {
+                StringBuffer sb = new StringBuffer();
+                Map.Entry<String, Object> entry = it.next();
+                String key = entry.getKey();
+                Matcher matcher = linePattern.matcher(key);
+                while (matcher.find()) {
+                    matcher.appendReplacement(sb, matcher.group(1).toUpperCase());
+                }
+                matcher.appendTail(sb);
+                newMap.put(sb.toString(), entry.getValue());
+            }
+            res.add(newMap);
+        });
+        return res;
+    }
+
+    /**
+     * 驼峰转下划线
+     *
+     * @param str
+     * @return
+     */
+    public static String humpToLine(String str) {
+        StringBuffer sb = new StringBuffer();
+        Matcher matcher = humpPattern.matcher(str);
+        while (matcher.find()) {
+            matcher.appendReplacement(sb, "_" + matcher.group(0).toLowerCase());
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
+    }
+
+
+    /**
+     * 驼峰转下划线(Map)
+     *
+     * @param map
+     * @return
+     */
+    public static Map<String, Object> humpToLine(Map<String, Object> map) {
+        Map<String, Object> newMap = new HashMap<>();
+        Iterator<Map.Entry<String, Object>> it = map.entrySet().iterator();
+        while (it.hasNext()) {
+            StringBuffer sb = new StringBuffer();
+            Map.Entry<String, Object> entry = it.next();
+            String key = entry.getKey();
+            Matcher matcher = humpPattern.matcher(key);
+            while (matcher.find()) {
+                matcher.appendReplacement(sb, "_" + matcher.group(0).toLowerCase());
+            }
+            matcher.appendTail(sb);
+            newMap.put(sb.toString(), entry.getValue());
+        }
+        return newMap;
+    }
+
+
+
+    /**
+     * 驼峰转下划线(List)
+     *
+     * @param list
+     * @return
+     */
+    public static List<Map<String, Object>> humpToLineList(List<Map<String, Object>> list) {
+        List<Map<String, Object>> res = new ArrayList<>();
+        list.stream().forEach(p -> {
+            Map<String, Object> newMap = new HashMap<>();
+            Iterator<Map.Entry<String, Object>> it = p.entrySet().iterator();
+            while (it.hasNext()) {
+                StringBuffer sb = new StringBuffer();
+                Map.Entry<String, Object> entry = it.next();
+                String key = entry.getKey();
+                Matcher matcher = humpPattern.matcher(key);
+                while (matcher.find()) {
+                    matcher.appendReplacement(sb, "_" + matcher.group(0).toLowerCase());
+                }
+                matcher.appendTail(sb);
+                newMap.put(sb.toString(), entry.getValue());
+            }
+            res.add(newMap);
+        });
+        return res;
+    }
 
 
     /**
@@ -1255,6 +1395,29 @@ public final class MyTools {
          */
         System.out.println("增加的位数:" + Integer.toBinaryString(1022 - (1022 & 783)));
         System.out.println("减少的位数:" + Integer.toBinaryString(783 - (783 & 1022)));
+
+
+        String line1 = "pd_id";
+        String line2 = "pdId";
+        Map<String, Object> lineMap = new HashMap<>();
+        lineMap.put("pd_id", 1);
+        lineMap.put("pt_id", 2);
+        Map<String, Object> humpMap = new HashMap<>();
+        humpMap.put("pdId", 1);
+        humpMap.put("ptId", 2);
+        List<Map<String,Object>> lineList = new ArrayList<>();
+        List<Map<String,Object>> humpList = new ArrayList<>();
+        lineList.add(lineMap);
+        humpList.add(lineMap);
+
+
+        System.out.println("line1：" + lineToHump(line1));
+        System.out.println("lineMap：" + lineToHump(lineMap));
+        System.out.println("lineToHumpList：" + lineToHumpList(lineList));
+        System.out.println("line2：" + humpToLine(line2));
+        System.out.println("humpMap：" + humpToLine(humpMap));
+        System.out.println("humpToLineList：" + humpToLineList(humpList));
+
 
 
     }
