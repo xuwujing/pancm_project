@@ -36,8 +36,7 @@ public class FileTest3 {
 
     /** 配置文件名称 */
     protected static final String fileName2 = "application.properties";
-    protected static final String PHONE = "phone";
-    protected static final String TIME = "endTime";
+
 
 
     public static boolean writeToFile(List<Map<String, Object>> lists) {
