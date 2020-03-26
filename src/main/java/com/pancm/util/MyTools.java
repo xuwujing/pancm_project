@@ -2,12 +2,11 @@ package com.pancm.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -1229,6 +1228,31 @@ public final class MyTools {
             res.add(newMap);
         });
         return res;
+    }
+
+
+    /**
+     * 文件压缩
+     *
+     * @param path,path2
+     * @return
+     */
+    public static void compress(String path, String path2) throws IOException {
+        // 创建压缩对象
+        ZipArchiveEntry entry = new ZipArchiveEntry("CompressTest");
+        // 要压缩的文件
+        File f = new File("d:\\user.txt");
+        FileInputStream fis = new FileInputStream(f);
+        // 输出的对象 压缩的文件
+        ZipArchiveOutputStream zipOutput = new ZipArchiveOutputStream(new File("d:\\user.zip"));
+        zipOutput.putArchiveEntry(entry);
+        int  j;
+        while ((j = fis.read()) != -1) {
+            zipOutput.write(j);
+        }
+        zipOutput.closeArchiveEntry();
+        zipOutput.close();
+        fis.close();
     }
 
 
