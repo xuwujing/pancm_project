@@ -1241,10 +1241,10 @@ public final class MyTools {
         // 创建压缩对象
         ZipArchiveEntry entry = new ZipArchiveEntry("CompressTest");
         // 要压缩的文件
-        File f = new File("d:\\user.txt");
+        File f = new File(path);
         FileInputStream fis = new FileInputStream(f);
         // 输出的对象 压缩的文件
-        ZipArchiveOutputStream zipOutput = new ZipArchiveOutputStream(new File("d:\\user.zip"));
+        ZipArchiveOutputStream zipOutput = new ZipArchiveOutputStream(new File(path2));
         zipOutput.putArchiveEntry(entry);
         int  j;
         while ((j = fis.read()) != -1) {
