@@ -72,7 +72,7 @@ public class FileTest3 {
         // 写入文件中
         try {
             writeFile(sb.toString());
-            // logger.info("写入成功!");
+
             return true;
         } catch (IOException e) {
             LOG.error("写入失败!原因是:", e);
