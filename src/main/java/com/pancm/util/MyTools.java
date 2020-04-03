@@ -1237,9 +1237,9 @@ public final class MyTools {
      * @param path,path2
      * @return
      */
-    public static void compress(String path, String path2) throws IOException {
+    public static void compress(String path, String path2,String  fileName) throws IOException {
         // 创建压缩对象
-        ZipArchiveEntry entry = new ZipArchiveEntry("CompressTest");
+        ZipArchiveEntry entry = new ZipArchiveEntry(fileName);
         // 要压缩的文件
         File f = new File(path);
         FileInputStream fis = new FileInputStream(f);
