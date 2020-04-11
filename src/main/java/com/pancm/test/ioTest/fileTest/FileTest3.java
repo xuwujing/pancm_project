@@ -36,8 +36,7 @@ public class FileTest3 {
 
     /** 配置文件名称 */
     protected static final String fileName2 = "application.properties";
-    protected static final String PHONE = "phone";
-    protected static final String TIME = "endTime";
+
 
 
     public static boolean writeToFile(List<Map<String, Object>> lists) {
@@ -73,7 +72,7 @@ public class FileTest3 {
         // 写入文件中
         try {
             writeFile(sb.toString());
-            // logger.info("写入成功!");
+
             return true;
         } catch (IOException e) {
             LOG.error("写入失败!原因是:", e);
