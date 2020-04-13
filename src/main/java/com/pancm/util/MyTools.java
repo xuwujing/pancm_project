@@ -1484,8 +1484,9 @@ public final class MyTools {
         System.out.println("humpMap：" + humpToLine(humpMap));
         System.out.println("humpToLineList：" + humpToLineList(humpList));
 
-
-
+        String path1="/opt/nginx/nginx-1.8.0/html/export";
+        String path2="/opt/nginx/nginx-1.8.0/html/";
+        System.out.println("" + substringAfter(path1,path2));
     }
 
 }
