@@ -24,10 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author pancm
@@ -54,9 +51,9 @@ public class EsHighLevelCluster {
     public static void main(String[] args) {
         try {
             init();
-            clusterUpdateSetting();
+//            clusterUpdateSetting();
             catHealth();
-            clusterGetSetting();
+//            clusterGetSetting();
             close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,12 +81,13 @@ public class EsHighLevelCluster {
             }
         }
     }
+
     /**
-     * @Author pancm
-     * @Description  设置该节点为冷节点
-     * @Date  2020/1/2
-     * @Param [index]
      * @return void
+     * @Author pancm
+     * @Description 设置该节点为冷节点
+     * @Date 2020/1/2
+     * @Param [index]
      **/
     public static void setCool(String index) throws IOException {
         RestClient restClient = null;
@@ -110,13 +108,27 @@ public class EsHighLevelCluster {
     }
 
 
+    public void setAlias(String index, String aliasIndex) throws IOException {
+        RestClient restClient = null;
+        try {
+            Objects.requireNonNull(index, "index is not null");
+            restClient = client.getLowLevelClient();
+            String msg = "/" + index + "/_alias" + "/" + aliasIndex;
+            restClient.performRequest("PUT", msg);
+        } finally {
+            if (restClient != null) {
+                restClient.close();
+            }
+        }
+    }
+
 
     /**
-     * @Author pancm
-     * @Description  设置集群的配置
-     * @Date  2020/1/2
-     * @Param [index]
      * @return void
+     * @Author pancm
+     * @Description 设置集群的配置
+     * @Date 2020/1/2
+     * @Param [index]
      **/
     public static void clusterUpdateSetting() throws IOException {
 
@@ -156,24 +168,24 @@ public class EsHighLevelCluster {
         request.transientSettings(map);
 
 
-
         ClusterUpdateSettingsResponse response = client.cluster().putSettings(request, RequestOptions.DEFAULT);
 
         Settings setting = response.getPersistentSettings();
         Settings setting2 = response.getTransientSettings();
-        logger.info("setting:{}",setting);
-        logger.info("setting2:{}",setting2);
+        logger.info("setting:{}", setting);
+        logger.info("setting2:{}", setting2);
     }
 
 
     /**
-     * @Author pancm
-     * @Description  设获取集群的健康情况
-     * @Date  2020/1/2
-     * @Param [index]
      * @return void
+     * @Author pancm
+     * @Description 设获取集群的健康情况
+     * @Date 2020/1/2
+     * @Param [index]
      **/
     public static void catHealth() throws IOException {
+
 
         ClusterHealthRequest request = new ClusterHealthRequest();
         ClusterHealthResponse response = client.cluster().health(request, RequestOptions.DEFAULT);
@@ -191,17 +203,32 @@ public class EsHighLevelCluster {
         int unassignedShards = response.getUnassignedShards();
         int delayedUnassignedShards = response.getDelayedUnassignedShards();
         double activeShardsPercent = response.getActiveShardsPercent();
-        logger.info("clusterName:{},status:{},timedOut:{},restStatus:{}",clusterName,status,timedOut,restStatus.getStatus());
+        logger.info("clusterName:{},status:{},timedOut:{},restStatus:{}", clusterName, status, timedOut, restStatus.getStatus());
+
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        response.getIndices().forEach((k, v) -> {
+            Map<String, Object> map = new HashMap<>();
+            String index = v.getIndex();
+            int replicas = v.getNumberOfReplicas();
+            int allShards = v.getActiveShards();
+            int shards = v.getActivePrimaryShards();
+            int status2 = v.getStatus().value();
+            map.put("index", index);
+            map.put("replicas", replicas);
+            map.put("shards", shards);
+            map.put("status", status2);
+            System.out.println(map);
+        });
 
     }
 
 
     /**
-     * @Author pancm
-     * @Description  设获取集群的设置情况
-     * @Date  2020/1/2
-     * @Param [index]
      * @return void
+     * @Author pancm
+     * @Description 设获取集群的设置情况
+     * @Date 2020/1/2
+     * @Param [index]
      **/
     public static void clusterGetSetting() throws IOException {
 
@@ -209,8 +236,8 @@ public class EsHighLevelCluster {
         ClusterGetSettingsResponse response = client.cluster().getSettings(request, RequestOptions.DEFAULT);
         Settings setting = response.getPersistentSettings();
         Settings setting2 = response.getTransientSettings();
-        logger.info("setting:{}",setting);
-        logger.info("setting2:{}",setting2);
+        logger.info("setting:{}", setting);
+        logger.info("setting2:{}", setting2);
     }
 
 }

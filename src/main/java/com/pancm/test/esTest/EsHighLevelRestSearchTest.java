@@ -1,15 +1,14 @@
 package com.pancm.test.esTest;
 
+import com.pancm.util.MyTools;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHost;
+import org.elasticsearch.action.admin.indices.alias.get.GetAliasesRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.ShardSearchFailure;
 import org.elasticsearch.action.support.IndicesOptions;
-import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestClientBuilder;
-import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.*;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -51,7 +50,7 @@ import java.util.regex.Pattern;
  */
 public class EsHighLevelRestSearchTest {
 
-//    private static String elasticIp = "192.169.2.98";
+    //    private static String elasticIp = "192.169.2.98";
     private static String elasticIp = "192.169.0.23";
     private static int elasticPort = 9200;
     private static Logger logger = LoggerFactory.getLogger(EsHighLevelRestSearchTest.class);
@@ -66,6 +65,8 @@ public class EsHighLevelRestSearchTest {
         try {
             init();
 //            allSearch();
+            allIndices();
+            allAliases();
 //            //普通查询
 //            genSearch();
 //            orSearch();
@@ -74,7 +75,7 @@ public class EsHighLevelRestSearchTest {
 //            existSearch();
 //            rangeSearch();
 //            regexpSearch();
-            spanSearch();
+//            spanSearch();
 //            boolSearch();
 //            countSearch();
 //			search();
@@ -120,7 +121,6 @@ public class EsHighLevelRestSearchTest {
 
     }
 
-    
 
     private static void countSearch() throws IOException {
         String type = "_doc";
@@ -136,23 +136,23 @@ public class EsHighLevelRestSearchTest {
 //		sourceBuilder.fetchSource(includeFields, excludeFields);
         sourceBuilder.fetchSource(false);
         searchRequest.source(sourceBuilder);
-        System.out.println("总数查询的DSL语句:"+sourceBuilder.toString());
+        System.out.println("总数查询的DSL语句:" + sourceBuilder.toString());
         // 同步查询
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-        System.out.println("总数查询的结果:"+searchResponse.getHits().getTotalHits());
+        System.out.println("总数查询的结果:" + searchResponse.getHits().getTotalHits());
 
         System.out.println("\n=================\n");
     }
 
 
     /**
-     * @Author pancm
-     * @Description  组合查询
-     * @Date  2019/9/30
-     * @Param []
      * @return void
+     * @Author pancm
+     * @Description 组合查询
+     * @Date 2019/9/30
+     * @Param []
      **/
-    private static void boolSearch() throws IOException{
+    private static void boolSearch() throws IOException {
         String type = "_doc";
         String index = "test1";
         // 查询指定的索引库
@@ -160,12 +160,12 @@ public class EsHighLevelRestSearchTest {
         searchRequest.types(type);
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
-        boolQueryBuilder.must(QueryBuilders.termQuery("uid",12345));
-        boolQueryBuilder.must(QueryBuilders.termQuery("msgcode",1));
+        boolQueryBuilder.must(QueryBuilders.termQuery("uid", 12345));
+        boolQueryBuilder.must(QueryBuilders.termQuery("msgcode", 1));
         // 设置查询条件
         sourceBuilder.query(boolQueryBuilder);
         searchRequest.source(sourceBuilder);
-        System.out.println("组合查询的DSL语句:"+sourceBuilder.toString());
+        System.out.println("组合查询的DSL语句:" + sourceBuilder.toString());
         // 同步查询
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
         // 结果
@@ -177,13 +177,13 @@ public class EsHighLevelRestSearchTest {
     }
 
     /**
-     * @Author pancm
-     * @Description  前缀查询
-     * @Date  2019/9/30
-     * @Param []
      * @return void
+     * @Author pancm
+     * @Description 前缀查询
+     * @Date 2019/9/30
+     * @Param []
      **/
-    private static void prefixSearch() throws IOException{
+    private static void prefixSearch() throws IOException {
         String type = "_doc";
         String index = "p_test2";
         // 查询指定的索引库
@@ -191,9 +191,9 @@ public class EsHighLevelRestSearchTest {
         searchRequest.types(type);
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
 
-        sourceBuilder.query(QueryBuilders.prefixQuery("uid","1"));
+        sourceBuilder.query(QueryBuilders.prefixQuery("uid", "1"));
         searchRequest.source(sourceBuilder);
-        System.out.println("前缀查询的DSL语句:"+sourceBuilder.toString());
+        System.out.println("前缀查询的DSL语句:" + sourceBuilder.toString());
         // 同步查询
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
         // 结果
@@ -207,20 +207,19 @@ public class EsHighLevelRestSearchTest {
 
 
     /**
-     * @Author pancm
-     * @Description  正则查询
-     * @Date  2019/9/30
-     * @Param []
      * @return void
+     * @Author pancm
+     * @Description 正则查询
+     * @Date 2019/9/30
+     * @Param []
      **/
-    private static void regexpSearch() throws IOException{
+    private static void regexpSearch() throws IOException {
         String type = "_doc";
         String index = "p_test2";
         // 查询指定的索引库
         SearchRequest searchRequest = new SearchRequest(index);
         searchRequest.types(type);
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-
 
 
         // 设置查询条件
@@ -233,22 +232,21 @@ public class EsHighLevelRestSearchTest {
 
         Pattern p = Pattern.compile(regexp);
 
-        String msg= "rl.com/l/1RIth6";
+        String msg = "rl.com/l/1RIth6";
         String msg1 = "中rl.com/l/1RIth6";
         String msg2 = "【招商银行】您已获得账单分期手续费5折权益限时优惠！回复#ZDFQ申请将最高21992.98元分12期还，每期本金1832.75元、每期手续费72.58元，实时测评为准。单笔优惠最高2500元，活动有效期至2019/12/31。12月达标还可抢罗莱澳洲羊毛冬被，戳 cmbt.cn/iJI?4=1 。退订回#A";
         String msg3 = "";
 
-        System.out.println("== "+p.matcher(msg).find());
-        System.out.println("== "+p.matcher(msg1).find());
-        System.out.println("== "+p.matcher(msg2).find());
-        System.out.println("== "+p.matcher(msg3).find());
-
+        System.out.println("== " + p.matcher(msg).find());
+        System.out.println("== " + p.matcher(msg1).find());
+        System.out.println("== " + p.matcher(msg2).find());
+        System.out.println("== " + p.matcher(msg3).find());
 
 
 //         regexp = regexp.replace("\\\\","\\");
-        sourceBuilder.query(QueryBuilders.regexpQuery("message",".*"+regexp));
+        sourceBuilder.query(QueryBuilders.regexpQuery("message", ".*" + regexp));
         searchRequest.source(sourceBuilder);
-        System.out.println("正则查询的DSL语句:"+sourceBuilder.toString());
+        System.out.println("正则查询的DSL语句:" + sourceBuilder.toString());
         // 同步查询
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
         // 结果
@@ -259,15 +257,14 @@ public class EsHighLevelRestSearchTest {
 
         System.out.println("\n=================\n");
     }
-    
+
     /**
-     * @Author pancm
-     * @Description
-     * Span queries are low-level positional queries which provide expert control over the order and proximity of the specified terms. These are typically used to implement very specific queries on legal documents or patents.
-     * Span queries cannot be mixed with non-span queries (with the exception of the span_multi query)
-     * @Date  2019/12/28
-     * @Param []
      * @return void
+     * @Author pancm
+     * @Description Span queries are low-level positional queries which provide expert control over the order and proximity of the specified terms. These are typically used to implement very specific queries on legal documents or patents.
+     * Span queries cannot be mixed with non-span queries (with the exception of the span_multi query)
+     * @Date 2019/12/28
+     * @Param []
      **/
     private static void spanSearch() throws IOException {
 
@@ -279,9 +276,8 @@ public class EsHighLevelRestSearchTest {
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
 
 
-
         searchRequest.source(sourceBuilder);
-        System.out.println("span查询的DSL语句:"+sourceBuilder.toString());
+        System.out.println("span查询的DSL语句:" + sourceBuilder.toString());
         // 同步查询
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
         // 结果
@@ -292,8 +288,8 @@ public class EsHighLevelRestSearchTest {
 
         System.out.println("\n=================\n");
     }
-    
-    
+
+
     /**
      * 转义正则特殊字符 （$()*+.[]?\^{}
      * \\需要第一个替换，否则replace方法替换时会有逻辑bug
@@ -324,16 +320,14 @@ public class EsHighLevelRestSearchTest {
     }
 
 
-
-
     /**
-     * @Author pancm
-     * @Description  范围查询
-     * @Date  2019/9/30
-     * @Param []
      * @return void
+     * @Author pancm
+     * @Description 范围查询
+     * @Date 2019/9/30
+     * @Param []
      **/
-    private static void rangeSearch() throws IOException{
+    private static void rangeSearch() throws IOException {
         String type = "_doc";
         String index = "test1";
         SearchRequest searchRequest = new SearchRequest(index);
@@ -343,7 +337,7 @@ public class EsHighLevelRestSearchTest {
         // 设置查询条件
         sourceBuilder.query(QueryBuilders.rangeQuery("sendtime").gte("2019-01-01 00:00:00").lte("2019-12-31 23:59:59"));
         searchRequest.source(sourceBuilder);
-        System.out.println("范围查询的DSL语句:"+sourceBuilder.toString());
+        System.out.println("范围查询的DSL语句:" + sourceBuilder.toString());
         // 同步查询
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
         // 结果
@@ -372,7 +366,7 @@ public class EsHighLevelRestSearchTest {
         // 设置查询条件
         sourceBuilder.query(QueryBuilders.existsQuery("msgcode"));
         searchRequest.source(sourceBuilder);
-        System.out.println("存在查询的DSL语句:"+sourceBuilder.toString());
+        System.out.println("存在查询的DSL语句:" + sourceBuilder.toString());
         // 同步查询
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
         // 结果
@@ -404,7 +398,7 @@ public class EsHighLevelRestSearchTest {
         // 设置查询条件
         sourceBuilder.query(QueryBuilders.existsQuery("msgcode"));
         searchRequest.source(sourceBuilder);
-        System.out.println("存在查询的DSL语句:"+sourceBuilder.toString());
+        System.out.println("存在查询的DSL语句:" + sourceBuilder.toString());
         // 同步查询
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
         // 结果
@@ -416,6 +410,7 @@ public class EsHighLevelRestSearchTest {
         });
         System.out.println("\n=================\n");
     }
+
     /**
      * @return void
      * @Author pancm
@@ -433,11 +428,11 @@ public class EsHighLevelRestSearchTest {
         /**
          *  SELECT * FROM p_test where uid in (123,1234)
          * */
-        String uids[] = {"123","1234"};
+        String uids[] = {"123", "1234"};
         // 设置查询条件
-       sourceBuilder.query(QueryBuilders.termsQuery("uid", uids));
+        sourceBuilder.query(QueryBuilders.termsQuery("uid", uids));
         searchRequest.source(sourceBuilder);
-        System.out.println("in查询的DSL语句:"+sourceBuilder.toString());
+        System.out.println("in查询的DSL语句:" + sourceBuilder.toString());
         // 同步查询
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
         // 结果
@@ -524,7 +519,7 @@ public class EsHighLevelRestSearchTest {
 //		sourceBuilder.fetchSource(includeFields, excludeFields);
 
         searchRequest.source(sourceBuilder);
-        System.out.println("普通查询的DSL语句:"+sourceBuilder.toString());
+        System.out.println("普通查询的DSL语句:" + sourceBuilder.toString());
         // 同步查询
         SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
 
@@ -561,8 +556,47 @@ public class EsHighLevelRestSearchTest {
         searchRequestAll.source(searchSourceBuilder);
         // 同步查询
         SearchResponse searchResponseAll = client.search(searchRequestAll, RequestOptions.DEFAULT);
+        System.out.println("--" + searchResponseAll.getClusters().toString());
+        System.out.println("--" + searchResponseAll.status());
+
+        searchResponseAll.getProfileResults().forEach((k, v) -> {
+            System.out.println("==" + k);
+            System.out.println("===" + v);
+        });
         System.out.println("所有查询总数:" + searchResponseAll.getHits().getTotalHits());
+
     }
+
+    private static void allIndices() throws IOException {
+        RestClient restClient = null;
+        try {
+            restClient = client.getLowLevelClient();
+            String msg = "_cat/indices?v" ;
+            Response response =  restClient.performRequest("GET", msg);
+            System.out.println(response.toString());
+            System.out.println(MyTools.toString(response.getEntity()));
+            System.out.println(MyTools.toString(response.getWarnings()));
+        }  finally {
+            if (restClient != null) {
+                restClient.close();
+            }
+        }
+    }
+
+    /**
+     * @Author pancm
+     * @Description 获取所有索引库和别名
+     * @Date  2020/4/15
+     * @Param []
+     * @return void
+     **/
+    private static void allAliases() throws IOException {
+        GetAliasesRequest request = new GetAliasesRequest();
+        GetAliasesResponse getAliasesResponse = client.indices().getAlias(request,RequestOptions.DEFAULT);
+        System.out.println("==" + getAliasesResponse.getAliases());
+        System.out.println("==" + getAliasesResponse.getAliases().keySet());
+    }
+
 
     /**
      * @return void
