@@ -299,6 +299,10 @@ public final class MyTools {
         return time;
     }
 
+
+
+
+
     /**
      * 时间补全 例如将2018-04-04补全为2018-04-04 00:00:00.000
      *
@@ -1298,6 +1302,20 @@ public final class MyTools {
         return str.substring(pos + separator.length());
     }
 
+    public static String substringBefore(final String str, final String separator) {
+        if (isEmpty(str)) {
+            return str;
+        }
+        if (separator == null) {
+            return "";
+        }
+        final int pos = str.indexOf(separator);
+        if (pos == -1) {
+            return "";
+        }
+        return str.substring(0,pos);
+    }
+
     /**
      * 本方法的测试示例
      *
@@ -1484,9 +1502,11 @@ public final class MyTools {
         System.out.println("humpMap：" + humpToLine(humpMap));
         System.out.println("humpToLineList：" + humpToLineList(humpList));
 
-        String path1="/opt/nginx/nginx-1.8.0/html/export";
+        String path1="/opt/nginx/nginx-1.8.0/html/export.txt";
         String path2="/opt/nginx/nginx-1.8.0/html/";
+        String path3="export.txt";
         System.out.println("" + substringAfter(path1,path2));
+        System.out.println("" + substringBefore(path1,path3));
     }
 
 }
