@@ -95,8 +95,13 @@ public class EsHighLevelRestTest1 {
 		GetMappingsRequest request = new GetMappingsRequest();
 		request.indices(index);
 		GetMappingsResponse response= client.indices().getMapping(request, RequestOptions.DEFAULT);
-		System.out.println("mapping "+response.getMappings());
-
+		System.out.println("mapping "+response);
+		System.out.println("mapping "+response.mappings());
+		response.getMappings().forEach(k->{
+			System.out.println(""+k.key);
+			System.out.println(""+k.value);
+			System.out.println(""+k.value.get(k.key));
+		});
 	}
 
 	private static void insert() throws IOException {
