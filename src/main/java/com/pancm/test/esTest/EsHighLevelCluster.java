@@ -10,11 +10,12 @@ import org.elasticsearch.action.admin.cluster.settings.ClusterGetSettingsRequest
 import org.elasticsearch.action.admin.cluster.settings.ClusterGetSettingsResponse;
 import org.elasticsearch.action.admin.cluster.settings.ClusterUpdateSettingsRequest;
 import org.elasticsearch.action.admin.cluster.settings.ClusterUpdateSettingsResponse;
+import org.elasticsearch.action.admin.indices.cache.clear.ClearIndicesCacheRequest;
+import org.elasticsearch.action.admin.indices.cache.clear.ClearIndicesCacheResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.cluster.health.ClusterHealthStatus;
-import org.elasticsearch.cluster.health.ClusterIndexHealth;
 import org.elasticsearch.cluster.routing.allocation.decider.EnableAllocationDecider;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.unit.ByteSizeUnit;
@@ -38,7 +39,7 @@ import java.util.*;
 public class EsHighLevelCluster {
 
 
-    //	private static String elasticIp = "192.169.0.23";
+//    	private static String elasticIp = "192.169.0.23";
     private static String elasticIp = "192.169.2.98";
     private static int elasticPort = 9200;
 
@@ -53,8 +54,9 @@ public class EsHighLevelCluster {
         try {
             init();
 //            clusterUpdateSetting();
-            catHealth();
+//            catHealth();
 //            clusterGetSetting();
+            clearCache();
             close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,6 +125,22 @@ public class EsHighLevelCluster {
         }
     }
 
+
+    /**
+     * @return void
+     * @Author pancm
+     * @Description 设置集群的配置
+     * @Date 2020/1/2
+     * @Param [index]
+     **/
+    public static void clearCache() throws IOException {
+
+        ClearIndicesCacheRequest request = new ClearIndicesCacheRequest();
+        ClearIndicesCacheResponse response = client.indices().clearCache(request,RequestOptions.DEFAULT);
+        System.out.println(""+response.getTotalShards());
+        System.out.println(""+response.getStatus());
+
+    }
 
     /**
      * @return void
