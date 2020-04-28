@@ -14,6 +14,7 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.cluster.health.ClusterHealthStatus;
+import org.elasticsearch.cluster.health.ClusterIndexHealth;
 import org.elasticsearch.cluster.routing.allocation.decider.EnableAllocationDecider;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.unit.ByteSizeUnit;
@@ -239,5 +240,12 @@ public class EsHighLevelCluster {
         logger.info("setting:{}", setting);
         logger.info("setting2:{}", setting2);
     }
+
+
+
+
+
+
+
 
 }

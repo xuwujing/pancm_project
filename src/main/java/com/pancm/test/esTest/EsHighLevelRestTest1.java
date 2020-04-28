@@ -10,6 +10,8 @@ import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
+import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsRequest;
+import org.elasticsearch.action.admin.indices.mapping.get.GetMappingsResponse;
 import org.elasticsearch.action.bulk.*;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -71,6 +73,7 @@ public class EsHighLevelRestTest1 {
 	public static void main(String[] args) {
 		try {
 			init();
+			getMapping();
 			createIndex();
 			insert();
 			queryById();
@@ -84,6 +87,15 @@ public class EsHighLevelRestTest1 {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+	}
+
+	private static void getMapping() throws IOException{
+		String index = "student";
+		GetMappingsRequest request = new GetMappingsRequest();
+		request.indices(index);
+		GetMappingsResponse response= client.indices().getMapping(request, RequestOptions.DEFAULT);
+		System.out.println("mapping "+response.getMappings());
 
 	}
 
