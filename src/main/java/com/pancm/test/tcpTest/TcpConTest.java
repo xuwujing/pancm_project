@@ -13,7 +13,13 @@ import java.net.InetAddress;
 public class TcpConTest {
 
     public static void main(String[] args) {
-        String ipAddress = "";
+        String ipAddress = "192.168.56.1";
+
+        try {
+            System.out.println(ping(ipAddress));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
