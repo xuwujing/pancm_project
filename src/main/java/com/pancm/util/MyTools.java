@@ -302,6 +302,40 @@ public final class MyTools {
 
 
 
+    public static String addDay(String time) {
+        time = formatTime1(time);
+        time = addPlusDay(time, 1);
+        time = formatTime2(time);
+        return time;
+    }
+
+    public static String formatTime(String time) {
+        String ym = time.substring(4, 7).replaceAll("-", "");
+        return ym;
+    }
+
+    public static String formatTime1(String time) {
+        String ym = time.substring(0,4).concat("-").concat(time.substring(4,6).concat("-")).concat(time.substring(6,8));
+        return ym;
+    }
+
+    public static String formatTime2(String time) {
+        String ym = time.substring(0, 10).replaceAll("-", "");
+        return ym;
+    }
+
+    /**
+     * 增加天数
+     *
+     * @param time
+     *            格式为yyyy-MM-dd
+     * @param month
+     *            增加天数
+     * @return
+     */
+    public static String addPlusDay(String time, int day) {
+        return LocalDate.parse(time).plusDays(day).toString();
+    }
 
     /**
      * 时间补全 例如将2018-04-04补全为2018-04-04 00:00:00.000
