@@ -1541,6 +1541,17 @@ public final class MyTools {
         String path3="export.txt";
         System.out.println("" + substringAfter(path1,path2));
         System.out.println("" + substringBefore(path1,path3));
+
+        String qwe[] = {"11","22","44"};
+        String qwe2[] = {"11","22","3","4","5","6","7"};
+        for (int i = 0; i < qwe2.length; i++) {
+            int k=  Arrays.binarySearch(qwe,qwe2[i]);
+            System.out.println(k);
+        }
+
+
+
+
     }
 
 }
