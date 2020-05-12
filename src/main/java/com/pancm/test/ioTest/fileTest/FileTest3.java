@@ -32,7 +32,7 @@ public class FileTest3 {
     private static long fileCount;
     private static String fileName;
     private static String fileSuffix="txt";
-    private static  String path="txtFile";
+    private static String path="txtFile";
 
     /** 配置文件名称 */
     protected static final String fileName2 = "application.properties";
