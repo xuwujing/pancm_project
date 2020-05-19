@@ -75,7 +75,13 @@ public class LeetCode1 {
          return s;
     }
 
-
+    /**
+     * @Author pancm
+     * @Description 利用map处理，但是数组有重复的数据将不行
+     * @Date  2020/5/18
+     * @Param [nums, target]
+     * @return int[]
+     **/
     public static int[] twoSum2(int[] nums, int target) {
         Map<Integer, Integer> map = new HashMap<>();
         for(int i = 0; i< nums.length; i++) {
