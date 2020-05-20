@@ -41,7 +41,7 @@ public class EsAggregationSearchTest2 {
 //    private static String elasticIp = "192.169.0.23";
     private static String elasticIp = "192.169.2.98";
     private static int elasticPort = 9200;
-    private static Logger logger = LoggerFactory.getLogger(EsHighLevelRestSearchTest.class);
+    private static Logger logger = LoggerFactory.getLogger(EsAggregationSearchTest2.class);
 
     private static RestHighLevelClient client = null;
 
@@ -49,7 +49,6 @@ public class EsAggregationSearchTest2 {
      * @param args
      */
     public static void main(String[] args) {
-
         try {
             init();
             test();

@@ -42,7 +42,7 @@ import java.util.Map;
 /**
  * @author pancm
  * @Title: pancm_project
- * @Description:ES聚合查询测试用例
+ * @Description:ES聚合查询测试用例(度量Metric聚合)
  * @Version:1.0.0
  * @Since:jdk1.8
  * @date 2019/4/2
