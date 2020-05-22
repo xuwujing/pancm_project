@@ -14,8 +14,10 @@ public class ConcurrentTest {
     public static void main(String[] args) {
         //安全的数组
         CopyOnWriteArrayList copyOnWriteArrayList =new CopyOnWriteArrayList();
-
-
+        copyOnWriteArrayList.add("1");
+        copyOnWriteArrayList.add("2");
+        copyOnWriteArrayList.add("3");
+        System.out.println("======"+copyOnWriteArrayList);
 
     }
 }

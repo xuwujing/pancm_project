@@ -24,19 +24,19 @@ public class ThreadPrtABC {
     public static void main(String[] args) {
 		// 只打印一次
 
-//		printOnceLatch();
+		printOnceLatch();
 		System.out.println("");
-//		try {
-//			printOnceLatch2();
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			printOnceLatch2();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		System.out.println("");
 
 		// 十次
-//		printTenTimesSemaphore();
-//		printTenTimes();
+		printTenTimesSemaphore();
+		printTenTimes();
 		printTenTimesWaitNotif();
 		
 	}
