@@ -7,6 +7,7 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
@@ -51,13 +52,26 @@ public class EsAggregationSearchTest2 {
     public static void main(String[] args) {
         try {
             init();
-            test();
+//            test();
+            test2();
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
             close();
         }
 
+    }
+
+    private static void test2() throws IOException {
+        AggregationBuilder aggregation = AggregationBuilders.filters("ecid", QueryBuilders.termQuery("id",1));
+        SearchResponse searchResponse = search(aggregation);
+        // 获取聚合结果
+        Aggregations aggregations = searchResponse.getAggregations();
+        Map<String,Object> map =  new HashMap<>();
+        List<Map<String,Object>> list = new ArrayList<>();
+        agg(map,list,aggregations);
+        logger.info("test2聚合查询结果:"+list);
+        logger.info("------------------------------------");
     }
 
 
