@@ -28,7 +28,7 @@ public class MySqlToEs {
 
        list.forEach(System.out::println);
 
-
+        System.out.println("==");
 
     }
 
