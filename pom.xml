@@ -411,6 +411,24 @@
             <version>2.0.7.RELEASE</version>
         </dependency>
 
+
+
+        <!-- screw核心 连接数据库生成数据字典 -->
+        <dependency>
+            <groupId>cn.smallbun.screw</groupId>
+            <artifactId>screw-core</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+
+        <!-- ssh连接jar -->
+        <dependency>
+            <groupId>ch.ethz.ganymed</groupId>
+            <artifactId>ganymed-ssh2</artifactId>
+            <version>262</version>
+        </dependency>
+
+
+
     </dependencies>
 
 
