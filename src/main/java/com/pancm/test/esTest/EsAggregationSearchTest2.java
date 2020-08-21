@@ -1,5 +1,10 @@
 package com.pancm.test.esTest;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.pancm.test.httpTest.HttpClientUtil;
+import com.pancm.util.MyTools;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -53,7 +58,8 @@ public class EsAggregationSearchTest2 {
         try {
             init();
 //            test();
-            test2();
+//            test2();
+            getHttpData();
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
@@ -61,6 +67,32 @@ public class EsAggregationSearchTest2 {
         }
 
     }
+
+    /**
+     * @Author pancm
+     * @Description 通过http请求ES并解析having聚合数据
+     * @Date  2020/8/21
+     * @Param
+     * @return void
+     **/
+    private static void getHttpData() throws Exception {
+        // group by 加 having的dsl语句
+        // 对应的sql语句为 SELECT nas_ip_address,COUNT(1) AS c FROM radius_acct GROUP BY nas_ip_address HAVING c >1000 ;
+        String dsl="{\"query\":{\"bool\":{\"must\":[{\"range\":{\"acct_start_time\":{\"from\":\"2020-08-01 13:25:55\",\"to\":null,\"include_lower\":true,\"include_upper\":true,\"boost\":1}}},{\"range\":{\"acct_start_time\":{\"from\":null,\"to\":\"2020-08-20 13:26:55\",\"include_lower\":true,\"include_upper\":true,\"boost\":1}}}],\"adjust_pure_negative\":true,\"boost\":1}},\"size\":0,\"version\":false,\"explain\":false,\"_source\":false,\"aggregations\":{\"groupby\":{\"terms\":{\"field\":\"nas_ip_address\",\"size\":2147483647,\"min_doc_count\":1,\"shard_min_doc_count\":0,\"show_term_doc_count_error\":false,\"order\":[{\"_count\":\"desc\"},{\"_key\":\"asc\"}]},\"aggregations\":{\"having\":{\"bucket_selector\":{\"buckets_path\":{\"groupCount\":\"_count\"},\"script\":{\"source\":\"params.groupCount >= 1000\",\"lang\":\"painless\"},\"gap_policy\":\"skip\"}}}}}}";
+        String postUrl = "http://192.168.8.78:9200/radius_acct_log/_search";
+        String postData =HttpClientUtil.post(postUrl,dsl);
+        System.out.println(getAggData(postData));
+
+    }
+
+    private static JSONArray getAggData(String data){
+        JSONObject jsonObject = MyTools.toJson(data).getJSONObject("aggregations");
+        // 这个groupby对于dsl语句中的自定义字段的那个，建议写死
+        JSONArray jsonArray = JSON.parseArray(jsonObject.getJSONObject("groupby").getString("buckets"));
+        return  jsonArray;
+    }
+
+
 
     private static void test2() throws IOException {
         AggregationBuilder aggregation = AggregationBuilders.filters("ecid", QueryBuilders.termQuery("id",1));
