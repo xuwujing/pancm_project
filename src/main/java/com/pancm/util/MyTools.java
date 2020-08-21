@@ -300,8 +300,6 @@ public final class MyTools {
     }
 
 
-
-
     public static String addDay(String time) {
         time = formatTime1(time);
         time = addPlusDay(time, 1);
@@ -315,7 +313,7 @@ public final class MyTools {
     }
 
     public static String formatTime1(String time) {
-        String ym = time.substring(0,4).concat("-").concat(time.substring(4,6).concat("-")).concat(time.substring(6,8));
+        String ym = time.substring(0, 4).concat("-").concat(time.substring(4, 6).concat("-")).concat(time.substring(6, 8));
         return ym;
     }
 
@@ -327,10 +325,8 @@ public final class MyTools {
     /**
      * 增加天数
      *
-     * @param time
-     *            格式为yyyy-MM-dd
-     * @param month
-     *            增加天数
+     * @param time  格式为yyyy-MM-dd
+     * @param  增加天数
      * @return
      */
     public static String addPlusDay(String time, int day) {
@@ -1240,7 +1236,6 @@ public final class MyTools {
     }
 
 
-
     /**
      * 驼峰转下划线(List)
      *
@@ -1275,7 +1270,7 @@ public final class MyTools {
      * @param path,path2
      * @return
      */
-    public static void compress(String path, String path2,String  fileName) throws IOException {
+    public static void compress(String path, String path2, String fileName) throws IOException {
         // 创建压缩对象
         ZipArchiveEntry entry = new ZipArchiveEntry(fileName);
         // 要压缩的文件
@@ -1284,7 +1279,7 @@ public final class MyTools {
         // 输出的对象 压缩的文件
         ZipArchiveOutputStream zipOutput = new ZipArchiveOutputStream(new File(path2));
         zipOutput.putArchiveEntry(entry);
-        int  j;
+        int j;
         while ((j = fis.read()) != -1) {
             zipOutput.write(j);
         }
@@ -1316,10 +1311,10 @@ public final class MyTools {
      * StringUtils.substringAfter("abc", "")    = "abc"
      * </pre>
      *
-     * @param str  the String to get a substring from, may be null
-     * @param separator  the String to search for, may be null
+     * @param str       the String to get a substring from, may be null
+     * @param separator the String to search for, may be null
      * @return the substring after the first occurrence of the separator,
-     *  {@code null} if null String input
+     * {@code null} if null String input
      * @since 2.0
      */
     public static String substringAfter(final String str, final String separator) {
@@ -1347,8 +1342,52 @@ public final class MyTools {
         if (pos == -1) {
             return "";
         }
-        return str.substring(0,pos);
+        return str.substring(0, pos);
     }
+
+
+    private static final Pattern pattern = Pattern.compile("\\{(.*?)\\}");
+    private static Matcher matcher;
+
+
+    /**
+     * 格式化字符串 字符串中使用{key}表示占位符
+     *
+     * @param sourStr 需要匹配的字符串
+     * @param param   参数集
+     * @return
+     */
+    public static String format(String sourStr, Map<String, Object> param) {
+        String tagerStr = sourStr;
+        if (param == null)
+            return tagerStr;
+        try {
+            matcher = pattern.matcher(tagerStr);
+            while (matcher.find()) {
+                String key = matcher.group();
+                String keyclone = key.substring(1, key.length() - 1).trim();
+                Object value = param.get(keyclone);
+                if (value != null)
+                    tagerStr = tagerStr.replace(key, value.toString());
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return tagerStr;
+    }
+
+    //public static void main(String[] args) {
+    //    String url = "https://xxx.com/cfes?c={campaign_name}&af_siteid={af_siteid}&clickid={clickid}&android_id={android_id}&advertising_id={advertising_id}&idfa={idfa}";
+    //    Map<String, Object> map = new LinkedHashMap<>();
+    //    map.put("campaign_name", "111");
+    //    map.put("af_siteid", "222");
+    //    map.put("clickid", "333");
+    //    map.put("android_id", "444");
+    //    map.put("advertising_id", "555");
+    //    map.put("idfa", "");
+    //    System.out.println(format(url, map));
+    //}
+
 
     /**
      * 本方法的测试示例
@@ -1523,8 +1562,8 @@ public final class MyTools {
         Map<String, Object> humpMap = new HashMap<>();
         humpMap.put("pdId", 1);
         humpMap.put("ptId", 2);
-        List<Map<String,Object>> lineList = new ArrayList<>();
-        List<Map<String,Object>> humpList = new ArrayList<>();
+        List<Map<String, Object>> lineList = new ArrayList<>();
+        List<Map<String, Object>> humpList = new ArrayList<>();
         lineList.add(lineMap);
         humpList.add(lineMap);
 
@@ -1536,20 +1575,29 @@ public final class MyTools {
         System.out.println("humpMap：" + humpToLine(humpMap));
         System.out.println("humpToLineList：" + humpToLineList(humpList));
 
-        String path1="/opt/nginx/nginx-1.8.0/html/export.txt";
-        String path2="/opt/nginx/nginx-1.8.0/html/";
-        String path3="export.txt";
-        System.out.println("" + substringAfter(path1,path2));
-        System.out.println("" + substringBefore(path1,path3));
+        String path1 = "/opt/nginx/nginx-1.8.0/html/export.txt";
+        String path2 = "/opt/nginx/nginx-1.8.0/html/";
+        String path3 = "export.txt";
+        System.out.println("" + substringAfter(path1, path2));
+        System.out.println("" + substringBefore(path1, path3));
 
-        String qwe[] = {"11","22","44"};
-        String qwe2[] = {"11","22","3","4","5","6","7"};
+        String qwe[] = {"11", "22", "44"};
+        String qwe2[] = {"11", "22", "3", "4", "5", "6", "7"};
         for (int i = 0; i < qwe2.length; i++) {
-            int k=  Arrays.binarySearch(qwe,qwe2[i]);
+            int k = Arrays.binarySearch(qwe, qwe2[i]);
             System.out.println(k);
         }
 
 
+        String url = "https://xxx.com/cfes?c={campaign_name}&af_siteid={af_siteid}&clickid={clickid}&android_id={android_id}&advertising_id={advertising_id}&idfa={idfa}";
+        Map<String, Object> map9 = new LinkedHashMap<>();
+        map9.put("campaign_name", "111");
+        map9.put("af_siteid", "222");
+        map9.put("clickid", "333");
+        map9.put("android_id", "444");
+        map9.put("advertising_id", "555");
+        map9.put("idfa", "");
+        System.out.println(format(url, map));
 
 
     }
