@@ -1376,6 +1376,10 @@ public final class MyTools {
         return tagerStr;
     }
 
+
+
+
+
     //public static void main(String[] args) {
     //    String url = "https://xxx.com/cfes?c={campaign_name}&af_siteid={af_siteid}&clickid={clickid}&android_id={android_id}&advertising_id={advertising_id}&idfa={idfa}";
     //    Map<String, Object> map = new LinkedHashMap<>();
