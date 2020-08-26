@@ -26,6 +26,7 @@ import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.avg.Avg;
+import org.elasticsearch.search.aggregations.metrics.cardinality.CardinalityAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.max.Max;
 import org.elasticsearch.search.aggregations.metrics.min.Min;
 import org.elasticsearch.search.aggregations.metrics.sum.Sum;
@@ -255,6 +256,31 @@ public class EsAggregationSearchTest {
         aggregation.subAggregation(aggregation2);
         agg(aggregation,buk);
     }
+
+    /**
+     * @Author pancm
+     * @Description 去重
+     * @Date  2020/8/26
+     * @Param []
+     * @return void
+     **/
+    private static void distinctSearch() throws IOException{
+        String buk="group";
+        String distinctName="name";
+        AggregationBuilder aggregation = AggregationBuilders.terms("age").field("age");
+        CardinalityAggregationBuilder cardinalityBuilder  = AggregationBuilders.cardinality(distinctName).field(distinctName);
+        //根据创建时间按天分组
+//        AggregationBuilder aggregation3 = AggregationBuilders.dateHistogram("createtm")
+//                .field("createtm")
+//                .format("yyyy-MM-dd")
+//                .dateHistogramInterval(DateHistogramInterval.DAY);
+//
+//        aggregation2.subAggregation(aggregation3);
+        aggregation.subAggregation(cardinalityBuilder);
+        agg(aggregation,buk);
+    }
+
+
 
     /**
      * @Author pancm
