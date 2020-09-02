@@ -427,6 +427,12 @@
             <version>262</version>
         </dependency>
 
+        <!-- Tuple tools -->
+        <dependency>
+            <groupId>org.javatuples</groupId>
+            <artifactId>javatuples</artifactId>
+            <version>1.2</version>
+        </dependency>
 
 
     </dependencies>
