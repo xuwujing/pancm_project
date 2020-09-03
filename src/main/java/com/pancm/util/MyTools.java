@@ -1,6 +1,7 @@
 package com.pancm.util;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
@@ -755,6 +756,8 @@ public final class MyTools {
         return JSON.parseObject(json, HashMap.class);
     }
 
+
+
     /**
      * 将map转化为string
      *
@@ -798,6 +801,25 @@ public final class MyTools {
      */
     public static <T> List<T> toList(String text, Class<T> clazz) {
         return JSON.parseArray(text, clazz);
+    }
+
+    /**
+     *  list 转化为JSONArray
+     * @param
+     * @return
+     */
+    public static JSONArray toJSONArray(List list){
+        return JSONArray.parseArray(JSON.toJSONString(list));
+    }
+
+
+    /**
+     *   JSONArray转化为list
+     * @param
+     * @return
+     */
+    public static <T> List<T> toList(JSONArray jsonArray,Class<T> clazz){
+        return JSONObject.parseArray(jsonArray.toJSONString(), clazz);
     }
 
     /**
