@@ -4,12 +4,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * The type Thread pool test.
@@ -154,9 +149,9 @@ public class ThreadPoolTest {
 	 * ThreadPoolExecutor线程池
 	 */
 	private  static void threadPoolExecutor() {
-		int corePoolSize=5;
-		int maximumPoolSize=10;
-		long keepAliveTime=2L;
+		int corePoolSize=3;
+		int maximumPoolSize=5;
+		long keepAliveTime=10L;
 		// 线程核心数，最大线程数，线程缓存时间，时间格式，缓存队列 ，线程工厂，拒绝策略
 		ThreadPoolExecutor tpx=new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, 
 				TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(3),
@@ -169,11 +164,25 @@ public class ThreadPoolTest {
 //	                System.out.println("put " + task);  
 	                tpx.execute(new MyThread(task));  
 	                // 便于观察，等待一段时间  
-	                Thread.sleep(20);  
-	            } catch (Exception e) {  
-	                e.printStackTrace();  
-	            }  
-	        }  
+	                Thread.sleep(100);
+					System.out.println("="+tpx.getActiveCount());
+					System.out.println("=="+tpx.getCompletedTaskCount());
+					System.out.println("=="+tpx.getLargestPoolSize());
+					System.out.println("=="+tpx.getTaskCount());
+
+	            } catch (Exception e) {
+					e.printStackTrace();
+				}
+		  }
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println("最后:"+tpx.getActiveCount());
+		System.out.println("最后: "+tpx.getCompletedTaskCount());
+		System.out.println("=="+tpx.getLargestPoolSize());
+		System.out.println("=="+tpx.getTaskCount());
 	}
 	
 	
