@@ -93,12 +93,10 @@ public class TimerTest {
      * 下面是实现代码，我们通过ScheduledExecutorService#scheduleAtFixedRate展示这个例子，通过代码里参数的控制，首次执行加了delay时间。
      */
     public static void timer3(){
-    	 Runnable runnable = new Runnable() {  
-             public void run() {  
-                 // task to run goes here  
-                 System.out.println("timer3  Hello !!");  
-             }  
-         };  
+    	 Runnable runnable = () -> {
+             // task to run goes here
+             System.out.println("timer3  Hello !!");
+         };
          ScheduledExecutorService service = Executors  .newSingleThreadScheduledExecutor();  
          // 第二个参数为首次执行的延时时间10s,，第三个参数为定时执行的间隔时间   2s
          service.scheduleAtFixedRate(runnable, 10, 2, TimeUnit.SECONDS); 

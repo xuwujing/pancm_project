@@ -14,7 +14,7 @@ import org.springframework.cache.annotation.Cacheable;
 public class CacheTest {
     public static void main(String[] args) {
         /**
-         * Cacheable ： 主要针对方法配置，能够根据方法的请求参数对其结果进行缓存
+         * Cacheable ： 主要针对方法配置，能够根据方法的请求参数对其结果进行缓存，适用于一次请求，后续不变更的情况
          *
          * value : 必须要的。
          * key ： 可选。要使用SpEL表达式

@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
