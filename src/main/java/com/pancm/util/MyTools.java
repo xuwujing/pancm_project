@@ -3,6 +3,7 @@ package com.pancm.util;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 
@@ -796,6 +797,21 @@ public final class MyTools {
     public static String toString(Object obj) {
         return JSON.toJSONString(obj);
     }
+
+
+    public static String toString2(Object obj) {
+        return toString(obj,sdf);
+    }
+    /**
+     * Object 转换为 String
+     * 不将时间格式转换为时间戳
+     * @param obj the obj
+     * @return String string
+     */
+    public static String toString(Object obj,String format) {
+        return JSON.toJSONStringWithDateFormat(obj, format, SerializerFeature.WriteDateUseDateFormat);
+    }
+
 
     /**
      * JSON 转换为 JavaBean
@@ -1731,7 +1747,13 @@ public final class MyTools {
         map9.put("idfa", "");
         System.out.println(format(url, map));
 
-
+        List<Map<String,Object>> mapList1 = new ArrayList<>();
+        Map<String,Object> timeMap = new HashMap<>();
+        timeMap.put("id",1);
+        timeMap.put("time",new Date());
+        mapList1.add(timeMap);
+        System.out.println(toString(mapList1));
+        System.out.println(toString2(mapList1));
     }
 
 }
