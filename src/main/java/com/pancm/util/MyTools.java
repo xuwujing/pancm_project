@@ -1754,6 +1754,18 @@ public final class MyTools {
         mapList1.add(timeMap);
         System.out.println(toString(mapList1));
         System.out.println(toString2(mapList1));
+
+
+        String ss =" 警告: 27.16.251.6 地址接入了不同的设备，原设备:00 24 ac 6b 69 21,当前设备:00 24 ac 6b 3d 35!";
+        String macP = "([A-Fa-f0-9]{2} ){5}[A-Fa-f0-9]{2}";
+        //有:或者-的匹配
+        String macP2 = "/((([a-f0-9]{2}:){5})|(([a-f0-9]{2}-){5}))[a-f0-9]{2}/gi";
+        Pattern macPattern = Pattern.compile(macP);
+        Matcher matcher = macPattern.matcher(ss);
+        while (matcher.find()) {
+            String key = matcher.group();
+            System.out.println(key);
+        }
     }
 
 }
