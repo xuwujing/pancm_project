@@ -1521,7 +1521,20 @@ public final class MyTools {
     }
 
 
+    public static String millisToStringShort(long l){
+        StringBuffer sb=new StringBuffer();
+        long minutes=1;
+        long hours=60*minutes;
+        long days=24*hours;
+        if(l/days>=1)
+            sb.append((int)(l/days)+"天");
+        if(l%days/hours>=1)
+            sb.append((int)(l%days/hours)+"小时");
+        if(l%days%hours/minutes>=1)
+            sb.append((int)(l%days%hours/minutes)+"分钟");
 
+        return sb.toString();
+    }
 
 
     //public static void main(String[] args) {
@@ -1766,6 +1779,22 @@ public final class MyTools {
             String key = matcher.group();
             System.out.println(key);
         }
+
+
+        String msg = "警告: 0050c242e636 设备已经掉线了！最后在线时间:2020-09-11 12:07:15！已离线:49662 分钟！";
+        String msg1= substringAfter(msg,"已离线:");
+        String msg0= substringBefore(msg,"已离线:");
+        System.out.println(msg0);
+        System.out.println(msg1);
+        String msg2= substringBefore(msg1," 分钟！");
+        System.out.println(msg2);
+        Long min = Long.valueOf(msg2);
+        Long hour = Long.valueOf(msg2);
+        String msg3 = millisToStringShort(min);
+        System.out.println(msg0.concat("已离线:").concat(msg3));
+
+
+
     }
 
 }
