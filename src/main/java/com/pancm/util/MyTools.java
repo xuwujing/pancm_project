@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 
@@ -330,7 +332,7 @@ public final class MyTools {
      * 增加天数
      *
      * @param time  格式为yyyy-MM-dd
-     * @param  增加天数
+     * @param
      * @return
      */
     public static String addPlusDay(String time, int day) {
@@ -1519,6 +1521,25 @@ public final class MyTools {
         }
         return tagerStr;
     }
+
+    /**
+     * @Author pancm
+     * @Description 得到map的差集
+     * @Date  2020/7/30
+     * @Param [bigMap, smallMap]
+     * @return java.util.Map<java.lang.String,java.lang.Object>
+     **/
+    private  Map<String, Object> getDifferenceMap(Map<String, Object> bigMap, Map<String, Object> smallMap) {
+        Set<String> bigMapKey = bigMap.keySet();
+        Set<String> smallMapKey = smallMap.keySet();
+        Set<String> differenceSet = Sets.difference(bigMapKey, smallMapKey);
+        Map<String, Object> result = Maps.newHashMap();
+        for (String key : differenceSet) {
+            result.put(key, bigMap.get(key));
+        }
+        return result;
+    }
+
 
 
     public static String millisToStringShort(long l){
