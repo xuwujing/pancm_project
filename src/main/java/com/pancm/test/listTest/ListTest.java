@@ -29,9 +29,9 @@ public class ListTest {
      * @param args the input arguments
      */
     public static void main(String[] args) {
-		test1();
+//		test1();
 //		test2();
-//        test3();
+        test3();
 //		test4();
 //		test5();
 
@@ -133,7 +133,7 @@ public class ListTest {
         ls2.add("e");
 //        System.out.println("合集:"+addAll(ls1,ls2));			
 //        System.out.println("交集 :"+retainAll(ls1,ls2));
-        System.out.println("差集 :" + removeAll(ls2, ls1));
+        System.out.println("差集 :" + removeAll(ls1, ls2));
         System.out.println("并集 :" + andAll(ls1, ls2));
 
     }
