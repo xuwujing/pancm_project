@@ -3,12 +3,13 @@
  */
 package com.pancm.test.googleTest.commons;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.pancm.test.pojoTest.User;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The type Google test.
@@ -52,5 +53,8 @@ public class googleTest {
 			}
 		});
 		System.out.println("更改之后的数据:"+userList);
+
+		String str = " xu wu jing ";
+		System.out.println("去掉所有空格:"+StringUtils.trimAllWhitespace(str));
 	}
 }
