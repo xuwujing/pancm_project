@@ -29,7 +29,7 @@ public class ListTest {
      * @param args the input arguments
      */
     public static void main(String[] args) {
-//		test1();
+		test1();
 //		test2();
         test3();
 //		test4();
@@ -47,6 +47,7 @@ public class ListTest {
         list.add("b");
         list.add("c");
 
+        System.out.println( "list转成String,用逗号分割" +String.join(",", list));
         System.out.println("list截取:" + list.subList(0, 1));
         System.out.println("list截取:" + list.subList(1, 3));
 
