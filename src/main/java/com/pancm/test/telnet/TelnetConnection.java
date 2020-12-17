@@ -1,4 +1,4 @@
-package com.pancm.util;
+package com.pancm.test.telnet;
 
 import org.apache.commons.net.telnet.TelnetClient;
 

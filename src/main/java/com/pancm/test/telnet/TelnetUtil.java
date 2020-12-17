@@ -1,4 +1,4 @@
-package com.pancm.util;
+package com.pancm.test.telnet;
 
 /**
  * @author pancm
