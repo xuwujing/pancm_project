@@ -4,18 +4,16 @@ import com.jcraft.jsch.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.zans.base.config.BaseConstants.SEPARATOR_LINE;
 
-/**
- * @author xv
- * @since 2020/4/17 17:06
- */
+
 @Slf4j
 public class SshClient {
+
+    public static String SEPARATOR_LINE = "\n";
 
     private static Session getSession(String ip, String username, String password, Integer port, boolean debug) {
         Session session = null;
@@ -180,7 +178,7 @@ public class SshClient {
                 start = true;
             }
             if (line.startsWith(endIndex)) {
-                total = StringHelper.getIntValue(line.substring(endIndex.length()).trim());
+                total = getIntValue(line.substring(endIndex.length()).trim());
                 break;
             }
 
@@ -188,8 +186,23 @@ public class SshClient {
         return macList;
     }
 
+    private static Integer getIntValue(Object input) {
+        if (input == null) {
+            return null;
+        }
+        try {
+            String val = input.toString();
+            if (isNumeric(val)) {
+                return Integer.parseInt(val.trim());
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
 
-
+    public static Boolean isNumeric(String str){
+        return str.matches("\\d+");
+    }
 
     /**
      * 连接
@@ -252,7 +265,24 @@ public class SshClient {
                 configList.add(line);
             }
         }
-        return StringHelper.joinCollection(configList, SEPARATOR_LINE);
+        return joinCollection(configList, SEPARATOR_LINE);
+    }
+
+    public static String joinCollection(Collection<Object> array, String separator) {
+        if (separator == null) {
+            separator = "";
+        }
+        if (array != null && array.size() != 0) {
+            StringBuilder sb = new StringBuilder();
+
+            for(Object data : array) {
+                sb.append(separator).append(data);
+            }
+            String result = sb.toString();
+            return result.substring(separator.length());
+        } else {
+            return "";
+        }
     }
 
     public static String exeCommand(String host, int port, String account, String password, String command) throws JSchException, IOException {
