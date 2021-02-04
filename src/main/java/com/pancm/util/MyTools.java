@@ -153,6 +153,34 @@ public final class MyTools {
 
 
     /**
+     * 是否是空的或为0，为null或空字符串或空列表或为0
+     * @param target
+     * @return
+     */
+    public static boolean isEmpty(Object target){
+        if (target == null){
+            return true;
+        }
+        if (target.getClass().equals(Integer.class)){
+            return ((Integer) target) == 0;
+        }
+        if (target.getClass().equals(String.class)){
+            return ((String) target).isEmpty() || ((String) target).replaceAll("\\s","").isEmpty();
+        }
+        if (target.getClass().equals(String[].class)){
+            return ((String[]) target).length == 0;
+        }
+        if (target instanceof List){
+            return ((List) target).isEmpty();
+        }
+        if (target instanceof Map){
+            return ((Map) target).isEmpty();
+        }
+        return false;
+    }
+
+
+    /**
      * @return int
      * @Author pancm
      * @Description char 类型转成int类型
