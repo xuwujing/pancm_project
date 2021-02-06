@@ -41,7 +41,6 @@ public class WechatAppAndSub {
          *
          **/
 
-
     }
 
 
@@ -81,7 +80,7 @@ public class WechatAppAndSub {
      **/
     private static final String WX_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token";
 
-//    private static final String WX_TMP_SEND_URL = "https://mp.weixin.qq.com/advanced/tmplmsg";
+    private static final String WX_TMP_SEND_URL2 = "https://mp.weixin.qq.com/advanced/tmplmsg";
 
     /**
      * @Author pancm
