@@ -1,17 +1,16 @@
 package com.pancm.test.encrypt;
 
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Base64;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.apache.commons.codec.binary.Base64;
 
 
 /**
@@ -59,7 +58,7 @@ public class AESUtil {
 
             byte[] result = cipher.doFinal(byteContent);// 加密
 
-            return Base64.encodeBase64String(result);//通过Base64转码返回
+            return Base64.getEncoder().encodeToString(result);//通过Base64转码返回
         } catch (Exception ex) {
             Logger.getLogger(AESUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -94,7 +93,7 @@ public class AESUtil {
             cipher.init(Cipher.DECRYPT_MODE, getSecretKey(password));
 
             //执行操作
-            byte[] result = cipher.doFinal(Base64.decodeBase64(content));
+            byte[] result = cipher.doFinal(Base64.getDecoder().decode(content));
 
             return new String(result, "utf-8");
         } catch (Exception ex) {
