@@ -487,6 +487,14 @@
             <version>2.2.7</version>
         </dependency>
 
+        <!--yaml工具类-->
+        <dependency>
+            <groupId>com.amihaiemil.web</groupId>
+            <artifactId>eo-yaml</artifactId>
+            <version>5.1.9</version>
+        </dependency>
+
+
     </dependencies>
 
 
