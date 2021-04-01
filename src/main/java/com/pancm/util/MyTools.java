@@ -70,7 +70,60 @@ public final class MyTools {
 
     private static Pattern humpPattern = Pattern.compile("\\B(\\p{Upper})(\\p{Lower}*)");
 
+    /**
+     * @Author beixing
+     * @Description  equals方法实现
+     *  StringUtils copy
+     * @Date  2021/3/31
+     * @Param
+     * @return
+     **/
+    public static boolean equals(CharSequence cs1, CharSequence cs2) {
+        if (cs1 == cs2) {
+            return true;
+        }
+        if (cs1 != null && cs2 != null) {
+            return cs1 instanceof String && cs2 instanceof String ? cs1.equals(cs2) : regionMatches(cs1, false, 0, cs2, 0, Math.max(cs1.length(), cs2.length()));
+        }
+        return false;
+    }
 
+    public static boolean equalsIgnoreCase(CharSequence str1, CharSequence str2) {
+        if (str1 != null && str2 != null) {
+            if (str1 == str2) {
+                return true;
+            }
+            return str1.length() != str2.length() ? false : regionMatches(str1, true, 0, str2, 0, str1.length());
+
+        }
+        return str1 == str2;
+
+    }
+
+
+    private  static boolean regionMatches(CharSequence cs, boolean ignoreCase, int thisStart, CharSequence substring, int start, int length) {
+        if (cs instanceof String && substring instanceof String) {
+            return ((String) cs).regionMatches(ignoreCase, thisStart, (String) substring, start, length);
+        } else {
+            int index1 = thisStart;
+            int index2 = start;
+            int var8 = length;
+
+            while (var8-- > 0) {
+                char c1 = cs.charAt(index1++);
+                char c2 = substring.charAt(index2++);
+                if (c1 != c2) {
+                    if (!ignoreCase) {
+                        return false;
+                    }
+                    if (Character.toUpperCase(c1) != Character.toUpperCase(c2) && Character.toLowerCase(c1) != Character.toLowerCase(c2)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+    }
     /**
      * 判断String类型的数据是否为空 null,""," " 为true "A"为false
      *
