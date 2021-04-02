@@ -5,7 +5,6 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.zans.base.config.GlobalConstants;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -54,7 +53,7 @@ public class PdfHelper {
         try {
             // 不同字体（这里定义为同一种字体：包含不同字号、不同style）
 //            BaseFont bfChinese = BaseFont.createFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED);
-            BaseFont bfChinese = BaseFont.createFont(GlobalConstants.UPLOAD_FOLDER+ "/template/pdf/simsun.ttc,1" , BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            BaseFont bfChinese = BaseFont.createFont(""+ "/template/pdf/simsun.ttc,1" , BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             TITLE_FONT = new Font(bfChinese, 18, Font.BOLD);
             HEAD_FONT = new Font(bfChinese, 14, Font.NORMAL);
             KEY_FONT = new Font(bfChinese, 10, Font.NORMAL);
@@ -180,9 +179,9 @@ public class PdfHelper {
 	/**
 	 *
 	 * @param image  图片
-	 * @param align  水平对其
-	 * @param colspan 合并列
-	 * @param rowspan
+	 * @param   水平对其
+	 * @param  合并列
+	 * @param
 	 * @return
 	 */
 	public static PdfPCell createCellImage(Image image, float heigth) {
