@@ -71,12 +71,12 @@ public final class MyTools {
     private static Pattern humpPattern = Pattern.compile("\\B(\\p{Upper})(\\p{Lower}*)");
 
     /**
-     * @Author beixing
-     * @Description  equals方法实现
-     *  StringUtils copy
-     * @Date  2021/3/31
-     * @Param
      * @return
+     * @Author beixing
+     * @Description equals方法实现
+     * StringUtils copy
+     * @Date 2021/3/31
+     * @Param
      **/
     public static boolean equals(CharSequence cs1, CharSequence cs2) {
         if (cs1 == cs2) {
@@ -101,7 +101,7 @@ public final class MyTools {
     }
 
 
-    private  static boolean regionMatches(CharSequence cs, boolean ignoreCase, int thisStart, CharSequence substring, int start, int length) {
+    private static boolean regionMatches(CharSequence cs, boolean ignoreCase, int thisStart, CharSequence substring, int start, int length) {
         if (cs instanceof String && substring instanceof String) {
             return ((String) cs).regionMatches(ignoreCase, thisStart, (String) substring, start, length);
         } else {
@@ -124,6 +124,7 @@ public final class MyTools {
             return true;
         }
     }
+
     /**
      * 判断String类型的数据是否为空 null,""," " 为true "A"为false
      *
@@ -207,26 +208,27 @@ public final class MyTools {
 
     /**
      * 是否是空的或为0，为null或空字符串或空列表或为0
+     *
      * @param target
      * @return
      */
-    public static boolean isEmpty(Object target){
-        if (target == null){
+    public static boolean isEmpty(Object target) {
+        if (target == null) {
             return true;
         }
-        if (target.getClass().equals(Integer.class)){
+        if (target.getClass().equals(Integer.class)) {
             return ((Integer) target) == 0;
         }
-        if (target.getClass().equals(String.class)){
-            return ((String) target).isEmpty() || ((String) target).replaceAll("\\s","").isEmpty();
+        if (target.getClass().equals(String.class)) {
+            return ((String) target).isEmpty() || ((String) target).replaceAll("\\s", "").isEmpty();
         }
-        if (target.getClass().equals(String[].class)){
+        if (target.getClass().equals(String[].class)) {
             return ((String[]) target).length == 0;
         }
-        if (target instanceof List){
+        if (target instanceof List) {
             return ((List) target).isEmpty();
         }
-        if (target instanceof Map){
+        if (target instanceof Map) {
             return ((Map) target).isEmpty();
         }
         return false;
@@ -412,7 +414,7 @@ public final class MyTools {
     /**
      * 增加天数
      *
-     * @param time  格式为yyyy-MM-dd
+     * @param time 格式为yyyy-MM-dd
      * @param
      * @return
      */
@@ -810,11 +812,11 @@ public final class MyTools {
     private static String getLinuxLocalIp() throws SocketException {
         String ip = "";
         try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
                 NetworkInterface intf = en.nextElement();
                 String name = intf.getName();
                 if (!name.contains("docker") && !name.contains("lo")) {
-                    for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                    for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
                         InetAddress inetAddress = enumIpAddr.nextElement();
                         if (!inetAddress.isLoopbackAddress()) {
                             String ipaddress = inetAddress.getHostAddress().toString();
@@ -831,19 +833,19 @@ public final class MyTools {
             ip = "127.0.0.1";
             ex.printStackTrace();
         }
-        System.out.println("IP:"+ip);
+        System.out.println("IP:" + ip);
         return ip;
     }
 
     /**
      * 获取用户真实IP地址，不使用request.getRemoteAddr();的原因是有可能用户使用了代理软件方式避免真实IP地址,
-     *
+     * <p>
      * 可是，如果通过了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP值，究竟哪个才是真正的用户端的真实IP呢？
      * 答案是取X-Forwarded-For中第一个非unknown的有效IP字符串。
-     *
+     * <p>
      * 如：X-Forwarded-For：192.168.1.110, 192.168.1.120, 192.168.1.130,
      * 192.168.1.100
-     *
+     * <p>
      * 用户真实IP为： 192.168.1.110
      *
      * @param request
@@ -870,7 +872,6 @@ public final class MyTools {
     }
 
 
-
     /**
      * Object 转换为 String
      *
@@ -883,15 +884,17 @@ public final class MyTools {
 
 
     public static String toString2(Object obj) {
-        return toString(obj,sdf);
+        return toString(obj, sdf);
     }
+
     /**
      * Object 转换为 String
      * 不将时间格式转换为时间戳
+     *
      * @param obj the obj
      * @return String string
      */
-    public static String toString(Object obj,String format) {
+    public static String toString(Object obj, String format) {
         return JSON.toJSONStringWithDateFormat(obj, format, SerializerFeature.WriteDateUseDateFormat);
     }
 
@@ -962,7 +965,6 @@ public final class MyTools {
     }
 
 
-
     /**
      * 将map转化为string
      *
@@ -1009,21 +1011,23 @@ public final class MyTools {
     }
 
     /**
-     *  list 转化为JSONArray
+     * list 转化为JSONArray
+     *
      * @param
      * @return
      */
-    public static JSONArray toJSONArray(List list){
+    public static JSONArray toJSONArray(List list) {
         return JSONArray.parseArray(JSON.toJSONString(list));
     }
 
 
     /**
-     *   JSONArray转化为list
+     * JSONArray转化为list
+     *
      * @param
      * @return
      */
-    public static <T> List<T> toList(JSONArray jsonArray,Class<T> clazz){
+    public static <T> List<T> toList(JSONArray jsonArray, Class<T> clazz) {
         return JSONObject.parseArray(jsonArray.toJSONString(), clazz);
     }
 
@@ -1574,7 +1578,6 @@ public final class MyTools {
 
 
     private static final Pattern pattern = Pattern.compile("\\{(.*?)\\}");
-    private static Matcher matcher;
 
 
     /**
@@ -1585,32 +1588,25 @@ public final class MyTools {
      * @return
      */
     public static String format(String sourStr, Map<String, Object> param) {
-        String tagerStr = sourStr;
-        if (param == null)
-            return tagerStr;
-        try {
-            matcher = pattern.matcher(tagerStr);
-            while (matcher.find()) {
-                String key = matcher.group();
-                String keyclone = key.substring(1, key.length() - 1).trim();
-                Object value = param.get(keyclone);
-                if (value != null)
-                    tagerStr = tagerStr.replace(key, value.toString());
-            }
-        } catch (Exception e) {
-            return null;
+        Matcher matcher = pattern.matcher(sourStr);
+        while (matcher.find()) {
+            String key = matcher.group();
+            String keyClone = key.substring(1, key.length() - 1).trim();
+            Object value = param.get(keyClone);
+            if (value != null)
+                sourStr = sourStr.replace(key, value.toString());
         }
-        return tagerStr;
+        return sourStr;
     }
 
     /**
+     * @return java.util.Map<java.lang.String, java.lang.Object>
      * @Author pancm
      * @Description 得到map的差集
-     * @Date  2020/7/30
+     * @Date 2020/7/30
      * @Param [bigMap, smallMap]
-     * @return java.util.Map<java.lang.String,java.lang.Object>
      **/
-    private  Map<String, Object> getDifferenceMap(Map<String, Object> bigMap, Map<String, Object> smallMap) {
+    private Map<String, Object> getDifferenceMap(Map<String, Object> bigMap, Map<String, Object> smallMap) {
         Set<String> bigMapKey = bigMap.keySet();
         Set<String> smallMapKey = smallMap.keySet();
         Set<String> differenceSet = Sets.difference(bigMapKey, smallMapKey);
@@ -1622,18 +1618,17 @@ public final class MyTools {
     }
 
 
-
-    public static String millisToStringShort(long l){
-        StringBuffer sb=new StringBuffer();
-        long minutes=1;
-        long hours=60*minutes;
-        long days=24*hours;
-        if(l/days>=1)
-            sb.append((int)(l/days)+"天");
-        if(l%days/hours>=1)
-            sb.append((int)(l%days/hours)+"小时");
-        if(l%days%hours/minutes>=1)
-            sb.append((int)(l%days%hours/minutes)+"分钟");
+    public static String millisToStringShort(long l) {
+        StringBuffer sb = new StringBuffer();
+        long minutes = 1;
+        long hours = 60 * minutes;
+        long days = 24 * hours;
+        if (l / days >= 1)
+            sb.append((int) (l / days) + "天");
+        if (l % days / hours >= 1)
+            sb.append((int) (l % days / hours) + "小时");
+        if (l % days % hours / minutes >= 1)
+            sb.append((int) (l % days % hours / minutes) + "分钟");
 
         return sb.toString();
     }
@@ -1853,7 +1848,7 @@ public final class MyTools {
 
 
         String url = "https://xxx.com/cfes?c={campaign_name}&af_siteid={af_siteid}&clickid={clickid}&android_id={android_id}&advertising_id={advertising_id}&idfa={idfa}";
-        Map<String, Object> map9 = new LinkedHashMap<>();
+        Map<String, Object> map9 = new HashMap<>();
         map9.put("campaign_name", "111");
         map9.put("af_siteid", "222");
         map9.put("clickid", "333");
@@ -1862,16 +1857,16 @@ public final class MyTools {
         map9.put("idfa", "");
         System.out.println(format(url, map));
 
-        List<Map<String,Object>> mapList1 = new ArrayList<>();
-        Map<String,Object> timeMap = new HashMap<>();
-        timeMap.put("id",1);
-        timeMap.put("time",new Date());
+        List<Map<String, Object>> mapList1 = new ArrayList<>();
+        Map<String, Object> timeMap = new HashMap<>();
+        timeMap.put("id", 1);
+        timeMap.put("time", new Date());
         mapList1.add(timeMap);
         System.out.println(toString(mapList1));
         System.out.println(toString2(mapList1));
 
 
-        String ss =" 警告: 27.16.251.6 地址接入了不同的设备，原设备:00 24 ac 6b 69 21,当前设备:00 24 ac 6b 3d 35!";
+        String ss = " 警告: 27.16.251.6 地址接入了不同的设备，原设备:00 24 ac 6b 69 21,当前设备:00 24 ac 6b 3d 35!";
         String macP = "([A-Fa-f0-9]{2} ){5}[A-Fa-f0-9]{2}";
         //有:或者-的匹配
         String macP2 = "/((([a-f0-9]{2}:){5})|(([a-f0-9]{2}-){5}))[a-f0-9]{2}/gi";
@@ -1884,17 +1879,16 @@ public final class MyTools {
 
 
         String msg = "警告: 0050c242e636 设备已经掉线了！最后在线时间:2020-09-11 12:07:15！已离线:49662 分钟！";
-        String msg1= substringAfter(msg,"已离线:");
-        String msg0= substringBefore(msg,"已离线:");
+        String msg1 = substringAfter(msg, "已离线:");
+        String msg0 = substringBefore(msg, "已离线:");
         System.out.println(msg0);
         System.out.println(msg1);
-        String msg2= substringBefore(msg1," 分钟！");
+        String msg2 = substringBefore(msg1, " 分钟！");
         System.out.println(msg2);
         Long min = Long.valueOf(msg2);
         Long hour = Long.valueOf(msg2);
         String msg3 = millisToStringShort(min);
         System.out.println(msg0.concat("已离线:").concat(msg3));
-
 
 
     }
