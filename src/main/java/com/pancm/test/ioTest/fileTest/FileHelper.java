@@ -162,4 +162,52 @@ public class FileHelper {
         }
         return false;
     }
+
+    /**
+     * @Author beixing
+     * @Description  文件夹复制
+     * @Date  2021/4/27
+     * @Param
+     * @return
+     **/
+    public static void copyFolder(String src, String des)  {
+        //初始化文件复制
+        File file1 = new File(src);
+        //把文件里面内容放进数组
+        File[] fs = file1.listFiles();
+        //初始化文件粘贴
+        File file2 = new File(des);
+        //判断是否有这个文件有不管没有创建
+        if (!file2.exists()) {
+            file2.mkdirs();
+        }
+        //遍历文件及文件夹
+        for (File f : fs) {
+            if (f.isFile()) {
+                ///调用文件拷贝的方法
+                fileCopy(f.getPath(), des + File.separator + f.getName());
+            } else if (f.isDirectory()) {
+                //文件夹
+                copyFolder(f.getPath(), des + File.separator + f.getName());
+            }
+        }
+
+    }
+
+    /**
+     * 文件复制的具体方法
+     */
+    private static void fileCopy(String src, String des) {
+        //io流固定格式
+        try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(src));
+             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(des))) {
+            int i = -1;//记录获取长度
+            byte[] bt = new byte[2014];//缓冲区
+            while ((i = bis.read(bt)) != -1) {
+                bos.write(bt, 0, i);
+            }
+        } catch (IOException e) {
+            log.error("read file error#", e);
+        }
+    }
 }
