@@ -55,6 +55,8 @@ public class FileZip {
             while ((len = bis.read(buf)) != -1) {
                 bos.write(buf,0,len);
             }
+            //图片压缩需要，否则出现问题
+            bos.flush();
             bis.close();
             fos.close();
         }
