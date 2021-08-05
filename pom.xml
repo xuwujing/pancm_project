@@ -411,6 +411,11 @@
             <version>2.0.7.RELEASE</version>
         </dependency>
 
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.6</version>
+        </dependency>
 
 
         <!-- screw核心 连接数据库生成数据字典 -->
