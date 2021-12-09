@@ -1,5 +1,9 @@
 package com.pancm.test.reflectTest;
 
+import com.pancm.util.GetSpringBean;
+import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.util.ReflectionUtils;
+
 import java.lang.reflect.Method;
 
 /**
@@ -28,8 +32,11 @@ public class ReflectTest2 {
 		method_2();
 		method_3();
 		method_4();
+		User user = new User();
+		BeanUtils.setProperty(user,"name","张三");
+		System.out.println(user);
 	}
-	
+
 	/**
 	 * 获取该类中的所有方法
 	 */
@@ -45,7 +52,7 @@ public class ReflectTest2 {
 			System.out.println("方法:"+me);
 		}
 	}
-	
+
 	/**
 	 * 获取指定方法
 	 */
@@ -53,7 +60,7 @@ public class ReflectTest2 {
 	private static void method_2() throws ReflectiveOperationException {
 		//指定类和路径
 		Class clazz=Class.forName("com.pancm.test.reflectTest.User");
-		//获取的指定名称的方法 
+		//获取的指定名称的方法
 		//如果带有入参，则指定入参类型
 		Method method=clazz.getMethod("getMessage2",int.class);
 		//初始化
@@ -61,8 +68,8 @@ public class ReflectTest2 {
 		//执行该方法
 		method.invoke(obj, 11);
 	}
-	
-	
+
+
 	/**
 	 * 获取私有的方法
 	 */
@@ -75,8 +82,8 @@ public class ReflectTest2 {
 		//私有方法不能直接访问，因为权限不够。非要访问，可以通过暴力的方式。
 		method.setAccessible(true);
 	}
-	
-	
+
+
 	/**
 	 * 获取静态方法
 	 */
@@ -87,7 +94,14 @@ public class ReflectTest2 {
 		//获取私有的方法，必须要使用getDeclaredMethod
 		Method method=clazz.getMethod("getMessage4",String.class);
 		System.out.println();
-		method.invoke(null, "测试");
+		Object o =method.invoke(null, "测试");
+		System.out.println("返回值:"+o);
 	}
-	
+
+
+	private Object getMethodValue(String className, String methodName,String args) throws Exception {
+		Method  mh = ReflectionUtils.findMethod(GetSpringBean.getBean(className).getClass(), methodName,new Class[]{String.class} );
+		Object obj = ReflectionUtils.invokeMethod(mh,  GetSpringBean.getBean(className),args);
+		return obj;
+	}
 }
