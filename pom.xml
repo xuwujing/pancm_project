@@ -499,6 +499,27 @@
             <version>5.1.9</version>
         </dependency>
 
+        <!-- ocr 二维码-->
+        <dependency>
+            <groupId>net.sourceforge.tess4j</groupId>
+            <artifactId>tess4j</artifactId>
+            <version>4.4.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openbaton</groupId>
+            <artifactId>vim-drivers</artifactId>
+            <version>6.0.0</version>
+        </dependency>
+
+        <!-- xftp -->
+        <dependency>
+            <groupId>com.hierynomus</groupId>
+            <artifactId>sshj</artifactId>
+            <version>0.27.0</version>
+        </dependency>
+
+
 
     </dependencies>
 
