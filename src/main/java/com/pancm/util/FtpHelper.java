@@ -42,7 +42,7 @@ public class FtpHelper {
                 Map<String, String> map = new HashMap<>();
                 map.put("fileName",ftpFile.getName());
                 map.put("fileSize",getSize(ftpFile.getSize()));
-                map.put("fileTime",DateHelper.getDateTime(ftpFile.getTimestamp().getTime()));
+                map.put("fileTime",ftpFile.getTimestamp().getTime().toString());
                 mapList.add(map);
             }
         }
