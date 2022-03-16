@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The type Lambda test.
@@ -44,16 +45,28 @@ public class LambdaTest {
 			System.out.println("k=" + k + "，v=" + v);
 		});
 
-		
-		
+		/**
+		 * AtomicInteger说明
+		 * AtomicInteger是一个提供原子操作的Integer类，通过线程安全的方式操作加减。
+		 *
+		 * AtomicReference说明：
+		 *
+		 * 它是通过"volatile"和"Unsafe提供的CAS函数实现"原子操作。
+		 * 1.value是volatile类型。这保证了：当某线程修改value的值时，其他线程看到的value值都是最新的value值，即修改之后的volatile的值。
+		 * 2. 通过CAS设置value。这保证了：当某线程池通过CAS函数(如compareAndSet函数)设置value时，它的操作是原子的，即线程在操作value时不会被中断。
+		 * ————————————————
+		 */
+
 		List<String> list = new ArrayList<String>();
 		list.add("a");
 		list.add("bb");
 		list.add("ccc");
 		list.add("dddd");
 		System.out.println("list拉姆达表达式遍历:");
+		//可以进行原则操作
+		final AtomicInteger c = new AtomicInteger();
 		list.forEach(v -> {
-			System.out.println(v);
+			System.out.println(v+":c"+c.incrementAndGet());
 		});
 		System.out.println("list双冒号运算符遍历:");
 		list.forEach(System.out::println);
@@ -92,7 +105,7 @@ public class LambdaTest {
      */
 //使用拉姆达方式创建
 	Runnable r2 = ()-> System.out.println("拉姆达方式创建!");
-	
+
 
 }
 
@@ -161,8 +174,8 @@ class User {
 		this.name = name;
 	}
 
-	/** 
-	 * 
+	/**
+	 *
 	 */
 	@Override
 	public String toString() {
