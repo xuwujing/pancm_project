@@ -170,7 +170,7 @@ public class EasyExcelTest {
         private Double doubleData;
     }
 
-    @Slf4j
+
     class DemoDataListener implements ReadListener<DemoData> {
 
         /**
