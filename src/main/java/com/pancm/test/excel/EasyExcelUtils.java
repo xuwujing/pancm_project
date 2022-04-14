@@ -16,8 +16,20 @@ import java.util.Map;
 
 public class EasyExcelUtils {
 
+    public static void main(String[] args) {
+        String[] headMap = { "项目名称", "楼栋名称", "单元名称", "楼层名称", "房间名称", "业主/租户姓名", "房间状态", "房间功能","认证人数" };
+        String[] dataStrMap={"hName","bName","uName","fName","pName","cName","pState","pFunction","pNum"};
+        NoModelWriteData d = new NoModelWriteData();
+        d.setFileName("认证统计");
+        d.setHeadMap(headMap);
+        d.setDataStrMap(dataStrMap);
+//        d.setDataList(listDatas);
+        EasyExcelUtils easyExcelUtils = new EasyExcelUtils();
+//        easyExcelUtils.jsonWrite(d, response);
+    }
+
     //不创建对象的导出
-    public void noModleWrite(NoModelWriteData data, HttpServletResponse response) throws IOException {
+    public void jsonWrite(NoModelWriteData data, HttpServletResponse response) throws IOException {
         // 这里注意 有同学反应使用swagger 会导致各种问题，请直接用浏览器或者用postman
         try {
 //            response.setContentType("application/vnd.ms-excel");
