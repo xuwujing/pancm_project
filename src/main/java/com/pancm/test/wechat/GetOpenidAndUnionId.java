@@ -38,6 +38,8 @@ public class GetOpenidAndUnionId {
 
         HttpClientUtil.get(url,jsonObject);
 
+
+
     }
 
 
