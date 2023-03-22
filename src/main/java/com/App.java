@@ -39,6 +39,7 @@ public class App {
 		a[1]="sahsja";
 
 		App nb=new App();
+
 		nb.add("gshaghsagdjas");
 		nb.add("dgshadgsjha");
 		nb.add("third", 1);
