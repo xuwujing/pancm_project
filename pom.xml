@@ -556,7 +556,12 @@
             <version>0.27.0</version>
         </dependency>
 
-
+        <!-- 常用工具类 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.3.7</version>
+        </dependency>
 
     </dependencies>
 
