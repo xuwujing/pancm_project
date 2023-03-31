@@ -7,10 +7,14 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.json.JSONUtil;
 import cn.hutool.poi.excel.ExcelUtil;
-import org.apache.hadoop.hbase.security.User;
+import com.pancm.test.pojoTest.Student;
+import com.pancm.test.pojoTest.User;
+import org.springframework.beans.BeanUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author pancm
@@ -43,6 +47,14 @@ public class HutoolTest {
 
     private static void test2() {
         System.out.println(BeanUtil.beanToMap(User.class));
+        List<User> userList = new ArrayList<User>();
+        for(int i=1;i<=10;i++){
+            userList.add(new User(i,"张三"+i));
+        }
+        List<Student> studentList = new ArrayList<Student>();
+
+        studentList = BeanUtil.copyToList(userList,Student.class);
+        System.out.println("转换后的数据:"+studentList);
     }
 
     private static  void test1(){

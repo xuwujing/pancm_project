@@ -10,7 +10,9 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import clojure.lang.Obj;
+import com.pancm.test.pojoTest.Student;
 import com.pancm.test.pojoTest.User;
+import org.springframework.beans.BeanUtils;
 
 /**
  * The type Stream test.
@@ -182,8 +184,18 @@ public class StreamTest {
 		System.out.println("转换之前的数据:" + list32);// 转换之前的数据:[1, 2, 3]
 		List<Map> list42 = list32.stream().map(User::toMap).collect(Collectors.toList());
 		System.out.println("转换之后的数据:" + list42); // [1, 2, 3]
-		
-		
+
+		System.out.println("List<User>转换之前的数据:" + list32);
+		List<Student> list43 = list32.stream().map(user->new Student(user.getId(),user.getName())).collect(Collectors.toList());
+		System.out.println("List<User>转换之后的数据:" + list43);
+		List<Student> studentList = new ArrayList<Student>();
+		list42.stream().forEach(user -> {
+			Student student = new Student();
+			BeanUtils.copyProperties(user,student);
+			studentList.add(student);
+		});
+
+
 		/*
 		 * 获取平方
 		 */
