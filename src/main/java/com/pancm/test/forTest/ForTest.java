@@ -24,9 +24,25 @@ public class ForTest {
 		   * 阿里巴巴开发手册中的遍历移除测试
 		   */
 		 iteratorTest();
-		 forEachTest();
+		forEachTest2();
+		forEachTest();
 	 }
-	 private static void forEachTest(){
+
+	private static void forEachTest2() {
+		List<String> list = new ArrayList<String>();
+		list.add("1");
+		list.add("2");
+		list.add("4");
+		list.forEach(s -> {
+			if("2".equals(s)){
+				list.add(s);
+			}
+		});
+		System.out.println(list);
+
+	}
+
+	private static void forEachTest(){
 		 List<String> list = new ArrayList<String>();
 		 list.add("1");
 		 list.add("2");
@@ -51,6 +67,7 @@ public class ForTest {
 			 String item = iterator.next();
 			 if ("2".equals(item)) {
 				 iterator.remove();
+
 			 }
 		 }
 		 System.out.println("list4:"+list);

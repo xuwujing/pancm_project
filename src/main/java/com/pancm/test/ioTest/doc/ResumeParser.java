@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class ResumeParser {
 
     public static void main(String[] args) {
-        String resume = "张三，男，25岁，本科学历，Java软件工程师，具有3年工作经验。联系方式：手机：13888888888，邮箱：zhangsan@xxx.com。";
+        String resume = "张三，男，25岁，本科学历，Java软件工程师，具有3工作经验。联系方式：手机：13888888888，邮箱：zhangsan@xxx.com。";
         String name = extractName(resume);
         String gender = extractGender(resume);
         int age = extractAge(resume);
