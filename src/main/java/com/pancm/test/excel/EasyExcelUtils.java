@@ -17,13 +17,18 @@ import java.util.Map;
 public class EasyExcelUtils {
 
     public static void main(String[] args) {
-        String[] headMap = { "项目名称", "楼栋名称", "单元名称", "楼层名称", "房间名称", "业主/租户姓名", "房间状态", "房间功能","认证人数" };
+        String[] headMap = { "项目名称", "楼栋名称", "单元名称", "楼层名称", "房间名称", "业主/租户姓名", "房间状态", "房间功能","认证人数","测试" };
         String[] dataStrMap={"hName","bName","uName","fName","pName","cName","pState","pFunction","pNum"};
         NoModelWriteData d = new NoModelWriteData();
         d.setFileName("认证统计");
         d.setHeadMap(headMap);
         d.setDataStrMap(dataStrMap);
-//        d.setDataList(listDatas);
+        List<JSONObject> listDatas = new ArrayList<>();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("hName","项目1");
+        jsonObject.put("bName","二楼");
+        jsonObject.put("aa","测试");
+        d.setDataList(listDatas);
         EasyExcelUtils easyExcelUtils = new EasyExcelUtils();
 //        easyExcelUtils.jsonWrite(d, response);
     }
