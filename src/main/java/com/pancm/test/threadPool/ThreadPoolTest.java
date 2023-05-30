@@ -172,6 +172,7 @@ public class ThreadPoolTest {
 
 	            } catch (Exception e) {
 					e.printStackTrace();
+					e.printStackTrace();
 				}
 		  }
 		try {
