@@ -13,7 +13,7 @@ public class App {
 	public int getsize() {
 		return notes.size();
 	}
-	public String Getnotes(int index) {
+	public String getNotes(int index) {
 		return notes.get(index);
 	}
 	public void add(String s,int location) {
@@ -44,7 +44,7 @@ public class App {
 		nb.add("dgshadgsjha");
 		nb.add("third", 1);
 		System.out.println(nb.getsize());
-		System.out.println(nb.Getnotes(1));
+		System.out.println(nb.getNotes(1));
 		nb.removeNotes(1);
 		String[] b= nb.list();
 	}
