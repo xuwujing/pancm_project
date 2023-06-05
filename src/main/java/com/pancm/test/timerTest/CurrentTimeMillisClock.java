@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author pancm
  * @Title: pancm_project
- * @Description:
+ * @Description: 单例模式的时钟，可以获取当前的时间戳 性能较高
  * @Version:1.0.0
  * @Since:jdk1.8
  * @date 2019/12/9
