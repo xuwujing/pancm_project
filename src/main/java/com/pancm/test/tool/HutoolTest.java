@@ -1,15 +1,14 @@
 package com.pancm.test.tool;
 
 
-import cn.hutool.*;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.crypto.digest.DigestUtil;
+import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
-import cn.hutool.poi.excel.ExcelUtil;
 import com.pancm.test.pojoTest.Student;
 import com.pancm.test.pojoTest.User;
-import org.springframework.beans.BeanUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,6 +32,19 @@ public class HutoolTest {
         test2();
         test3();
         test4();
+        test5();
+        test6();
+    }
+
+    private static void test6() {
+        String url ="https://restapi.amap.com/v3/direction/walking?origin=116.434307,39.90909&destination=116.434446,39.90816&key=44cfa7574786e7f35a7f58b545f57819";
+        System.out.println(HttpUtil.get(url));
+
+    }
+      private static void test5() {
+        String msg="123456";
+        System.out.println(DigestUtil.md5Hex16(msg));
+
     }
 
     private static void test4() {
