@@ -119,7 +119,8 @@ public class ListTest {
     private static void test3() {
         List<Integer> list = initData(100);
         System.out.println("list:" + list);
-        System.out.println("removeList:" + removeList(list, 10, 20));
+//        System.out.println("removeList:" + removeList(list, 10, 20));
+        System.out.println("removeList2:" + removeList2(list, 10, 20));
         list.subList(10, 20).clear();
         System.out.println("subList:" + list);
 
@@ -237,6 +238,19 @@ public class ListTest {
                 list.remove(i);
             }
         }
+        return list;
+    }
+
+    /**
+     * 移除指定数据
+     *
+     * @param list
+     * @param s    要移除的起始位置
+     * @param d    要移除的最后位置
+     */
+    private static List<Integer> removeList2(List<Integer> list, int s, int d) {
+        List<Integer> subList = new ArrayList<>(list.subList(s, d));
+        list.removeAll(subList);
         return list;
     }
 
