@@ -31,13 +31,15 @@ public class AddressParser {
             JSONArray districtArr = jsonObj.getJSONArray("districts");
             JSONObject countryObj = districtArr.getJSONObject(0);
             JSONArray provinceArr = countryObj.getJSONArray("districts");
-
+            Class.forName(JDBC_DRIVER);
+            Connection   conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            System.out.println("provinceSize:"+provinceArr.size());
             // 遍历省份列表，插入省份数据到数据库中
             for (int i = 0; i < provinceArr.size(); i++) {
                 JSONObject provinceObj = provinceArr.getJSONObject(i);
                 String provinceCode = provinceObj.getString("adcode");
                 String provinceName = provinceObj.getString("name");
-                insertData("province", provinceCode, provinceName, "CN");
+                insertData(conn,"province", provinceCode, provinceName, "CN");
 
                 // 遍历城市列表，插入城市数据到数据库中
                 JSONArray cityArr = provinceObj.getJSONArray("districts");
@@ -45,7 +47,7 @@ public class AddressParser {
                     JSONObject cityObj = cityArr.getJSONObject(j);
                     String cityCode = cityObj.getString("adcode");
                     String cityName = cityObj.getString("name");
-                    insertData("city", cityCode, cityName, provinceCode);
+                    insertData(conn,"city", cityCode, cityName, provinceCode);
 
                     // 遍历区县列表，插入区县数据到数据库中
                     JSONArray districtArr2 = cityObj.getJSONArray("districts");
@@ -53,7 +55,7 @@ public class AddressParser {
                         JSONObject districtObj = districtArr2.getJSONObject(k);
                         String districtCode = districtObj.getString("adcode");
                         String districtName = districtObj.getString("name");
-                        insertData("district", districtCode, districtName, cityCode);
+                        insertData(conn,"district", districtCode, districtName, cityCode);
 
                         // 遍历街道列表，插入街道数据到数据库中
                         JSONArray streetArr = districtObj.getJSONArray("districts");
@@ -61,11 +63,13 @@ public class AddressParser {
                             JSONObject streetObj = streetArr.getJSONObject(l);
                             String streetCode = streetObj.getString("adcode");
                             String streetName = streetObj.getString("name");
-                            insertData("street", streetCode, streetName, districtCode);
+                            insertData(conn,"street", streetCode, streetName, districtCode);
                         }
                     }
+
                 }
             }
+            conn.close();
 
             System.out.println("Done!");
         } catch (Exception e) {
@@ -93,8 +97,7 @@ public class AddressParser {
     }
 
     // 插入数据到数据库中
-    public static void insertData(String tableName, String code, String name, String parentCode) throws Exception {
-        Connection conn = null;
+    public static void insertData(Connection conn,String tableName, String code, String name, String parentCode) throws Exception {
         Statement stmt = null;
 
         try {
@@ -110,7 +113,6 @@ public class AddressParser {
             e.printStackTrace();
         } finally {
             if (stmt != null) stmt.close();
-            if (conn != null) conn.close();
         }
     }
 }
