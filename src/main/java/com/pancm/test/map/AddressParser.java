@@ -9,7 +9,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.pancm.util.MyTools;
 /**
  * @Author pancm
- * @Description 获取中国的省市区信息并写入到表中
+ * @Description 获取高德中国的省市区信息并写入到表中
+ * 也可以从https://gitcode.net/mirrors/modood/administrative-divisions-of-china/-/blob/master/dist/areas.csv
+ * 这里面下载
+ *
  * @Date  2023/6/17
  * @Param
  * @return
