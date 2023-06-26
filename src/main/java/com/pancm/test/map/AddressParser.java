@@ -107,7 +107,6 @@ public class AddressParser {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = conn.createStatement();
-
             String sql = "INSERT INTO " + tableName + " (code, name, parent_code) VALUES ('" + code + "', '" + name + "', '" + parentCode + "')";
             stmt.executeUpdate(sql);
         } catch (SQLException se) {
