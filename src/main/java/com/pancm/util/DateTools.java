@@ -5,15 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.time.Clock;
-import java.time.DayOfWeek;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
@@ -87,6 +79,28 @@ public class DateTools {
         return LocalDateTime.parse(str, DateTimeFormatter.ofPattern(DATE_FORMAT_DATETIME));
     }
 
+    /**
+     * @Author pancm
+     * @Description 计算相差的月份，如果是月初和月末，则相差月份+1
+     * @Date  2023/6/27
+     * @Param [startDate, endDate]
+     * @return long
+     **/
+    public static long getMonthDifference(Date startDate, Date endDate) {
+        // 将Date转换为LocalDate
+        LocalDate localStartDate = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate localEndDate = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        // 获取两个日期之间的差距
+        Period period = Period.between(localStartDate, localEndDate);
+
+        // 如果开始日期是月初且结束日期是月末，则相差月份+1
+        if (localStartDate.getDayOfMonth() == 1 && localEndDate.lengthOfMonth() == localEndDate.getDayOfMonth()) {
+            period = period.plusMonths(1);
+        }
+        // 计算相差的月份
+        int monthDifference = period.getYears() * 12 + period.getMonths();
+        return monthDifference;
+    }
     /**
      * Gets date yyyy.
      *
