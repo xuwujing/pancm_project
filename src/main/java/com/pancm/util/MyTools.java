@@ -28,6 +28,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.Map.Entry;
@@ -701,6 +702,19 @@ public final class MyTools {
         LocalDate ld1 = LocalDate.of(year1, month1, 01);
         LocalDate ld2 = LocalDate.of(year2, month2, 01);
         return Period.between(ld1, ld2).getMonths();
+    }
+
+    public static long calculateMonthDifference(LocalDate startDate, LocalDate endDate) {
+        // 计算两个日期之间的月份差值
+        long months = ChronoUnit.MONTHS.between(startDate.withDayOfMonth(1), endDate.withDayOfMonth(1));
+
+
+        // 如果结束日期的下一个月的第一天小于等于开始日期，则向上取整
+        if (endDate.plusMonths(1).withDayOfMonth(1).compareTo(startDate) <= 0) {
+            months += 1;
+        }
+
+        return months;
     }
 
     /**
@@ -1891,6 +1905,22 @@ public final class MyTools {
         System.out.println(msg0.concat("已离线:").concat(msg3));
 
 
+
+        LocalDate date1 = LocalDate.of(2013, 1, 31);
+        LocalDate date2 = LocalDate.of(2013, 2, 27);
+        System.out.println(calculateMonthDifference(date1, date2)); // 输出 1
+
+        LocalDate date3 = LocalDate.of(2020, 2, 28);
+        LocalDate date4 = LocalDate.of(2020, 3, 29);
+        System.out.println(calculateMonthDifference(date3, date4)); // 输出 1
+
+        LocalDate date5 = LocalDate.of(2020, 3, 1);
+        LocalDate date6 = LocalDate.of(2020, 4, 25);
+        System.out.println(calculateMonthDifference(date5, date6)); // 输出 2
+
+        LocalDate date7 = LocalDate.of(2020, 3, 1);
+        LocalDate date8 = LocalDate.of(2020, 4, 2);
+        System.out.println(calculateMonthDifference(date7, date8)); // 输出 2
     }
 
 }
