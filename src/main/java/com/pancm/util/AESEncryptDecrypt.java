@@ -74,8 +74,8 @@ public class AESEncryptDecrypt {
 	 * 
 	 * @param content
 	 *            加密内容字节数组
-	 * @param ab
-	 *            密钥字节数组
+	 * @param
+	 *
 	 * @return 密文字节数组
 	 */
 	private static byte[] aesEncrypt(byte[] content, byte[] aesKey) {
