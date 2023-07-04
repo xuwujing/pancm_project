@@ -102,7 +102,6 @@ public class AddressParser {
     // 插入数据到数据库中
     public static void insertData(Connection conn,String tableName, String code, String name, String parentCode) throws Exception {
         Statement stmt = null;
-
         try {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
