@@ -78,6 +78,7 @@ public class WordToHtmlUtil {
             serializer.transform(domSource, streamResult);
             String content = baos.toString();
             logger.info("docToHtmlText--->{}", content);
+
             return content;
         } catch (Exception e) {
             logger.error("docToHtmlText 异常", e);
