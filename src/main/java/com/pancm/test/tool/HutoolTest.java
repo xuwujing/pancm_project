@@ -72,6 +72,9 @@ public class HutoolTest {
     private static  void test1(){
         System.out.println(DateUtil.date(new Date()));
         System.out.println(DateUtil.format(new Date(),"yyyy-MM-dd"));
+        System.out.println(DateUtil.now());
+        System.out.println(DateUtil.parse(DateUtil.now(),"yyyy-MM-dd"));
+        System.out.println(DateUtil.endOfDay(new Date()));
     }
 
 
