@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -26,6 +28,7 @@ public class getPropertiesTest {
 	//当前应用程序的默认配置，test.properties的
 	private static Map<String,String> appSettings = new HashMap<String,String>();
 	private static final Logger log = LoggerFactory.getLogger(getPropertiesTest.class);
+	private final String FILE_NAME = "test.properties";
 	/**
 	 * 初始化系统默认参数
 	 */
@@ -37,9 +40,9 @@ public class getPropertiesTest {
 		InputStream in = null;
 		try{
 			//获取resource中的配置
-			in=getPropertiesTest.class.getClassLoader().getResourceAsStream("test.properties");
+			in=getPropertiesTest.class.getClassLoader().getResourceAsStream(FILE_NAME);
 			//获取项目同级的配置
-			in = new FileInputStream(new File("test.properties"));
+			in = new FileInputStream(new File(FILE_NAME));
 			Properties prop = new Properties();
 			prop.load(in);
 			Set<Entry<Object, Object>> buf = prop.entrySet();
@@ -59,6 +62,18 @@ public class getPropertiesTest {
 				}
 			}
 		}
+	}
+
+	private Map<String, Object> getVersion() {
+		Map<String, Object> versionMap = new HashMap<>();
+		try (InputStream in = Files.newInputStream(Paths.get(FILE_NAME))) {
+			Properties prop = new Properties();
+			prop.load(in);
+			prop.forEach((key, value) -> versionMap.put((String) key, value));
+		} catch (IOException e) {
+			log.error("读取文件失败: " + FILE_NAME, e);
+		}
+		return versionMap;
 	}
 
     /**
