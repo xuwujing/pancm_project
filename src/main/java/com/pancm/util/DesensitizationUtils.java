@@ -31,11 +31,56 @@ public class DesensitizationUtils {
 
 
 
-        // 脱敏其他敏感信息
-        // ...
+        // 脱敏省份
+        data = desensitizeProvince(data);
+
+        // 脱敏城市
+        data = desensitizeCity(data);
+
+        // 脱敏区县
+        data = desensitizeDistrict(data);
+
 
         return data;
     }
+
+    private static String desensitizeProvince(String address) {
+        // 省份正则表达式
+        String regex = "(.*省|.*自治区|.*特别行政区)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(address);
+        if (matcher.find()) {
+            String province = matcher.group();
+            return address.replace(province, "*****");
+        }
+        return address;
+    }
+
+    private static String desensitizeCity(String address) {
+        // 城市正则表达式
+        String regex = "(.*市)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(address);
+        if (matcher.find()) {
+            String city = matcher.group();
+            return address.replace(city, "*****");
+        }
+        return address;
+    }
+
+    private static String desensitizeDistrict(String address) {
+        // 区县正则表达式
+        String regex = "(.*区|.*县)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(address);
+        if (matcher.find()) {
+            String district = matcher.group();
+            return address.replace(district, "*****");
+        }
+        return address;
+    }
+
+
 
     private static String desensitizePhoneNumber(String data) {
         // 手机号正则表达式
@@ -81,5 +126,8 @@ public class DesensitizationUtils {
         System.out.println(desensitize(email)); // Output: joh****@example.com
         System.out.println(desensitize(idNumber)); // Output: 110101********1234
         System.out.println(desensitize(bankCardNumber)); // Output: 622202********1234
+
+        String address = "上海市上海市浦东新区哈哈哈街道123弄234好";
+        System.out.println(desensitize(address)); // Output: *****区*****街道*****
     }
 }
