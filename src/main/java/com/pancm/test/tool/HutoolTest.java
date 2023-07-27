@@ -4,6 +4,7 @@ package com.pancm.test.tool;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.DesensitizedUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
@@ -39,6 +40,9 @@ public class HutoolTest {
     private static void test6() {
         String url ="https://restapi.amap.com/v3/direction/walking?origin=116.434307,39.90909&destination=116.434446,39.90816&key=44cfa7574786e7f35a7f58b545f57819";
         System.out.println(HttpUtil.get(url));
+        String address = "1111";
+        //脱敏
+        DesensitizedUtil.desensitized(address, DesensitizedUtil.DesensitizedType.ADDRESS);
 
     }
       private static void test5() {
