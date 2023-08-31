@@ -1,10 +1,13 @@
 package com.pancm.test.mapTest;
 
+import com.alibaba.fastjson.JSONArray;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /**
  * Title: MapTest
@@ -93,7 +96,30 @@ public class MapTest {
 		treeMap.put("c", 3);
 		treeMap.put("b", 2);
 		System.out.println("TreeMap:"+treeMap);
-		
+
+		// map类型转换  Map<Integer, String> 转成 Map<String, String>
+		Map<Integer, String> map1 = new HashMap<>();
+		map1.put(1, "value1");
+		map1.put(2, "value2");
+		map1.put(3, "value3");
+
+		Map<String, String> map2 = map1.entrySet().stream()
+				.collect(Collectors.toMap(
+						entry -> entry.getKey().toString(),
+						Map.Entry::getValue
+				));
+		System.out.println(map2);
+
+
+		// map类型转换  map转JSONArray
+		Map<Integer, String> map = new HashMap<>();
+		map.put(1, "value1");
+		map.put(2, "value2");
+		map.put(3, "value3");
+
+		JSONArray jsonArray = new JSONArray();
+		jsonArray.addAll(map.entrySet());
+		System.out.println(jsonArray.toJSONString());
 	}
 	
 	
