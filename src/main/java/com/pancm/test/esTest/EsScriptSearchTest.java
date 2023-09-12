@@ -51,7 +51,7 @@ public class EsScriptSearchTest {
 
         try {
             init();
-//            search();
+            search();
             putApi();
             scriptSearch();
         } catch (Exception e) {

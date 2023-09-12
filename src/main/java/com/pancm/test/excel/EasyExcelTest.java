@@ -55,7 +55,7 @@ public class EasyExcelTest {
 
         // 写法2：
         // 匿名内部类 不用额外写一个DemoDataListener
-        fileName = "/home" + "demo" + File.separator + "demo.xlsx";
+        fileName = "test2.xlsx";
         // 这里 需要指定读用哪个class去读，然后读取第一个sheet 文件流会自动关闭
         EasyExcel.read(fileName, DemoData.class, new ReadListener<DemoData>() {
             /**
@@ -144,7 +144,7 @@ public class EasyExcelTest {
         EasyExcel.read(fileName, DemoData.class, new DemoDataListener()).sheet().doRead();
 
         // 写法4：
-        fileName = "/home" + "demo" + File.separator + "demo.xlsx";
+        fileName = "test2.xlsx";
         // 一个文件一个reader
         ExcelReader excelReader = null;
         try {
