@@ -7,10 +7,16 @@ import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.StringUtil;
+import com.pancm.test.pojoTest.TenementPlaceCompanyCodeVO;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -175,7 +181,52 @@ public class EasyExcelUtil2 {
         }
     }
 
+    /**
+     * 获取MultipartFile文件
+     *
+     * @param picPath
+     * @return
+     */
+    private static MultipartFile getMulFileByPath(String picPath) {
+        FileItem fileItem = createFileItem(picPath);
+        MultipartFile mfile = new CommonsMultipartFile(fileItem);
+        return mfile;
+    }
+
+    private static FileItem createFileItem(String filePath) {
+        FileItemFactory factory = new DiskFileItemFactory(16, null);
+        String textFieldName = "textField";
+        int num = filePath.lastIndexOf(".");
+        String extFile = filePath.substring(num);
+        FileItem item = factory.createItem(textFieldName, "text/plain", true,
+                "MyFileName" + extFile);
+        File newfile = new File(filePath);
+        int bytesRead = 0;
+        byte[] buffer = new byte[8192];
+        try {
+            FileInputStream fis = new FileInputStream(newfile);
+            OutputStream os = item.getOutputStream();
+            while ((bytesRead = fis.read(buffer, 0, 8192))
+                    != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+            os.close();
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return item;
+    }
+
+    public static void main(String[] args) throws Exception {
+        List<TenementPlaceCompanyCodeVO> list =  EasyExcelUtil2.readerExcel(getMulFileByPath("test2.xlsx"), TenementPlaceCompanyCodeVO.class);
+        System.out.println(list);
+    }
+
+
 }
+
+
 
 @Data
 class GeneralExcelListener<T> extends AnalysisEventListener<T> {
