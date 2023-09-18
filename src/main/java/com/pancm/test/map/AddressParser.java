@@ -7,13 +7,13 @@ import java.sql.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.pancm.util.MyTools;
+
 /**
  * @Author pancm
  * @Description 获取高德中国的省市区信息并写入到表中
  * 也可以从https://gitcode.net/mirrors/modood/administrative-divisions-of-china/-/blob/master/dist/areas.csv
  * 这里面下载
- *
- * @Date  2023/6/17
+ * @Date 2023/6/17
  * @Param
  * @return
  **/
@@ -35,14 +35,15 @@ public class AddressParser {
             JSONObject countryObj = districtArr.getJSONObject(0);
             JSONArray provinceArr = countryObj.getJSONArray("districts");
             Class.forName(JDBC_DRIVER);
-            Connection   conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            System.out.println("provinceSize:"+provinceArr.size());
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            System.out.println("provinceSize:" + provinceArr.size());
             // 遍历省份列表，插入省份数据到数据库中
             for (int i = 0; i < provinceArr.size(); i++) {
                 JSONObject provinceObj = provinceArr.getJSONObject(i);
                 String provinceCode = provinceObj.getString("adcode");
                 String provinceName = provinceObj.getString("name");
-                insertData(conn,"province", provinceCode, provinceName, "CN");
+                String center = provinceObj.getString("center");
+                insertData(conn, "gaode_province", provinceCode, provinceName, "CN", center);
 
                 // 遍历城市列表，插入城市数据到数据库中
                 JSONArray cityArr = provinceObj.getJSONArray("districts");
@@ -50,7 +51,8 @@ public class AddressParser {
                     JSONObject cityObj = cityArr.getJSONObject(j);
                     String cityCode = cityObj.getString("adcode");
                     String cityName = cityObj.getString("name");
-                    insertData(conn,"city", cityCode, cityName, provinceCode);
+                    center = cityObj.getString("center");
+                    insertData(conn, "gaode_city", cityCode, cityName, provinceCode, center);
 
                     // 遍历区县列表，插入区县数据到数据库中
                     JSONArray districtArr2 = cityObj.getJSONArray("districts");
@@ -58,7 +60,8 @@ public class AddressParser {
                         JSONObject districtObj = districtArr2.getJSONObject(k);
                         String districtCode = districtObj.getString("adcode");
                         String districtName = districtObj.getString("name");
-                        insertData(conn,"district", districtCode, districtName, cityCode);
+                        center = districtObj.getString("center");
+                        insertData(conn, "gaode_district", districtCode, districtName, cityCode, center);
 
                         // 遍历街道列表，插入街道数据到数据库中
                         JSONArray streetArr = districtObj.getJSONArray("districts");
@@ -66,7 +69,8 @@ public class AddressParser {
                             JSONObject streetObj = streetArr.getJSONObject(l);
                             String streetCode = streetObj.getString("adcode");
                             String streetName = streetObj.getString("name");
-                            insertData(conn,"street", streetCode, streetName, districtCode);
+                            center = streetObj.getString("center");
+                            insertData(conn, "gaode_street", streetCode, streetName, districtCode, center);
                         }
                     }
 
@@ -100,13 +104,13 @@ public class AddressParser {
     }
 
     // 插入数据到数据库中
-    public static void insertData(Connection conn,String tableName, String code, String name, String parentCode) throws Exception {
+    public static void insertData(Connection conn, String tableName, String code, String name, String parentCode, String center) throws Exception {
         Statement stmt = null;
         try {
             Class.forName(JDBC_DRIVER);
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             stmt = conn.createStatement();
-            String sql = "INSERT INTO " + tableName + " (code, name, parent_code) VALUES ('" + code + "', '" + name + "', '" + parentCode + "')";
+            String sql = "INSERT INTO " + tableName + " (code, name, parent_code,center) VALUES ('" + code + "', '" + name + "', '" + parentCode + "', '" + center + "')";
             stmt.executeUpdate(sql);
         } catch (SQLException se) {
             se.printStackTrace();
