@@ -49,5 +49,8 @@ public class AmapUtil {
         double latitude = 39.908692;
         String address = AmapUtil.getAddress(longitude, latitude);
         System.out.println(address);
+
+
+
     }
 }
