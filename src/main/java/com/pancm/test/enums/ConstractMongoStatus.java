@@ -71,6 +71,14 @@ public enum ConstractMongoStatus {
         this.desc = desc;
     }
 
+    public Integer getStatus() {
+        return status;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
     public static Integer getValue(Integer value) {
         ConstractMongoStatus[] businessModeEnums = values();
         for (ConstractMongoStatus businessModeEnum : businessModeEnums) {
