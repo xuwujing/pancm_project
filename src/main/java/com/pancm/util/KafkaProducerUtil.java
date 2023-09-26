@@ -1,11 +1,11 @@
 package com.pancm.util;
 
-import java.util.List;
-import java.util.Properties;
-
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
+
+import java.util.List;
+import java.util.Properties;
 
 
 /**

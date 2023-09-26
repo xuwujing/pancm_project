@@ -1,17 +1,16 @@
 package com.pancm.util;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 /**

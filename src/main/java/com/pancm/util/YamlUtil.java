@@ -1,7 +1,9 @@
 package com.pancm.util;
 
 import com.alibaba.fastjson.JSON;
-import com.amihaiemil.eoyaml.*;
+import com.amihaiemil.eoyaml.Yaml;
+import com.amihaiemil.eoyaml.YamlMapping;
+import com.amihaiemil.eoyaml.YamlNode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

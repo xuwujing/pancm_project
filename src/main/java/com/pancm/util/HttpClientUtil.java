@@ -1,10 +1,6 @@
 package com.pancm.util;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import com.alibaba.fastjson.JSONObject;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
@@ -17,7 +13,10 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSONObject;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.Map;
+import java.util.Map.Entry;
 
 
 /**

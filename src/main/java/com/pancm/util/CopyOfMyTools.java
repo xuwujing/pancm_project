@@ -1,11 +1,11 @@
 package com.pancm.util;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import com.alibaba.fastjson.JSONObject;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -14,21 +14,11 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.HttpServletRequest;
-
-import com.alibaba.fastjson.JSONObject;
-
-//import net.sf.json.xml.XMLSerializer; 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+//import net.sf.json.xml.XMLSerializer;
 
 
 /**

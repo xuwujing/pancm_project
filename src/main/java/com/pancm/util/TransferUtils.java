@@ -7,7 +7,8 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLParser;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
 *  yaml转换类

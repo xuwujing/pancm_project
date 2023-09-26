@@ -1,12 +1,12 @@
 package com.pancm.util;
 
+import org.springframework.data.redis.connection.DataType;
+import org.springframework.data.redis.core.ZSetOperations;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
-import org.springframework.data.redis.connection.DataType;
-import org.springframework.data.redis.core.ZSetOperations;
 
 /**
  * The interface Redis command.
