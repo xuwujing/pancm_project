@@ -151,6 +151,8 @@ public class MyHttpRequest {
             out = new PrintWriter(conn.getOutputStream());
             // 发送请求参数
             out.print(param);
+
+
             // flush输出流的缓冲
             out.flush();
             // 定义BufferedReader输入流来读取URL的响应    设置接收格式
