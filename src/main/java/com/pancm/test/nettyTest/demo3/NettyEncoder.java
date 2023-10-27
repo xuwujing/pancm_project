@@ -1,10 +1,10 @@
 package com.pancm.test.nettyTest.demo3;
 
-import java.nio.charset.Charset;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
+
+import java.nio.charset.Charset;
 
 /**
  * Description:Netty自定义编码器

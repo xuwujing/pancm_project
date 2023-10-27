@@ -29,20 +29,29 @@ import java.util.stream.Collectors;
  */
 public class EasyExcelMergeTest {
 
+    //主函数，程序从这里开始
     public static void main(String[] args) {
+        //调用writeExcel()函数
         writeExcel();
+        //调用writeExcel01()函数
         writeExcel01();
+        //调用writeExcel02()函数
         writeExcel02();
+        //调用writeExcel03()函数
         writeExcel03();
     }
 
 
+    //获取当前目录
     private static String getPath(String s) {
+        //Get the current directory from the system property
         return System.getProperty("user.dir") + "/" + s+"_"+System.currentTimeMillis() + ".xlsx";
     }
 
-    private static List<DemoData> data1() {
+   private static List<DemoData> data1() {
+        // 创建一个DemoData的List
         List<DemoData> list = Lists.newArrayList();
+        // 遍历添加3个字符串
         for (int i = 0; i < 3; i++) {
             DemoData data = new DemoData();
             data.setString("字符串" + 1);
@@ -50,6 +59,7 @@ public class EasyExcelMergeTest {
             data.setDoubleData(0.56);
             list.add(data);
         }
+        // 遍历添加3个字符串
         for (int i = 0; i < 3; i++) {
             DemoData data = new DemoData();
             data.setString("字符串" + 2);
@@ -57,16 +67,18 @@ public class EasyExcelMergeTest {
             data.setDoubleData(0.56);
             list.add(data);
         }
+        // 遍历添加4个字符串
         for (int i = 0; i < 4; i++) {
             DemoData data = new DemoData();
             data.setString("字符串" + 3);
+
             data.setDate(new Date());
             data.setDoubleData(0.57);
             list.add(data);
         }
+        // 返回list
         return list;
     }
-
 
 
     // 自定义合并策略 该类继承了AbstractMergeStrategy抽象合并策略，需要重写merge()方法

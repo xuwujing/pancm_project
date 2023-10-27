@@ -1,20 +1,10 @@
 package com.pancm.test.quartzTest.jdbc;
 
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
+
 import java.text.ParseException;
 import java.util.List;
-
-import org.quartz.CronTrigger;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.SchedulerFactory;
-import org.quartz.SimpleScheduleBuilder;
-import org.quartz.SimpleTrigger;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
-import org.quartz.impl.StdSchedulerFactory;
 
 /**
  * The type Quartz jdbc test.

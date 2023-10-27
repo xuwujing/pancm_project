@@ -1,9 +1,9 @@
 package com.pancm.test.hbaseTest;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.alibaba.fastjson.JSONObject;
 
 /**
  * Title: hbaseTest

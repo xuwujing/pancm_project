@@ -1,12 +1,17 @@
 package com.pancm.test.map;
 
-import java.io.*;
-import java.net.*;
-import java.sql.*;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.pancm.util.MyTools;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * @Author pancm

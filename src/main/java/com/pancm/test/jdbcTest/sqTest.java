@@ -1,17 +1,12 @@
 package com.pancm.test.jdbcTest;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSONObject;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Title: sqTest Description:sql语句的一些测试 Version:1.0.0

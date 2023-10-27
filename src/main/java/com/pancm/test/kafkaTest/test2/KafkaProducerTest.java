@@ -1,10 +1,10 @@
 package com.pancm.test.kafkaTest.test2;
 
-import java.util.Properties;
-
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
+
+import java.util.Properties;
 
 
 /**

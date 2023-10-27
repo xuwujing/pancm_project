@@ -1,11 +1,11 @@
 package com.pancm.test.minatest.demo1;
 
-import java.util.Date;
-
 import org.apache.log4j.Logger;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
+
+import java.util.Date;
 
 
 /**

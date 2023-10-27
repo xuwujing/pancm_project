@@ -1,8 +1,5 @@
 package com.pancm.test.minatest.demo;
 
-import java.net.InetSocketAddress;
-import java.util.HashMap;
-
 import org.apache.log4j.Logger;
 import org.apache.mina.core.future.ConnectFuture;
 import org.apache.mina.core.service.IoConnector;
@@ -10,6 +7,9 @@ import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 import org.apache.mina.filter.codec.serialization.ObjectSerializationCodecFactory;
 import org.apache.mina.transport.socket.nio.NioSocketConnector;
+
+import java.net.InetSocketAddress;
+import java.util.HashMap;
 
 
 /**

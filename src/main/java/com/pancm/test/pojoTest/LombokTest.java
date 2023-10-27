@@ -1,16 +1,11 @@
 package com.pancm.test.pojoTest;
 
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import lombok.AllArgsConstructor;
-import lombok.Cleanup;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * The type Lombok test.

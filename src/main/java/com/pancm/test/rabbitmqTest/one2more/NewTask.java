@@ -1,12 +1,12 @@
 package com.pancm.test.rabbitmqTest.one2more;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.MessageProperties;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type New task.

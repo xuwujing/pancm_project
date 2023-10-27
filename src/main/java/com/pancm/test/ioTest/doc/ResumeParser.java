@@ -2,6 +2,7 @@ package com.pancm.test.ioTest.doc;
 
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.seg.common.Term;
+
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

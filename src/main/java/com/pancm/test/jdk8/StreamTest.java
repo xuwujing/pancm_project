@@ -1,5 +1,9 @@
 package com.pancm.test.jdk8;
 
+import com.pancm.test.pojoTest.Student;
+import com.pancm.test.pojoTest.User;
+import org.springframework.beans.BeanUtils;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,11 +12,6 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
-import clojure.lang.Obj;
-import com.pancm.test.pojoTest.Student;
-import com.pancm.test.pojoTest.User;
-import org.springframework.beans.BeanUtils;
 
 /**
  * The type Stream test.

@@ -1,10 +1,10 @@
 package com.pancm.test.kafkaTest.others;
 
-import java.util.Properties;
-
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+
+import java.util.Properties;
 
 /**
  * The type Test producer.

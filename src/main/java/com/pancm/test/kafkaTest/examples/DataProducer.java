@@ -1,11 +1,11 @@
 package com.pancm.test.kafkaTest.examples;
 
-import java.util.Properties;
-import java.util.Random;
-
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+
+import java.util.Properties;
+import java.util.Random;
 
 /**
  * The type Data producer.

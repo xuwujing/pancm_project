@@ -1,11 +1,7 @@
 package com.pancm.test.timerTest;
+
 import java.util.Calendar;
 import java.util.Date;
-/**
- * @author ZERO
- * @Data 2017-6-3 下午2:37:04
- * @Description 
- */
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;

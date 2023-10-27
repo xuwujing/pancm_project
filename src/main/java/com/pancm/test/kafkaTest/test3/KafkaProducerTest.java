@@ -1,12 +1,11 @@
 package com.pancm.test.kafkaTest.test3;
 
-import java.util.Properties;
-
+import com.alibaba.fastjson.JSONObject;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
-import com.alibaba.fastjson.JSONObject;
+import java.util.Properties;
 
 /**
  * Title: KafkaProducerTest

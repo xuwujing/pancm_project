@@ -1,13 +1,12 @@
 package com.pancm.test.rabbitmqTest.one2one;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.Channel;
-//生产者 ( Producer:数据的发送方)
-//单发送单接收 //单发送单接收  Send.java和Recv.java类
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Send.

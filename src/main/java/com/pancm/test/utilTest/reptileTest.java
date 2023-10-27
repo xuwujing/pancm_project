@@ -1,11 +1,7 @@
 package com.pancm.test.utilTest;
 
 import com.geccocrawler.gecco.GeccoEngine;
-import com.geccocrawler.gecco.annotation.Gecco;
-import com.geccocrawler.gecco.annotation.Html;
-import com.geccocrawler.gecco.annotation.HtmlField;
-import com.geccocrawler.gecco.annotation.RequestParameter;
-import com.geccocrawler.gecco.annotation.Text;
+import com.geccocrawler.gecco.annotation.*;
 import com.geccocrawler.gecco.spider.HtmlBean;
 
 /**

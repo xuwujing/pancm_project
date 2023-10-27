@@ -1,11 +1,11 @@
 package com.pancm.test.minatest.demo1;
 
-import java.nio.charset.Charset;
-
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolEncoder;
+
+import java.nio.charset.Charset;
 
 /**
  * The type My text line codec factory.

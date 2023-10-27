@@ -1,11 +1,11 @@
 package com.pancm.test.kafkaTest.others;
 
-import java.util.Arrays;
-import java.util.Properties;
-
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+
+import java.util.Arrays;
+import java.util.Properties;
 
 /**
  * The type Test consumer.

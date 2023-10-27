@@ -1,8 +1,8 @@
 package com.pancm.test.pojoTest;
 
-import java.util.Map;
-
 import com.pancm.util.MyTools;
+
+import java.util.Map;
 
 /**
  * Title: User Description:用户pojo类 Version:1.0.0

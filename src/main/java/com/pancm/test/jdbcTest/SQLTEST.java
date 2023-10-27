@@ -1,7 +1,9 @@
 package com.pancm.test.jdbcTest;
 
-import com.pancm.util.*;
-import org.apache.storm.command.list;
+import com.pancm.util.ConnectionManager2;
+import com.pancm.util.DBUtil;
+import com.pancm.util.DBUtil1;
+import com.pancm.util.GetProperties;
 
 import java.sql.SQLException;
 import java.util.HashMap;

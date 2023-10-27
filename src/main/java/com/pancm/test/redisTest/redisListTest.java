@@ -1,8 +1,8 @@
 package com.pancm.test.redisTest;
 
-import java.util.List;
-
 import redis.clients.jedis.Jedis;
+
+import java.util.List;
 
 /**
  * Title: redisStringTest

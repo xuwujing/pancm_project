@@ -1,8 +1,5 @@
 package com.pancm.test.others;
 
-import cn.hutool.core.date.DateUtil;
-import com.pancm.util.MyTools;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -10,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class ContractYearChecker {
     public static void main(String[] args) {

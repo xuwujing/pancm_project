@@ -1,8 +1,6 @@
 package com.pancm.test.redisTest;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import com.pancm.util.MyTools;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
@@ -13,10 +11,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
-
-import com.pancm.util.MyTools;
-
 import redis.clients.jedis.JedisPoolConfig;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The type Redis config.

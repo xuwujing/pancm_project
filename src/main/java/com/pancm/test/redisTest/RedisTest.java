@@ -1,10 +1,10 @@
 package com.pancm.test.redisTest;
 
+import redis.clients.jedis.Jedis;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import redis.clients.jedis.Jedis;
 
 /**
  * The type Redis test.

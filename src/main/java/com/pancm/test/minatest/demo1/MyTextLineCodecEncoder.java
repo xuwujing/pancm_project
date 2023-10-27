@@ -1,12 +1,12 @@
 package com.pancm.test.minatest.demo1;
 
-import java.nio.charset.Charset;
-
 import org.apache.log4j.Logger;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolEncoder;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
+
+import java.nio.charset.Charset;
 
 /**
  * The type My text line codec encoder.

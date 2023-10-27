@@ -1,11 +1,12 @@
 package com.pancm.test.rabbitmqTest.one2one;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.QueueingConsumer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**

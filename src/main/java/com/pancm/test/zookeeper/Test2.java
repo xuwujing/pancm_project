@@ -1,10 +1,10 @@
 package com.pancm.test.zookeeper;
 
-import java.io.IOException;
-
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
+
+import java.io.IOException;
 
 /**
  * The type Test 2.

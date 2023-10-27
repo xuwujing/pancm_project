@@ -1,12 +1,12 @@
 package com.pancm.test.rabbitmqTest.demo;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.alibaba.fastjson.JSON;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The type Rabbit producer.

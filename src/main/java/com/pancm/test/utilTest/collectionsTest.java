@@ -1,15 +1,15 @@
 package com.pancm.test.utilTest;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.apache.commons.collections.Bag;
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.Factory;
 import org.apache.commons.collections.HashBag;
 import org.apache.commons.collections.bidimap.TreeBidiMap;
 import org.apache.commons.collections.list.LazyList;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Title: collections
