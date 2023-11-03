@@ -90,38 +90,56 @@ public final class MyTools {
     }
 
     public static boolean equalsIgnoreCase(CharSequence str1, CharSequence str2) {
+        //比较两个字符串是否相等，忽略大小写
         if (str1 != null && str2 != null) {
+            //如果两个字符串都不为空
             if (str1 == str2) {
+                //如果两个字符串相等
                 return true;
             }
+            //如果两个字符串不相等
             return str1.length() != str2.length() ? false : regionMatches(str1, true, 0, str2, 0, str1.length());
+
+            //比较两个字符串的长度，如果长度不相等，返回false，如果相等，比较两个字符串的每一个字符，忽略大小写
 
         }
         return str1 == str2;
+
+        //如果两个字符串有一个为空，返回false
 
     }
 
 
     private static boolean regionMatches(CharSequence cs, boolean ignoreCase, int thisStart, CharSequence substring, int start, int length) {
+        // 判断cs和substring是否都是String类型
         if (cs instanceof String && substring instanceof String) {
+            // 调用String的regionMatches方法，判断cs和substring是否相等
             return ((String) cs).regionMatches(ignoreCase, thisStart, (String) substring, start, length);
         } else {
+            // 定义两个索引变量
             int index1 = thisStart;
             int index2 = start;
+            // 定义一个变量，用于存储length
             int var8 = length;
 
+            // 循环判断cs和substring是否相等
             while (var8-- > 0) {
+                // 获取cs和substring的charAt方法
                 char c1 = cs.charAt(index1++);
                 char c2 = substring.charAt(index2++);
+                // 判断cs和substring是否相等
                 if (c1 != c2) {
+                    // 如果ignoreCase为false，则返回false
                     if (!ignoreCase) {
                         return false;
                     }
+                    // 判断cs和substring是否忽略大小写相等
                     if (Character.toUpperCase(c1) != Character.toUpperCase(c2) && Character.toLowerCase(c1) != Character.toLowerCase(c2)) {
                         return false;
                     }
                 }
             }
+            // 如果相等，则返回true
             return true;
         }
     }
@@ -214,21 +232,27 @@ public final class MyTools {
      * @return
      */
     public static boolean isEmpty(Object target) {
+        //判断传入的参数是否为空
         if (target == null) {
             return true;
         }
+        //判断传入的参数是否为Integer类型
         if (target.getClass().equals(Integer.class)) {
             return ((Integer) target) == 0;
         }
+        //判断传入的参数是否为String类型
         if (target.getClass().equals(String.class)) {
             return ((String) target).isEmpty() || ((String) target).replaceAll("\\s", "").isEmpty();
         }
+        //判断传入的参数是否为String[]类型
         if (target.getClass().equals(String[].class)) {
             return ((String[]) target).length == 0;
         }
+        //判断传入的参数是否为List类型
         if (target instanceof List) {
             return ((List) target).isEmpty();
         }
+        //判断传入的参数是否为Map类型
         if (target instanceof Map) {
             return ((Map) target).isEmpty();
         }
