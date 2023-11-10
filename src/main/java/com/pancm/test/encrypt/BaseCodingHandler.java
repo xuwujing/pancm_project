@@ -188,9 +188,8 @@ public class BaseCodingHandler implements IBaseCodingHandler {
         // 初始化加密对象
         cipher.init(Cipher.ENCRYPT_MODE, key);// 初始化
         // 加密成密文字节数组
-        byte[] result = cipher.doFinal(tmpContent);
         // 返回结果
-        return result; // 加密
+        return cipher.doFinal(tmpContent); // 加密
     }
 
 
@@ -255,8 +254,12 @@ public class BaseCodingHandler implements IBaseCodingHandler {
      *
      */
     public static byte[] parseHexStr2Byte(String hexStr) {
-        if (hexStr.length() < 1)
+        if (hexStr.isEmpty())
             return null;
+        return getBytes(hexStr);
+    }
+
+    public static byte[] getBytes(String hexStr) {
         byte[] result = new byte[hexStr.length() / 2];
         for (int i = 0; i < hexStr.length() / 2; i++) {
             int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);
@@ -267,9 +270,8 @@ public class BaseCodingHandler implements IBaseCodingHandler {
     }
 
 
-
     private  boolean isEmpty(String str) {
-        return (null == str || str.trim().length() == 0);
+        return (null == str || str.trim().isEmpty());
     }
 
 
