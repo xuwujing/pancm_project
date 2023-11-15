@@ -6,16 +6,16 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFPictureData;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 
 public class WordToMarkdownConverter {
 
     public static void main(String[] args) {
         try {
             File wordFile = new File("input.docx");
-            XWPFDocument document = new XWPFDocument(new FileInputStream(wordFile));
+            XWPFDocument document = new XWPFDocument(Files.newInputStream(wordFile.toPath()));
             XWPFWordExtractor extractor = new XWPFWordExtractor(document);
 
             StringBuilder markdownContent = new StringBuilder();

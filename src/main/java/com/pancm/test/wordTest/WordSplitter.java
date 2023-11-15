@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,7 +12,6 @@ import java.util.List;
  * @Description word文件切割
  * @Date 2023/11/15
  * @Param
- * @return
  **/
 public class WordSplitter {
     public static void main(String[] args) throws IOException {
@@ -32,9 +32,7 @@ public class WordSplitter {
                 content.append(new String(buffer, 0, len));
             }
             String[] words = content.toString().split("\\s+");
-            for (String word : words) {
-                lines.add(word);
-            }
+            Collections.addAll(lines, words);
         }
         return lines;
     }
