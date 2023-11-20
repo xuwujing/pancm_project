@@ -78,6 +78,7 @@ public class QrCodeCreateUtil {
         } catch (ReaderException e) {
             e.printStackTrace();
         }
+        assert result != null;
         System.out.println(result.getText());
     }
 
@@ -93,18 +94,16 @@ public class QrCodeCreateUtil {
         String qrInfo = null;
         try {
             //判断图片路径是否为空
-            if (imagePath == null || "".equals(imagePath.trim())) {
+            if (imagePath == null || imagePath.trim().isEmpty()) {
                 System.err.println("Parameter \'imagePath\' cannot be empty");
-                qrInfo = null;
-                return qrInfo;
+                return null;
             }
 
             //判断图片文件是否存在
             File imageFile = new File(imagePath);
             if (!imageFile.exists()) {
                 System.err.println("The image file is not exits");
-                qrInfo = null;
-                return qrInfo;
+                return null;
             }
 
             //判断是否为图片
@@ -112,28 +111,24 @@ public class QrCodeCreateUtil {
                 Image image = ImageIO.read(imageFile);
                 if (image == null) {
                     System.err.println("The image file is not real picture");
-                    qrInfo = null;
-                    return qrInfo;
+                    return null;
                 }
             } catch (IOException ex) {
                 System.err.println("The image file is not real picture");
-                qrInfo = null;
-                return qrInfo;
+                return null;
             }
 
             //判断缓存目录是否为空
-            if (cachePath == null || "".equals(cachePath.trim())) {
+            if (cachePath == null || cachePath.trim().isEmpty()) {
                 System.err.println("Parameter \'cachePath\' cannot be empty");
-                qrInfo = null;
-                return qrInfo;
+                return null;
             }
 
             //判断缓存目录是否存在
             File cacheFile = new File(cachePath);
             if (!cacheFile.exists() || !cacheFile.isDirectory()) {
                 System.err.println("cachePath is not exits or is not directory");
-                qrInfo = null;
-                return qrInfo;
+                return null;
             }
 
             ImageIO.setCacheDirectory(new File(cachePath));
@@ -147,8 +142,7 @@ public class QrCodeCreateUtil {
             qrInfo = result.getText();
             return qrInfo;
         } catch (Exception e) {
-            qrInfo = null;
-            return qrInfo;
+            return null;
         }
 
     }
