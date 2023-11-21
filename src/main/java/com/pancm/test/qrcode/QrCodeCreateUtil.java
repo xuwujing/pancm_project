@@ -12,7 +12,11 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -192,8 +196,8 @@ public class QrCodeCreateUtil {
 
 
     private static void test1() throws IOException, WriterException {
-        createQrCode(new FileOutputStream(new File("d:\\pancm.jpg")), "http://www.panchengming.com", 900, "JPEG");
-        readQrCode(new FileInputStream(new File("d:\\pancm.jpg")));
+        createQrCode(Files.newOutputStream(new File("d:\\pancm.jpg").toPath()), "http://www.panchengming.com", 900, "JPEG");
+        readQrCode(Files.newInputStream(new File("d:\\pancm.jpg").toPath()));
     }
 
     private static void test2() throws IOException, WriterException {
@@ -203,8 +207,8 @@ public class QrCodeCreateUtil {
         jsonObject.put("3","c");
         String filePath = "d:\\test\\test.jpg";
 //        String filePath = "d:\\test\\Lark20210428-165847.jpeg";
-        createQrCode(new FileOutputStream(new File(filePath)), jsonObject.toJSONString(), 900, "JPEG");
-        readQrCode(new FileInputStream(new File(filePath)));
+        createQrCode(Files.newOutputStream(new File(filePath).toPath()), jsonObject.toJSONString(), 900, "JPEG");
+        readQrCode(Files.newInputStream(new File(filePath).toPath()));
     }
 
     private static void test3() throws IOException, WriterException {
