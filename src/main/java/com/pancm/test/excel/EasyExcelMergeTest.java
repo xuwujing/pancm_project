@@ -183,14 +183,12 @@ public class EasyExcelMergeTest {
     public static void writeExcel02() {
         String fileName = getPath("多sheet");
         ExcelWriter excelWriter = EasyExcel.write(fileName).excelType(ExcelTypeEnum.XLSX).build();
-
         List<DemoData> demoDataList = data1();
         WriteSheet writeSheet = EasyExcel.writerSheet("模板1").head(DemoData.class)
                 .registerWriteHandler(new CustomMergeStrategy(demoDataList.stream().map(DemoData::getString).collect(Collectors.toList()), 0))
                 .registerWriteHandler(new CustomMergeStrategy(demoDataList.stream().map(o -> o.getDoubleData().toString()).collect(Collectors.toList()), 2))
                 .build();
         excelWriter.write(demoDataList, writeSheet);
-
         WriteSheet writeSheet1 = EasyExcel.writerSheet("模板2").head(DemoData.class).build();
         excelWriter.write(data1(), writeSheet1);
         excelWriter.finish();
@@ -201,7 +199,6 @@ public class EasyExcelMergeTest {
         String fileName = getPath("多表");
         ExcelWriter excelWriter = EasyExcel.write(fileName).excelType(ExcelTypeEnum.XLSX).build();
         WriteSheet writeSheet = EasyExcel.writerSheet("模板").needHead(Boolean.FALSE).build();
-
         List<DemoData> demoDataList = data1();
         // 需要表头设置为true，WriteTable一些属性会继承自WriteSheet
         WriteTable writeTable = EasyExcel.writerTable(1).head(DemoData.class).needHead(Boolean.TRUE)
@@ -209,7 +206,6 @@ public class EasyExcelMergeTest {
                 .registerWriteHandler(new CustomMergeStrategy(demoDataList.stream().map(o -> o.getDoubleData().toString()).collect(Collectors.toList()), 2))
                 .build();
         excelWriter.write(demoDataList, writeSheet, writeTable);
-
         WriteTable writeTable1 = EasyExcel.writerTable(2).head(DemoData.class).needHead(Boolean.TRUE).build();
         excelWriter.write(data1(), writeSheet, writeTable1);
         excelWriter.finish();
