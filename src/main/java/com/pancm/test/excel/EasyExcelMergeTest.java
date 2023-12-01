@@ -71,7 +71,6 @@ public class EasyExcelMergeTest {
         for (int i = 0; i < 4; i++) {
             DemoData data = new DemoData();
             data.setString("字符串" + 3);
-
             data.setDate(new Date());
             data.setDoubleData(0.57);
             list.add(data);
