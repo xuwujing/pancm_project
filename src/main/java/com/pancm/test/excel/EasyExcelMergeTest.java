@@ -134,10 +134,8 @@ public class EasyExcelMergeTest {
             if (CollectionUtils.isEmpty(exportDataList)) {
                 return new ArrayList<>();
             }
-
             List<Integer> groupCountList = new ArrayList<>();
             int count = 1;
-
             for (int i = 1; i < exportDataList.size(); i++) {
                 if (exportDataList.get(i).equals(exportDataList.get(i - 1))) {
                     count++;
@@ -156,7 +154,6 @@ public class EasyExcelMergeTest {
     public static void writeExcel() {
         String fileName = getPath("单列多行");
         ExcelWriter excelWriter = EasyExcel.write(fileName).excelType(ExcelTypeEnum.XLSX).build();
-
         List<DemoData> demoDataList = data1();
         // 写sheet的时候注册相应的自定义合并单元格策略
         WriteSheet writeSheet = EasyExcel.writerSheet("模板1").head(DemoData.class)
@@ -170,7 +167,6 @@ public class EasyExcelMergeTest {
     public static void writeExcel01() {
         String fileName = getPath("多行多列");
         ExcelWriter excelWriter = EasyExcel.write(fileName).excelType(ExcelTypeEnum.XLSX).build();
-
         List<DemoData> demoDataList = data1();
         WriteSheet writeSheet = EasyExcel.writerSheet("模板1").head(DemoData.class)
                 .registerWriteHandler(new CustomMergeStrategy(demoDataList.stream().map(DemoData::getString).collect(Collectors.toList()), 0))
