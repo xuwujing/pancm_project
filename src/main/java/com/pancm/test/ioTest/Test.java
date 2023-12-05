@@ -58,8 +58,6 @@ public class Test {
 	}
 	
 	
-	
-	
 
 	/**
 	 * 字符流
