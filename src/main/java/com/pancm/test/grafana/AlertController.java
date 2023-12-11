@@ -51,6 +51,7 @@ public class AlertController {
         restTemplate.postForEntity(webHookUrl, new HttpEntity<>(m, headers), Void.class);
     }
 
+
     /**
      * 构建通知报文
      *
