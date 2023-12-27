@@ -24,8 +24,11 @@ public class SetSystemProperty {
 		Properties props = new Properties();
 		InputStream in = null;
 		try {
+			// 创建一个缓冲流，用于读取文件
 			in = new BufferedInputStream(new FileInputStream(profilepath));
+			// 加载文件
 			props.load(in);
+			// 获取指定key的值
 			String value = props.getProperty(key);
 			return value;
 		} catch (Exception e) {
@@ -34,6 +37,7 @@ public class SetSystemProperty {
 		} finally {
 			if (in != null)
 				try {
+					// 关闭流
 					in.close();
 				} catch (IOException e) {
 					e.printStackTrace();
