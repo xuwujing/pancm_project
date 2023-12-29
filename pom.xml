@@ -258,10 +258,17 @@
         </dependency>
 
         <!--SQL Server 驱动包 -->
-        <dependency>
+  <!--      <dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>sqljdbc4</artifactId>
             <version>4.0</version>
+        </dependency>-->
+
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>6.2.0.jre8</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- 数据库相关jar end -->
@@ -568,6 +575,20 @@
             <artifactId>hanlp</artifactId>
             <version>portable-1.8.4</version>
         </dependency>
+
+
+    <!-- opencv -->
+     <!--       <dependency>
+                <groupId>org.openpvn</groupId>
+                <artifactId>opencv</artifactId>
+                <version>4.5.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openpvn</groupId>
+                <artifactId>opencv-java-headless</artifactId>
+                <version>4.5.4</version>
+            </dependency>
+-->
 
     </dependencies>
 
