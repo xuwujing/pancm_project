@@ -59,10 +59,8 @@ public class App {
         a[0] = "ajkj";
         a[1] = "sahsja";
 
-
         //声明一个App类型的变量nb
         App nb = new App();
-
         //调用nb的add方法，添加字符串
         nb.add("gshaghsagdjas");
         nb.add("dgshadgsjha");
