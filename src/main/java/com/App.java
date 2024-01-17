@@ -47,8 +47,6 @@ public class App {
             a[i] = notes.get(i);
         }
         return a;
-
-
     }
 
     public static void main(String[] args) {
