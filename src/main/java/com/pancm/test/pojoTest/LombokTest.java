@@ -134,7 +134,7 @@ public class LombokTest {
 
 
 	/**
-	 * @param name2
+	 * @param
 	 */
 	private static void test3(String name) {
 		if(null == name) {
@@ -144,7 +144,7 @@ public class LombokTest {
 	}
 	
 	/**
-	 * @param name2
+	 * @param
 	 */
 	private static void test4(@NonNull String name) {
 		System.out.println(name);
