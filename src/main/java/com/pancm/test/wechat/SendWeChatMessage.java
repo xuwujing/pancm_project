@@ -129,7 +129,7 @@ public class SendWeChatMessage {
             //关闭输出通道
             outputStream.close();
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+           e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (ProtocolException e) {
