@@ -27,14 +27,12 @@ public class WordToMarkdownConverter {
                 // Append the paragraph text to the markdownContent
                 markdownContent.append(paragraph.getText()).append("\n");
             }
-
             // Iterate through all the pictures in the document
             for (XWPFPictureData picture : document.getAllPictures()) {
                 // Get the picture data
                 byte[] pictureData = picture.getData();
                 // Save pictureData to file and include link in markdownContent
             }
-
             // Write the markdownContent to a file
             FileWriter writer = new FileWriter("output.md");
             writer.write(markdownContent.toString());

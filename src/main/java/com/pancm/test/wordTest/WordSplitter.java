@@ -21,7 +21,6 @@ public class WordSplitter {
             System.out.println(line);
         }
     }
-
    public static List<String> splitWordFile(File file) throws IOException {
         //Create a list to store the words
         List<String> lines = new ArrayList<>();
