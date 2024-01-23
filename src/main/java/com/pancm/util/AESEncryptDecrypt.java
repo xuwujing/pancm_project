@@ -126,7 +126,6 @@ public class AESEncryptDecrypt {
 			SecretKeySpec skp = new SecretKeySpec(aesKey, "AES");
 			// 设置加密模式与填充方法
 			Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
-
 			// 初始化解密对象
 			cipher.init(Cipher.DECRYPT_MODE, skp);
 			// 解密成明文字节数组
@@ -247,7 +246,6 @@ public class AESEncryptDecrypt {
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;
-			
 		}
 		return plainText;
 	}
