@@ -10,6 +10,7 @@ import java.util.Map;
 /**
  * @Author pancm
  * @Description Postgres备份还原
+ * navicat可以远程连接ssh(外网ssh登录)，然后通过ssh登录到内网数据库服务器，通过navicat连接内网数据库服务器，
  * @Date  2024/1/25
  * @Param
  * @return
