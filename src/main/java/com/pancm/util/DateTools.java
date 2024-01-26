@@ -120,10 +120,14 @@ public class DateTools {
      * @param date the date
      * @return the string
      */
-    public static String parseDate(Date date) {
+   public static String parseDate(Date date) {
+        //Convert Date object to Instant object
         Instant instant = date.toInstant();
+        //Get the default timezone
         ZoneId zone = ZoneId.systemDefault();
+        //Convert Instant object to LocalDateTime object
         LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zone);
+        //Format the LocalDateTime object
         return formaterLocalDateTime(localDateTime);
     }
 
@@ -138,9 +142,12 @@ public class DateTools {
      * @throws ParseException 转换异常
      * @see LocalDateTime
      */
-    public static LocalDateTime parseLocalDateTime(final String str, final String dateFormat) throws ParseException {
+   public static LocalDateTime parseLocalDateTime(final String str, final String dateFormat) throws ParseException {
+        //Create a LocalDateTime object from the given string and date format
         LocalDateTime localDateTime = LocalDateTime.parse(str, DateTimeFormatter.ofPattern(DATE_FORMAT_DATETIME));
+        //Create a DateTimeFormatter object from the given date format
         DateTimeFormatter ofPattern = DateTimeFormatter.ofPattern(dateFormat);
+        //Return the LocalDateTime object parsed using the given date format
         return LocalDateTime.parse(localDateTime.format(ofPattern), ofPattern);
     }
 
