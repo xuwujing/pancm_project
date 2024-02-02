@@ -21,7 +21,6 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 public class CmdHelper {
-
     public static boolean testMount(String ip) throws IOException, InterruptedException {
         List<String> stringList = new ArrayList<>();
         stringList.add("cmd.exe");
@@ -37,13 +36,13 @@ public class CmdHelper {
     }
 
     /**
-    * @Author beixing
-    * @Description  创建挂载，挂载的地址和盘符
-    * @Date  2021/8/16
-    * @Param
-    * @return
-    **/
-    public static boolean createMount(String url,String driverName) throws IOException, InterruptedException {
+     * @return
+     * @Author beixing
+     * @Description 创建挂载，挂载的地址和盘符
+     * @Date 2021/8/16
+     * @Param
+     **/
+    public static boolean createMount(String url, String driverName) throws IOException, InterruptedException {
         List<String> stringList = new ArrayList<>();
         stringList.add("cmd.exe");
         stringList.add("/c");
@@ -58,11 +57,11 @@ public class CmdHelper {
     }
 
     /**
-     * @Author beixing
-     * @Description  删除映射关系，挂载的地址和盘符
-     * @Date  2021/8/16
-     * @Param
      * @return
+     * @Author beixing
+     * @Description 删除映射关系，挂载的地址和盘符
+     * @Date 2021/8/16
+     * @Param
      **/
     public static boolean delMount(String driverName) throws IOException, InterruptedException {
         List<String> stringList = new ArrayList<>();
@@ -81,11 +80,11 @@ public class CmdHelper {
     }
 
     /**
-     * @Author beixing
-     * @Description  删除映射关系，挂载的地址和盘符
-     * @Date  2021/8/16
-     * @Param
      * @return
+     * @Author beixing
+     * @Description 删除映射关系，挂载的地址和盘符
+     * @Date 2021/8/16
+     * @Param
      **/
     public static boolean delLink(String linkName) throws IOException, InterruptedException {
         List<String> stringList = new ArrayList<>();
@@ -100,16 +99,16 @@ public class CmdHelper {
     }
 
     /**
-     * @Author beixing
-     * @Description  创建链接
-     * @Date  2021/8/16
-     * @Param
      * @return
+     * @Author beixing
+     * @Description 创建链接
+     * @Date 2021/8/16
+     * @Param
      **/
-    public static boolean createLink(String linkName,String driverName) throws IOException, InterruptedException {
+    public static boolean createLink(String linkName, String driverName) throws IOException, InterruptedException {
 
         Process process = Runtime.getRuntime().
-                exec("runas /profile /user:Administrator \"cmd.exe /c mklink /d C:\\Users\\Administrator\\Desktop\\"+linkName+" "+driverName+ "\"");
+                exec("runas /profile /user:Administrator \"cmd.exe /c mklink /d C:\\Users\\Administrator\\Desktop\\" + linkName + " " + driverName + "\"");
 //                exec("runas /trustlevel:0x40000 \"cmd.exe /c mklink /d C:\\Users\\Administrator\\Desktop\\"+linkName+" "+driverName+ "\"");
         process.waitFor(30, TimeUnit.SECONDS);
         process.destroy();
@@ -121,7 +120,7 @@ public class CmdHelper {
             sbf.append(" ");
         }
         String resultInfo = sbf.toString();
-        log.info("result:{}" , resultInfo);
+        log.info("result:{}", resultInfo);
         return true;
 //        List<String> stringList = new ArrayList<>();
 //        stringList.add("cmd.exe");
@@ -152,7 +151,7 @@ public class CmdHelper {
             sbf.append(" ");
         }
         String resultInfo = sbf.toString();
-        log.info("result:{}" , resultInfo);
+        log.info("result:{}", resultInfo);
         p1.destroy();
         return resultInfo;
     }
@@ -163,7 +162,7 @@ public class CmdHelper {
         String ip = "192.168.6.191";
         String url = "\\\\192.168.6.191\\data";
         String drive = "x:";
-        String linkName = user +"_"+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        String linkName = user + "_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 //        System.out.println(testMount(ip));
 //        System.out.println(createMount(url,drive));
 //        System.out.println(createLink(linkName,drive));
