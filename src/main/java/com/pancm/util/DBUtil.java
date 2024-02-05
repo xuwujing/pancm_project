@@ -170,7 +170,6 @@ public class DBUtil {
 	 * @throws SQLException SQL异常
 	 */
 	public  int insert(String tableName, Map<String, Object> valueMap) throws SQLException {
-
 		/** 获取数据库插入的Map的键值对的值 **/
 		Set<String> keySet = valueMap.keySet();
 		Iterator<String> iterator = keySet.iterator();
