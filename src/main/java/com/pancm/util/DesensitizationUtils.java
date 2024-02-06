@@ -16,10 +16,8 @@ public class DesensitizationUtils {
         if (data == null || data.isEmpty()) {
             return data;
         }
-
         // 脱敏手机号
         data = desensitizePhoneNumber(data);
-
         // 脱敏邮箱
         data = desensitizeEmail(data);
 
