@@ -61,7 +61,6 @@ public class RedisPoolUtil {
     public static String set(String key,String value){
         Jedis jedis = null;
         String result = null;
-
         try {
             jedis = RedisPool.getJedis();
             result = jedis.set(key,value);
