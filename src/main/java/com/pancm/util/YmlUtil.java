@@ -146,7 +146,7 @@ public class YmlUtil {
     public static void main(String[] args) {
         try {
             YmlUtil.setYmlFile(new File("application.yml"));
-            YmlUtil.saveOrUpdateByKey("agg.uptime","2021-03-29 00:00:01");
+            YmlUtil.saveOrUpdateByKey("agg.uptime","2024-02-21 00:00:01");
         } catch (Exception e) {
             e.printStackTrace();
         }
