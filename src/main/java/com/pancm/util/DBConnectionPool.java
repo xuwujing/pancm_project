@@ -61,12 +61,10 @@ public class DBConnectionPool {
             cpds.setIdleConnectionTestPeriod(60);
             /**最大空闲时间,超过空闲时间的连接将被丢弃.为0或负数据则永不丢弃.默认为0;**/
             cpds.setMaxIdleTime(3000);
-
             /**因性能消耗大请只在需要的时候使用它。如果设为true那么在每个connection提交的
              时候都将校验其有效性。建议使用idleConnectionTestPeriod或automaticTestTable
              等方法来提升连接测试的性能。Default: false**/
             cpds.setTestConnectionOnCheckout(true);
-
             /**如果设为true那么在取得连接的同时将校验连接的有效性。Default: false **/
             cpds.setTestConnectionOnCheckin(true);
             /**定义在从数据库获取新的连接失败后重复尝试获取的次数，默认为30;**/
