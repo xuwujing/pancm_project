@@ -69,7 +69,6 @@ public class ConnectionManager {
 				logger.error("数据库连接失败!程序退出!");
 				System.exit(1);
 			}
-			
 			// 连接成功并且是明文的话,就直接回写密文
 			if (password2 == null) {
 				logger.info("从数据库的密码是明文!");
