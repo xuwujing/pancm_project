@@ -97,7 +97,6 @@ public class HttpClientUtil {
 				method.addHeader("Content-type",
 						"application/json; charset=utf-8");
 				method.setHeader("Accept", "application/json");
-
 				HttpResponse response = httpClient.execute(method);
 				int statusCode = response.getStatusLine().getStatusCode();
 				if (statusCode != HttpStatus.SC_OK) {
@@ -142,18 +141,14 @@ public class HttpClientUtil {
 				method.setHeader("Accept", "application/json");
 				method.setEntity(new StringEntity(parameters, Charset
 						.forName("UTF-8")));
-
 				HttpResponse response = httpClient.execute(method);
-
 				int statusCode = response.getStatusLine().getStatusCode();
-
 				// logger.debug("statusCode:" + statusCode);
 				if (statusCode != HttpStatus.SC_OK) {
 					logger.error("Method failed:" + response.getStatusLine());
 					logger.error("Request:"+parameters);
 					throw new Exception("statusCode：" + statusCode);
 				}
-
 				// Read the response body
 				body = EntityUtils.toString(response.getEntity());
 			}	
