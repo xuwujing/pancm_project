@@ -13,7 +13,6 @@ import org.springframework.context.ApplicationContextAware;
 public class GetSpringBean implements ApplicationContextAware{
 
 	private static ApplicationContext context;
-
     /**
      * Gets bean.
      *
@@ -23,7 +22,6 @@ public class GetSpringBean implements ApplicationContextAware{
     public static Object getBean(String name) {
 		return context.getBean(name);
 	}
-
     /**
      * Gets bean.
      *
