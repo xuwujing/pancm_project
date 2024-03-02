@@ -97,7 +97,6 @@ public class CmdHelper {
         String resultInfo = execCmd(stringList);
         return true;
     }
-
     /**
      * @return
      * @Author beixing

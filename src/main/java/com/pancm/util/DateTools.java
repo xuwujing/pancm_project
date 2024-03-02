@@ -298,7 +298,6 @@ public class DateTools {
     public static String formaterLocalDateTime(final LocalDateTime dateTime) {
         return dateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATETIME));
     }
-
     /**
      * 将localDateTime 格式化成特定格式的字符串.
      *
