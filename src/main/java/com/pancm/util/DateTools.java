@@ -33,12 +33,10 @@ public class DateTools {
      * 要用到的DATE Format的定义.
      */
     public static final String DATE_FORMAT_DATEONLY = "yyyy-MM-dd";
-
     /**
      * The constant DATE_FORMAT_DATETIME.
      */
     public static final String DATE_FORMAT_DATETIME = "yyyy-MM-dd HH:mm:ss";
-
     /**
      * The constant DATE_FORMAT_DATETIME14.
      */
