@@ -19,7 +19,6 @@ import java.util.List;
 public class IpUtil {
     
     public static void main(String[] args) {
-       
        System.out.println(calcIpSegment("27.23.16.30", "255.255.255.254"));
     }
 
