@@ -97,5 +97,7 @@ public  final class KafkaProducerUtil {
 		props.put("value.serializer", StringSerializer.class.getName());
 		return props;
 	}
-	
+
+
+
 }
