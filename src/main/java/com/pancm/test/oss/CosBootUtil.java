@@ -198,8 +198,8 @@ public class CosBootUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        CosBootUtil.setAccessKeyId("AKIDcBkIvqlofcvJHHCEMSVXdaMzTCDFwc8U");
-        CosBootUtil.setAccessKeySecret("IOJBtStAIoRwLDvSq5LctFA0iHfstkR5");
+        CosBootUtil.setAccessKeyId("xxx");
+        CosBootUtil.setAccessKeySecret("xxx");
         CosBootUtil.setBucketName("test-1307462009");
         CosBootUtil.setRegion("ap-guangzhou");
         CosBootUtil.setUrl("202403/");

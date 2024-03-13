@@ -22,9 +22,9 @@ import java.io.File;
  **/
 public class CosTest {
  
-	private String secretId = "AKIDcBkIvqlofcvJHHCEMSVXdaMzTCDFwc8U";
+	private String secretId = "xxxx";
  
-	private String secretKey ="IOJBtStAIoRwLDvSq5LctFA0iHfstkR5";
+	private String secretKey ="xxxx";
  
 	private String region ="ap-guangzhou";
  
