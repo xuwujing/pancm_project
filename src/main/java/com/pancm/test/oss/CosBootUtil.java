@@ -13,14 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -172,6 +170,60 @@ public class CosBootUtil {
         return mfile;
     }
 
+
+    public MultipartFile getMultipartFile(InputStream inputStream, String fileName) {
+        FileItem fileItem = createFileItem(inputStream, fileName);
+        //CommonsMultipartFile是feign对multipartFile的封装，但是要FileItem类对象
+        return new CommonsMultipartFile(fileItem);
+
+    }
+
+    /**
+     * FileItem类对象创建
+     *
+     * @param inputStream inputStream
+     * @param fileName    fileName
+     * @return FileItem
+     */
+    public FileItem createFileItem(InputStream inputStream, String fileName) {
+        FileItemFactory factory = new DiskFileItemFactory(16, null);
+        String textFieldName = "file";
+        FileItem item = factory.createItem(textFieldName, MediaType.MULTIPART_FORM_DATA_VALUE, true, fileName);
+        int bytesRead = 0;
+        byte[] buffer = new byte[10 * 1024 * 1024];
+        OutputStream os = null;
+        //使用输出流输出输入流的字节
+        try {
+            os = item.getOutputStream();
+            while ((bytesRead = inputStream.read(buffer, 0, 8192)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+            inputStream.close();
+        } catch (IOException e) {
+            log.error("Stream copy exception", e);
+            throw new IllegalArgumentException("文件上传失败");
+        } finally {
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    log.error("Stream close exception", e);
+
+                }
+            }
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    log.error("Stream close exception", e);
+                }
+            }
+        }
+        return item;
+
+    }
+
+
     private static FileItem createFileItem(String filePath) {
         FileItemFactory factory = new DiskFileItemFactory(16, null);
         String textFieldName = "textField";
@@ -205,7 +257,7 @@ public class CosBootUtil {
         CosBootUtil.setUrl("202403/");
         String filePath = "D:\\image\\1.png";
         MultipartFile file = getMulFileByPath(filePath);
-        String url = upload( file, null);
+        String url = upload(file, null);
         System.out.println(url);
     }
 }

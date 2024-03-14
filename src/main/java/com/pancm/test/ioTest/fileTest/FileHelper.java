@@ -2,15 +2,29 @@ package com.pancm.test.ioTest.fileTest;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 
 @Slf4j
 public class FileHelper {
-
+    private static final String FILE_SEPARATOR = "/";
     /**
      * 行为单位读取文件，常用于读面向行的格式化文件
      * @param folder 文件目录
@@ -209,5 +223,167 @@ public class FileHelper {
         } catch (IOException e) {
             log.error("read file error#", e);
         }
+    }
+
+
+
+    /**
+     * 获取MultipartFile文件
+     *
+     * @param picPath
+     * @return
+     */
+    private static MultipartFile getMulFileByPath(String picPath) {
+        FileItem fileItem = createFileItem(picPath);
+        MultipartFile mfile = new CommonsMultipartFile(fileItem);
+        return mfile;
+    }
+
+    /**
+     * @Author pancm
+     * @Description 获取MultipartFile文件
+     * @Date  2024/3/14
+     * @Param [inputStream, fileName]
+     * @return org.springframework.web.multipart.MultipartFile
+     **/
+    public MultipartFile getMultipartFile(InputStream inputStream, String fileName) {
+        FileItem fileItem = createFileItem(inputStream, fileName);
+        //CommonsMultipartFile是feign对multipartFile的封装，但是要FileItem类对象
+        return new CommonsMultipartFile(fileItem);
+
+    }
+
+    /**
+     * FileItem类对象创建
+     *
+     * @param inputStream inputStream
+     * @param fileName    fileName
+     * @return FileItem
+     */
+    public FileItem createFileItem(InputStream inputStream, String fileName) {
+        FileItemFactory factory = new DiskFileItemFactory(16, null);
+        String textFieldName = "file";
+        FileItem item = factory.createItem(textFieldName, MediaType.MULTIPART_FORM_DATA_VALUE, true, fileName);
+        int bytesRead = 0;
+        byte[] buffer = new byte[10 * 1024 * 1024];
+        OutputStream os = null;
+        //使用输出流输出输入流的字节
+        try {
+            os = item.getOutputStream();
+            while ((bytesRead = inputStream.read(buffer, 0, 8192)) != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+            inputStream.close();
+        } catch (IOException e) {
+            log.error("Stream copy exception", e);
+            throw new IllegalArgumentException("文件上传失败");
+        } finally {
+            if (os != null) {
+                try {
+                    os.close();
+                } catch (IOException e) {
+                    log.error("Stream close exception", e);
+
+                }
+            }
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    log.error("Stream close exception", e);
+                }
+            }
+        }
+        return item;
+
+    }
+
+
+    private static FileItem createFileItem(String filePath) {
+        FileItemFactory factory = new DiskFileItemFactory(16, null);
+        String textFieldName = "textField";
+        int num = filePath.lastIndexOf(".");
+        String extFile = filePath.substring(num);
+        FileItem item = factory.createItem(textFieldName, "text/plain", true,
+                "MyFileName" + extFile);
+        File newfile = new File(filePath);
+        int bytesRead = 0;
+        byte[] buffer = new byte[8192];
+        try {
+            FileInputStream fis = new FileInputStream(newfile);
+            OutputStream os = item.getOutputStream();
+            while ((bytesRead = fis.read(buffer, 0, 8192))
+                    != -1) {
+                os.write(buffer, 0, bytesRead);
+            }
+            os.close();
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return item;
+    }
+
+
+
+
+    /**
+     * @Author pancm
+     * @Description 批量下载文件并整理成zip
+     * @Date  2024/3/14
+     * @Param [urls, localPath, zipFileName]
+     * @return void
+     **/
+    public static void downloadFiles(List<String> urls, String localPath, String zipFileName) throws IOException {
+        // 创建临时目录
+        Path tempDir = Paths.get(localPath + FILE_SEPARATOR + "temp");
+        Files.createDirectories(tempDir);
+        // 创建Zip文件
+        Path zipFilePath = Paths.get(localPath + FILE_SEPARATOR + zipFileName);
+        Files.createDirectories(zipFilePath.getParent());
+        try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFilePath.toFile()))) {
+            // 下载图片并添加到Zip文件
+            for (String url : urls) {
+                URL u = new URL(url);
+                HttpURLConnection con = (HttpURLConnection) u.openConnection();
+                con.setRequestMethod("GET");
+                con.connect();
+
+                String fileName = new File(new URL(url).getPath()).getName();
+                Path filePath = Paths.get(localPath + FILE_SEPARATOR + "temp" + FILE_SEPARATOR + fileName);
+
+                try (InputStream is = con.getInputStream();
+                     FileOutputStream fos = new FileOutputStream(filePath.toFile())) {
+                    byte[] buffer = new byte[1024];
+                    int len;
+                    while ((len = is.read(buffer)) > 0) {
+                        fos.write(buffer, 0, len);
+                    }
+                }
+
+                // 将文件添加到Zip文件
+                ZipEntry zipEntry = new ZipEntry(filePath.toFile().getName());
+                zos.putNextEntry(zipEntry);
+
+                try (InputStream is = new FileInputStream(filePath.toFile())) {
+                    byte[] buffer = new byte[1024];
+                    int len;
+                    while ((len = is.read(buffer)) > 0) {
+                        zos.write(buffer, 0, len);
+                    }
+                }
+                zos.closeEntry();
+            }
+        }
+        // 删除临时目录
+//        Files.delete(tempDir);
+
+    }
+
+    public static void main(String[] args) throws IOException {
+        List<String> strings =new ArrayList<>();
+        strings.add("https://test-1307462009.cos.ap-guangzhou.myqcloud.com/2024/白色底图_1710297101783.png");
+        strings.add("https://test-1307462009.cos.ap-guangzhou.myqcloud.com/2024/registerCar-min_1710297300082.png");
+        downloadFiles(strings,"temp","images.zip");
     }
 }
