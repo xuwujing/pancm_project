@@ -8,7 +8,8 @@ import java.util.zip.ZipOutputStream;
 public class FileZip {
     /**
      * zip文件压缩
-     * @param inputFile 待压缩文件夹/文件名
+     *
+     * @param inputFile  待压缩文件夹/文件名
      * @param outputFile 生成的压缩包名字
      */
 
@@ -18,10 +19,11 @@ public class FileZip {
         //创建缓冲输出流
         BufferedOutputStream bos = new BufferedOutputStream(out);
         File input = new File(inputFile);
-        compress(out, bos, input,null);
+        compress(out, bos, input, null);
         bos.close();
         out.close();
     }
+
     /**
      * @param name 压缩文件名，可以写为null保持默认
      */
@@ -53,7 +55,7 @@ public class FileZip {
             //将源文件写入到zip文件中
             byte[] buf = new byte[1024];
             while ((len = bis.read(buf)) != -1) {
-                bos.write(buf,0,len);
+                bos.write(buf, 0, len);
             }
             //图片压缩需要，否则出现问题
             bos.flush();
@@ -61,6 +63,7 @@ public class FileZip {
             fos.close();
         }
     }
+
     public static void main(String[] args) {
         try {
             String src = "D:\\home\\release";
