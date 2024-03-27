@@ -23,7 +23,6 @@ public class FileZip {
         bos.close();
         out.close();
     }
-
     /**
      * @param name 压缩文件名，可以写为null保持默认
      */
@@ -36,7 +35,6 @@ public class FileZip {
         if (input.isDirectory()) {
             //取出文件夹中的文件（或子文件夹）
             File[] flist = input.listFiles();
-
             if (flist.length == 0)//如果文件夹为空，则只需在目的地zip文件中写入一个目录进入
             {
                 out.putNextEntry(new ZipEntry(name + "/"));
