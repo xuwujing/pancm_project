@@ -170,7 +170,6 @@ public class CosBootUtil {
         return mfile;
     }
 
-
     public MultipartFile getMultipartFile(InputStream inputStream, String fileName) {
         FileItem fileItem = createFileItem(inputStream, fileName);
         //CommonsMultipartFile是feign对multipartFile的封装，但是要FileItem类对象
@@ -180,7 +179,6 @@ public class CosBootUtil {
 
     /**
      * FileItem类对象创建
-     *
      * @param inputStream inputStream
      * @param fileName    fileName
      * @return FileItem
@@ -208,7 +206,6 @@ public class CosBootUtil {
                     os.close();
                 } catch (IOException e) {
                     log.error("Stream close exception", e);
-
                 }
             }
             if (inputStream != null) {
