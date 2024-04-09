@@ -172,12 +172,15 @@ public class CosBootUtil {
         return mfile;
     }
 
+     //获取MultipartFile类型的文件
     public MultipartFile getMultipartFile(InputStream inputStream, String fileName) {
+        //创建一个FileItem对象
         FileItem fileItem = createFileItem(inputStream, fileName);
-        //CommonsMultipartFile是feign对multipartFile的封装，但是要FileItem类对象
+        //使用CommonsMultipartFile对FileItem对象进行封装
         return new CommonsMultipartFile(fileItem);
 
     }
+
 
     /**
      * FileItem类对象创建
@@ -223,40 +226,69 @@ public class CosBootUtil {
     }
 
 
+    /**
+     * 创建一个FileItem对象
+     * @param filePath 文件路径
+     * @return FileItem对象
+     */
     private static FileItem createFileItem(String filePath) {
+        // 创建一个文件项工厂
         FileItemFactory factory = new DiskFileItemFactory(16, null);
+        // 设置文件项的名称
         String textFieldName = "textField";
+        // 获取文件扩展名
         int num = filePath.lastIndexOf(".");
         String extFile = filePath.substring(num);
+        // 使用文件项工厂创建一个文件项
         FileItem item = factory.createItem(textFieldName, "text/plain", true,
                 "MyFileName" + extFile);
+        // 创建一个文件对象
         File newfile = new File(filePath);
+        // 读取文件的次数
         int bytesRead = 0;
+        // 字节数组
         byte[] buffer = new byte[8192];
         try {
+            // 创建一个文件输入流
             FileInputStream fis = new FileInputStream(newfile);
+            // 创建一个输出流
             OutputStream os = item.getOutputStream();
+            // 循环读取文件
             while ((bytesRead = fis.read(buffer, 0, 8192))
                     != -1) {
+                // 将字节写入输出流
                 os.write(buffer, 0, bytesRead);
             }
+            // 关闭输出流
             os.close();
+            // 关闭文件输入流
             fis.close();
         } catch (IOException e) {
+            // 打印异常
             e.printStackTrace();
         }
+        // 返回文件项
         return item;
     }
 
     public static void main(String[] args) throws Exception {
+        // 设置accessKeyId
         CosBootUtil.setAccessKeyId("xxx");
+        // 设置accessKeySecret
         CosBootUtil.setAccessKeySecret("xxx");
+        // 设置bucketName
         CosBootUtil.setBucketName("test-1307462009");
+        // 设置region
         CosBootUtil.setRegion("ap-guangzhou");
+        // 设置url
         CosBootUtil.setUrl("202403/");
+        // 设置文件路径
         String filePath = "D:\\image\\1.png";
+        // 通过路径获取文件
         MultipartFile file = getMulFileByPath(filePath);
+        // 上传文件
         String url = upload(file, null);
+        // 打印上传后的url
         System.out.println(url);
     }
 }
