@@ -166,7 +166,6 @@ public class WordToHtmlUtil {
 
 
     public static void test1() throws Exception {
-
         File path = new File(ResourceUtils.getURL("classpath:").getPath());
         String imagePathStr = path.getAbsolutePath() + "\\static\\image\\";
 //        String filePath = "D:\\pdf\\Legal-Contract Temp-HR Admin-51. 维修工程合同.docx";
@@ -199,7 +198,6 @@ public class WordToHtmlUtil {
         serializer.setOutputProperty(OutputKeys.METHOD, "html");
         serializer.transform(domSource, streamResult);
         System.out.println("===");
-
     }
     /**
      * 获取MultipartFile文件
