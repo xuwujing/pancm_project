@@ -15,69 +15,69 @@ import java.text.DecimalFormat;
  */
 public class CalculateTest {
 
-	private String result;
+    private String result;
 
-	/**
+    /**
      * The entry point of application.
      *
      * @param args the input arguments
      */
     public static void main(String[] args) {
-		//自增运算符测试
-		test1();
-		//运算符优先级测试
-		test2();
-		//位运算符
-		test3();
-		//赋值运算符
-		test4();
+        //自增运算符测试
+        test1();
+        //运算符优先级测试
+        test2();
+        //位运算符
+        test3();
+        //赋值运算符
+        test4();
 
-		test5();
-	}
+        test5();
+    }
 
-	private static void test5() {
+    private static void test5() {
 
 
-	 // 方式一： 这个四舍五入有点问题，实际是五舍六入
-		double f = 0.0500285;
-		BigDecimal b = new BigDecimal(f);
-		double f1 = b.setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
+        // 方式一： 这个四舍五入有点问题，实际是五舍六入
+        double f = 0.0500285;
+        BigDecimal b = new BigDecimal(f);
+        double f1 = b.setScale(6, BigDecimal.ROUND_HALF_UP).doubleValue();
 
-		// 方式二： 这个四舍五入有点问题，实际是五舍六入
-		String s= new DecimalFormat("#.000000").format(f);
-// #.00 表示两位小数 #.0000四位小数 以此类推…
+        // 方式二： 这个四舍五入有点问题，实际是五舍六入
+        String s = new DecimalFormat("#.000000").format(f);
+        // #.00 表示两位小数 #.0000四位小数 以此类推…
 
-		// 方式三：这个是符合四舍五入
-		double d = 0.0500285;
-		String result = String.format("%.6f", d);
+        // 方式三：这个是符合四舍五入
+        double d = 0.0500285;
+        String result = String.format("%.6f", d);
 
-		System.out.println("f1:"+f1);
-		System.out.println("s:"+s);
-		System.out.println("result:"+result);
+        System.out.println("f1:" + f1);
+        System.out.println("s:" + s);
+        System.out.println("result:" + result);
 
-	}
+    }
 
-	private static void test4() {
-		int a = 4;
-		a *= 5; 
-		int b = 6;
-		b %=3;
-		int c = 9;
-		c |= a;
-		int d = 8;
-		d <<=2;
-		int e = 17;
-		e &=9;
-		int f = 16;
-		f ^=2;
-		System.out.println("赋值运算符测试开始");
-		System.out.println(a);
-		System.out.println(b);
-		System.out.println(c);
-		System.out.println(d);
-		System.out.println(e);
-		System.out.println(f);
-		System.out.println("赋值运算符测试结束");
+    private static void test4() {
+        int a = 4;
+        a *= 5;
+        int b = 6;
+        b %= 3;
+        int c = 9;
+        c |= a;
+        int d = 8;
+        d <<= 2;
+        int e = 17;
+        e &= 9;
+        int f = 16;
+        f ^= 2;
+        System.out.println("赋值运算符测试开始");
+        System.out.println(a);
+        System.out.println(b);
+        System.out.println(c);
+        System.out.println(d);
+        System.out.println(e);
+        System.out.println(f);
+        System.out.println("赋值运算符测试结束");
 		
 		
 		
@@ -98,23 +98,23 @@ public class CalculateTest {
 		| =	按位或赋值操作符	C | = 2等价于C = C | 2
 		 
 		 */
-	}
+    }
 
-	private static void test3() {
-		int a = 64>>>2;
-		int b = 2<<2;
-		int c = a&b;
-		int d = b|c;
-		int e = ~a;
-		int f = 60^13;
-		System.out.println("位运算符测试开始");
-		System.out.println(a);
-		System.out.println(b);
-		System.out.println(c);
-		System.out.println(d);
-		System.out.println(e);
-		System.out.println(f);
-		System.out.println("位运算符测试结束");
+    private static void test3() {
+        int a = 64 >>> 2;
+        int b = 2 << 2;
+        int c = a & b;
+        int d = b | c;
+        int e = ~a;
+        int f = 60 ^ 13;
+        System.out.println("位运算符测试开始");
+        System.out.println(a);
+        System.out.println(b);
+        System.out.println(c);
+        System.out.println(d);
+        System.out.println(e);
+        System.out.println(f);
+        System.out.println("位运算符测试结束");
 		
 		/*
 		 * 
@@ -135,21 +135,21 @@ public class CalculateTest {
 		 
 		 
 		 */
-		
-	}
-	
-	//运算符优先级测试
-	private static void test2() {
-		int a = 2+3*4/2 + (5+4)*2;
-		int b = 2>>3+4/2-1;
-		int c = a++*3-b--;
-		int d = (a>c?4:5) + 4%2 << 3;
-		System.out.println("运算符优先级测试开始");
-		System.out.println(a);
-		System.out.println(b);
-		System.out.println(c);
-		System.out.println(d);
-		System.out.println("运算符优先级测试结束");
+
+    }
+
+    //运算符优先级测试
+    private static void test2() {
+        int a = 2 + 3 * 4 / 2 + (5 + 4) * 2;
+        int b = 2 >> 3 + 4 / 2 - 1;
+        int c = a++ * 3 - b--;
+        int d = (a > c ? 4 : 5) + 4 % 2 << 3;
+        System.out.println("运算符优先级测试开始");
+        System.out.println(a);
+        System.out.println(b);
+        System.out.println(c);
+        System.out.println(d);
+        System.out.println("运算符优先级测试结束");
 		/*
 		 * 最高优先级的运算符在的表的最上面，最低优先级的在表的底部。
 		 类别	操作符	关联性
@@ -169,48 +169,46 @@ public class CalculateTest {
 		赋值	= + = - = * = / =％= >> = << =＆= ^ = | =	从右到左
 		逗号	，	左到右
 		 */
-		
-	}
 
-	private static void test1() {
-		 int a=1,z=1;
-		 int b = a++;
-		 int c = ++a;
-		 int x = 2*++a;
-	     int y = 2*b++;
-		System.out.println("自增运算符测试开始");
-		System.out.println(a);
-		System.out.println(b);
-		System.out.println(c);
-		System.out.println(z++);
-		System.out.println(++z);
-		System.out.println(x);
-		System.out.println(y);
-		System.out.println("自增加运算符测试结束");
+    }
 
-	}
+    private static void test1() {
+        int a = 1, z = 1;
+        int b = a++;
+        int c = ++a;
+        int x = 2 * ++a;
+        int y = 2 * b++;
+        System.out.println("自增运算符测试开始");
+        System.out.println(a);
+        System.out.println(b);
+        System.out.println(c);
+        System.out.println(z++);
+        System.out.println(++z);
+        System.out.println(x);
+        System.out.println(y);
+        System.out.println("自增加运算符测试结束");
 
-	
-	
-	
-	private static void test10() {
-		int i = 16;
-		// 16转换的二进制数据
-		int j = 10000;
-		// 8转换的二进制数据
-		int k = 1000;
-		// 4转换的二进制数据
-		int m = 100;
-		// 32转换的二进制数据
-		int n = 100000;
-		System.out.println("--" + (j & i));
-		System.out.println("--" + (k & i));
-		System.out.println("--" + (m & i));
-		System.out.println("--" + (n & i));
-		System.out.println("--" + decimal2Binary(i));
-		System.out.println("--" + biannary2Decimal(n));
-		//十进制转二进制
-		System.out.println("--" + Integer.toBinaryString(i));
+    }
+
+
+    private static void test10() {
+        int i = 16;
+        // 16转换的二进制数据
+        int j = 10000;
+        // 8转换的二进制数据
+        int k = 1000;
+        // 4转换的二进制数据
+        int m = 100;
+        // 32转换的二进制数据
+        int n = 100000;
+        System.out.println("--" + (j & i));
+        System.out.println("--" + (k & i));
+        System.out.println("--" + (m & i));
+        System.out.println("--" + (n & i));
+        System.out.println("--" + decimal2Binary(i));
+        System.out.println("--" + biannary2Decimal(n));
+        //十进制转二进制
+        System.out.println("--" + Integer.toBinaryString(i));
 	    /*
 	     *  1. BigInteger的构造函数 
 		    BigInteger(String src)默认参数字符串为10进制数值 
@@ -219,10 +217,10 @@ public class CalculateTest {
 		    toString()默认把数值按10进制数值转化为字符串。 
 		    toString(int x)把数值按参数x的进制转化为字符串
 	     */
-		System.out.println("--" + new BigInteger(String.valueOf(i)).toString(2));
-		//二进制转十进制
-		System.out.println("--" + new BigInteger(String.valueOf(j),2).toString());
-	}
+        System.out.println("--" + new BigInteger(String.valueOf(i)).toString(2));
+        //二进制转十进制
+        System.out.println("--" + new BigInteger(String.valueOf(j), 2).toString());
+    }
 
     /**
      * 十进制转二进制
@@ -231,14 +229,14 @@ public class CalculateTest {
      * @return the string
      */
     public static String decimal2Binary(int de) {
-		String numstr = "";
-		while (de > 0) {
-			int res = de % 2; // 除2 取余数作为二进制数
-			numstr = res + numstr;
-			de = de / 2;
-		}
-		return numstr;
-	}
+        String numstr = "";
+        while (de > 0) {
+            int res = de % 2; // 除2 取余数作为二进制数
+            numstr = res + numstr;
+            de = de / 2;
+        }
+        return numstr;
+    }
 
     /**
      * 将二进制转换为10进制
@@ -247,15 +245,15 @@ public class CalculateTest {
      * @return integer
      */
     public static Integer biannary2Decimal(int bi) {
-		String binStr = bi + "";
-		Integer sum = 0;
-		int len = binStr.length();
-		for (int i = 1; i <= len; i++) {
-			// 第i位 的数字为：
-			int dt = Integer.parseInt(binStr.substring(i - 1, i));
-			sum += (int) Math.pow(2, len - i) * dt;
-		}
-		return sum;
-	}
+        String binStr = bi + "";
+        Integer sum = 0;
+        int len = binStr.length();
+        for (int i = 1; i <= len; i++) {
+            // 第i位 的数字为：
+            int dt = Integer.parseInt(binStr.substring(i - 1, i));
+            sum += (int) Math.pow(2, len - i) * dt;
+        }
+        return sum;
+    }
 
 }
