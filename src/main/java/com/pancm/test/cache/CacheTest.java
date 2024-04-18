@@ -33,38 +33,37 @@ public class CacheTest {
         System.out.println(cacheTest.getUser("xuwujing"));
         System.out.println(cacheTest.getUser("xuwujing"));
         System.out.println(cacheTest.getUser("pancm"));
-        System.out.println(cacheTest.getUser("xuwujing",0));
-        System.out.println(cacheTest.getUser("xuwujing",1));
-        System.out.println(cacheTest.getUser("xuwujing",1));
-
+        System.out.println(cacheTest.getUser("xuwujing", 0));
+        System.out.println(cacheTest.getUser("xuwujing", 1));
+        System.out.println(cacheTest.getUser("xuwujing", 1));
         // 创建一个3秒之后过期的缓存
-        Cache<String,String>  cache = Caffeine.newBuilder()
+        Cache<String, String> cache = Caffeine.newBuilder()
                 .expireAfterWrite(3, TimeUnit.SECONDS)
                 .maximumSize(10_000)
                 .build();
-        cache.put("xuwujing","xuwujing");
-        System.out.println("1:"+cache.getIfPresent("xuwujing"));
+        cache.put("xuwujing", "xuwujing");
+        System.out.println("1:" + cache.getIfPresent("xuwujing"));
         TimeUnit.SECONDS.sleep(2);
-        System.out.println("2:"+cache.getIfPresent("xuwujing"));
+        System.out.println("2:" + cache.getIfPresent("xuwujing"));
         TimeUnit.SECONDS.sleep(2);
-        System.out.println("3:"+cache.getIfPresent("xuwujing"));
+        System.out.println("3:" + cache.getIfPresent("xuwujing"));
         //1:xuwujing
         //2:xuwujing
         //3:null
     }
 
 
-    @Cacheable(value = "user", key="#userName")
-    public  User getUser(String userName){
+    @Cacheable(value = "user", key = "#userName")
+    public User getUser(String userName) {
         User user = new User();
         user.setId(1);
         user.setName(userName);
         return user;
     }
 
-    @Cacheable(value = "user", key="#user",condition = "#status = 1",unless="#result == null")
-    public  User getUser(String userName,Integer status){
-        if(status == 0){
+    @Cacheable(value = "user", key = "#user", condition = "#status = 1", unless = "#result == null")
+    public User getUser(String userName, Integer status) {
+        if (status == 0) {
             return null;
         }
         User user = new User();
@@ -72,7 +71,6 @@ public class CacheTest {
         user.setName(userName);
         return user;
     }
-
 
 
 }
