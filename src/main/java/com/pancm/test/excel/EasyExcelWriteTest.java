@@ -36,7 +36,6 @@ public class EasyExcelWriteTest {
         jsonObject2.put("t2","22");
         jsonObjectList.add(jsonObject);
         jsonObjectList.add(jsonObject2);
-
         String  fileName = "simpleWrite" + System.currentTimeMillis() + ".xlsx";
         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
         // 如果这里想使用03 则 传入excelType参数即可
