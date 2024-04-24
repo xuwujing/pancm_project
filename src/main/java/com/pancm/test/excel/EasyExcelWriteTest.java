@@ -59,7 +59,6 @@ public class EasyExcelWriteTest {
 //                    // 分页查询数据
 //                    return data();
 //                });
-
         // 写法2
         fileName = "/home"+ "simpleWrite" + System.currentTimeMillis() + ".xlsx";
         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
