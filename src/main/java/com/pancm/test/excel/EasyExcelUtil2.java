@@ -178,7 +178,6 @@ public class EasyExcelUtil2 {
             throw new Exception("导入失败, 请检查导入数据的准确性");
         }
     }
-
     /**
      * 获取MultipartFile文件
      *
