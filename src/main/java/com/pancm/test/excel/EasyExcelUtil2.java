@@ -180,7 +180,6 @@ public class EasyExcelUtil2 {
     }
     /**
      * 获取MultipartFile文件
-     *
      * @param picPath
      * @return
      */
