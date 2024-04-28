@@ -34,7 +34,6 @@ public class FileHelper {
     public static String readFileToString(String folder, String fileName) {
         return readFileToString(folder + "/" + fileName);
     }
-
     /**
      * 以行为单位读取文件，常用于读面向行的格式化文件
      * @param filePath 文件路径
