@@ -19,7 +19,6 @@ public class BridgeTest {
 		Paper paper=new ExaminationPaper();
 		paper.setPen(new RedPen());
 		paper.writing();
-		
 		Paper paper2=new NewsPaper();
 		paper2.setPen(new BlackPen());
 		paper2.writing();
