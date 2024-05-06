@@ -77,8 +77,6 @@ public class EasyExcelWriteTest {
             }
         }
     }
-
-
     private List<DemoData> data() {
         List<DemoData> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
