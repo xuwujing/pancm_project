@@ -88,7 +88,6 @@ public class EasyExcelTest {
              */
             @Override
             public void invokeHead(Map<Integer, CellData> headMap, AnalysisContext context) {
-
             }
 
             @Override
@@ -100,7 +99,6 @@ public class EasyExcelTest {
                     cachedDataList = new ArrayList<>();
                 }
             }
-
             /**
              * The current method is called when extra information is returned
              *
