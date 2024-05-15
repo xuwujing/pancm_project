@@ -60,6 +60,7 @@ public class FileHelper {
                 try {
                     reader.close();
                 } catch (IOException e1) {
+                    log.error("close error",e1);
                 }
             }
         }
