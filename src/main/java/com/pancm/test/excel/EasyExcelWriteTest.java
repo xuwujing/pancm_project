@@ -24,8 +24,6 @@ import java.util.List;
  */
 @Slf4j
 public class EasyExcelWriteTest {
-
-
     public static void main(String[] args) {
         List<JSONObject> jsonObjectList = new ArrayList<>();
         JSONObject jsonObject = new JSONObject();
