@@ -40,7 +40,6 @@ public class EasyExcelWriteTest {
         EasyExcel.write(fileName).sheet("模板").doWrite(jsonObjectList);
     }
 
-
     public void excludeOrIncludeWrite() {
         // 注意 simpleWrite在数据量不大的情况下可以使用（5000以内，具体也要看实际情况），数据量大参照 重复多次写入
         // 写法1 JDK8+
