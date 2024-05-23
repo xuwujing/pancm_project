@@ -165,9 +165,7 @@ public class EasyExcelTest {
         private Double doubleData;
     }
 
-
     class DemoDataListener implements ReadListener<DemoData> {
-
         /**
          * 每隔5条存储数据库，实际使用中可以100条，然后清理list ，方便内存回收
          */
