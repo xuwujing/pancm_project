@@ -214,7 +214,6 @@ public class EasyExcelTest {
          */
         @Override
         public void invokeHead(Map<Integer, CellData> headMap, AnalysisContext context) {
-
         }
 
         /**
