@@ -242,7 +242,6 @@ public class EasyExcelTest {
          */
         @Override
         public void extra(CellExtra extra, AnalysisContext context) {
-
         }
 
         /**
