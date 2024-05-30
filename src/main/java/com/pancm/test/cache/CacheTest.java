@@ -26,8 +26,6 @@ public class CacheTest {
          * condition：可选，是否需要缓存
          * unless:
          *
-         *
-         *
          **/
         CacheTest cacheTest = new CacheTest();
         System.out.println(cacheTest.getUser("xuwujing"));
