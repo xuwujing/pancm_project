@@ -49,8 +49,6 @@ public class CacheTest {
         //2:xuwujing
         //3:null
     }
-
-
     @Cacheable(value = "user", key = "#userName")
     public User getUser(String userName) {
         User user = new User();
