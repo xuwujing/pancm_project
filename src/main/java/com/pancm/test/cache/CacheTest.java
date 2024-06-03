@@ -25,7 +25,6 @@ public class CacheTest {
          * key ： 可选。要使用SpEL表达式
          * condition：可选，是否需要缓存
          * unless:
-         *
          **/
         CacheTest cacheTest = new CacheTest();
         System.out.println(cacheTest.getUser("xuwujing"));
