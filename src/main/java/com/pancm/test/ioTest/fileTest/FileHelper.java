@@ -345,10 +345,8 @@ public class FileHelper {
                 HttpURLConnection con = (HttpURLConnection) u.openConnection();
                 con.setRequestMethod("GET");
                 con.connect();
-
                 String fileName = new File(new URL(url).getPath()).getName();
                 Path filePath = Paths.get(localPath + FILE_SEPARATOR + "temp" + FILE_SEPARATOR + fileName);
-
                 try (InputStream is = con.getInputStream();
                      FileOutputStream fos = new FileOutputStream(filePath.toFile())) {
                     byte[] buffer = new byte[1024];
