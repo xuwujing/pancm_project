@@ -102,7 +102,6 @@ public class BaseCodingHandler implements IBaseCodingHandler {
 
     /**
      * base64 加密
-     *
      * @param str
      * @return
      */
@@ -112,7 +111,6 @@ public class BaseCodingHandler implements IBaseCodingHandler {
 
     /**
      * base64解密
-     *
      * @param encodeStr
      * @return
      */
@@ -138,7 +136,6 @@ public class BaseCodingHandler implements IBaseCodingHandler {
 
     /***
      * AES解密方法
-     *
      * @param password
      *            密文密码
      * @return
@@ -162,7 +159,6 @@ public class BaseCodingHandler implements IBaseCodingHandler {
 
     /***
      * AES加密实现方法
-     *
      * @param content
      *            加密内容字节数组
      * @param aesKey
@@ -224,7 +220,6 @@ public class BaseCodingHandler implements IBaseCodingHandler {
 
     /***
      * 将字节数组转化成十六进制字符串
-     *
      * @param buf
      *            字节数组
      * @return 十六进制字符串
@@ -248,7 +243,6 @@ public class BaseCodingHandler implements IBaseCodingHandler {
 
     /**
      * 将字符串转换成字节数组
-     *
      * @param hexStr
      * @return buf 字节数组
      *
@@ -298,6 +292,5 @@ public class BaseCodingHandler implements IBaseCodingHandler {
         System.out.println("msg:"+msg);
         System.out.println("msg2:"+msg2);
         System.out.println("msg3:"+msg3);
-
     }
 }
