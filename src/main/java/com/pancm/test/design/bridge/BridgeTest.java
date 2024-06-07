@@ -94,6 +94,7 @@ abstract class  Paper{
  * @Version:1.0.0
  * @date 2018年8月22日
  */
+
 class ExaminationPaper extends Paper{
 	@Override
 	void writing() {
