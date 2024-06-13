@@ -101,7 +101,6 @@ class VideoPlayer implements Mp4{
  * @date 2018年8月21日
  */
 class FormatFactory extends VideoPlayer  implements Avi{
-
 	@Override
 	public void playAvi() {
 		//转换成MP4格式的视频
