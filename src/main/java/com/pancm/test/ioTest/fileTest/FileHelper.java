@@ -76,7 +76,6 @@ public class FileHelper {
         String content = FileHelper.readFileToString(filePath);
         return JSONObject.parse(content);
     }
-
     /**
      * 相对路径转换为绝对路径
      * @param folderInput 相对路径，如./
