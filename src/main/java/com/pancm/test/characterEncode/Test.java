@@ -31,9 +31,7 @@ public class Test {
 			System.out.println("中文".getBytes("ISO8859_1"));
 
 			System.out.println(new String("中文".getBytes()));
-
 			System.out.println(new String("中文".getBytes(), "GB2312"));
-
 			System.out.println(new String("中文".getBytes(), "ISO8859_1"));
 
 			System.out.println(new String("中文".getBytes("GB2312")));
