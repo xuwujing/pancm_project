@@ -193,7 +193,6 @@ class Lunch implements IBuilderFood{
 class FoodStore{
     /**
      * Create breakfast meal.
-     *
      * @param bf the bf
      * @return the meal
      */
