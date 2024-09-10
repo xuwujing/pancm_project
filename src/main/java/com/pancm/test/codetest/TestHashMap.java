@@ -22,7 +22,6 @@ public class TestHashMap {
      * @param args the input arguments
      */
     public static void main(String[] args) {
-		
 		/*
 		  HashMap提供了三个构造函数：
 

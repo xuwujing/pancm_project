@@ -9,7 +9,6 @@ package com.pancm.test.codetest;
  */
 public class TestBoolean {
 
-
     /**
      * The entry point of application.
      *
