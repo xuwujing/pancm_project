@@ -71,8 +71,8 @@ public class App {
         nb.removeNotes(1);
         //调用nb的list方法，获取notes中的所有字符串
         String[] b = nb.list();
-
         //写一个调用高德地图的接口，调用逆地址编码，将结果转换成json格式，使用文件保存，写入到项目中
+
 
     }
 
