@@ -31,6 +31,8 @@ public class TestBoolean {
             System.out.println("bool1:" + str1 + ",str2:" + str2 + ",bool3:" + str3);
             boolean x5 = Boolean.parseBoolean("ASD");         //源码是直接判断然后与true对比，因此打印为false
             System.out.println(x5);
+            System.out.println(Boolean.hashCode(Boolean.TRUE));
+
         }
     }
 
