@@ -3,8 +3,8 @@ package com.pancm.test.excel;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.context.AnalysisContext;
-import com.alibaba.excel.metadata.CellData;
 import com.alibaba.excel.metadata.CellExtra;
+import com.alibaba.excel.metadata.data.CellData;
 import com.alibaba.excel.read.listener.ReadListener;
 import com.alibaba.excel.read.metadata.ReadSheet;
 import com.alibaba.fastjson.JSON;
@@ -83,12 +83,12 @@ public class EasyExcelTest {
             /**
              * When analysis one head row trigger invoke function.
              *
-             * @param headMap
+             * @param
              * @param context
              */
-            @Override
-            public void invokeHead(Map<Integer, CellData> headMap, AnalysisContext context) {
-            }
+//            @Override
+//            public void invokeHead(Map<Integer, CellData> headMap, AnalysisContext context) {
+//            }
 
             @Override
             public void invoke(DemoData data, AnalysisContext context) {
@@ -212,9 +212,9 @@ public class EasyExcelTest {
          * @param headMap
          * @param context
          */
-        @Override
-        public void invokeHead(Map<Integer, CellData> headMap, AnalysisContext context) {
-        }
+//        @Override
+//        public void invokeHead(Map<Integer, CellData> headMap, AnalysisContext context) {
+//        }
 
         /**
          * 这个每一条数据解析都会来调用
