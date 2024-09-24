@@ -17,7 +17,7 @@ public class CustomCellWriteHandler extends AbstractCellWriteHandler {
         int rowIndex = row.getRowNum();
         System.out.println("当前行: " + rowIndex);
         short height = 600;
-        row.setHeight(height);
+//        row.setHeight(height);
     }
 
     @Override
