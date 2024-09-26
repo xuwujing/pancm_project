@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.swing.filechooser.FileSystemView;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -322,6 +323,15 @@ public class FileHelper {
         return item;
     }
 
+
+    /**
+     * 获取桌面路径
+     * @return
+     */
+    public static String getDesktopPath(){
+        File desktopDir = FileSystemView.getFileSystemView().getHomeDirectory();
+        return desktopDir.getAbsolutePath();
+    }
 
     /**
      * @Author pancm
