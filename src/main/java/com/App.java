@@ -9,7 +9,6 @@ import java.util.ArrayList;
  * @Description 
  * @Date  2024/1/4
  * @Param 
- * @return 
  **/
 public class App {
     //声明一个ArrayList类型的变量notes
