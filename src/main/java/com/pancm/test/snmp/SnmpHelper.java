@@ -76,7 +76,6 @@ public class SnmpHelper {
             PDU pdu = new PDU();
             OID targetOid = new OID(inputOid);
             pdu.add(new VariableBinding(targetOid));
-
             boolean finished = false;
             while (!finished) {
                 VariableBinding vb = null;
