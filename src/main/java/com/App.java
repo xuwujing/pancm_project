@@ -13,7 +13,6 @@ import java.util.ArrayList;
 public class App {
     //声明一个ArrayList类型的变量notes
     public ArrayList<String> notes = new ArrayList<String>();
-
     //声明一个add方法，用于添加字符串
     public void add(String s) {
         notes.add(s);
