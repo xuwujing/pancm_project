@@ -1672,6 +1672,25 @@ public final class MyTools {
     }
 
 
+    /**
+     * 模板字符串：我们定义了一个包含占位符的模板字符串。
+     * 占位符映射：使用 HashMap 存储占位符及其对应的值。
+     * 填充方法：fillPlaceholders 方法遍历占位符映射，并使用 String.replace() 方法替换模板中的占位符。
+     * 输出结果：最后，打印填充后的字符串。
+     * @param template
+     * @param placeholders
+     * @return
+     */
+    public static String fillPlaceholders(String template, Map<String, String> placeholders) {
+        for (Map.Entry<String, String> entry : placeholders.entrySet()) {
+            String placeholder = "${" + entry.getKey() + "}";
+            String value = entry.getValue();
+            template = template.replace(placeholder, value);
+        }
+        return template;
+    }
+
+
     //public static void main(String[] args) {
     //    String url = "https://xxx.com/cfes?c={campaign_name}&af_siteid={af_siteid}&clickid={clickid}&android_id={android_id}&advertising_id={advertising_id}&idfa={idfa}";
     //    Map<String, Object> map = new LinkedHashMap<>();
