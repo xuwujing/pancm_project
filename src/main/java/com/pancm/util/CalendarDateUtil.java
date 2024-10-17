@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -13,7 +12,6 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
 /**
  * The type Date tools.
@@ -25,17 +23,17 @@ import java.util.Objects;
  * @date 2018年11月21日
  * @since jdk1.8
  */
-public class DateTools {
+public class CalendarDateUtil {
 
     /**
      * The constant LOGGER.
      */
-    public static final Logger LOGGER = LoggerFactory.getLogger(DateTools.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(CalendarDateUtil.class);
 
     /**
      * 要用到的DATE Format的定义.
      */
-    public static final String DATE_FORMAT_DATEONLY = "yyyy-MM-dd";
+    public static final String DATE_FORMAT_DATE_ONLY = "yyyy-MM-dd";
     /**
      * The constant DATE_FORMAT_DATETIME.
      */
@@ -48,7 +46,12 @@ public class DateTools {
     /**
      * The constant SHORTDATEFORMAT.
      */
-    public static final String SHORTDATEFORMAT = "yyyyMMdd";
+    public static final String SHORT_DATE_FORMAT = "yyyyMMdd";
+
+    /**
+     * The constant HMS_FORMAT.
+     */
+    public static final String HM_FORMAT = "HH:mm";
 
     /**
      * The constant HMS_FORMAT.
@@ -129,7 +132,7 @@ public class DateTools {
         //Convert Instant object to LocalDateTime object
         LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zone);
         //Format the LocalDateTime object
-        return formaterLocalDateTime(localDateTime);
+        return formatLocalDateTime(localDateTime);
     }
 
 
@@ -162,7 +165,7 @@ public class DateTools {
      * @see LocalDateTime
      */
     public static LocalDateTime parseLocalDateTime10(final String str) throws ParseException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT_DATEONLY);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT_DATE_ONLY);
         LocalDateTime time = LocalDateTime.from(LocalDate.parse(str, formatter).atStartOfDay());
         return time;
     }
@@ -177,7 +180,7 @@ public class DateTools {
      * @see LocalDateTime
      */
     public static LocalDate parseLocalDate(final String str) throws ParseException {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT_DATEONLY);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT_DATE_ONLY);
         return LocalDate.parse(str, formatter);
     }
 
@@ -228,7 +231,7 @@ public class DateTools {
      * @return 当前日期 yyyy-MM-dd
      */
     public static String getCurrentDate() {
-        return LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATEONLY));
+        return LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATE_ONLY));
     }
 
     /**
@@ -265,8 +268,8 @@ public class DateTools {
      * @param date 日期
      * @return yyyy -MM-dd 日期
      */
-    public static String formaterDate(final LocalDate date) {
-        return date.format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATEONLY));
+    public static String formatDate(final LocalDate date) {
+        return date.format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATE_ONLY));
     }
 
     /**
@@ -276,7 +279,7 @@ public class DateTools {
      * @param dateFormat 格式化
      * @return String string
      */
-    public static String formaterTime(final LocalTime time, final String dateFormat) {
+    public static String formatTime(final LocalTime time, final String dateFormat) {
         return time.format(DateTimeFormatter.ofPattern(dateFormat));
     }
 
@@ -286,9 +289,10 @@ public class DateTools {
      * @param date 传入的日期
      * @return yyyyMMdd 字符串
      */
-    public static String formaterDateToyyyyMMdd(final LocalDate date) {
-        return date.format(DateTimeFormatter.ofPattern(SHORTDATEFORMAT));
+    public static String formatDateToyyyyMMdd(final LocalDate date) {
+        return date.format(DateTimeFormatter.ofPattern(SHORT_DATE_FORMAT));
     }
+
 
     /**
      * 将localDateTime 格式化成yyyy-MM-dd HH:mm:ss.
@@ -296,7 +300,7 @@ public class DateTools {
      * @param dateTime 时间
      * @return String string
      */
-    public static String formaterLocalDateTime(final LocalDateTime dateTime) {
+    public static String formatLocalDateTime(final LocalDateTime dateTime) {
         return dateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATETIME));
     }
     /**
@@ -306,7 +310,7 @@ public class DateTools {
      * @param dateFormat 格式化
      * @return string string
      */
-    public static String formaterLocalDateTime(final LocalDateTime dateTime, final String dateFormat) {
+    public static String formatLocalDateTime(final LocalDateTime dateTime, final String dateFormat) {
         return dateTime.format(DateTimeFormatter.ofPattern(dateFormat));
     }
 
@@ -441,8 +445,8 @@ public class DateTools {
      * @return boolean boolean
      */
     public static boolean isSameDate(final LocalDateTime date1, final LocalDateTime date2) {
-        String date1Str = date1.format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATEONLY));
-        String date2Str = date2.format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATEONLY));
+        String date1Str = date1.format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATE_ONLY));
+        String date2Str = date2.format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATE_ONLY));
         return date1Str.equals(date2Str);
     }
 
@@ -716,7 +720,7 @@ public class DateTools {
      * @return yyyy -MM-dd
      */
     public static String subDays(final int days) {
-        return LocalDate.now().minusDays(days).format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATEONLY));
+        return LocalDate.now().minusDays(days).format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATE_ONLY));
     }
 
     /**
@@ -747,7 +751,7 @@ public class DateTools {
      * @return yyyy -MM-dd
      */
     public static String getYesterday(final LocalDate date) {
-        return date.minusDays(1).format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATEONLY));
+        return date.minusDays(1).format(DateTimeFormatter.ofPattern(DATE_FORMAT_DATE_ONLY));
     }
 
     /**
@@ -865,44 +869,56 @@ public class DateTools {
         return timestamp == null ? null : toDefaultDateTime(timestamp.toLocalDateTime());
     }
 
-
+    /**
+     *    将 Date 转换为 LocalDateTime
+     * @param date
+     * @return
+     */
+    public static LocalDateTime convertDateToLocalDateTime(Date date) {
+        // 获取系统默认时区
+        ZoneId zoneId = ZoneId.systemDefault();
+        // 将 Date 转换为 Instant
+        Instant instant = date.toInstant();
+        // 将 Instant 转换为 LocalDateTime
+        return LocalDateTime.ofInstant(instant, zoneId);
+    }
+    /**
+     * 格式化日期范围
+     *
+     * @param startTime 开始时间
+     * @param endTime   结束时间
+     * @return 格式化后的日期范围
+     */
     public static String formatDateRange(Date startTime, Date endTime) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMMd日", Locale.CHINESE);
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-        Calendar calendar = Calendar.getInstance();
+        return formatDateRange(convertDateToLocalDateTime(startTime), convertDateToLocalDateTime(endTime));
+    }
 
-        // 获取今天和明天的日期
-        calendar.setTime(new Date());
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        Date today = calendar.getTime();
 
-        calendar.add(Calendar.DAY_OF_YEAR, 1);
-        Date tomorrow = calendar.getTime();
-
-        // 格式化开始时间和结束时间
-        String startDateStr = dateFormat.format(startTime);
-        String startTimeStr = timeFormat.format(startTime);
-        String endTimeStr = timeFormat.format(endTime);
-
-        String suffix = ""; // 后缀部分
-
+    public static String formatDateRange(LocalDateTime startTime, LocalDateTime endTime) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("M月d日", Locale.CHINESE);
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
+        LocalDate startDate = startTime.toLocalDate();
+        String startDateStr = startDate.format(dateFormatter);
+        String startTimeStr = startTime.format(timeFormatter);
+        String endTimeStr = endTime.format(timeFormatter);
+        String suffix; // 后缀部分
         // 判断是否是今天或明天
-        if (isSameDay(startTime, today)) {
+        if (startDate.equals(today)) {
             suffix = "（今天）";
-        } else if (isSameDay(startTime, tomorrow)) {
+        } else if (startDate.equals(tomorrow)) {
             suffix = "（明天）";
         } else {
             // 如果不是今天或明天，显示星期几
-            SimpleDateFormat weekFormat = new SimpleDateFormat("EEEE", Locale.CHINESE);
-            String weekDay = weekFormat.format(startTime);
+            String weekDay = startDate.getDayOfWeek().getDisplayName(java.time.format.TextStyle.FULL, Locale.CHINESE);
             suffix = "（" + weekDay + "）";
         }
 
         // 返回完整的格式化字符串
         return startDateStr + suffix + " " + startTimeStr + " - " + endTimeStr;
     }
+
 
     private static boolean isSameDay(Date date1, Date date2) {
         Calendar cal1 = Calendar.getInstance();
@@ -922,31 +938,24 @@ public class DateTools {
 
 
     public static void main(String[] args) {
+
+
         // 测试代码
-        Calendar calendar = Calendar.getInstance();
+        LocalDateTime startTimeToday = LocalDateTime.now().withHour(14).withMinute(0).withSecond(0);
+        LocalDateTime endTimeToday = startTimeToday.plusMinutes(30);
 
-        // 示例: 写入今天的开始和结束日期时间
-        calendar.set(2024, Calendar.OCTOBER, 10, 14, 0);
-        Date startTime = calendar.getTime();
+        LocalDateTime startTimeTomorrow = LocalDateTime.now().plusDays(1).withHour(14).withMinute(0).withSecond(0);
+        LocalDateTime endTimeTomorrow = startTimeTomorrow.plusMinutes(30);
 
-        calendar.set(2024, Calendar.OCTOBER, 10, 14, 30);
-        Date endTime = calendar.getTime();
+        LocalDateTime startTimeOtherDay = LocalDateTime.now().plusDays(3).withHour(14).withMinute(0).withSecond(0);
+        LocalDateTime endTimeOtherDay = startTimeOtherDay.plusMinutes(30);
 
-        String result = formatDateRange(startTime, endTime);
-        System.out.println(result);  // 输出结果
+        System.out.println(formatDateRange(startTimeToday, endTimeToday)); // 今天的时间段
+        System.out.println(formatDateRange(startTimeTomorrow, endTimeTomorrow)); // 明天的时间段
+        System.out.println(formatDateRange(startTimeOtherDay, endTimeOtherDay)); // 其他日期的时间段
 
 
-        System.out.println(Objects.equals(null,null));  // 输出结果
-        System.out.println(Objects.equals(1,null));  // 输出结果
-        System.out.println(Objects.equals(1,1));  // 输出结果
     }
 
-    /*public static void main(String[] args) throws Exception {
-        LocalDateTime t1 = LocalDateTime.now();
-        LocalDateTime t2 = LocalDateTime.now().plusDays(1);
-        System.out.println(t1.isAfter(t2));
-        System.out.println(getUTCLocalDateTime());
-        System.out.println(LocalDateTime.now());
-    }
-*/
+
 }

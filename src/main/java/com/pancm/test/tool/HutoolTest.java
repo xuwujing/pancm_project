@@ -4,6 +4,7 @@ package com.pancm.test.tool;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.DesensitizedUtil;
 import cn.hutool.crypto.digest.DigestUtil;
 import cn.hutool.http.HttpUtil;
@@ -79,6 +80,13 @@ public class HutoolTest {
         System.out.println(DateUtil.now());
         System.out.println(DateUtil.parse(DateUtil.now(),"yyyy-MM-dd"));
         System.out.println(DateUtil.endOfDay(new Date()));
+
+        System.out.println("------------------------------");
+
+        System.out.println(UUID.fastUUID().toString());
+        System.out.println(UUID.randomUUID().toString());
+
+
     }
 
 
