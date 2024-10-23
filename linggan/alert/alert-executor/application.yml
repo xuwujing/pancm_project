@@ -1,0 +1,58 @@
+server:
+  port: 9876
+app:
+  name: alert-executor
+  node_id: alert.14.9527.6953142354
+  node_local: 192.168.6.14
+  node_type: alert
+  remote-server-context: job/api
+  remote-server-ip: 192.168.9.42
+  remote-server-port: 15367
+  version: 2.1.2
+logging:
+  config: logback.xml
+alert:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    password: txsqldb@123456
+    url: jdbc:mysql://192.168.9.42:3306/guard_scan?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+    username: guard
+job:
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    password: txsqldb@123456
+    url: jdbc:mysql://192.168.9.42:3306/guard_job?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+    username: guard
+pull:
+  queue:
+    time: 10
+recover:
+  time: 10
+agg:
+  time: 10
+  uptime: '2021-06-26 18:10:09.0'
+aes:
+  key: Lgwy@1234!@#$%^&
+reqLoopUri: http://27.10.30.52:21013/api/sw/loop
+spring:
+  charset: utf-8
+  http:
+    encoding:
+      charset: utf-8
+      enabled: true
+      force: true
+  messages:
+    encoding: UTF-8
+  redis:
+    host: 192.168.9.51
+    port: 6379
+redis:
+  cluster:
+    max-redirects: 3
+  maxIdle: 5
+  maxTotal: 100
+  maxWaitMillis: 1000
+  minEvictableIdleTimeMillis: 300000
+  numTestsPerEvictionRun: 3
+  password: redis123
+  timeBetweenEvictionRunsMillis: 30000

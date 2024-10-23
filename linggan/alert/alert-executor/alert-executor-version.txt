@@ -1,0 +1,17 @@
+Current Version:
+V2.1.2
+1.标准版本;
+
+
+
+History Version:
+V1.2.3
+1.将配置文件由application.properties改为application.yml;
+
+V1.1.2
+1.增加告警聚合和告警记录恢复功能
+
+V1.0.1
+1.初步完成告警服务代码开发
+
+
