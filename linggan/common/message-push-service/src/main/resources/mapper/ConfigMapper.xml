@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.wechat.message_push.dao.ConfigDao">
+   <insert id="insert" >
+       insert into wechat_config(group_id,name,appid,sercet,type,enable_status)
+        values(#{groupId},#{name},#{appid},#{sercet},#{type},#{enableStatus})
+   </insert>
+
+    <update id="update" >
+        update wechat_config set group_id=#{groupId},name=#{name},sercet=#{sercet},type=#{type},next_openid=#{nextOpenid},
+        interval_pull_time = #{intervalPullTime},enable_status=#{enableStatus},update_time=#{updateTime}
+        where appid =#{appid}
+    </update>
+
+    <update id="changeStatus">
+        update wechat_config set enable_status = #{enableStatus} where appid= #{appid}
+    </update>
+
+    <select id="getAppsecret" parameterType="string" resultType="string">
+        select sercet from wechat_config where appid=#{appid} and enable_status=1
+    </select>
+
+
+    <insert id="insertLog" parameterType="pushlog">
+        insert into wechat_push_log (appid,openid,req_time,rep_time,req_data,rep_data,serial_num)
+        values (#{appid},#{openid},#{reqTime},#{repTime},#{reqData},#{repData},#{serialNum})
+    </insert>
+
+
+    <insert id="insertUser" parameterType="user">
+        insert into wechat_user(id,appid,openid,unionid,nickname,subscribe,subscribe_time,subscribe_scene,enable_status,creator,create_time,update_time)
+        values (#{id},#{appid},#{openid},#{unionid},#{nickname},#{subscribe},#{subscribeTime},#{subscribeScene},#{enableStatus},#{creator},#{createTime},#{updateTime})
+    </insert>
+
+
+    <select id="getConfigs" parameterType="string" resultType="config">
+        select * from wechat_config
+    </select>
+
+
+    <select id="getConfig" parameterType="string" resultType="config">
+        select * from wechat_config
+        <where>
+            <if test="appid!=null and appid!=''">appid = #{appid}</if>
+        </where>
+    </select>
+
+
+    <select id="getUniqueAppid" parameterType="string" resultType="int">
+        select count(*) from wechat_config where appid=#{appid}
+    </select>
+
+    <select id="getConfigByAppid" parameterType="string" resultType="config">
+        select * from wechat_config where appid=#{appid};
+    </select>
+
+    <select id="getMpConfig" resultType="config">
+        select * from wechat_config where type =0 and enable_status=1
+    </select>
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration  scan="true" scanPeriod="30 seconds" >
+	<property name="LOG_HOME" value="logs"/>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				|%d{yyyy-MM-dd HH:mm:ss.SSS}|[%thread]|%-5level|%replace(%caller{1}){'\t|Caller.{1}0|\r\n', ''}|-%msg%n|
+			</Pattern>
+		</layout>
+	</appender>
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOG_HOME}/msgInfo-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<!-- each file should be at most 10MB, keep 31 days worth of history, but at most 10GB -->
+			<maxFileSize>10MB</maxFileSize>
+			<maxHistory>15</maxHistory>
+			<totalSizeCap>10GB</totalSizeCap>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				|%d{yyyy-MM-dd HH:mm:ss.SSS}|[%thread]|%-5level|%logger{50}|-%msg%n
+			</Pattern>
+		</layout>
+	</appender>
+
+
+	<!--自定义一个请求的日志输出文件  -->
+	<appender name="AAA_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOG_HOME}/aaaInfo/%d{yyyy-MM-dd}/aaaInfo.%i.log</fileNamePattern>
+			<!-- each file should be at most 10MB, keep 31 days worth of history, but at most 10GB -->
+			<maxFileSize>10MB</maxFileSize>
+			<maxHistory>31</maxHistory>
+			<totalSizeCap>10GB</totalSizeCap>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				|%d{yyyy-MM-dd HH:mm:ss.SSS}|[%thread]|%-5level|%logger{50}|-%msg%n
+			</Pattern>
+		</layout>
+	</appender>
+
+	<!--自定义一个请求的日志输出文件  -->
+	<appender name="NETWORK_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOG_HOME}/networkInfo/%d{yyyy-MM-dd}/networkInfo.%i.log</fileNamePattern>
+			<!-- each file should be at most 10MB, keep 31 days worth of history, but at most 10GB -->
+			<maxFileSize>10MB</maxFileSize>
+			<maxHistory>31</maxHistory>
+			<totalSizeCap>10GB</totalSizeCap>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				|%d{yyyy-MM-dd HH:mm:ss.SSS}|[%thread]|%-5level|%logger{50}|-%msg%n
+			</Pattern>
+		</layout>
+	</appender>
+
+	<!-- 自定义定义日志文件可以从这获取 例如 logTest -->
+	<logger name="aaa" level="DEBUG" additivity="true">
+		<appender-ref ref="AAA_INFO" />
+	</logger>
+	<logger name="network" level="INFO" additivity="true">
+		<appender-ref ref="NETWORK_INFO" />
+	</logger>
+
+	<!-- 主日志文件的日志级别  -->
+	<root level="INFO">
+		<appender-ref ref="STDOUT"/>
+		<appender-ref ref="FILE" />
+	</root>
+
+</configuration>

@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.RadiusEndpointProfileDao">
+
+    <resultMap type="com.zans.model.RadiusEndpointProfile" id="RadiusEndpointProfileMap">
+        <result property="endpointId" column="endpoint_id" jdbcType="INTEGER"/>
+        <result property="mac" column="mac" jdbcType="VARCHAR"/>
+        <result property="aliveNotNode" column="alive_not_node" jdbcType="VARCHAR"/>
+        <result property="replyMessage" column="reply_message" jdbcType="VARCHAR"/>
+        <result property="filterId" column="filter_id" jdbcType="VARCHAR"/>
+        <result property="acctSessionId" column="acct_session_id" jdbcType="VARCHAR"/>
+        <result property="acctUpdateTime" column="acct_update_time" jdbcType="VARCHAR"/>
+        <result property="company" column="company" jdbcType="VARCHAR"/>
+        <result property="brandName" column="brand_name" jdbcType="VARCHAR"/>
+        <result property="openPortAll" column="open_port_all" jdbcType="VARCHAR"/>
+        <result property="modelLevel" column="model_level" jdbcType="INTEGER"/>
+        <result property="serialNo" column="serial_no" jdbcType="VARCHAR"/>
+        <result property="version" column="version" jdbcType="VARCHAR"/>
+        <result property="macScan" column="mac_scan" jdbcType="VARCHAR"/>
+        <result property="curIpAddr" column="cur_ip_addr" jdbcType="VARCHAR"/>
+        <result property="curSwIp" column="cur_sw_ip" jdbcType="VARCHAR"/>
+        <result property="curNasIpAddress" column="cur_nas_ip_address" jdbcType="VARCHAR"/>
+        <result property="curNasPortId" column="cur_nas_port_id" jdbcType="VARCHAR"/>
+        <result property="curVlan" column="cur_vlan" jdbcType="VARCHAR"/>
+        <result property="curOpenPort" column="cur_open_port" jdbcType="VARCHAR"/>
+        <result property="curMute" column="cur_mute" jdbcType="INTEGER"/>
+        <result property="curServerOs" column="cur_server_os" jdbcType="VARCHAR"/>
+        <result property="curDeviceType" column="cur_device_type" jdbcType="INTEGER"/>
+        <result property="curModelDes" column="cur_model_des" jdbcType="VARCHAR"/>
+        <result property="deviceLock" column="device_lock" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="checkLastTime" column="check_last_time" jdbcType="VARCHAR"/>
+        <result property="source" column="source" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="RadiusEndpointProfileMap">
+        select endpoint_id,
+               mac,
+               alive_not_node,
+               reply_message,
+               filter_id,
+               acct_session_id,
+               acct_update_time,
+               company,
+               brand_name,
+               open_port_all,
+               model_level,
+               serial_no,
+               version,
+               mac_scan,
+               cur_ip_addr,
+               cur_sw_ip,
+               cur_nas_ip_address,
+               cur_nas_port_id,
+               cur_vlan,
+               cur_open_port,
+               cur_mute,
+               cur_server_os,
+               cur_device_type,
+               cur_model_des,
+               device_lock,
+               remark,
+               check_last_time,
+               source,
+               create_time,
+               update_time
+        from radius_endpoint_profile
+        where endpoint_id = #{endpointId}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="RadiusEndpointProfileMap">
+        select
+        endpoint_id, mac, alive_not_node, reply_message, filter_id, acct_session_id, acct_update_time, company,
+        brand_name, open_port_all, model_level, serial_no, version, mac_scan, cur_ip_addr, cur_sw_ip,
+        cur_nas_ip_address, cur_nas_port_id, cur_vlan, cur_open_port, cur_mute, cur_server_os, cur_device_type,
+        cur_model_des, device_lock, remark, check_last_time, source, create_time, update_time
+        from radius_endpoint_profile
+        <where>
+            <if test="endpointId != null">
+                and endpoint_id = #{endpointId}
+            </if>
+            <if test="mac != null and mac != ''">
+                and mac = #{mac}
+            </if>
+            <if test="aliveNotNode != null and aliveNotNode != ''">
+                and alive_not_node = #{aliveNotNode}
+            </if>
+            <if test="replyMessage != null and replyMessage != ''">
+                and reply_message = #{replyMessage}
+            </if>
+            <if test="filterId != null and filterId != ''">
+                and filter_id = #{filterId}
+            </if>
+            <if test="acctSessionId != null and acctSessionId != ''">
+                and acct_session_id = #{acctSessionId}
+            </if>
+            <if test="acctUpdateTime != null and acctUpdateTime != ''">
+                and acct_update_time = #{acctUpdateTime}
+            </if>
+            <if test="company != null and company != ''">
+                and company = #{company}
+            </if>
+            <if test="brandName != null and brandName != ''">
+                and brand_name = #{brandName}
+            </if>
+            <if test="openPortAll != null and openPortAll != ''">
+                and open_port_all = #{openPortAll}
+            </if>
+            <if test="modelLevel != null">
+                and model_level = #{modelLevel}
+            </if>
+            <if test="serialNo != null and serialNo != ''">
+                and serial_no = #{serialNo}
+            </if>
+            <if test="version != null and version != ''">
+                and version = #{version}
+            </if>
+            <if test="macScan != null and macScan != ''">
+                and mac_scan = #{macScan}
+            </if>
+            <if test="curIpAddr != null and curIpAddr != ''">
+                and cur_ip_addr = #{curIpAddr}
+            </if>
+            <if test="curSwIp != null and curSwIp != ''">
+                and cur_sw_ip = #{curSwIp}
+            </if>
+            <if test="curNasIpAddress != null and curNasIpAddress != ''">
+                and cur_nas_ip_address = #{curNasIpAddress}
+            </if>
+            <if test="curNasPortId != null and curNasPortId != ''">
+                and cur_nas_port_id = #{curNasPortId}
+            </if>
+            <if test="curVlan != null and curVlan != ''">
+                and cur_vlan = #{curVlan}
+            </if>
+            <if test="curOpenPort != null and curOpenPort != ''">
+                and cur_open_port = #{curOpenPort}
+            </if>
+            <if test="curMute != null">
+                and cur_mute = #{curMute}
+            </if>
+            <if test="curServerOs != null and curServerOs != ''">
+                and cur_server_os = #{curServerOs}
+            </if>
+            <if test="curDeviceType != null">
+                and cur_device_type = #{curDeviceType}
+            </if>
+            <if test="curModelDes != null and curModelDes != ''">
+                and cur_model_des = #{curModelDes}
+            </if>
+            <if test="deviceLock != null">
+                and device_lock = #{deviceLock}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="checkLastTime != null and checkLastTime != ''">
+                and check_last_time = #{checkLastTime}
+            </if>
+            <if test="source != null">
+                and source = #{source}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="endpointId" useGeneratedKeys="true">
+        insert into radius_endpoint_profile(mac, alive_not_node, reply_message, filter_id, acct_session_id,
+                                            acct_update_time, company, brand_name, open_port_all, model_level,
+                                            serial_no, version, mac_scan, cur_ip_addr, cur_sw_ip, cur_nas_ip_address,
+                                            cur_nas_port_id, cur_vlan, cur_open_port, cur_mute, cur_server_os,
+                                            cur_device_type, cur_model_des, device_lock, remark, check_last_time,
+                                            source, create_time, update_time)
+        values (#{mac}, #{aliveNotNode}, #{replyMessage}, #{filterId}, #{acctSessionId}, #{acctUpdateTime}, #{company},
+                #{brandName}, #{openPortAll}, #{modelLevel}, #{serialNo}, #{version}, #{macScan}, #{curIpAddr},
+                #{curSwIp}, #{curNasIpAddress}, #{curNasPortId}, #{curVlan}, #{curOpenPort}, #{curMute}, #{curServerOs},
+                #{curDeviceType}, #{curModelDes}, #{deviceLock}, #{remark}, #{checkLastTime}, #{source}, #{createTime},
+                #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="endpointId" useGeneratedKeys="true">
+        insert into radius_endpoint_profile(mac, alive_not_node, reply_message, filter_id, acct_session_id,
+        acct_update_time, company, brand_name, open_port_all, model_level, serial_no, version, mac_scan, cur_ip_addr,
+        cur_sw_ip, cur_nas_ip_address, cur_nas_port_id, cur_vlan, cur_open_port, cur_mute, cur_server_os,
+        cur_device_type, cur_model_des, device_lock, remark, check_last_time, source, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.mac}, #{entity.aliveNotNode}, #{entity.replyMessage}, #{entity.filterId}, #{entity.acctSessionId},
+            #{entity.acctUpdateTime}, #{entity.company}, #{entity.brandName}, #{entity.openPortAll},
+            #{entity.modelLevel}, #{entity.serialNo}, #{entity.version}, #{entity.macScan}, #{entity.curIpAddr},
+            #{entity.curSwIp}, #{entity.curNasIpAddress}, #{entity.curNasPortId}, #{entity.curVlan},
+            #{entity.curOpenPort}, #{entity.curMute}, #{entity.curServerOs}, #{entity.curDeviceType},
+            #{entity.curModelDes}, #{entity.deviceLock}, #{entity.remark}, #{entity.checkLastTime}, #{entity.source},
+            #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="endpointId" useGeneratedKeys="true">
+        insert into radius_endpoint_profile(mac, alive_not_node, reply_message, filter_id, acct_session_id,
+        acct_update_time, company, brand_name, open_port_all, model_level, serial_no, version, mac_scan, cur_ip_addr,
+        cur_sw_ip, cur_nas_ip_address, cur_nas_port_id, cur_vlan, cur_open_port, cur_mute, cur_server_os,
+        cur_device_type, cur_model_des, device_lock, remark, check_last_time, source, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.mac}, #{entity.aliveNotNode}, #{entity.replyMessage}, #{entity.filterId}, #{entity.acctSessionId},
+            #{entity.acctUpdateTime}, #{entity.company}, #{entity.brandName}, #{entity.openPortAll},
+            #{entity.modelLevel}, #{entity.serialNo}, #{entity.version}, #{entity.macScan}, #{entity.curIpAddr},
+            #{entity.curSwIp}, #{entity.curNasIpAddress}, #{entity.curNasPortId}, #{entity.curVlan},
+            #{entity.curOpenPort}, #{entity.curMute}, #{entity.curServerOs}, #{entity.curDeviceType},
+            #{entity.curModelDes}, #{entity.deviceLock}, #{entity.remark}, #{entity.checkLastTime}, #{entity.source},
+            #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        mac = values(mac) , alive_not_node = values(alive_not_node) , reply_message = values(reply_message) , filter_id
+        = values(filter_id) , acct_session_id = values(acct_session_id) , acct_update_time = values(acct_update_time) ,
+        company = values(company) , brand_name = values(brand_name) , open_port_all = values(open_port_all) ,
+        model_level = values(model_level) , serial_no = values(serial_no) , version = values(version) , mac_scan =
+        values(mac_scan) , cur_ip_addr = values(cur_ip_addr) , cur_sw_ip = values(cur_sw_ip) , cur_nas_ip_address =
+        values(cur_nas_ip_address) , cur_nas_port_id = values(cur_nas_port_id) , cur_vlan = values(cur_vlan) ,
+        cur_open_port = values(cur_open_port) , cur_mute = values(cur_mute) , cur_server_os = values(cur_server_os) ,
+        cur_device_type = values(cur_device_type) , cur_model_des = values(cur_model_des) , device_lock =
+        values(device_lock) , remark = values(remark) , check_last_time = values(check_last_time) , source =
+        values(source) , create_time = values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update radius_endpoint_profile
+        <set>
+            <if test="mac != null and mac != ''">
+                mac = #{mac},
+            </if>
+            <if test="aliveNotNode != null and aliveNotNode != ''">
+                alive_not_node = #{aliveNotNode},
+            </if>
+            <if test="replyMessage != null and replyMessage != ''">
+                reply_message = #{replyMessage},
+            </if>
+            <if test="filterId != null and filterId != ''">
+                filter_id = #{filterId},
+            </if>
+            <if test="acctSessionId != null and acctSessionId != ''">
+                acct_session_id = #{acctSessionId},
+            </if>
+            <if test="acctUpdateTime != null and acctUpdateTime != ''">
+                acct_update_time = #{acctUpdateTime},
+            </if>
+            <if test="company != null and company != ''">
+                company = #{company},
+            </if>
+            <if test="brandName != null and brandName != ''">
+                brand_name = #{brandName},
+            </if>
+            <if test="openPortAll != null and openPortAll != ''">
+                open_port_all = #{openPortAll},
+            </if>
+            <if test="modelLevel != null">
+                model_level = #{modelLevel},
+            </if>
+            <if test="serialNo != null and serialNo != ''">
+                serial_no = #{serialNo},
+            </if>
+            <if test="version != null and version != ''">
+                version = #{version},
+            </if>
+            <if test="macScan != null and macScan != ''">
+                mac_scan = #{macScan},
+            </if>
+            <if test="curIpAddr != null and curIpAddr != ''">
+                cur_ip_addr = #{curIpAddr},
+            </if>
+            <if test="curSwIp != null and curSwIp != ''">
+                cur_sw_ip = #{curSwIp},
+            </if>
+            <if test="curNasIpAddress != null and curNasIpAddress != ''">
+                cur_nas_ip_address = #{curNasIpAddress},
+            </if>
+            <if test="curNasPortId != null and curNasPortId != ''">
+                cur_nas_port_id = #{curNasPortId},
+            </if>
+            <if test="curVlan != null and curVlan != ''">
+                cur_vlan = #{curVlan},
+            </if>
+            <if test="curOpenPort != null and curOpenPort != ''">
+                cur_open_port = #{curOpenPort},
+            </if>
+            <if test="curMute != null">
+                cur_mute = #{curMute},
+            </if>
+            <if test="curServerOs != null and curServerOs != ''">
+                cur_server_os = #{curServerOs},
+            </if>
+            <if test="curDeviceType != null">
+                cur_device_type = #{curDeviceType},
+            </if>
+            <if test="curModelDes != null and curModelDes != ''">
+                cur_model_des = #{curModelDes},
+            </if>
+            <if test="deviceLock != null">
+                device_lock = #{deviceLock},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="checkLastTime != null and checkLastTime != ''">
+                check_last_time = #{checkLastTime},
+            </if>
+            <if test="source != null">
+                source = #{source},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where endpoint_id = #{endpointId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from radius_endpoint_profile
+        where endpoint_id = #{endpointId}
+    </delete>
+
+</mapper>
+

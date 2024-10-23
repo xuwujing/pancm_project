@@ -1,0 +1,22 @@
+server:
+  port: 10010
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://27.17.0.121:3306/wechat_push?autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull
+    username: guard
+    password: Txsqldb@123456
+mybatis:
+  type-aliases-package: com.zans.wechat.message_push.model
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    com:
+      zans:
+        wechat:
+          message_push:
+            dao: info
+
+

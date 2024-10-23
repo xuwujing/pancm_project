@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.wechat.message_push.dao.UserDao">
+
+    <select id="getOpenid" parameterType="string" resultType="string">
+        select openid from wechat_user where unionid=#{unionid}
+    </select>
+
+
+    <insert id="insertList" >
+        insert into wechat_user(appid,openid,unionid,nickname,subscribe,subscribe_time,subscribe_scene,enable_status,creator,create_time,update_time)
+        VALUES
+        <foreach collection="users" item="user" separator=";">
+            (#{user.appid},#{user.openid},#{user.unionid},#{user.nickname},#{user.subscribe},#{user.subscribe_time},#{user.subscribe_scene},#{user.enable_status},#{user.creator},#{user.create_time},#{user.update_time})
+        </foreach>
+    </insert>
+
+    <insert id="insert" parameterType="user">
+        insert into wechat_user(appid,openid,unionid,nickname,subscribe,subscribe_time,subscribe_scene,enable_status,creator,create_time,update_time)
+        VALUES (#{appid},#{openid},#{unionid},#{nickname},#{subscribe},#{subscribe_time},#{subscribe_scene},#{enable_status},#{creator},#{create_time},#{update_time})
+
+    </insert>
+
+    <select id="getUnionid" resultType="string">
+        select unionid from wechat_user
+    </select>
+</mapper>

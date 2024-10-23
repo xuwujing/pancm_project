@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.wechat.message_push.dao.TokenModelDao">
+
+    <delete id="delete">
+        delete from wechat_token
+    </delete>
+
+    <insert id="insert" parameterType="tokenModel">
+        insert into wechat_token(access_token,deadline,appid)
+        values (#{accessToken},#{deadline},#{appid})
+    </insert>
+
+
+    <select id="getByAppid" parameterType="string" resultType="string">
+        select access_token from wechat_token where appid=#{appid}
+    </select>
+
+</mapper>

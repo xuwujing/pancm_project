@@ -1,0 +1,107 @@
+server:
+  port: 29632
+
+
+
+# 数据源配置
+# 查询数据库配置的名称后缀名加1，每次加新增一个同的配置则加1
+db:
+  info:
+    # 查询数据库的个数，如下面配置了2个数据库的链接，该配置就是2
+    num: 2
+    # mysql的安装地址
+    mysqlPath: /usr/bin/
+    # 保存备份的天,默认保存3天的备份数据,至少保留1份
+    backUpDay: 3
+    # -------------第一个  guard_scan数据库-----------------
+    # 数据库地址和端口
+    url1: 192.168.9.211
+    # 端口
+    port1: 35607
+    # 数据库名称
+    dbName1: guard_scan
+    # 数据库账号
+    username1: guard
+    # 数据库密码(这里的密码需要加密)
+    password1: Bba9sUV9Cv4Xi5QB6yOWkQ==
+    # 需要备份的表，多个用空格符隔开，全部备份则不用填写
+    tableName1:
+    # 备份存放的路径
+    targetPath1: /home/bak/guard_scan/
+    # 每天备份的时间 格式 hhmmss
+    executeTime1: "23:32:00"
+    # 是否启动时执行 0：否，1：是
+    isStartExecute1: 1
+
+    # -------------第二个 guard_job数据库-----------------
+    # 数据库地址和端口
+    url2: 192.168.9.211
+    # 端口
+    port2: 35607
+    # 数据库名称
+    dbName2: guard_job
+    # 数据库账号
+    username2: guard
+    # 数据库密码(这里的密码需要加密)
+    password2: Bba9sUV9Cv4Xi5QB6yOWkQ==
+    # 需要备份的表，多个用空格符隔开，全部备份则不用填写
+    tableName2: db_version  ops_job ops_node QRTZ_JOB_DETAILS QRTZ_TRIGGERS QRTZ_BLOB_TRIGGERS QRTZ_CALENDARS  QRTZ_CRON_TRIGGERS QRTZ_FIRED_TRIGGERS QRTZ_LOCKS QRTZ_PAUSED_TRIGGER_GRPS QRTZ_SCHEDULER_STATE QRTZ_SIMPLE_TRIGGERS QRTZ_SIMPROP_TRIGGERS
+    # 备份存放的路径
+    targetPath2: /home/bak/guard_job/
+    # 每天备份的时间 格式 hhmmss
+    executeTime2: "23:37:00"
+    # 是否启动时执行 0：否，1：是
+    isStartExecute2: 1
+
+# 文件备份配置
+# 文件配置的名称后缀名加1，每次加新增一个同的配置则加1
+file:
+  info:
+    # 查询的个数，如下面配置了2个链接，该配置就是2
+    num: 2
+    # -------------第一个  用户上传的文件 -----------------
+    # 备份的服务器类型 1：linux；2:Windows
+    os1: 1
+    # linux服务的地址
+    hostName1: 192.168.9.211
+    # 端口
+    port1: 22
+    # 账号
+    username1: root
+    # 密码(这里的密码需要加密)
+    password1: VW/hvxpTZF4Hp+aER1VwUA==
+    # 源路径
+    sourcePath1: /home/release/file
+    # 备份存放的路径
+    targetPath1: /home/bak/file/
+    # 每天备份的时间 格式 hhmmss
+    executeTime1: "00:10:00"
+    # 是否启动时执行 0：否，1：是
+    isStartExecute1: 1
+    # 后续是否增量备份
+    isIncrement1: 0
+    # 源路径前缀 isIncrement =1 时,该值有效
+    sourcePathPrefix1:
+    # -------------第二个 安装的程序备份-----------------
+    # 备份的服务器类型 1：linux；2:Windows
+    os2: 1
+    # linux服务的地址
+    hostName2: 192.168.9.211
+    # 端口
+    port2: 22
+    # 账号
+    username2: root
+    # 密码(这里的密码需要加密)
+    password2: VW/hvxpTZF4Hp+aER1VwUA==
+    # 源路径
+    sourcePath2: /home/release/portal,/home/release/alert,/home/release/alert_api,/home/release/job,/home/release/judge_api,/home/release/rad_api,/home/release/scan,/home/release/network_api,/home/release/access_area_api
+    # 备份存放的路径
+    targetPath2: /home/bak/release/
+    # 每天备份的时间 格式 hhmmss
+    executeTime2: "00:20:00"
+    # 是否启动时执行 0：否，1：是
+    isStartExecute2: 1
+    # 后续是否增量备份
+    isIncrement2: 0
+    # 源路径前缀 isIncrement =1 时,该值有效
+    sourcePathPrefix2:

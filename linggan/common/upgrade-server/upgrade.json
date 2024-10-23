@@ -1,0 +1,39 @@
+{
+  "checkList": {
+    "before": {
+      "fileNum": 3
+    },
+    "after": {
+      "version": {
+        "portal": "V2.3.0",
+        "alert-api": "V2.2.2"
+      },
+      "dbCheck": {
+        "checkSql": ""
+      }
+    }
+  },
+  "upgrade": {
+    "program": [
+      {
+        "name": "alert-api",
+        "enable": 1,
+        "srcPath": "",
+        "dstPath": ""
+      }
+    ],
+    "db": {
+      "before": {
+        "cmd": ""
+      },
+      "execute": [
+        {
+          "fullName": "guard.sql"
+        }
+      ],
+      "after": {
+        "cmd": ""
+      }
+    }
+  }
+}

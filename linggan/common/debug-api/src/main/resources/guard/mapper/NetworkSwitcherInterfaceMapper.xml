@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.NetworkSwitcherInterfaceDao">
+
+    <resultMap type="com.zans.model.NetworkSwitcherInterface" id="NetworkSwitcherInterfaceMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="swId" column="sw_id" jdbcType="INTEGER"/>
+        <result property="swIp" column="sw_ip" jdbcType="VARCHAR"/>
+        <result property="interfaceIndex" column="interface_index" jdbcType="INTEGER"/>
+        <result property="interfaceDetail" column="interface_detail" jdbcType="VARCHAR"/>
+        <result property="macIndex" column="mac_index" jdbcType="INTEGER"/>
+        <result property="phyStatus" column="phy_status" jdbcType="INTEGER"/>
+        <result property="upStatus" column="up_status" jdbcType="VARCHAR"/>
+        <result property="mac" column="mac" jdbcType="VARCHAR"/>
+        <result property="streamType" column="stream_type" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="scanOn" column="scan_on" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="NetworkSwitcherInterfaceMap">
+        select id,
+               sw_id,
+               sw_ip,
+               interface_index,
+               interface_detail,
+               mac_index,
+               phy_status,
+               up_status,
+               mac,
+               stream_type,
+               create_time,
+               update_time,
+               scan_on
+        from network_switcher_interface
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="NetworkSwitcherInterfaceMap">
+        select
+        id, sw_id, sw_ip, interface_index, interface_detail, mac_index, phy_status, up_status, mac, stream_type,
+        create_time, update_time, scan_on
+        from network_switcher_interface
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="swId != null">
+                and sw_id = #{swId}
+            </if>
+            <if test="swIp != null and swIp != ''">
+                and sw_ip = #{swIp}
+            </if>
+            <if test="interfaceIndex != null">
+                and interface_index = #{interfaceIndex}
+            </if>
+            <if test="interfaceDetail != null and interfaceDetail != ''">
+                and interface_detail = #{interfaceDetail}
+            </if>
+            <if test="macIndex != null">
+                and mac_index = #{macIndex}
+            </if>
+            <if test="phyStatus != null">
+                and phy_status = #{phyStatus}
+            </if>
+            <if test="upStatus != null">
+                and up_status = #{upStatus}
+            </if>
+            <if test="mac != null and mac != ''">
+                and mac = #{mac}
+            </if>
+            <if test="streamType != null">
+                and stream_type = #{streamType}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="scanOn != null">
+                and scan_on = #{scanOn}
+            </if>
+        </where>
+    </select>
+
+    <select id="findItfLimitList" resultType="com.zans.model.NetworkSwitcherInterface">
+        select interface_detail as interface_detail from network_switcher_interface where sw_ip =#{swIp} and scan_on=1
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into network_switcher_interface(sw_id, sw_ip, interface_index, interface_detail, mac_index, phy_status,
+                                               up_status, mac, stream_type, create_time, update_time, scan_on)
+        values (#{swId}, #{swIp}, #{interfaceIndex}, #{interfaceDetail}, #{macIndex}, #{phyStatus}, #{upStatus}, #{mac},
+                #{streamType}, #{createTime}, #{updateTime}, #{scanOn})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into network_switcher_interface(sw_id, sw_ip, interface_index, interface_detail, mac_index, phy_status,
+        up_status, mac, stream_type, create_time, update_time, scan_on)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.swId}, #{entity.swIp}, #{entity.interfaceIndex}, #{entity.interfaceDetail}, #{entity.macIndex},
+            #{entity.phyStatus}, #{entity.upStatus}, #{entity.mac}, #{entity.streamType}, #{entity.createTime},
+            #{entity.updateTime}, #{entity.scanOn})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into network_switcher_interface(sw_id, sw_ip, interface_index, interface_detail, mac_index, phy_status,
+        up_status, mac, stream_type, create_time, update_time, scan_on)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.swId}, #{entity.swIp}, #{entity.interfaceIndex}, #{entity.interfaceDetail}, #{entity.macIndex},
+            #{entity.phyStatus}, #{entity.upStatus}, #{entity.mac}, #{entity.streamType}, #{entity.createTime},
+            #{entity.updateTime}, #{entity.scanOn})
+        </foreach>
+        on duplicate key update
+        sw_id = values(sw_id) , sw_ip = values(sw_ip) , interface_index = values(interface_index) , interface_detail =
+        values(interface_detail) , mac_index = values(mac_index) , phy_status = values(phy_status) , up_status =
+        values(up_status) , mac = values(mac) , stream_type = values(stream_type) , create_time = values(create_time) ,
+        update_time = values(update_time) , scan_on = values(scan_on)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update network_switcher_interface
+        <set>
+            <if test="swId != null">
+                sw_id = #{swId},
+            </if>
+            <if test="swIp != null and swIp != ''">
+                sw_ip = #{swIp},
+            </if>
+            <if test="interfaceIndex != null">
+                interface_index = #{interfaceIndex},
+            </if>
+            <if test="interfaceDetail != null and interfaceDetail != ''">
+                interface_detail = #{interfaceDetail},
+            </if>
+            <if test="macIndex != null">
+                mac_index = #{macIndex},
+            </if>
+            <if test="phyStatus != null">
+                phy_status = #{phyStatus},
+            </if>
+            <if test="upStatus != null">
+                up_status = #{upStatus},
+            </if>
+            <if test="mac != null and mac != ''">
+                mac = #{mac},
+            </if>
+            <if test="streamType != null">
+                stream_type = #{streamType},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="scanOn != null">
+                scan_on = #{scanOn},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from network_switcher_interface
+        where id = #{id}
+    </delete>
+
+</mapper>
+

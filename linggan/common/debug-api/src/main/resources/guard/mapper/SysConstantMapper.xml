@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.SysConstantDao">
+
+    <resultMap type="com.zans.model.SysConstant" id="SysConstantMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="constantKey" column="constant_key" jdbcType="VARCHAR"/>
+        <result property="constantValue" column="constant_value" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="comment" column="comment" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryByKey" resultMap="SysConstantMap">
+        select id,
+               constant_key,
+               constant_value,
+               status,
+               comment,
+               create_time,
+               update_time
+        from sys_constant
+        where constant_key = #{key}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysConstantMap">
+        select
+        id, constant_key, constant_value, status, comment, create_time, update_time
+        from sys_constant
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="constantKey != null and constantKey != ''">
+                and constant_key = #{constantKey}
+            </if>
+            <if test="constantValue != null and constantValue != ''">
+                and constant_value = #{constantValue}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="comment != null and comment != ''">
+                and comment = #{comment}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_constant(constant_key, constant_value, status, comment, create_time, update_time)
+        values (#{constantKey}, #{constantValue}, #{status}, #{comment}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_constant(constant_key, constant_value, status, comment, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.constantKey}, #{entity.constantValue}, #{entity.status}, #{entity.comment}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_constant(constant_key, constant_value, status, comment, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.constantKey}, #{entity.constantValue}, #{entity.status}, #{entity.comment}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        constant_key = values(constant_key) , constant_value = values(constant_value) , status = values(status) ,
+        comment = values(comment) , create_time = values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update sys_constant
+        <set>
+            <if test="constantKey != null and constantKey != ''">
+                constant_key = #{constantKey},
+            </if>
+            <if test="constantValue != null and constantValue != ''">
+                constant_value = #{constantValue},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="comment != null and comment != ''">
+                comment = #{comment},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from sys_constant
+        where id = #{id}
+    </delete>
+
+</mapper>
+

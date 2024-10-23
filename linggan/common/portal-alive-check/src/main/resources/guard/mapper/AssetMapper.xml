@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.AssetMapper">
+
+
+    <select id="getIpAll" resultType="java.lang.String">
+        SELECT
+            ab.ip_addr
+        FROM
+            asset ab
+                LEFT JOIN asset_profile ap
+                          ON ap.ip_addr = ab.ip_addr
+        WHERE 1=1
+            AND LENGTH(IFNULL(ab.ip_addr, '')) > 6
+        UNION
+        SELECT
+        p.cur_ip_addr AS ip_addr
+        FROM
+        radius_endpoint r
+        LEFT JOIN radius_endpoint_profile p ON r.`mac` = p.`mac`
+        WHERE 1=1
+                  -- AND r.`access_policy` = 0 OR r.`access_policy` = 1
+            AND LENGTH(IFNULL( p.cur_ip_addr, '')) > 6
+    </select>
+
+    <select id="findAliveHeartBeatByIp" resultType="com.zans.vo.AliveHeartbeatVO">
+        select *
+        from alive_heartbeat
+        where ip_addr = #{ipAddr}
+    </select>
+
+    <select id="getIpAllByRadiusPoint" resultType="java.lang.String">
+        SELECT
+        p.cur_ip_addr AS ip_addr
+        FROM
+        radius_endpoint r
+        LEFT JOIN radius_endpoint_profile p ON r.`mac` = p.`mac`
+        WHERE 1=1
+            -- AND r.`access_policy` = 0 AND r.`access_policy` = 1
+        AND LENGTH(IFNULL( p.cur_ip_addr, '')) > 6
+        AND p.`cur_device_type` !=1 OR p.`cur_device_type` IS NULL
+    </select>
+
+    <select id="getEndpointByIp" resultType="com.zans.model.Asset">
+        SELECT
+            p.cur_ip_addr AS ip_addr,
+               p.cur_device_type as deviceType
+        FROM
+            radius_endpoint r
+                LEFT JOIN radius_endpoint_profile p ON r.`mac` = p.`mac`
+            where p.cur_ip_addr = #{ipAddr}
+    </select>
+
+
+    <update id="updateAliveHeartBeat">
+        update alive_heartbeat
+        set alive  = #{alive},
+            source = 1,
+            alive_last_time = now()
+        where ip_addr = #{ipAddr}
+    </update>
+
+    <insert id="saveAliveHeartBeat">
+        insert  into alive_heartbeat (ip_addr,alive,alive_last_time,source)
+        values( #{ipAddr},#{alive},now(),1)
+
+    </insert>
+
+</mapper>

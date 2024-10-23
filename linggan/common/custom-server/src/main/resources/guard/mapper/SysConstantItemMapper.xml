@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.SysConstantItemDao">
+
+    <resultMap type="com.zans.model.SysConstantItem" id="SysConstantItemMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="dictKey" column="dict_key" jdbcType="VARCHAR"/>
+        <result property="itemKey" column="item_key" jdbcType="VARCHAR"/>
+        <result property="itemValue" column="item_value" jdbcType="VARCHAR"/>
+        <result property="ordinal" column="ordinal" jdbcType="VARCHAR"/>
+        <result property="classType" column="class_type" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SysConstantItemMap">
+        select id,
+               dict_key,
+               item_key,
+               item_value,
+               ordinal,
+               class_type
+        from sys_constant_item
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysConstantItemMap">
+        select
+        id, dict_key, item_key, item_value, ordinal, class_type
+        from sys_constant_item
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="dictKey != null and dictKey != ''">
+                and dict_key = #{dictKey}
+            </if>
+            <if test="itemKey != null and itemKey != ''">
+                and item_key = #{itemKey}
+            </if>
+            <if test="itemValue != null and itemValue != ''">
+                and item_value = #{itemValue}
+            </if>
+            <if test="ordinal != null">
+                and ordinal = #{ordinal}
+            </if>
+            <if test="classType != null and classType != ''">
+                and class_type = #{classType}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryAllByKey" resultType="java.lang.String">
+        select dict_key  from sys_constant_item group by dict_key
+    </select>
+
+    <select id="queryByKey" resultType="com.zans.vo.SelectVO">
+        select item_key, item_value  from sys_constant_item where dict_key=#{dictKey} order by ordinal, id
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_constant_item(dict_key, item_key, item_value, ordinal, class_type)
+        values (#{dictKey}, #{itemKey}, #{itemValue}, #{ordinal}, #{classType})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_constant_item(dict_key, item_key, item_value, ordinal, class_type)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.dictKey}, #{entity.itemKey}, #{entity.itemValue}, #{entity.ordinal}, #{entity.classType})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_constant_item(dict_key, item_key, item_value, ordinal, class_type)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.dictKey}, #{entity.itemKey}, #{entity.itemValue}, #{entity.ordinal}, #{entity.classType})
+        </foreach>
+        on duplicate key update
+        dict_key = values(dict_key) , item_key = values(item_key) , item_value = values(item_value) , ordinal =
+        values(ordinal) , class_type = values(class_type)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update sys_constant_item
+        <set>
+            <if test="dictKey != null and dictKey != ''">
+                dict_key = #{dictKey},
+            </if>
+            <if test="itemKey != null and itemKey != ''">
+                item_key = #{itemKey},
+            </if>
+            <if test="itemValue != null and itemValue != ''">
+                item_value = #{itemValue},
+            </if>
+            <if test="ordinal != null">
+                ordinal = #{ordinal},
+            </if>
+            <if test="classType != null and classType != ''">
+                class_type = #{classType},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from sys_constant_item
+        where id = #{id}
+    </delete>
+
+</mapper>
+

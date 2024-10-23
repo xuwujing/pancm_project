@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.RadiusEndpointDao">
+
+    <resultMap type="com.zans.model.RadiusEndpoint" id="RadiusEndpointMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="mac" column="mac" jdbcType="VARCHAR"/>
+        <result property="baseIp" column="base_ip" jdbcType="VARCHAR"/>
+        <result property="accessPolicy" column="access_policy" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="authPerson" column="auth_person" jdbcType="VARCHAR"/>
+        <result property="authMark" column="auth_mark" jdbcType="VARCHAR"/>
+        <result property="authTime" column="auth_time" jdbcType="VARCHAR"/>
+        <result property="insertType" column="insert_type" jdbcType="INTEGER"/>
+        <result property="deleteStatus" column="delete_status" jdbcType="INTEGER"/>
+        <result property="enableStatus" column="enable_status" jdbcType="INTEGER"/>
+        <result property="source" column="source" jdbcType="INTEGER"/>
+        <result property="createPerson" column="create_person" jdbcType="VARCHAR"/>
+        <result property="otherUuid" column="other_uuid" jdbcType="VARCHAR"/>
+        <result property="otherScanStatus" column="other_scan_status" jdbcType="INTEGER"/>
+        <result property="otherScanTime" column="other_scan_time" jdbcType="VARCHAR"/>
+        <result property="qzDeviceStatus" column="qz_device_status" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="revealStatus" column="reveal_status" jdbcType="INTEGER"/>
+        <result property="whiteStatus" column="white_status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="RadiusEndpointMap">
+        select id,
+               mac,
+               base_ip,
+               access_policy,
+               remark,
+               auth_person,
+               auth_mark,
+               auth_time,
+               insert_type,
+               delete_status,
+               enable_status,
+               source,
+               create_person,
+               other_uuid,
+               other_scan_status,
+               other_scan_time,
+               qz_device_status,
+               create_time,
+               update_time,
+               reveal_status,
+               white_status
+        from radius_endpoint
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="RadiusEndpointMap">
+        select
+        id, mac, base_ip, access_policy, remark, auth_person, auth_mark, auth_time, insert_type, delete_status,
+        enable_status, source, create_person, other_uuid, other_scan_status, other_scan_time, qz_device_status,
+        create_time, update_time, reveal_status, white_status
+        from radius_endpoint
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="mac != null and mac != ''">
+                and mac = #{mac}
+            </if>
+            <if test="baseIp != null and baseIp != ''">
+                and base_ip = #{baseIp}
+            </if>
+            <if test="accessPolicy != null">
+                and access_policy = #{accessPolicy}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="authPerson != null and authPerson != ''">
+                and auth_person = #{authPerson}
+            </if>
+            <if test="authMark != null and authMark != ''">
+                and auth_mark = #{authMark}
+            </if>
+            <if test="authTime != null and authTime != ''">
+                and auth_time = #{authTime}
+            </if>
+            <if test="insertType != null">
+                and insert_type = #{insertType}
+            </if>
+            <if test="deleteStatus != null">
+                and delete_status = #{deleteStatus}
+            </if>
+            <if test="enableStatus != null">
+                and enable_status = #{enableStatus}
+            </if>
+            <if test="source != null">
+                and source = #{source}
+            </if>
+            <if test="createPerson != null and createPerson != ''">
+                and create_person = #{createPerson}
+            </if>
+            <if test="otherUuid != null and otherUuid != ''">
+                and other_uuid = #{otherUuid}
+            </if>
+            <if test="otherScanStatus != null">
+                and other_scan_status = #{otherScanStatus}
+            </if>
+            <if test="otherScanTime != null and otherScanTime != ''">
+                and other_scan_time = #{otherScanTime}
+            </if>
+            <if test="qzDeviceStatus != null">
+                and qz_device_status = #{qzDeviceStatus}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="revealStatus != null">
+                and reveal_status = #{revealStatus}
+            </if>
+            <if test="whiteStatus != null">
+                and white_status = #{whiteStatus}
+            </if>
+        </where>
+    </select>
+
+    <select id="findAllEndpointOfSwitcher" resultType="com.zans.model.RadiusEndpoint">
+        select p.endpoint_id, p.cur_ip_addr, p.mac from radius_endpoint e
+        inner join radius_endpoint_profile p on e.id=p.endpoint_id
+        where e.source <![CDATA[<=]]> 2 and p.cur_sw_ip= #{swIp}
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into radius_endpoint(mac, base_ip, access_policy, remark, auth_person, auth_mark, auth_time, insert_type,
+                                    delete_status, enable_status, source, create_person, other_uuid, other_scan_status,
+                                    other_scan_time, qz_device_status, create_time, update_time, reveal_status,
+                                    white_status)
+        values (#{mac}, #{baseIp}, #{accessPolicy}, #{remark}, #{authPerson}, #{authMark}, #{authTime}, #{insertType},
+                #{deleteStatus}, #{enableStatus}, #{source}, #{createPerson}, #{otherUuid}, #{otherScanStatus},
+                #{otherScanTime}, #{qzDeviceStatus}, #{createTime}, #{updateTime}, #{revealStatus}, #{whiteStatus})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into radius_endpoint(mac, base_ip, access_policy, remark, auth_person, auth_mark, auth_time, insert_type,
+        delete_status, enable_status, source, create_person, other_uuid, other_scan_status, other_scan_time,
+        qz_device_status, create_time, update_time, reveal_status, white_status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.mac}, #{entity.baseIp}, #{entity.accessPolicy}, #{entity.remark}, #{entity.authPerson},
+            #{entity.authMark}, #{entity.authTime}, #{entity.insertType}, #{entity.deleteStatus},
+            #{entity.enableStatus}, #{entity.source}, #{entity.createPerson}, #{entity.otherUuid},
+            #{entity.otherScanStatus}, #{entity.otherScanTime}, #{entity.qzDeviceStatus}, #{entity.createTime},
+            #{entity.updateTime}, #{entity.revealStatus}, #{entity.whiteStatus})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into radius_endpoint(mac, base_ip, access_policy, remark, auth_person, auth_mark, auth_time, insert_type,
+        delete_status, enable_status, source, create_person, other_uuid, other_scan_status, other_scan_time,
+        qz_device_status, create_time, update_time, reveal_status, white_status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.mac}, #{entity.baseIp}, #{entity.accessPolicy}, #{entity.remark}, #{entity.authPerson},
+            #{entity.authMark}, #{entity.authTime}, #{entity.insertType}, #{entity.deleteStatus},
+            #{entity.enableStatus}, #{entity.source}, #{entity.createPerson}, #{entity.otherUuid},
+            #{entity.otherScanStatus}, #{entity.otherScanTime}, #{entity.qzDeviceStatus}, #{entity.createTime},
+            #{entity.updateTime}, #{entity.revealStatus}, #{entity.whiteStatus})
+        </foreach>
+        on duplicate key update
+        mac = values(mac) , base_ip = values(base_ip) , access_policy = values(access_policy) , remark = values(remark)
+        , auth_person = values(auth_person) , auth_mark = values(auth_mark) , auth_time = values(auth_time) ,
+        insert_type = values(insert_type) , delete_status = values(delete_status) , enable_status =
+        values(enable_status) , source = values(source) , create_person = values(create_person) , other_uuid =
+        values(other_uuid) , other_scan_status = values(other_scan_status) , other_scan_time = values(other_scan_time) ,
+        qz_device_status = values(qz_device_status) , create_time = values(create_time) , update_time =
+        values(update_time) , reveal_status = values(reveal_status) , white_status = values(white_status)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update radius_endpoint
+        <set>
+            <if test="mac != null and mac != ''">
+                mac = #{mac},
+            </if>
+            <if test="baseIp != null and baseIp != ''">
+                base_ip = #{baseIp},
+            </if>
+            <if test="accessPolicy != null">
+                access_policy = #{accessPolicy},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="authPerson != null and authPerson != ''">
+                auth_person = #{authPerson},
+            </if>
+            <if test="authMark != null and authMark != ''">
+                auth_mark = #{authMark},
+            </if>
+            <if test="authTime != null and authTime != ''">
+                auth_time = #{authTime},
+            </if>
+            <if test="insertType != null">
+                insert_type = #{insertType},
+            </if>
+            <if test="deleteStatus != null">
+                delete_status = #{deleteStatus},
+            </if>
+            <if test="enableStatus != null">
+                enable_status = #{enableStatus},
+            </if>
+            <if test="source != null">
+                source = #{source},
+            </if>
+            <if test="createPerson != null and createPerson != ''">
+                create_person = #{createPerson},
+            </if>
+            <if test="otherUuid != null and otherUuid != ''">
+                other_uuid = #{otherUuid},
+            </if>
+            <if test="otherScanStatus != null">
+                other_scan_status = #{otherScanStatus},
+            </if>
+            <if test="otherScanTime != null and otherScanTime != ''">
+                other_scan_time = #{otherScanTime},
+            </if>
+            <if test="qzDeviceStatus != null">
+                qz_device_status = #{qzDeviceStatus},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="revealStatus != null">
+                reveal_status = #{revealStatus},
+            </if>
+            <if test="whiteStatus != null">
+                white_status = #{whiteStatus},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from radius_endpoint
+        where id = #{id}
+    </delete>
+
+</mapper>
+

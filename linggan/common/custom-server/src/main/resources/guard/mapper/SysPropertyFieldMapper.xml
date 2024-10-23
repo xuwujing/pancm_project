@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.SysPropertyFieldDao">
+
+    <resultMap type="com.zans.model.SysPropertyField" id="SysPropertyFieldMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="value" column="value" jdbcType="VARCHAR"/>
+        <result property="filedEnable" column="filed_enable" jdbcType="INTEGER"/>
+        <result property="filedStatus" column="filed_status" jdbcType="INTEGER"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="createdTime" column="created_time" jdbcType="VARCHAR"/>
+        <result property="updatedTime" column="updated_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SysPropertyFieldMap">
+        select id,
+               name,
+               value,
+               filed_enable,
+               filed_status,
+               sort,
+               created_time,
+               updated_time
+        from sys_property_field
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysPropertyFieldMap">
+        select
+        id, name, value, filed_enable, filed_status, sort, created_time, updated_time
+        from sys_property_field
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="value != null and value != ''">
+                and value = #{value}
+            </if>
+            <if test="filedEnable != null">
+                and filed_enable = #{filedEnable}
+            </if>
+            <if test="filedStatus != null">
+                and filed_status = #{filedStatus}
+            </if>
+            <if test="sort != null">
+                and sort = #{sort}
+            </if>
+            <if test="createdTime != null and createdTime != ''">
+                and created_time = #{createdTime}
+            </if>
+            <if test="updatedTime != null and updatedTime != ''">
+                and updated_time = #{updatedTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="init" resultType="com.zans.vo.SelectVO">
+        select value as itemKey, name as itemValue
+        from sys_property_field
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_property_field(name, value, filed_enable, filed_status, sort, created_time, updated_time)
+        values (#{name}, #{value}, #{filedEnable}, #{filedStatus}, #{sort}, #{createdTime}, #{updatedTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_property_field(name, value, filed_enable, filed_status, sort, created_time, updated_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.value}, #{entity.filedEnable}, #{entity.filedStatus}, #{entity.sort},
+            #{entity.createdTime}, #{entity.updatedTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_property_field(name, value, filed_enable, filed_status, sort, created_time, updated_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.value}, #{entity.filedEnable}, #{entity.filedStatus}, #{entity.sort},
+            #{entity.createdTime}, #{entity.updatedTime})
+        </foreach>
+        on duplicate key update
+        name = values(name) , value = values(value) , filed_enable = values(filed_enable) , filed_status =
+        values(filed_status) , sort = values(sort) , created_time = values(created_time) , updated_time =
+        values(updated_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update sys_property_field
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="value != null and value != ''">
+                value = #{value},
+            </if>
+            <if test="filedEnable != null">
+                filed_enable = #{filedEnable},
+            </if>
+            <if test="filedStatus != null">
+                filed_status = #{filedStatus},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="createdTime != null and createdTime != ''">
+                created_time = #{createdTime},
+            </if>
+            <if test="updatedTime != null and updatedTime != ''">
+                updated_time = #{updatedTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from sys_property_field
+        where id = #{id}
+    </delete>
+
+</mapper>
+

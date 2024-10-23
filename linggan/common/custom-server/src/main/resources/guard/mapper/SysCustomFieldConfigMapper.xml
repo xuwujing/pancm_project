@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.SysCustomFieldConfigDao">
+
+    <resultMap type="com.zans.model.SysCustomFieldConfig" id="SysCustomFieldConfigMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="moduleName" column="module_name" jdbcType="VARCHAR"/>
+        <result property="sqlText" column="sql_text" jdbcType="VARCHAR"/>
+        <result property="sqlHead" column="sql_head" jdbcType="VARCHAR"/>
+        <result property="sqlHeadEn" column="sql_head_en" jdbcType="VARCHAR"/>
+        <result property="filedEnable" column="filed_enable" jdbcType="INTEGER"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SysCustomFieldConfigMap">
+        select id,
+               module_name,
+               sql_text,
+               sql_head,
+               sql_head_en,
+               filed_enable,
+               sort,
+               create_time,
+               update_time
+        from sys_custom_field_config
+        where id = #{id}
+    </select>
+
+    <select id="queryByModule" resultType="com.zans.model.SysCustomFieldConfig">
+        select id,
+               module_name,
+               sql_text,
+               sql_head,
+               sql_head_en,
+               filed_enable,
+               sort,
+               create_time,
+               update_time
+        from sys_custom_field_config
+        where module_name = #{module}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysCustomFieldConfigMap">
+        select
+        id, module_name, sql_text, sql_head, sql_head_en, filed_enable, sort, create_time, update_time
+        from sys_custom_field_config
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="moduleName != null and moduleName != ''">
+                and module_name = #{moduleName}
+            </if>
+            <if test="sqlText != null and sqlText != ''">
+                and sql_text = #{sqlText}
+            </if>
+            <if test="sqlHead != null and sqlHead != ''">
+                and sql_head = #{sqlHead}
+            </if>
+            <if test="sqlHeadEn != null and sqlHeadEn != ''">
+                and sql_head_en = #{sqlHeadEn}
+            </if>
+            <if test="filedEnable != null">
+                and filed_enable = #{filedEnable}
+            </if>
+            <if test="sort != null">
+                and sort = #{sort}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_custom_field_config(module_name, sql_text, sql_head, sql_head_en, filed_enable, sort,
+                                            create_time, update_time)
+        values (#{moduleName}, #{sqlText}, #{sqlHead}, #{sqlHeadEn}, #{filedEnable}, #{sort}, #{createTime},
+                #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_custom_field_config(module_name, sql_text, sql_head, sql_head_en, filed_enable, sort,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.moduleName}, #{entity.sqlText}, #{entity.sqlHead}, #{entity.sqlHeadEn}, #{entity.filedEnable},
+            #{entity.sort}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_custom_field_config(module_name, sql_text, sql_head, sql_head_en, filed_enable, sort,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.moduleName}, #{entity.sqlText}, #{entity.sqlHead}, #{entity.sqlHeadEn}, #{entity.filedEnable},
+            #{entity.sort}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        module_name = values(module_name) , sql_text = values(sql_text) , sql_head = values(sql_head) , sql_head_en =
+        values(sql_head_en) , filed_enable = values(filed_enable) , sort = values(sort) , create_time =
+        values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update sys_custom_field_config
+        <set>
+            <if test="moduleName != null and moduleName != ''">
+                module_name = #{moduleName},
+            </if>
+            <if test="sqlText != null and sqlText != ''">
+                sql_text = #{sqlText},
+            </if>
+            <if test="sqlHead != null and sqlHead != ''">
+                sql_head = #{sqlHead},
+            </if>
+            <if test="sqlHeadEn != null and sqlHeadEn != ''">
+                sql_head_en = #{sqlHeadEn},
+            </if>
+            <if test="filedEnable != null">
+                filed_enable = #{filedEnable},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from sys_custom_field_config
+        where id = #{id}
+    </delete>
+
+</mapper>
+

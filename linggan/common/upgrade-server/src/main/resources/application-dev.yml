@@ -1,0 +1,21 @@
+server:
+  port: 19632
+
+
+
+spring:
+  datasource:
+    guard:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://192.168.9.42:3306/guard_scan?autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+      username: guard
+      password: txsqldb@123456
+  servlet:
+    multipart:
+      max-file-size: 5000MB
+      max-request-size: 5000MB
+  thymeleaf:
+    cache: false
+
+uploadFolder: /home/upgradePath/
+

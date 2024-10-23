@@ -1,0 +1,82 @@
+server:
+  port: 29632
+
+
+
+# 数据源配置
+# 查询数据库配置的名称后缀名加1，每次加新增一个同的配置则加1
+db:
+  info:
+    # 查询数据库的个数，如下面配置了2个数据库的链接，该配置就是2
+    num: 2
+    # mysql的安装地址
+    mysqlPath: /usr/bin/
+    # 保存备份的天,默认保存3天的备份数据
+    backUpDay: 3
+    # -------------第一个数据库-----------------
+    # 数据库地址和端口
+    url1: 192.168.9.42
+    # 端口
+    port1: 3306
+    # 数据库名称
+    dbName1: guard_scan
+    # 数据库账号
+    username1: guard
+    # 数据库密码(这里的密码需要加密)
+    password1: Bba9sUV9Cv4Xi5QB6yOWkQ==
+    # 需要备份的表，多个用空格符隔开，全部备份则不用填写
+    tableName1: alert_rule alert_server
+    # 备份存放的路径
+    targetPath1: /home/bak/guard_scan/
+    # 每天备份的时间 格式 hhmmss
+    executeTime1: "17:32:00"
+    # 是否启动时执行 0：否，1：是
+    isStartExecute1: 1
+
+    # -------------第二个数据库-----------------
+    # 数据库地址和端口
+    url2: 192.168.9.52
+    # 端口
+    port2: 3306
+    # 数据库名称(运维库)
+    dbName2: mms_dev11
+    # 数据库账号
+    username2: guard
+    # 数据库密码(这里的密码需要加密)
+    password2: Bba9sUV9Cv4Xi5QB6yOWkQ==
+    # 需要备份的表，多个用空格符隔开，全部备份则不用填写
+    tableName2:
+    # 备份存放的路径
+    targetPath2: /home/bak/mms_dev11/
+    # 每天备份的时间 格式 hhmmss
+    executeTime2: "17:32:00"
+    # 是否启动时执行 0：否，1：是
+    isStartExecute2: 1
+
+# 文件备份配置
+# 文件配置的名称后缀名加1，每次加新增一个同的配置则加1
+file:
+  info:
+    # 查询的个数，如下面配置了2个链接，该配置就是2
+    num: 1
+    # 备份的服务器类型 1：linux；2:Windows
+    os1: 1
+    # linux服务的地址
+    hostName1: 192.168.9.42
+    # 端口
+    port1: 22
+    # 账号
+    username1: root
+    # 密码(这里的密码需要加密)
+    password1: VW/hvxpTZF4Hp+aER1VwUA==
+    # 源路径
+    sourcePath1: /home/release/file
+    # 备份存放的路径
+    targetPath1: /home/bak/file/
+    # 每天备份的时间 格式 hhmmss
+    executeTime1: "17:32:00"
+    # 是否启动时执行 0：否，1：是
+    isStartExecute1: 1
+    # 后续是否增量备份
+    isIncrement: 0
+

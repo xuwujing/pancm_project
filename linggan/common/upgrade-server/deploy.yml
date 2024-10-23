@@ -1,0 +1,21 @@
+- hosts: policy_group
+  gather_facts: False
+  remote_user: root
+  tasks:
+    - name: copy upgrade_file to dest_server
+      debug:
+        var: glb
+    - copy:
+        src: "{{ item.srcPath }}"
+        dest: "{{ item.dstPath }}"
+        owner: root
+        group: root
+        mode: 755
+        backup: yes
+      with_items: "{{ glb }}"
+    - name: restart application
+      supervisorctl:
+        name: "{{ item.superName }}"
+        state: restarted
+        config: "/etc/supervisor/supervisord.conf"
+      with_items: "{{ glb }}"

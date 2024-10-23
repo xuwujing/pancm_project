@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.SysQueryFieldConfigDao">
+
+    <resultMap type="com.zans.model.SysQueryFieldConfig" id="SysQueryFieldConfigMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="moduleName" column="module_name" jdbcType="VARCHAR"/>
+        <result property="fieldKey" column="field_key" jdbcType="VARCHAR"/>
+        <result property="fieldName" column="field_name" jdbcType="VARCHAR"/>
+        <result property="filedEnable" column="filed_enable" jdbcType="INTEGER"/>
+        <result property="fieldType" column="field_type" jdbcType="INTEGER"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="fieldDesc" column="field_desc" jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="updatedTime" column="updated_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="SysQueryFieldConfigMap">
+        select id,
+               module_name,
+               field_key,
+               field_name,
+               filed_enable,
+               field_type,
+               sort,
+               field_desc,
+               created_time,
+               updated_time
+        from sys_query_field_config
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysQueryFieldConfigMap">
+        select
+        id, module_name, field_key, field_name, filed_enable, field_type, sort, field_desc, created_time, updated_time
+        from sys_query_field_config
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="moduleName != null and moduleName != ''">
+                and module_name = #{moduleName}
+            </if>
+            <if test="fieldKey != null and fieldKey != ''">
+                and field_key = #{fieldKey}
+            </if>
+            <if test="fieldName != null and fieldName != ''">
+                and field_name = #{fieldName}
+            </if>
+            <if test="filedEnable != null">
+                and filed_enable = #{filedEnable}
+            </if>
+            <if test="fieldType != null">
+                and field_type = #{fieldType}
+            </if>
+            <if test="sort != null">
+                and sort = #{sort}
+            </if>
+            <if test="fieldDesc != null and fieldDesc != ''">
+                and field_desc = #{fieldDesc}
+            </if>
+            <if test="createdTime != null">
+                and created_time = #{createdTime}
+            </if>
+            <if test="updatedTime != null">
+                and updated_time = #{updatedTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryByModule" resultType="com.zans.strategy.QueryRespVO">
+        select
+            field_key as itemKey, field_name as itemValue, field_type as type,field_desc as dict
+        from sys_query_field_config
+        where module_name = #{module}
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_query_field_config(module_name, field_key, field_name, filed_enable, field_type, sort,
+                                           field_desc, created_time, updated_time)
+        values (#{moduleName}, #{fieldKey}, #{fieldName}, #{filedEnable}, #{fieldType}, #{sort}, #{fieldDesc},
+                #{createdTime}, #{updatedTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_query_field_config(module_name, field_key, field_name, filed_enable, field_type, sort,
+        field_desc, created_time, updated_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.moduleName}, #{entity.fieldKey}, #{entity.fieldName}, #{entity.filedEnable}, #{entity.fieldType},
+            #{entity.sort}, #{entity.fieldDesc}, #{entity.createdTime}, #{entity.updatedTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_query_field_config(module_name, field_key, field_name, filed_enable, field_type, sort,
+        field_desc, created_time, updated_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.moduleName}, #{entity.fieldKey}, #{entity.fieldName}, #{entity.filedEnable}, #{entity.fieldType},
+            #{entity.sort}, #{entity.fieldDesc}, #{entity.createdTime}, #{entity.updatedTime})
+        </foreach>
+        on duplicate key update
+        module_name = values(module_name) , field_key = values(field_key) , field_name = values(field_name) ,
+        filed_enable = values(filed_enable) , field_type = values(field_type) , sort = values(sort) , field_desc =
+        values(field_desc) , created_time = values(created_time) , updated_time = values(updated_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update sys_query_field_config
+        <set>
+            <if test="moduleName != null and moduleName != ''">
+                module_name = #{moduleName},
+            </if>
+            <if test="fieldKey != null and fieldKey != ''">
+                field_key = #{fieldKey},
+            </if>
+            <if test="fieldName != null and fieldName != ''">
+                field_name = #{fieldName},
+            </if>
+            <if test="filedEnable != null">
+                filed_enable = #{filedEnable},
+            </if>
+            <if test="fieldType != null">
+                field_type = #{fieldType},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="fieldDesc != null and fieldDesc != ''">
+                field_desc = #{fieldDesc},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime},
+            </if>
+            <if test="updatedTime != null">
+                updated_time = #{updatedTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from sys_query_field_config
+        where id = #{id}
+    </delete>
+
+</mapper>
+
