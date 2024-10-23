@@ -27,8 +27,8 @@ public class TimerTest {
     public static void main(String[] args) {
 //    	timer1();
 //    	timer2();
-    	timer3();
-//    	timer4();
+//    	timer3();
+    	timer4();
 //    	timer5();
 //    	timer6();
 //    	timer7();
