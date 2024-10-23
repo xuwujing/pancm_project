@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.AsynQueueDao">
+
+    <resultMap type="com.zans.model.AsynQueue" id="AsynQueueMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="queueName" column="queue_name" jdbcType="VARCHAR"/>
+        <result property="queueDesc" column="queue_desc" jdbcType="VARCHAR"/>
+        <result property="queueEnable" column="queue_enable" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AsynQueueMap">
+        select id,
+               queue_name,
+               queue_desc,
+               queue_enable,
+               create_time,
+               update_time
+        from asyn_queue
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="AsynQueueMap">
+        select
+        id, queue_name, queue_desc, queue_enable, create_time, update_time
+        from asyn_queue
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="queueName != null and queueName != ''">
+                and queue_name = #{queueName}
+            </if>
+            <if test="queueDesc != null and queueDesc != ''">
+                and queue_desc = #{queueDesc}
+            </if>
+            <if test="queueEnable != null">
+                and queue_enable = #{queueEnable}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into asyn_queue(queue_name, queue_desc, queue_enable, create_time, update_time)
+        values (#{queueName}, #{queueDesc}, #{queueEnable}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asyn_queue(queue_name, queue_desc, queue_enable, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.queueName}, #{entity.queueDesc}, #{entity.queueEnable}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asyn_queue(queue_name, queue_desc, queue_enable, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.queueName}, #{entity.queueDesc}, #{entity.queueEnable}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        queue_name = values(queue_name) , queue_desc = values(queue_desc) , queue_enable = values(queue_enable) ,
+        create_time = values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update asyn_queue
+        <set>
+            <if test="queueName != null and queueName != ''">
+                queue_name = #{queueName},
+            </if>
+            <if test="queueDesc != null and queueDesc != ''">
+                queue_desc = #{queueDesc},
+            </if>
+            <if test="queueEnable != null">
+                queue_enable = #{queueEnable},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from asyn_queue
+        where id = #{id}
+    </delete>
+
+</mapper>
+

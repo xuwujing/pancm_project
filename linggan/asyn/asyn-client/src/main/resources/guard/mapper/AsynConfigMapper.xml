@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.AsynConfigDao">
+
+    <resultMap type="com.zans.model.AsynConfig" id="AsynConfigMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="projectId" column="project_id" jdbcType="VARCHAR"/>
+
+        <result property="enable" column="enable" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AsynConfigMap">
+        select id,
+               project_id,
+               enable,
+               create_time,
+               update_time
+        from asyn_config
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="AsynConfigMap">
+        select
+        id, project_id, enable, create_time, update_time
+        from asyn_config
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="projectId != null and projectId != ''">
+                and project_id = #{projectId}
+            </if>
+            <if test="targetUrl != null and targetUrl != ''">
+                and target_url = #{targetUrl}
+            </if>
+            <if test="urlHttp != null and urlHttp != ''">
+                and url_http = #{urlHttp}
+            </if>
+            <if test="urlMethod != null and urlMethod != ''">
+                and url_method = #{urlMethod}
+            </if>
+            <if test="queueName != null and queueName != ''">
+                and queue_name = #{queueName}
+            </if>
+            <if test="enable != null">
+                and enable = #{enable}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryByProjectId" resultType="com.zans.model.AsynConfig">
+        select id,
+               project_id,
+               queue_name,
+               enable,
+               create_time,
+               update_time
+        from asyn_config
+        where project_id = #{projectId}
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into asyn_config(project_id, enable, create_time,
+                                update_time)
+        values (#{projectId}, #{targetUrl}, #{urlHttp}, #{urlMethod}, #{queueName}, #{enable}, #{createTime},
+                #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asyn_config(project_id, enable, create_time,
+        update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.projectId}, #{entity.targetUrl}, #{entity.urlHttp}, #{entity.urlMethod}, #{entity.queueName},
+            #{entity.enable}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asyn_config(project_id, enable, create_time,
+        update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.projectId}, #{entity.targetUrl}, #{entity.urlHttp}, #{entity.urlMethod}, #{entity.queueName},
+            #{entity.enable}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        project_id = values(project_id) , enable = values(enable) , create_time =
+        values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update asyn_config
+        <set>
+            <if test="projectId != null and projectId != ''">
+                project_id = #{projectId},
+            </if>
+            <if test="targetUrl != null and targetUrl != ''">
+                target_url = #{targetUrl},
+            </if>
+            <if test="urlHttp != null and urlHttp != ''">
+                url_http = #{urlHttp},
+            </if>
+            <if test="urlMethod != null and urlMethod != ''">
+                url_method = #{urlMethod},
+            </if>
+            <if test="queueName != null and queueName != ''">
+                queue_name = #{queueName},
+            </if>
+            <if test="enable != null">
+                enable = #{enable},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from asyn_config
+        where id = #{id}
+    </delete>
+
+</mapper>
+

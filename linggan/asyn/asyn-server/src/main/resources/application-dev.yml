@@ -1,0 +1,31 @@
+server:
+  port: 19633
+  servlet:
+    context-path: /api
+
+
+spring:
+  datasource:
+    guard:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://192.168.9.42:3306/asyn_schema?autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+      username: guard
+      password: txsqldb@123456
+
+  # REDIS数据库配置
+  redis:
+    # [必须修改] Redis服务器IP, REDIS安装在本机的,使用127.0.0.1
+    host: 192.168.9.51
+    # [必须修改] 端口号
+    port: 6379
+    # [可选] 数据库 DB
+    database: 1
+    # [可选] 访问密码,若你的redis服务器没有设置密码，就不需要用密码去连接
+    password: redis123
+    # [可选] 超时时间
+    timeout: 10000
+  # netty配置
+  netty:
+    port: 52314
+    boss_threads: 1
+    worker_threads: 5

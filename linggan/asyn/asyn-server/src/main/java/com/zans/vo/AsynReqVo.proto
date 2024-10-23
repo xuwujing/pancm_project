@@ -1,0 +1,22 @@
+syntax = "proto3";
+// 生成的包名
+option java_package="com.zans.vo";
+//生成的java名
+option java_outer_classname = "AsynReqVo";
+
+message AsynReqVoMsg {
+
+     // ID
+     int32 state = 1;
+
+    // taskId
+     string taskId = 2;
+
+    // 名称
+     string name = 3;
+
+	 // 状态
+     string data = 4;
+
+}
+

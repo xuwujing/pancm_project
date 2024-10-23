@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.AsynTaskRecordDao">
+
+    <resultMap type="com.zans.model.AsynTaskRecord" id="AsynTaskRecordMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="taskId" column="task_id" jdbcType="VARCHAR"/>
+        <result property="reqData" column="req_data" jdbcType="VARCHAR"/>
+        <result property="respData" column="resp_data" jdbcType="VARCHAR"/>
+        <result property="executeStatus" column="execute_status" jdbcType="INTEGER"/>
+        <result property="retryCount" column="retry_count" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AsynTaskRecordMap">
+        select id,
+               task_id,
+               req_data,
+               resp_data,
+               execute_status,
+               retry_count,
+               create_time,
+               update_time
+        from asyn_task_record
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="AsynTaskRecordMap">
+        select
+        id, task_id, req_data, resp_data, execute_status, retry_count, create_time, update_time
+        from asyn_task_record
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="taskId != null and taskId != ''">
+                and task_id = #{taskId}
+            </if>
+            <if test="reqData != null and reqData != ''">
+                and req_data = #{reqData}
+            </if>
+            <if test="respData != null and respData != ''">
+                and resp_data = #{respData}
+            </if>
+            <if test="executeStatus != null">
+                and execute_status = #{executeStatus}
+            </if>
+            <if test="retryCount != null">
+                and retry_count = #{retryCount}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into asyn_task_record(task_id,source_project_id,target_project_id,queue_name, req_data)
+        values (#{taskId}, #{sourceProjectId},#{targetProjectId}, #{queueName}, #{reqData})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asyn_task_record(task_id, req_data, resp_data, execute_status, retry_count, create_time,
+        update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.taskId}, #{entity.reqData}, #{entity.respData}, #{entity.executeStatus}, #{entity.retryCount},
+            #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asyn_task_record(task_id, req_data, resp_data, execute_status, retry_count, create_time,
+        update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.taskId}, #{entity.reqData}, #{entity.respData}, #{entity.executeStatus}, #{entity.retryCount},
+            #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        task_id = values(task_id) , req_data = values(req_data) , resp_data = values(resp_data) , execute_status =
+        values(execute_status) , retry_count = values(retry_count) , create_time = values(create_time) , update_time =
+        values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update asyn_task_record
+        <set>
+            <if test="taskId != null and taskId != ''">
+                task_id = #{taskId},
+            </if>
+            <if test="reqData != null and reqData != ''">
+                req_data = #{reqData},
+            </if>
+            <if test="respData != null and respData != ''">
+                resp_data = #{respData},
+            </if>
+            <if test="executeStatus != null">
+                execute_status = #{executeStatus},
+            </if>
+            <if test="retryCount != null">
+                retry_count = #{retryCount},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from asyn_task_record
+        where id = #{id}
+    </delete>
+
+</mapper>
+
