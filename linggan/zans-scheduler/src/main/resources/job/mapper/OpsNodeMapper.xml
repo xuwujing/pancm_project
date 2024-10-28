@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.job.dao.OpsNodeMapper" >
+  <select id="getEnableNodes" resultType="com.zans.job.vo.node.NodeVO">
+    select *, weight as effective_weight, 0 as current_weight from ops_node a
+    <where>
+      enable=1
+      <if test="nodeType != null">
+        and node_type = #{nodeType}
+      </if>
+      <if test="priority != null">
+        and priority = #{priority}
+      </if>
+    </where>
+    order by priority, node_id
+  </select>
+
+
+
+
+  <select id="findNodeById" resultType="com.zans.job.model.OpsNode">
+    select * from ops_node where node_id=#{nodeId}
+  </select>
+
+  <select id="findNodeList" resultType="com.zans.job.vo.node.NodeRespVO">
+    SELECT o.node_id,o.node_type,o.ip,concat(o.ip,':',o.port) as ip_port,o.port,o.ssh_port,o.root_password,o.max_task_count,o.weight,o.priority,o.temp_quota,o.remark,o.register,
+    o.alive,o.expire_time,o.enable,
+    (SELECT COUNT(1) FROM ops_job_task t WHERE t.node_id = o.node_id AND t.task_status = 1 AND t.enable = 0 AND t.alloc_status = 2) current_task_count
+    FROM ops_node o where 1=1 and o.enable = 1
+    <if test="reqVo.nodeId != null and reqVo.nodeId!= '' ">
+      and o.node_id like concat('%',#{reqVo.nodeId},'%')
+    </if>
+    <if test="reqVo.ip != null and reqVo.ip!= '' ">
+      and o.ip like concat('%',#{reqVo.ip},'%')
+    </if>
+    <if test=" reqVo.priority != null ">
+      and o.priority = #{reqVo.priority}
+    </if>
+    <if test=" reqVo.nodeType != null and reqVo.nodeType != '' ">
+      and o.node_type = #{reqVo.nodeType}
+    </if>
+    <if test=" reqVo.alive != null ">
+      and o.alive = #{reqVo.alive}
+    </if>
+    <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+      order by ${reqVo.orderBy}
+    </if>
+  </select>
+
+</mapper>

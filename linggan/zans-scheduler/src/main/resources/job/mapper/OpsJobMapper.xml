@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.job.dao.OpsJobMapper" >
+
+  <select id="findJobList" resultType="com.zans.job.vo.job.JobRespVO">
+    <!-- SELECT o.*,
+    (SELECT DATE_FORMAT(start_time,'%Y-%m-%d %h:%i:%s') FROM ops_job_execution e WHERE e.`job_id` = o.`job_id` ORDER BY e.`start_time` DESC LIMIT 1) AS new_start_time,
+    (SELECT job_status FROM ops_job_execution e WHERE e.`job_id` = o.`job_id` ORDER BY e.`start_time` DESC LIMIT 1) AS job_status
+    FROM ops_job o WHERE 1=1 -->
+
+    SELECT o.*,DATE_FORMAT(sje.start_time,'%Y-%m-%d %h:%i:%s')  AS new_start_time,sje.job_status FROM ops_job o 
+    LEFT JOIN (SELECT job_id,MAX(exec_id) AS exec_id FROM ops_job_execution GROUP BY job_id) je ON o.job_id=je.job_id
+    LEFT JOIN ops_job_execution sje ON sje.exec_id = je.exec_id
+    where 1=1 
+    <if test="reqVo.jobId != null">
+      AND o.job_id = #{reqVo.jobId}
+    </if>
+    <if test="reqVo.jobName != null and reqVo.jobName != '' ">
+      AND o.`job_name` LIKE CONCAT('%',#{reqVo.jobName},'%')
+    </if>
+    <if test=" reqVo.start != null and reqVo.start != '' ">
+      AND DATE_FORMAT(sje.start_time,'%Y-%m-%d %h:%i:%s')= #{reqVo.start}
+    </if>
+    <if test="reqVo.enable != null">
+      AND o.enable = #{reqVo.enable}
+    </if>
+    <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+      order by ${reqVo.orderBy}
+    </if>
+  </select>
+
+  <select id="getJobByJobNameAndId" resultType="java.lang.Integer">
+    select count(1) from ops_job o where o.job_name = #{jobName}
+    <if test=" jobId != null ">
+        and o.job_id != #{jobId}
+    </if>
+  </select>
+
+  <select id="getJobCount" resultType="com.zans.job.vo.common.CircleUnit">
+    SELECT COUNT(1) AS val,'total' AS name FROM ops_job o
+    UNION ALL
+    SELECT COUNT(1) AS val,'execution' AS name FROM (
+      SELECT e.job_id FROM `ops_job_execution` e LEFT JOIN ops_job o ON e.job_id = o.`job_id`  WHERE e.job_status <![CDATA[<=]]>  1	AND  e.start_time >  DATE_SUB(NOW(), INTERVAL 10 MINUTE)
+    ) t
+  </select>
+
+  <select id="getJobPieChart" resultType="com.zans.job.vo.common.CircleUnit">
+    SELECT COUNT(1) AS val,'成功' AS NAME FROM ops_job_execution e WHERE e.job_status = 2
+    UNION ALL
+    SELECT COUNT(1) AS val,'进行中' AS NAME FROM ops_job_execution e WHERE e.job_status = 1
+    UNION ALL
+    SELECT COUNT(1) AS val,'失败' AS NAME FROM ops_job_execution e WHERE e.job_status IN (3,4)
+  </select>
+
+  <select id="getJobByHours" resultType="com.zans.job.vo.common.CircleUnit">
+    <foreach collection="dates" item="date" index="index" separator="UNION ALL">
+      SELECT COUNT(1) AS val,#{date} AS NAME FROM `ops_job_execution` o WHERE  o.start_time BETWEEN CONCAT(#{date}, ':00:00') AND CONCAT(#{date}, ':59:59')
+    </foreach>
+  </select>
+
+
+</mapper>

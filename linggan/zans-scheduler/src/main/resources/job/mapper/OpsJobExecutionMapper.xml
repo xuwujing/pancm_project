@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.job.dao.OpsJobExecutionMapper" >
+
+  <select id="getExecutionByJob" resultType="com.zans.job.model.OpsJobExecution">
+    select * from ops_job_execution where job_id=#{jobId} order by exec_id desc
+  </select>
+  <select id="getRunningExecutionByJob" resultType="com.zans.job.model.OpsJobExecution">
+    select * from ops_job_execution where job_id=#{jobId} and (job_status = 0 or job_status = 1) order by exec_id desc
+  </select>
+  <select id="getExecutionByJobAndSharding" resultType="com.zans.job.model.OpsJobExecution">
+    select * from ops_job_execution where job_id=#{jobId} and sharding_num=#{shardingNum} order by exec_id desc
+  </select>
+
+  <select id="findExecuteList" resultType="com.zans.job.vo.execution.ExecuRespVO">
+      SELECT e.exec_id,e.job_id,e.record_count,e.`finished_sharding`,e.`start_time`,e.`finish_time`,e.`job_status`,
+      CASE WHEN e.`job_status` = 1 THEN '任务开始'
+      WHEN e.`job_status` = 2 THEN '任务正常结束'
+      WHEN e.`job_status` = 3 THEN '任务超时'
+      WHEN e.`job_status` = 4 THEN '异常终止'
+      ELSE '' END job_status_name
+      FROM ops_job_execution e
+      WHERE 1=1
+      <if test="reqVo.jobId != null">
+        and e.job_id = #{reqVo.jobId}
+      </if>
+      <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+        order by ${reqVo.orderBy}
+      </if>
+  </select>
+
+</mapper>

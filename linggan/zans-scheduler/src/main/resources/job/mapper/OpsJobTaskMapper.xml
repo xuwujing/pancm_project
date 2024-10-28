@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.job.dao.OpsJobTaskMapper" >
+  <update id="assignTaskToNode">
+    update ops_job_task set node_id=#{nodeId}, alloc_time=#{date}, alloc_status=#{allocStatus} where task_id=#{taskId}
+  </update>
+  <select id="getRunningTaskOfNode" resultType="java.lang.Integer">
+    select count(task_id) from ops_job_task where node_id=#{nodeId} and (task_status &lt;= 1 or task_status is null)
+  </select>
+  <select id="getRunningTaskOfExecution" resultType="java.lang.Integer">
+    select count(task_id) from ops_job_task where exec_id=#{executionId} and (task_status &lt;= 1 or task_status is null)
+  </select>
+  <select id="getTasksOfExecution" resultType="com.zans.job.model.OpsJobTask">
+    select * from ops_job_task where exec_id=#{executionId} and (task_status &lt;= 1 or task_status is null)
+  </select>
+  <select id="getRunningTasksOfNode" resultType="com.zans.job.model.OpsJobTask">
+    select a.* from ops_job_task a inner join ops_job_execution b on a.exec_id=b.exec_id
+    where node_id=#{nodeId} and b.job_status &lt;= 1 and (task_status &lt;= 1 or task_status is null)
+  </select>
+  <select id="getUnAllocTasksOfExecution" resultType="com.zans.job.model.OpsJobTask">
+    select * from ops_job_task where exec_id=#{executionId} and
+      (alloc_status &lt;= 1 or alloc_status is null or node_id is null)
+  </select>
+  <delete id="deleteTasksOfExecution">
+    delete from ops_job_task where exec_id=#{executionId}
+  </delete>
+  <select id="findByJobId" resultType="com.zans.job.model.OpsJobTask">
+    select * from ops_job_task o where o.job_id = #{jobId}
+  </select>
+
+  <select id="findTaskList" resultType="com.zans.job.vo.task.TaskRespVO">
+    SELECT t.`task_id`,t.`exec_id`,t.`job_id`,t.alloc_status,t.alloc_time,t.node_id,t.`task_name`,
+    t.todo_count,t.done_count,t.progress,
+    DATE_FORMAT(t.start_time,'%Y-%m-%d %H:%i:%s') start_time,
+    DATE_FORMAT(t.finish_time,'%Y-%m-%d %H:%i:%s') finish_time,
+    t.task_status, t.error,t.content
+    FROM ops_job_task t
+    WHERE 1=1
+    <if test=" reqVo.execId != null ">
+      and t.exec_id = #{reqVo.execId}
+    </if>
+    <if test=" reqVo.nodeId != null and reqVo.nodeId != '' ">
+      and t.node_id = #{reqVo.nodeId}
+    </if>
+    <if test=" reqVo.taskId != null ">
+      and t.task_id = #{reqVo.taskId}
+    </if>
+    <if test=" reqVo.startTime != null and reqVo.startTime != '' ">
+      and date_format(t.start_time,'%Y-%m-%d %H:%i') = #{reqVo.startTime}
+    </if>
+    <if test=" reqVo.allocStatus != null ">
+      and t.alloc_status = #{reqVo.allocStatus}
+    </if>
+    <if test=" reqVo.taskStatus != null ">
+      and t.task_status = #{reqVo.taskStatus}
+    </if>
+    <if test=" reqVo.type != null and reqVo.type == 1 ">
+      and t.task_status in (0,1)
+    </if>
+    <if test=" reqVo.type != null and reqVo.type == 2 ">
+      and t.task_status in (2,3)
+    </if>
+    <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+      order by ${reqVo.orderBy}
+    </if>
+  </select>
+</mapper>
