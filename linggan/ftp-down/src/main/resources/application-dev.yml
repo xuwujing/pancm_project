@@ -1,0 +1,17 @@
+server:
+  port: 8632
+  servlet:
+    context-path: /api
+
+
+sftp:
+  # 格式hhmmss
+  execute-time: 173200
+  hostName: 192.168.9.80
+  username: root
+  password: Admin#12$34!
+  srcFilePath: /home/release/file
+  targetFilePath: D:\\d1
+
+mmsImgDay: 0
+
