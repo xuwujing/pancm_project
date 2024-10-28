@@ -1,0 +1,25 @@
+server:
+  servlet:
+    context-path: /api
+  port: 43200
+
+
+
+spring:
+  datasource:
+    url: jdbc:mysql://192.168.9.52:3306/guard_scan?autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull
+    username: guard_2
+    password: Txsqldb@123456
+    driver-class-name: com.mysql.jdbc.Driver
+  mybatis:
+    configuration:
+      map-underscore-to-camel-case=true: true
+
+
+
+
+
+
+
+
+

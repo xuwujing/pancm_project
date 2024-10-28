@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.DeviceCipherApproveDao">
+
+    <resultMap type="com.zans.model.DeviceCipherApprove" id="DeviceCipherApproveMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="ip" column="ip" jdbcType="VARCHAR"/>
+        <result property="proposUser" column="propos_user" jdbcType="VARCHAR"/>
+        <result property="approveUser" column="approve_user" jdbcType="VARCHAR"/>
+        <result property="approveStatus" column="approve_status" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DeviceCipherApproveMap">
+        select id,
+               ip,
+               propos_user,
+               approve_user,
+               approve_status,
+               remark,
+               create_time,
+               update_time
+        from device_cipher_approve
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultType="com.zans.vo.DeviceCipherApproveVO">
+        select
+        id, ip, propos_user, approve_user, approve_status, remark, create_time, update_time
+        from device_cipher_approve
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="ip != null and ip != ''">
+                and ip LIKE CONCAT('%',CONCAT(#{ip}),'%')
+            </if>
+            <if test="proposUser != null and proposUser != ''">
+                and propos_user LIKE CONCAT('%',CONCAT(#{proposUser}),'%')
+            </if>
+            <if test="approveUser != null and approveUser != ''">
+                and approve_user = #{approveUser}
+            </if>
+            <if test="approveStatus != null">
+                and approve_status = #{approveStatus}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        order by create_time DESC
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into device_cipher_approve(ip, propos_user, approve_user, approve_status, remark, create_time,
+                                          update_time)
+        values (#{ip}, #{proposUser}, #{approveUser}, #{approveStatus}, #{remark}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into device_cipher_approve(ip, propos_user, approve_user, approve_status, remark, create_time,
+        update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ip}, #{entity.proposUser}, #{entity.approveUser}, #{entity.approveStatus}, #{entity.remark},
+            #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into device_cipher_approve(ip, propos_user, approve_user, approve_status, remark, create_time,
+        update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ip}, #{entity.proposUser}, #{entity.approveUser}, #{entity.approveStatus}, #{entity.remark},
+            #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        ip = values(ip) , propos_user = values(propos_user) , approve_user = values(approve_user) , approve_status =
+        values(approve_status) , remark = values(remark) , create_time = values(create_time) , update_time =
+        values(update_time)
+    </insert>
+
+    <!--    <update id="updateStatus">-->
+    <!--        <foreach collection="list" item="item"-->
+    <!--                 index="index" separator=";">-->
+    <!--            update device_cipher_approve-->
+    <!--            <set>-->
+    <!--                <if test="approveStatus != null">-->
+    <!--                    approve_status = #{approveStatus},-->
+    <!--                </if>-->
+    <!--            </set>-->
+    <!--            where id =#{id}-->
+    <!--        </foreach>-->
+    <!--    </update>-->
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update device_cipher_approve
+        <set>
+            <if test="ip != null and ip != ''">
+                ip = #{ip},
+            </if>
+            <if test="proposUser != null and proposUser != ''">
+                propos_user = #{proposUser},
+            </if>
+            <if test="approveUser != null and approveUser != ''">
+                approve_user = #{approveUser},
+            </if>
+            <if test="approveStatus != null">
+                approve_status = #{approveStatus},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键修改数据-->
+    <update id="updateStatus">
+        update device_cipher_approve
+        <set>
+            <if test="ip != null and ip != ''">
+                ip = #{ip},
+            </if>
+            <if test="proposUser != null and proposUser != ''">
+                propos_user = #{proposUser},
+            </if>
+            <if test="approveUser != null and approveUser != ''">
+                approve_user = #{approveUser},
+            </if>
+            <if test="approveStatus != null">
+                approve_status = #{approveStatus},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from device_cipher_approve
+        where id = #{id}
+    </delete>
+
+    <select id="queryOne" resultType="com.zans.model.DeviceCipherApprove">
+        select * from device_cipher_approve
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="ip != null and ip != ''">
+                and ip = #{ip}
+            </if>
+            <if test="proposUser != null and proposUser != ''">
+                and propos_user = #{proposUser}
+            </if>
+            <if test="approveUser != null and approveUser != ''">
+                and approve_user = #{approveUser}
+            </if>
+            <if test="approveStatus != null">
+                and approve_status = #{approveStatus}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+        limit 1
+    </select>
+
+    <select id="queryApproveList" resultType="com.zans.vo.DeviceCipherApproveVO">
+        select id,
+               ip,
+               propos_user,
+               approve_user,
+               approve_status,
+               remark,
+               create_time,
+               update_time
+        from device_cipher_approve
+        where approve_status in (2, 3)
+    </select>
+
+</mapper>
+

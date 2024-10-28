@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.HikFeatureModelRelevanceDao">
+
+    <resultMap type="com.zans.model.HikFeatureModelRelevance" id="HikFeatureModelRelevanceMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="businessId" column="business_id" jdbcType="VARCHAR"/>
+        <result property="model" column="model" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="HikFeatureModelRelevanceMap">
+        select id,
+               business_id,
+               model,
+               create_time,
+               update_time
+        from hik_feature_model_relevance
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="HikFeatureModelRelevanceMap">
+        select
+        id, business_id, model, create_time, update_time
+        from hik_feature_model_relevance
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="businessId != null and businessId != ''">
+                and business_id = #{businessId}
+            </if>
+            <if test="model != null">
+                and model = #{model}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into hik_feature_model_relevance(business_id, model)
+        values (#{businessId}, #{model})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into hik_feature_model_relevance(business_id, model)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.businessId}, #{entity.model})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into hik_feature_model_relevance(business_id, model, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.businessId}, #{entity.model}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        business_id = values(business_id) , model = values(model) , create_time = values(create_time) , update_time =
+        values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update hik_feature_model_relevance
+        <set>
+            <if test="businessId != null and businessId != ''">
+                business_id = #{businessId},
+            </if>
+            <if test="model != null">
+                model = #{model},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from hik_feature_model_relevance
+        where id = #{id}
+    </delete>
+
+</mapper>
+

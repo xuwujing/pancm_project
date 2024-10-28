@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.DeviceCipherDao">
+
+    <resultMap type="com.zans.model.DeviceCipher" id="DeviceCipherMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="ip" column="ip" jdbcType="VARCHAR"/>
+        <result property="deviceBrand" column="device_brand" jdbcType="VARCHAR"/>
+        <result property="deviceType" column="device_type" jdbcType="VARCHAR"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="aliveStatus" column="alive_status" jdbcType="INTEGER"/>
+        <result property="isValid" column="is_valid" jdbcType="INTEGER"/>
+        <result property="isStrong" column="is_strong" jdbcType="INTEGER"/>
+        <result property="deleteStatus" column="delete_status" jdbcType="INTEGER"/>
+        <result property="lastStartTime" column="last_start_time" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DeviceCipherMap">
+        select id,
+               ip,
+               device_brand,
+               device_type,
+               account,
+               password,
+               alive_status,
+               is_valid,
+               is_strong,
+               delete_status,
+               last_start_time,
+               remark,
+               update_user,
+               create_time,
+               update_time
+        from device_cipher
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DeviceCipherMap">
+        select
+        id, ip, device_brand, device_type, account, password, alive_status, is_valid, is_strong, delete_status,
+        last_start_time, remark, update_user, create_time, update_time
+        from device_cipher
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="ip != null and ip != ''">
+                and ip LIKE CONCAT('%',CONCAT(#{ip}),'%')
+            </if>
+            <if test="deviceBrand != null and deviceBrand != ''">
+                and device_brand = #{deviceBrand}
+            </if>
+            <if test="deviceType != null and deviceType != ''">
+                and device_type = #{deviceType}
+            </if>
+            <if test="account != null and account != ''">
+                and account LIKE CONCAT('%',CONCAT(#{account}),'%')
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="aliveStatus != null">
+                and alive_status = #{aliveStatus}
+            </if>
+            <if test="isValid != null">
+                and is_valid = #{isValid}
+            </if>
+            <if test="isStrong != null">
+                and is_strong = #{isStrong}
+            </if>
+            <if test="deleteStatus != null">
+                and delete_status = #{deleteStatus}
+            </if>
+            <if test="lastStartTime != null and lastStartTime != ''">
+                and last_start_time = #{lastStartTime}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                and update_user = #{updateUser}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into device_cipher(ip, device_brand, device_type, account, password, alive_status, is_valid, is_strong,
+                                  delete_status, last_start_time, remark, update_user, create_time, update_time)
+        values (#{ip}, #{deviceBrand}, #{deviceType}, #{account}, #{password}, #{aliveStatus}, #{isValid}, #{isStrong},
+                #{deleteStatus}, #{lastStartTime}, #{remark}, #{updateUser}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into device_cipher(ip, device_brand, device_type, account, password, alive_status, is_valid, is_strong,
+        delete_status, last_start_time, remark, update_user, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ip}, #{entity.deviceBrand}, #{entity.deviceType}, #{entity.account}, #{entity.password},
+            #{entity.aliveStatus}, #{entity.isValid}, #{entity.isStrong}, #{entity.deleteStatus},
+            #{entity.lastStartTime}, #{entity.remark}, #{entity.updateUser}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into device_cipher(ip, device_brand, device_type, account, password, alive_status, is_valid, is_strong,
+        delete_status, last_start_time, remark, update_user, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ip}, #{entity.deviceBrand}, #{entity.deviceType}, #{entity.account}, #{entity.password},
+            #{entity.aliveStatus}, #{entity.isValid}, #{entity.isStrong}, #{entity.deleteStatus},
+            #{entity.lastStartTime}, #{entity.remark}, #{entity.updateUser}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        ip = values(ip) , device_brand = values(device_brand) , device_type = values(device_type) , account =
+        values(account) , password = values(password) , alive_status = values(alive_status) , is_valid =
+        values(is_valid) , is_strong = values(is_strong) , delete_status = values(delete_status) , last_start_time =
+        values(last_start_time) , remark = values(remark) , update_user = values(update_user) , create_time =
+        values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update device_cipher
+        <set>
+            <if test="ip != null and ip != ''">
+                ip = #{ip},
+            </if>
+            <if test="deviceBrand != null and deviceBrand != ''">
+                device_brand = #{deviceBrand},
+            </if>
+            <if test="deviceType != null and deviceType != ''">
+                device_type = #{deviceType},
+            </if>
+            <if test="account != null and account != ''">
+                account = #{account},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="aliveStatus != null">
+                alive_status = #{aliveStatus},
+            </if>
+            <if test="isValid != null">
+                is_valid = #{isValid},
+            </if>
+            <if test="isStrong != null">
+                is_strong = #{isStrong},
+            </if>
+            <if test="deleteStatus != null">
+                delete_status = #{deleteStatus},
+            </if>
+            <if test="lastStartTime != null and lastStartTime != ''">
+                last_start_time = #{lastStartTime},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                update_user = #{updateUser},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from device_cipher
+        where id = #{id}
+    </delete>
+
+    <select id="queryOneByIp" resultMap="DeviceCipherMap">
+        select * from device_cipher
+        <where>
+            <if test="ip != null and ip != ''">
+                and ip = #{ip}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+
+    <update id="updateByIp">
+        update device_cipher
+        <set>
+            <if test="deviceBrand != null and deviceBrand != ''">
+                device_brand = #{deviceBrand},
+            </if>
+            <if test="deviceType != null and deviceType != ''">
+                device_type = #{deviceType},
+            </if>
+            <if test="account != null and account != ''">
+                account = #{account},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="aliveStatus != null">
+                alive_status = #{aliveStatus},
+            </if>
+            <if test="isValid != null">
+                is_valid = #{isValid},
+            </if>
+            <if test="isStrong != null">
+                is_strong = #{isStrong},
+            </if>
+            <if test="deleteStatus != null">
+                delete_status = #{deleteStatus},
+            </if>
+            <if test="lastStartTime != null and lastStartTime != ''">
+                last_start_time = #{lastStartTime},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                update_user = #{updateUser},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where ip = #{ip}
+    </update>
+
+</mapper>
+

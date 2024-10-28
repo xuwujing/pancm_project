@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.DeviceFeatureModelRelevanceDao">
+
+    <resultMap type="com.zans.vo.DeviceFeatureModelRelevanceVO" id="DeviceFeatureModelRelevanceMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="businessId" column="business_id" jdbcType="VARCHAR"/>
+        <result property="xhrVersion" column="xhr_version" jdbcType="VARCHAR"/>
+        <result property="maxIp" column="max_ip" jdbcType="VARCHAR"/>
+        <result property="minIp" column="min_ip" jdbcType="VARCHAR"/>
+        <result property="model" column="model" jdbcType="VARCHAR"/>
+        <result property="count" column="count" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DeviceFeatureModelRelevanceMap">
+        select id,
+               business_id,
+               xhr_version,
+               max_ip,
+               min_ip,
+               model,
+               count,
+               status,
+               create_time,
+               update_time
+        from device_feature_model_relevance
+        where id = #{id}
+    </select>
+
+    <!--通过实体查询一条数据-->
+    <select id="findOne" resultMap="DeviceFeatureModelRelevanceMap">
+        select
+        id, business_id, xhr_version, max_ip, min_ip, model, count, status, create_time, update_time from
+        device_feature_model_relevance
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="businessId != null and businessId != ''">
+                and business_id = #{businessId}
+            </if>
+            <if test="xhrVersion != null and xhrVersion != ''">
+                and xhr_version = #{xhrVersion}
+            </if>
+            <if test="maxIp != null and maxIp != ''">
+                and max_ip = #{maxIp}
+            </if>
+            <if test="minIp != null and minIp != ''">
+                and min_ip = #{minIp}
+            </if>
+            <if test="model != null and model != ''">
+                and model = #{model}
+            </if>
+            <if test="count != null">
+                and count = #{count}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DeviceFeatureModelRelevanceMap">
+        select
+        id, business_id, xhr_version, max_ip, min_ip, model, count, status, create_time, update_time
+        from device_feature_model_relevance
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="businessId != null and businessId != ''">
+                and business_id = #{businessId}
+            </if>
+            <if test="xhrVersion != null and xhrVersion != ''">
+                and xhr_version = #{xhrVersion}
+            </if>
+            <if test="maxIp != null and maxIp != ''">
+                and max_ip = #{maxIp}
+            </if>
+            <if test="minIp != null and minIp != ''">
+                and min_ip = #{minIp}
+            </if>
+            <if test="model != null and model != ''">
+                and model = #{model}
+            </if>
+            <if test="count != null">
+                and count = #{count}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into device_feature_model_relevance(business_id, xhr_version, max_ip, min_ip, model, count, status)
+        values (#{businessId}, #{xhrVersion}, #{maxIp}, #{minIp}, #{model}, #{count}, #{status})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into device_feature_model_relevance(business_id, xhr_version, max_ip, min_ip, model, count, status,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.businessId}, #{entity.xhrVersion}, #{entity.maxIp}, #{entity.minIp}, #{entity.model},
+            #{entity.count}, #{entity.status}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into device_feature_model_relevance(business_id, xhr_version, max_ip, min_ip, model, count, status,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.businessId}, #{entity.xhrVersion}, #{entity.maxIp}, #{entity.minIp}, #{entity.model},
+            #{entity.count}, #{entity.status}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        business_id = values(business_id) , xhr_version = values(xhr_version) , max_ip = values(max_ip) , min_ip =
+        values(min_ip) , model = values(model) , count = values(count) , status = values(status) , create_time =
+        values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update device_feature_model_relevance
+        <set>
+            <if test="businessId != null and businessId != ''">
+                business_id = #{businessId},
+            </if>
+            <if test="xhrVersion != null and xhrVersion != ''">
+                xhr_version = #{xhrVersion},
+            </if>
+            <if test="maxIp != null and maxIp != ''">
+                max_ip = #{maxIp},
+            </if>
+            <if test="minIp != null and minIp != ''">
+                min_ip = #{minIp},
+            </if>
+            <if test="model != null and model != ''">
+                model = #{model},
+            </if>
+            <if test="count != null">
+                count = #{count},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from device_feature_model_relevance
+        where id = #{id}
+    </delete>
+
+</mapper>
+

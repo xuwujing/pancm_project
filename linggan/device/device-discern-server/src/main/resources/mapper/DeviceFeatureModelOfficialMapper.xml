@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.DeviceFeatureModelOfficialDao">
+
+    <resultMap type="com.zans.vo.DeviceFeatureModelOfficialVO" id="DeviceFeatureModelOfficialMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="modelCode" column="model_code" jdbcType="VARCHAR"/>
+        <result property="modelCodeNew" column="model_code_new" jdbcType="VARCHAR"/>
+        <result property="deviceTypeId" column="device_type_id" jdbcType="INTEGER"/>
+        <result property="deviceTypeName" column="device_type_name" jdbcType="VARCHAR"/>
+        <result property="deviceTypeNew" column="device_type_new" jdbcType="VARCHAR"/>
+        <result property="brandId" column="brand_id" jdbcType="INTEGER"/>
+        <result property="brandName" column="brand_name" jdbcType="VARCHAR"/>
+        <result property="company" column="company" jdbcType="VARCHAR"/>
+        <result property="modelDes" column="model_des" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DeviceFeatureModelOfficialMap">
+        select id,
+               model_code,
+               model_code_new,
+               device_type_id,
+               device_type_name,
+               device_type_new,
+               brand_id,
+               brand_name,
+               company,
+               model_des,
+               remark,
+               create_time,
+               update_time
+        from device_feature_model_official
+        where id = #{id}
+    </select>
+
+    <!--通过实体查询一条数据-->
+    <select id="findOne" resultMap="DeviceFeatureModelOfficialMap">
+        select
+        id, model_code, model_code_new, device_type_id, device_type_name, device_type_new, brand_id, brand_name,
+        company, model_des, remark, create_time, update_time from device_feature_model_official
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="modelCode != null and modelCode != ''">
+                and model_code = #{modelCode}
+            </if>
+            <if test="modelCodeNew != null and modelCodeNew != ''">
+                and model_code_new = #{modelCodeNew}
+            </if>
+            <if test="deviceTypeId != null">
+                and device_type_id = #{deviceTypeId}
+            </if>
+            <if test="deviceTypeName != null and deviceTypeName != ''">
+                and device_type_name = #{deviceTypeName}
+            </if>
+            <if test="deviceTypeNew != null and deviceTypeNew != ''">
+                and device_type_new = #{deviceTypeNew}
+            </if>
+            <if test="brandId != null">
+                and brand_id = #{brandId}
+            </if>
+            <if test="brandName != null and brandName != ''">
+                and brand_name = #{brandName}
+            </if>
+            <if test="company != null and company != ''">
+                and company = #{company}
+            </if>
+            <if test="modelDes != null and modelDes != ''">
+                and model_des = #{modelDes}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DeviceFeatureModelOfficialMap">
+        select
+        id, model_code, model_code_new, device_type_id, device_type_name, device_type_new, brand_id, brand_name,
+        company, model_des, remark, create_time, update_time
+        from device_feature_model_official
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="modelCode != null and modelCode != ''">
+                and model_code = #{modelCode}
+            </if>
+            <if test="modelCodeNew != null and modelCodeNew != ''">
+                and model_code_new = #{modelCodeNew}
+            </if>
+            <if test="deviceTypeId != null">
+                and device_type_id = #{deviceTypeId}
+            </if>
+            <if test="deviceTypeName != null and deviceTypeName != ''">
+                and device_type_name = #{deviceTypeName}
+            </if>
+            <if test="deviceTypeNew != null and deviceTypeNew != ''">
+                and device_type_new = #{deviceTypeNew}
+            </if>
+            <if test="brandId != null">
+                and brand_id = #{brandId}
+            </if>
+            <if test="brandName != null and brandName != ''">
+                and brand_name = #{brandName}
+            </if>
+            <if test="company != null and company != ''">
+                and company = #{company}
+            </if>
+            <if test="modelDes != null and modelDes != ''">
+                and model_des = #{modelDes}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryByModel" resultType="com.zans.vo.DeviceFeatureModelOfficialVO">
+        SELECT REPLACE(`model_code_new`,'i','') as model_code,model_code_new FROM device_feature_model_official
+        WHERE brand_name = '海康' AND REPLACE(`model_code_new`,'i','') LIKE 'DS-2%'
+    </select>
+
+    <select id="queryByBall" resultType="com.zans.vo.DeviceFeatureModelOfficialVO">
+        SELECT REPLACE(`model_code_new`,'i','') as model_code,model_code_new FROM device_feature_model_official
+        WHERE brand_name = '海康' AND REPLACE(`model_code_new`,'i','') LIKE 'DS-2DF%';
+    </select>
+
+    <select id="queryByCamera" resultType="com.zans.vo.DeviceFeatureModelOfficialVO">
+        SELECT REPLACE(`model_code_new`,'i','') as model_code,model_code_new FROM device_feature_model_official
+        WHERE brand_name = '海康' AND REPLACE(`model_code_new`,'i','') LIKE 'DS-2CD%';
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into device_feature_model_official(model_code, model_code_new, device_type_id, device_type_name,
+                                                  device_type_new, brand_id, brand_name, company, model_des, remark,
+                                                  create_time, update_time)
+        values (#{modelCode}, #{modelCodeNew}, #{deviceTypeId}, #{deviceTypeName}, #{deviceTypeNew}, #{brandId},
+                #{brandName}, #{company}, #{modelDes}, #{remark}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into device_feature_model_official(model_code, model_code_new, device_type_id, device_type_name,
+        device_type_new, brand_id, brand_name, company, model_des, remark, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.modelCode}, #{entity.modelCodeNew}, #{entity.deviceTypeId}, #{entity.deviceTypeName},
+            #{entity.deviceTypeNew}, #{entity.brandId}, #{entity.brandName}, #{entity.company}, #{entity.modelDes},
+            #{entity.remark}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into device_feature_model_official(model_code, model_code_new, device_type_id, device_type_name,
+        device_type_new, brand_id, brand_name, company, model_des, remark, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.modelCode}, #{entity.modelCodeNew}, #{entity.deviceTypeId}, #{entity.deviceTypeName},
+            #{entity.deviceTypeNew}, #{entity.brandId}, #{entity.brandName}, #{entity.company}, #{entity.modelDes},
+            #{entity.remark}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        model_code = values(model_code) , model_code_new = values(model_code_new) , device_type_id =
+        values(device_type_id) , device_type_name = values(device_type_name) , device_type_new = values(device_type_new)
+        , brand_id = values(brand_id) , brand_name = values(brand_name) , company = values(company) , model_des =
+        values(model_des) , remark = values(remark) , create_time = values(create_time) , update_time =
+        values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update device_feature_model_official
+        <set>
+            <if test="modelCode != null and modelCode != ''">
+                model_code = #{modelCode},
+            </if>
+
+            <if test="deviceTypeId != null">
+                device_type_id = #{deviceTypeId},
+            </if>
+            <if test="deviceTypeName != null and deviceTypeName != ''">
+                device_type_name = #{deviceTypeName},
+            </if>
+            <if test="deviceTypeNew != null and deviceTypeNew != ''">
+                device_type_new = #{deviceTypeNew},
+            </if>
+            <if test="brandId != null">
+                brand_id = #{brandId},
+            </if>
+            <if test="brandName != null and brandName != ''">
+                brand_name = #{brandName},
+            </if>
+            <if test="company != null and company != ''">
+                company = #{company},
+            </if>
+            <if test="modelDes != null and modelDes != ''">
+                model_des = #{modelDes},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+
+        </set>
+        where model_code_new = #{modelCodeNew}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from device_feature_model_official
+        where id = #{id}
+    </delete>
+
+</mapper>
+

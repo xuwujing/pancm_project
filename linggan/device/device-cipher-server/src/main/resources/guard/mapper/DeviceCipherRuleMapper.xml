@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.DeviceCipherRuleDao">
+
+    <resultMap type="com.zans.model.DeviceCipherRule" id="DeviceCipherRuleMap">
+        <result property="ruleChar" column="rule_char" jdbcType="VARCHAR"/>
+        <result property="ruleLength" column="rule_length" jdbcType="INTEGER"/>
+        <result property="rulePeriod" column="rule_period" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="query" resultMap="DeviceCipherRuleMap">
+        select rule_char,
+               rule_length,
+               rule_period,
+               create_time,
+               update_time
+        from device_cipher_rule limit 1
+    </select>
+
+    <update id="updateRule">
+        update device_cipher_rule
+        <set>
+            <if test="ruleChar != null and ruleChar !=''">
+                rule_char = #{ruleChar},
+            </if>
+            <if test="ruleLength != null and ruleLength != ''">
+                rule_length = #{ruleLength},
+            </if>
+            <if test="rulePeriod != null">
+                rule_period = #{rulePeriod},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+
+</mapper>
+

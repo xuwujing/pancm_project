@@ -1,0 +1,7 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: leakproof-server
+  main:
+    allow-bean-definition-overriding: true

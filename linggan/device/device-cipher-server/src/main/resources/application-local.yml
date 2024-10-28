@@ -1,0 +1,40 @@
+server:
+  port: 56789
+  servlet:
+    context-path: /api
+
+spring:
+  datasource:
+    guard:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://192.168.10.123:3306/device_cipher?autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull
+      username: guard
+      password: txsqldb@123456
+  cache:
+    type: caffeine
+    caffeine:
+      spec: initialCapacity=10,maximumSize=200,expireAfterWrite=30s
+
+
+logging:
+  config: logback.xml
+  level:
+    com.zans.dao : debug
+
+security:
+  exclude-path:
+    swagger: /swagger-ui.html, /swagger/**, /swagger-resources/**, /webjars/**, /v2/api-docs, /statics/**, /doc.html
+    base: /login,/logout,/verify_login,/getUser,/deviceCipher/export
+  user-verify: jwt
+  jwt:
+    expire-time: 86400000
+    app-expire-time: 86400000
+
+api:
+  upload:
+    folder: D:/home/release/file/upload/
+    max-size: 5
+  export:
+    folder: D:/home/release/file/export/
+
+

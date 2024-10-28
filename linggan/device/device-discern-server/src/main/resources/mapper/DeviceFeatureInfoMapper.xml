@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.DeviceFeatureInfoDao">
+
+    <resultMap type="com.zans.vo.DeviceFeatureInfoVO" id="DeviceFeatureInfoMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="ip" column="ip" jdbcType="VARCHAR"/>
+        <result property="businessId" column="business_id" jdbcType="VARCHAR"/>
+        <result property="deviceType" column="device_type" jdbcType="INTEGER"/>
+        <result property="model" column="model" jdbcType="VARCHAR"/>
+        <result property="realityDeviceType" column="reality_device_type" jdbcType="INTEGER"/>
+        <result property="realityModel" column="reality_model" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DeviceFeatureInfoMap">
+        select id,
+               ip,
+               business_id,
+               device_type,
+               model,
+               reality_device_type,
+               reality_model,
+               create_time,
+               update_time
+        from device_feature_info
+        where id = #{id}
+    </select>
+
+    <!--通过实体查询一条数据-->
+    <select id="findOne" resultMap="DeviceFeatureInfoMap">
+        select
+        id, ip, business_id, device_type, model, reality_device_type, reality_model, create_time, update_time from
+        device_feature_info
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="ip != null and ip != ''">
+                and ip = #{ip}
+            </if>
+            <if test="businessId != null and businessId != ''">
+                and business_id = #{businessId}
+            </if>
+            <if test="deviceType != null">
+                and device_type = #{deviceType}
+            </if>
+            <if test="model != null and model != ''">
+                and model = #{model}
+            </if>
+            <if test="realityDeviceType != null">
+                and reality_device_type = #{realityDeviceType}
+            </if>
+            <if test="realityModel != null and realityModel != ''">
+                and reality_model = #{realityModel}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DeviceFeatureInfoMap">
+        select
+        id, ip, business_id, device_type, model, reality_device_type, reality_model, create_time, update_time
+        from device_feature_info
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="ip != null and ip != ''">
+                and ip = #{ip}
+            </if>
+            <if test="businessId != null and businessId != ''">
+                and business_id = #{businessId}
+            </if>
+            <if test="deviceType != null">
+                and device_type = #{deviceType}
+            </if>
+            <if test="model != null and model != ''">
+                and model = #{model}
+            </if>
+            <if test="realityDeviceType != null">
+                and reality_device_type = #{realityDeviceType}
+            </if>
+            <if test="realityModel != null and realityModel != ''">
+                and reality_model = #{realityModel}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into device_feature_info(ip, business_id, device_type, model, reality_device_type, reality_model,
+                                        create_time, update_time)
+        values (#{ip}, #{businessId}, #{deviceType}, #{model}, #{realityDeviceType}, #{realityModel}, #{createTime},
+                #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into device_feature_info(ip, business_id, device_type, model, reality_device_type, reality_model,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ip}, #{entity.businessId}, #{entity.deviceType}, #{entity.model}, #{entity.realityDeviceType},
+            #{entity.realityModel}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into device_feature_info(ip, business_id, device_type, model, reality_device_type, reality_model,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ip}, #{entity.businessId}, #{entity.deviceType}, #{entity.model}, #{entity.realityDeviceType},
+            #{entity.realityModel}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        ip = values(ip) , business_id = values(business_id) , device_type = values(device_type) , model = values(model)
+        , reality_device_type = values(reality_device_type) , reality_model = values(reality_model) , create_time =
+        values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update device_feature_info
+        <set>
+            <if test="ip != null and ip != ''">
+                ip = #{ip},
+            </if>
+            <if test="businessId != null and businessId != ''">
+                business_id = #{businessId},
+            </if>
+            <if test="deviceType != null">
+                device_type = #{deviceType},
+            </if>
+            <if test="model != null and model != ''">
+                model = #{model},
+            </if>
+            <if test="realityDeviceType != null">
+                reality_device_type = #{realityDeviceType},
+            </if>
+            <if test="realityModel != null and realityModel != ''">
+                reality_model = #{realityModel},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where  business_id = #{businessId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from device_feature_info
+        where id = #{id}
+    </delete>
+
+</mapper>
+

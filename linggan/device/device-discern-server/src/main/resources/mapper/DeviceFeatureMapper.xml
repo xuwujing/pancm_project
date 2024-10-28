@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.DeviceFeatureDao">
+
+    <resultMap type="com.zans.vo.DeviceFeatureVO" id="DeviceFeatureMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="ip" column="ip" jdbcType="VARCHAR"/>
+        <result property="deviceType" column="device_type" jdbcType="INTEGER"/>
+        <result property="brand" column="brand" jdbcType="VARCHAR"/>
+        <result property="model" column="model" jdbcType="VARCHAR"/>
+        <result property="webVersionUrl" column="web_version_url" jdbcType="VARCHAR"/>
+        <result property="webVersion" column="web_version" jdbcType="VARCHAR"/>
+        <result property="build" column="build" jdbcType="VARCHAR"/>
+        <result property="buildYear" column="build_year" jdbcType="VARCHAR"/>
+        <result property="homeUrl" column="home_url" jdbcType="VARCHAR"/>
+        <result property="homeContent" column="home_content" jdbcType="VARCHAR"/>
+        <result property="xhrVersion" column="xhr_version" jdbcType="VARCHAR"/>
+        <result property="jsDevice" column="js_device" jdbcType="VARCHAR"/>
+        <result property="jsWebSdk" column="js_web_sdk" jdbcType="VARCHAR"/>
+        <result property="jsWebAuth" column="js_web_auth" jdbcType="VARCHAR"/>
+        <result property="jsResponse" column="js_response" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DeviceFeatureMap">
+        select id,
+               ip,
+               device_type,
+               brand,
+               model,
+               web_version_url,
+               web_version,
+               build,
+               build_year,
+               home_url,
+               home_content,
+               xhr_version,
+
+               js_web_sdk,
+               js_web_auth,
+               js_response
+        from device_feature
+        where id = #{id}
+    </select>
+
+    <!--通过实体查询一条数据-->
+    <select id="findOne" resultMap="DeviceFeatureMap">
+        select
+        id, ip, device_type, brand, model, web_version_url, web_version, build, build_year, home_url, home_content,
+        xhr_version,  js_web_sdk, js_web_auth, js_response from device_feature
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="ip != null and ip != ''">
+                and ip = #{ip}
+            </if>
+            <if test="deviceType != null">
+                and device_type = #{deviceType}
+            </if>
+            <if test="brand != null and brand != ''">
+                and brand = #{brand}
+            </if>
+            <if test="model != null and model != ''">
+                and model = #{model}
+            </if>
+            <if test="webVersionUrl != null and webVersionUrl != ''">
+                and web_version_url = #{webVersionUrl}
+            </if>
+            <if test="webVersion != null and webVersion != ''">
+                and web_version = #{webVersion}
+            </if>
+            <if test="build != null and build != ''">
+                and build = #{build}
+            </if>
+            <if test="buildYear != null and buildYear != ''">
+                and build_year = #{buildYear}
+            </if>
+            <if test="homeUrl != null and homeUrl != ''">
+                and home_url = #{homeUrl}
+            </if>
+            <if test="homeContent != null and homeContent != ''">
+                and home_content = #{homeContent}
+            </if>
+            <if test="xhrVersion != null and xhrVersion != ''">
+                and xhr_version = #{xhrVersion}
+            </if>
+            <if test="jsDevice != null and jsDevice != ''">
+                and js_device = #{jsDevice}
+            </if>
+            <if test="jsWebSdk != null and jsWebSdk != ''">
+                and js_web_sdk = #{jsWebSdk}
+            </if>
+            <if test="jsWebAuth != null and jsWebAuth != ''">
+                and js_web_auth = #{jsWebAuth}
+            </if>
+            <if test="jsResponse != null and jsResponse != ''">
+                and js_response = #{jsResponse}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DeviceFeatureMap">
+        select
+        id, ip, device_type, brand, model, web_version_url, web_version, build, build_year, home_url, home_content,
+        xhr_version,  js_web_sdk, js_web_auth, js_response
+        from device_feature
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="ip != null and ip != ''">
+                and ip = #{ip}
+            </if>
+            <if test="deviceType != null">
+                and device_type = #{deviceType}
+            </if>
+            <if test="brand != null and brand != ''">
+                and brand = #{brand}
+            </if>
+            <if test="model != null and model != ''">
+                and model = #{model}
+            </if>
+            <if test="webVersionUrl != null and webVersionUrl != ''">
+                and web_version_url = #{webVersionUrl}
+            </if>
+            <if test="webVersion != null and webVersion != ''">
+                and web_version = #{webVersion}
+            </if>
+            <if test="build != null and build != ''">
+                and build = #{build}
+            </if>
+            <if test="buildYear != null and buildYear != ''">
+                and build_year = #{buildYear}
+            </if>
+            <if test="homeUrl != null and homeUrl != ''">
+                and home_url = #{homeUrl}
+            </if>
+            <if test="homeContent != null and homeContent != ''">
+                and home_content = #{homeContent}
+            </if>
+            <if test="xhrVersion != null and xhrVersion != ''">
+                and xhr_version = #{xhrVersion}
+            </if>
+
+            <if test="jsWebSdk != null and jsWebSdk != ''">
+                and js_web_sdk = #{jsWebSdk}
+            </if>
+            <if test="jsWebAuth != null and jsWebAuth != ''">
+                and js_web_auth = #{jsWebAuth}
+            </if>
+            <if test="jsResponse != null and jsResponse != ''">
+                and js_response = #{jsResponse}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into device_feature(ip, device_type, brand, model, web_version_url, web_version, build, build_year,
+                                   home_url, home_content, xhr_version,  js_web_sdk, js_web_auth, js_response)
+        values (#{ip}, #{deviceType}, #{brand}, #{model}, #{webVersionUrl}, #{webVersion}, #{build}, #{buildYear},
+                #{homeUrl}, #{homeContent}, #{xhrVersion}, #{jsWebSdk}, #{jsWebAuth}, #{jsResponse})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into device_feature(ip, device_type, brand, model, web_version_url, web_version, build, build_year,
+        home_url, home_content, xhr_version,  js_web_sdk, js_web_auth, js_response)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ip}, #{entity.deviceType}, #{entity.brand}, #{entity.model}, #{entity.webVersionUrl},
+            #{entity.webVersion}, #{entity.build}, #{entity.buildYear}, #{entity.homeUrl}, #{entity.homeContent},
+            #{entity.xhrVersion}, #{entity.jsWebSdk}, #{entity.jsWebAuth}, #{entity.jsResponse})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into device_feature(ip, device_type, brand, model, web_version_url, web_version, build, build_year,
+        home_url, home_content, xhr_version,  js_web_sdk, js_web_auth, js_response)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ip}, #{entity.deviceType}, #{entity.brand}, #{entity.model}, #{entity.webVersionUrl},
+            #{entity.webVersion}, #{entity.build}, #{entity.buildYear}, #{entity.homeUrl}, #{entity.homeContent},
+            #{entity.xhrVersion}, #{entity.jsWebSdk}, #{entity.jsWebAuth}, #{entity.jsResponse})
+        </foreach>
+        on duplicate key update
+        ip = values(ip) , device_type = values(device_type) , brand = values(brand) , model = values(model) ,
+        web_version_url = values(web_version_url) , web_version = values(web_version) , build = values(build) ,
+        build_year = values(build_year) , home_url = values(home_url) , home_content = values(home_content) ,
+        xhr_version = values(xhr_version) , js_web_sdk = values(js_web_sdk) ,
+        js_web_auth = values(js_web_auth) , js_response = values(js_response)
+    </insert>
+
+
+    <insert id="insertDeviceFeatureInfo">
+        INSERT INTO  device_feature_info(ip,business_id)
+        SELECT ip,${businessId} FROM device_feature where ${businessId} is not null
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update device_feature
+        <set>
+            <if test="ip != null and ip != ''">
+                ip = #{ip},
+            </if>
+            <if test="deviceType != null">
+                device_type = #{deviceType},
+            </if>
+            <if test="brand != null and brand != ''">
+                brand = #{brand},
+            </if>
+            <if test="model != null and model != ''">
+                model = #{model},
+            </if>
+            <if test="webVersionUrl != null and webVersionUrl != ''">
+                web_version_url = #{webVersionUrl},
+            </if>
+            <if test="webVersion != null and webVersion != ''">
+                web_version = #{webVersion},
+            </if>
+            <if test="build != null and build != ''">
+                build = #{build},
+            </if>
+            <if test="buildYear != null and buildYear != ''">
+                build_year = #{buildYear},
+            </if>
+            <if test="homeUrl != null and homeUrl != ''">
+                home_url = #{homeUrl},
+            </if>
+            <if test="homeContent != null and homeContent != ''">
+                home_content = #{homeContent},
+            </if>
+            <if test="xhrVersion != null and xhrVersion != ''">
+                xhr_version = #{xhrVersion},
+            </if>
+            <if test="jsDevice != null and jsDevice != ''">
+                js_device = #{jsDevice},
+            </if>
+            <if test="jsWebSdk != null and jsWebSdk != ''">
+                js_web_sdk = #{jsWebSdk},
+            </if>
+            <if test="jsWebAuth != null and jsWebAuth != ''">
+                js_web_auth = #{jsWebAuth},
+            </if>
+            <if test="jsResponse != null and jsResponse != ''">
+                js_response = #{jsResponse},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from device_feature
+        where id = #{id}
+    </delete>
+
+
+    <update id="reset">
+        TRUNCATE TABLE device_feature_model_relevance;
+        TRUNCATE TABLE device_feature_model_relevance_ex;
+        TRUNCATE TABLE device_feature_type_relevance;
+        TRUNCATE TABLE device_feature_type_relevance_ex;
+        TRUNCATE TABLE device_feature_info;
+    </update>
+
+    <update id="resetTable">
+        TRUNCATE TABLE device_feature_model_relevance;
+        TRUNCATE TABLE device_feature_model_relevance_ex;
+        TRUNCATE TABLE device_feature_type_relevance;
+        TRUNCATE TABLE device_feature_type_relevance_ex;
+        TRUNCATE TABLE device_feature_info;
+        <foreach collection="entities" item="entity" separator=";">
+            TRUNCATE TABLE #{entity}
+        </foreach>
+    </update>
+
+
+
+
+    <select id="analyzeModel" resultType="com.zans.vo.ResultRespVO">
+        SELECT  MAX(ip) as maxIp,MIN(ip) as minIp,model as name,COUNT(1) AS count
+        FROM device_feature h
+        WHERE ${fieldName} = #{name}
+        GROUP BY model
+        ORDER BY count DESC;
+    </select>
+
+    <select id="analyzeDeviceType" resultType="com.zans.vo.ResultRespVO">
+        SELECT MAX(ip) as maxIp,MIN(ip) as minIp,h.`device_type` as name, COUNT(1) AS count
+        FROM device_feature h
+        WHERE ${fieldName} = #{name}
+        GROUP BY device_type
+        order by count desc;
+    </select>
+
+    <select id="groupByBusinessId" resultType="com.zans.vo.ResultRespVO">
+        SELECT MAX(ip) as maxIp,MIN(ip) as minIp,${businessId} as name, COUNT(1) AS count
+        FROM device_feature
+        WHERE ${businessId} IS NOT NULL
+        GROUP BY ${businessId}
+        ORDER BY count DESC;
+    </select>
+
+    <select id="groupByBusinessIdAndIp" resultType="com.zans.vo.ResultRespVO">
+        SELECT MAX(ip) as maxIp,MIN(ip) as minIp, ${businessId} as name, COUNT(1) AS count
+        FROM device_feature
+        WHERE ${businessId} IS NOT NULL
+        <if test="ip != null and ip != ''">
+           AND ip = #{ip}
+        </if>
+        GROUP BY ${businessId}
+        ORDER BY count DESC;
+    </select>
+
+
+
+    <select id="groupByDeviceType" resultType="com.zans.vo.ResultRespVO">
+        SELECT device_type as name,COUNT(1) as count FROM device_feature
+        WHERE ${fieldName} = #{fieldNameValue}
+        AND model = #{model}
+        GROUP BY device_type
+        ORDER BY count DESC
+    </select>
+
+    <select id="groupByModel" resultType="com.zans.vo.ResultRespVO">
+        SELECT model as name,COUNT(1) as count FROM device_feature
+        WHERE ${fieldName} = #{fieldNameValue}
+          AND device_type = #{deviceType}
+        GROUP BY model
+        ORDER BY count DESC
+
+    </select>
+
+
+
+
+</mapper>
+
