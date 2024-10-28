@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.AssetGuardLineMapper">
+    <resultMap id="BaseResultMap" type="com.zans.portal.model.AssetGuardLine">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="enable_fast_scan" property="enableFastScan" jdbcType="INTEGER"/>
+        <result column="seq" property="seq" jdbcType="INTEGER"/>
+        <result column="creator_id" property="creatorId" jdbcType="INTEGER"/>
+        <result column="update_id" property="updateId" jdbcType="INTEGER"/>
+        <result column="delete_status" property="deleteStatus" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <delete id="deleteByIpAddr">
+        delete
+        from asset_guard_line_asset
+        where ip_addr = #{ipAddr}
+    </delete>
+
+    <select id="getAll" resultType="com.zans.portal.model.AssetGuardLine">
+        SELECT *
+        FROM asset_guard_line
+        WHERE delete_status = 0
+        ORDER BY seq asc
+    </select>
+    <select id="getNextSeq" resultType="java.lang.Integer">
+        SELECT ifnull(max(seq), 0) + 1
+        FROM asset_guard_line
+    </select>
+
+    <select id="findCountByName" resultType="java.lang.Integer">
+        select count(*) from asset_guard_line where name=#{name} and delete_status=0
+        <if test="id != null">
+            and id != #{id}
+        </if>
+    </select>
+
+    <select id="findTotalCount" resultType="java.lang.Integer">
+        select count(id) as totalCount
+        from asset_guard_line
+        where delete_status = 0
+    </select>
+
+    <select id="findListByNameFuzzy" resultType="com.zans.portal.vo.asset.guardline.resp.AssetGuardLineRespVO">
+        select id,name,enable_fast_scan,seq from asset_guard_line
+        where delete_status=0
+        <if test="name !=null and name !=''">
+            and name like concat('%',#{name},'%')
+        </if>
+        order by seq asc
+    </select>
+
+    <select id="getGroupStatistics" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        SUM(CASE WHEN IFNULL(ah.alive, 2) = 1 THEN 1 ELSE 0 END) AS onlineNum,
+        SUM(CASE WHEN IFNULL(ah.alive, 2) = 2 THEN 1 ELSE 0 END) AS offlineNum,
+        ROUND(SUM(CASE WHEN IFNULL(ah.alive, 2) = 1 THEN 1 ELSE 0 END)/COUNT(1) *100,2) AS onlineRate
+        FROM
+        asset_guard_line_asset aba
+        INNER JOIN asset_guard_line ab ON ab.id = aba.guard_line_id
+        INNER JOIN asset e ON aba.ip_addr = e.ip_addr
+        LEFT JOIN asset_profile p ON p.ip_addr = e.ip_addr
+        LEFT JOIN alive_heartbeat ah ON ah.ip_addr = e.ip_addr
+        LEFT JOIN radius_endpoint re ON p.cur_mac = re.mac
+        LEFT JOIN (SELECT ip_addr,COUNT(ip_addr) AS alertCount FROM alert_rule_original WHERE deal_status = 0 GROUP BY
+        ip_addr)
+        alet ON alet.ip_addr = aba.ip_addr
+        WHERE
+        p.delete_status =0 AND aba.delete_status =0 AND ab.delete_status=0
+        <if test="assetGuardLineId != null">
+            and aba.guard_line_id = #{assetGuardLineId}
+        </if>
+
+    </select>
+    <select id="getGroupStatisticsTotal" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            COUNT(1) as totalNum,
+            (SELECT COUNT(1) AS   branchNum FROM asset_guard_line WHERE delete_status = 0) branchNum,
+            SUM(CASE WHEN IFNULL(ah.alive, 2) = 1 THEN 1 ELSE 0 END) AS onlineNum,
+            SUM(CASE WHEN IFNULL(ah.alive, 2) = 2 THEN 1 ELSE 0 END) AS offlineNum,
+            ROUND(SUM(CASE WHEN IFNULL(ah.alive, 2) = 1 THEN 1 ELSE 0 END)/COUNT(1) *100,2) AS onlineRate
+        FROM
+            asset_guard_line_asset aba
+                INNER JOIN asset_guard_line ab ON ab.id = aba.guard_line_id
+                INNER JOIN asset e ON aba.ip_addr = e.ip_addr
+                LEFT JOIN asset_profile p ON p.ip_addr = e.ip_addr
+                LEFT JOIN alive_heartbeat ah ON ah.ip_addr = e.ip_addr
+                LEFT JOIN radius_endpoint re ON p.cur_mac = re.mac
+                LEFT JOIN (SELECT ip_addr,COUNT(ip_addr) AS alertCount FROM alert_rule_original WHERE deal_status = 0 GROUP BY
+                ip_addr)
+                alet ON alet.ip_addr = aba.ip_addr
+        WHERE
+            p.delete_status =0 AND aba.delete_status =0 AND ab.delete_status=0
+
+    </select>
+
+</mapper>

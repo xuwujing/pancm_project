@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.AssetGuardLineAssetMapper">
+    <resultMap id="BaseResultMap" type="com.zans.portal.model.AssetGuardLineAsset">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="asset_id" property="assetId" jdbcType="INTEGER"/>
+        <result column="guard_line_id" property="guardLineId" jdbcType="INTEGER"/>
+        <result column="ip_addr" property="ipAddr" jdbcType="VARCHAR"/>
+        <result column="delete_status" property="deleteStatus" jdbcType="INTEGER"/>
+        <result column="command_execute_status" property="commandExecuteStatus" jdbcType="INTEGER"/>
+        <result column="creator_id" property="creatorId" jdbcType="INTEGER"/>
+        <result column="update_id" property="updateId" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="getByAssetIdAndLineId" resultType="com.zans.portal.model.AssetGuardLineAsset">
+        select *
+        from asset_guard_line_asset
+        where asset_id = #{assetId}
+          and guard_line_id = #{lineId}
+    </select>
+
+    <select id="getByLineId" resultType="com.zans.portal.model.AssetGuardLineAsset">
+        select *
+        from asset_guard_line_asset
+        where delete_status = 0
+          and guard_line_id = #{lineId}
+    </select>
+
+    <select id="findExistAssetIds" resultType="java.lang.Integer">
+        SELECT asset_id
+        FROM asset_guard_line_asset
+        WHERE guard_line_id = #{guardLineId}
+          and delete_status = 0
+    </select>
+
+    <select id="findGuardLineAssetList" resultType="com.zans.portal.vo.asset.guardline.resp.AssetGuardLineListVO">
+        SELECT
+        aba.id as assetGuardLineAssetId,
+        ab.name as assetGuardLineName,
+        p.enable_status enableStatus,
+        aba.command_execute_status as commandExecuteStatus,
+        p.asset_id as assetId,
+        IFNULL(ah.alive,2) as alive,
+        ah.alive_last_time aliveLastTime,
+        dp.point_name pointName,
+        p.cur_mac mac,
+        ifnull(p.cur_device_type,e.device_type) deviceType,
+        ifnull(p.cur_model_des,e.model_des) curModelDes,
+        p.cur_brand brandName,
+        p.cur_company company,
+        e.ip_addr ipAddr,
+        dp.longitude,
+        dp.latitude,
+        re.access_policy as accessPolicy,
+        ifnull(alet.alertCount,0) as hasAlert
+        FROM
+        asset_guard_line_asset aba
+        INNER JOIN asset_guard_line ab ON ab.id = aba.guard_line_id
+        INNER JOIN asset e ON aba.ip_addr = e.ip_addr
+        left JOIN asset_profile p ON p.ip_addr = e.ip_addr
+        left join device_point dp on e.point_code = dp.point_code
+        LEFT JOIN alive_heartbeat ah on ah.ip_addr = e.ip_addr
+        left join radius_endpoint re on p.cur_mac = re.mac
+        left join (SELECT ip_addr,count(ip_addr) as alertCount FROM alert_rule_original where deal_status = 0 group by
+        ip_addr)
+        alet on alet.ip_addr = aba.ip_addr
+        WHERE
+        p.delete_status =0 and aba.delete_status =0 and ab.delete_status=0
+        <if test="reqVO.assetGuardLineId != null">
+            and aba.guard_line_id = #{reqVO.assetGuardLineId}
+        </if>
+        <if test="reqVO.alive != null">
+            and ah.alive = #{reqVO.alive}
+        </if>
+        <if test="reqVO.pointName != null and reqVO.pointName !='' ">
+            and dp.point_name like concat('%',#{reqVO.pointName},'%')
+        </if>
+        <if test="reqVO.deviceType != null">
+            and p.cur_device_type = #{reqVO.deviceType}
+        </if>
+        <if test="reqVO.ipAddr != null and reqVO.ipAddr !=''">
+            and e.ip_addr like concat('%',#{reqVO.ipAddr},'%')
+        </if>
+        <if test="reqVO.enableStatus != null">
+            and p.enable_status = #{reqVO.enableStatus}
+        </if>
+        ORDER BY alet.alertCount desc,ah.alive desc
+    </select>
+
+    <select id="findGuardLineAssetExcelList"
+            resultType="com.zans.portal.vo.asset.guardline.resp.ExcelAssetGuardLineStatisticsVO">
+        SELECT
+        aba.id as assetGuardLineAssetId,
+        ab.name as assetGuardLineName,
+        p.enable_status enableStatus,
+        aba.command_execute_status as commandExecuteStatus,
+        e.id assetId,
+        IFNULL(ah.alive,2) as alive,
+        ah.alive_last_time aliveLastTime,
+        e.point_name pointName,
+        p.cur_mac mac,
+        ifnull(p.cur_device_type,e.device_type) deviceType,
+        ifnull(p.cur_model_des,e.model_des) curModelDes,
+        p.cur_brand brandName,
+        p.cur_company company,
+        e.ip_addr ipAddr,
+        e.longitude,
+        e.latitude
+        FROM
+        asset_guard_line_asset aba
+        INNER JOIN asset_guard_line ab ON ab.id = aba.guard_line_id
+        INNER JOIN asset e ON aba.ip_addr = e.ip_addr
+        LEFT JOIN alive_heartbeat ah on ah.ip_addr = e.ip_addr
+        left JOIN asset_profile p ON p.ip_addr = e.ip_addr
+
+        WHERE
+        p.delete_status =0 and aba.delete_status =0 and ab.delete_status=0
+        <if test="reqVO.assetGuardLineId != null">
+            and aba.guard_line_id = #{reqVO.assetGuardLineId}
+        </if>
+        <if test="reqVO.alive != null">
+            and ah.alive = #{reqVO.alive}
+        </if>
+
+        <if test="reqVO.pointName != null and reqVO.pointName !='' ">
+            and e.point_name like concat('%',#{reqVO.pointName},'%')
+        </if>
+        <if test="reqVO.deviceType != null">
+            and p.cur_device_type = #{reqVO.deviceType}
+        </if>
+        <if test="reqVO.ipAddr != null and reqVO.ipAddr !=''">
+            and e.ip_addr like concat('%',#{reqVO.ipAddr},'%')
+        </if>
+        <if test="reqVO.enableStatus != null">
+            and p.enable_status = #{reqVO.enableStatus}
+        </if>
+        ORDER BY ah.alive_last_time desc
+    </select>
+
+    <select id="findRunningStatis" resultType="com.zans.portal.vo.asset.guardline.resp.GuardLineRunningListRespVO">
+        select t.*,
+               agl.name        as assetGuardLineName,
+               agl.creator_id  as creatorId,
+               agl.create_time as createTime,
+               u.nick_name     as createName
+        from (
+                 select aba.guard_line_id                                    as assetGuardLineId,
+                        count(aba.asset_id)                                  as assetTotal,
+                        sum(case when IFNULL(ah.alive,2) = 1 then 1 else 0 end)         as onlineNumber,
+                        sum(case when IFNULL(ah.alive,2) = 1 then 0 else 1 end)         as offlineNumber,
+                        sum(case when p.enable_status = 1 then 0 else 1 end) as disableNumber
+                 from asset_guard_line_asset aba
+                          INNER JOIN asset e ON aba.ip_addr = e.ip_addr
+                          left join alive_heartbeat ah on ah.ip_addr = e.ip_addr
+                          left JOIN asset_profile p ON p.ip_addr = e.ip_addr
+                 WHERE p.delete_status = 0
+                   and aba.delete_status = 0
+                 group by aba.guard_line_id
+             ) t
+                 INNER join asset_guard_line agl on t.assetGuardLineId = agl.id
+                 left join sys_user u on agl.creator_id = u.id
+        where agl.delete_status = 0
+        order by agl.seq asc
+    </select>
+
+    <select id="findRunningStatisExport"
+            resultType="com.zans.portal.vo.asset.guardline.resp.ExcelGuardLineRunningListRespVO">
+        select t.assetTotal, t.onlineNumber, t.offlineNumber, t.disableNumber, agl.name as assetGuardLineName
+        from (
+                 select aba.guard_line_id                                    as assetGuardLineId,
+                        count(aba.asset_id)                                  as assetTotal,
+                        sum(case when IFNULL(ah.alive,2) then 1 else 0 end)         as onlineNumber,
+                        sum(case when IFNULL(ah.alive,2) then 0 else 1 end)         as offlineNumber,
+                        sum(case when p.enable_status = 1 then 0 else 1 end) as disableNumber
+                 from asset_guard_line_asset aba
+                          INNER JOIN asset e ON aba.ip_addr = e.ip_addr
+                          left join alive_heartbeat ah on ah.ip_addr = e.ip_addr
+                          left JOIN asset_profile p ON p.ip_addr = e.ip_addr
+                 WHERE p.delete_status = 0
+                   and aba.delete_status = 0
+                 group by aba.guard_line_id
+             ) t
+                 INNER join asset_guard_line agl on t.assetGuardLineId = agl.id
+        where agl.delete_status = 0
+        order by agl.seq asc
+    </select>
+
+    <select id="findForceEndpointIds"
+            resultType="com.zans.portal.vo.asset.guardline.resp.GuardLineForceCommandObjectVO">
+        select la.id,re.id,la.ip_addr as endpoint_id
+        from asset_guard_line_asset la
+        join radius_endpoint re on la.ip_addr=re.base_ip
+        where la.id in
+        <foreach item="item" collection="idList" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <select id="findForceOnlineEndpointIds"
+            resultType="com.zans.portal.vo.asset.guardline.resp.GuardLineForceCommandObjectVO">
+        select la.id,re.endpoint_id,re.cur_ip_addr asipAddr
+        from asset_guard_line_asset la
+        join radius_endpoint_profile re on la.ip_addr=re.cur_ip_addr
+        where la.id in
+        <foreach item="item" collection="idList" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findForceEndpointIps"
+            resultType="com.zans.portal.vo.asset.guardline.resp.GuardLineForceCommandObjectVO">
+        SELECT rp.endpoint_id,rp.cur_ip_addr as ipAddr FROM radius_endpoint_profile rp
+        WHERE rp.cur_ip_addr in
+        <foreach item="item" collection="ipList" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+
+    </select>
+
+    <select id="findCommandExecResult"
+            resultType="com.zans.portal.vo.asset.guardline.resp.GuardLineForceCommandObjectVO">
+        select la.id,la.command_execute_status,IFNULL(ah.alive,2)
+        from asset_guard_line_asset la
+        left join asset a on a.id=la.asset_id
+        left join alive_heartbeat ah on ah.ip_addr = a.ip_addr
+        where la.id in
+        <foreach item="item" collection="idList" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="findForceEndpointIps2"
+            resultType="com.zans.portal.vo.asset.guardline.resp.GuardLineForceCommandObjectVO">
+        SELECT rp.id as endpoint_id,rp.base_ip as ipAddr FROM radius_endpoint rp
+        WHERE rp.base_ip in
+        <foreach item="item" collection="ipList" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+
+    </select>
+    <select id="findExistAssetIps" resultType="java.lang.String">
+        SELECT ip_addr
+        FROM asset_guard_line_asset
+        WHERE guard_line_id = #{guardLineId}
+          and delete_status = 0
+    </select>
+
+
+</mapper>

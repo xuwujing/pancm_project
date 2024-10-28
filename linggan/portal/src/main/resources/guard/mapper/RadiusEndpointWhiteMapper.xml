@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.RadiusEndpointWhiteDao">
+
+    <resultMap type="com.zans.portal.vo.RadiusEndpointWhiteVO" id="RadiusEndpointWhiteMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="deviceName" column="device_name" jdbcType="VARCHAR"/>
+        <result property="mac" column="mac" jdbcType="VARCHAR"/>
+        <result property="deviceType" column="device_type" jdbcType="INTEGER"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="deviceTypeName" column="device_type_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="RadiusEndpointWhiteMap">
+        select
+            id, device_name, mac, device_type, d.type_name as device_type_name, creator,
+               DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S') AS create_time
+        from radius_endpoint_white r
+                 LEFT JOIN device_type_guard d ON r.`device_type` = d.`type_id`
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="RadiusEndpointWhiteMap">
+        select
+        id, device_name, mac, device_type, d.type_name as device_type_name, creator,
+        DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S') AS create_time
+        from radius_endpoint_white r
+        LEFT JOIN device_type_guard d ON r.`device_type` = d.`type_id`
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="deviceName != null and deviceName != ''">
+                and device_name like concat('%',#{deviceName},'%')
+            </if>
+            <if test="mac != null and mac != ''">
+                and mac = #{mac}
+            </if>
+            <if test="deviceType != null">
+                and device_type = #{deviceType}
+            </if>
+            <if test="creator != null and creator != ''">
+                and creator  like concat('%',#{creator},'%')
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+        </where>
+        order by id desc
+    </select>
+    <select id="queryByMac" resultType="com.zans.portal.vo.RadiusEndpointWhiteVO">
+        select
+            id, device_name, mac, device_type, d.type_name as device_type_name, creator,
+            DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%S') AS create_time
+        from radius_endpoint_white r
+                 LEFT JOIN device_type_guard d ON r.`device_type` = d.`type_id`
+        where mac = #{mac}
+
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into radius_endpoint_white(device_name, mac, device_type, creator)
+        values (#{deviceName}, #{mac}, #{deviceType}, #{creator})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into radius_endpoint_white(device_name, mac, device_type, creator, create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.deviceName}, #{entity.mac}, #{entity.deviceType}, #{entity.creator}, #{entity.createTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into radius_endpoint_white(device_name, mac, device_type, creator, create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.deviceName}, #{entity.mac}, #{entity.deviceType}, #{entity.creator}, #{entity.createTime})
+        </foreach>
+        on duplicate key update
+        device_name = values(device_name) , mac = values(mac) , device_type = values(device_type) , creator =
+        values(creator) , create_time = values(create_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update radius_endpoint_white
+        <set>
+            <if test="deviceName != null and deviceName != ''">
+                device_name = #{deviceName},
+            </if>
+            <if test="mac != null and mac != ''">
+                mac = #{mac},
+            </if>
+            <if test="deviceType != null">
+                device_type = #{deviceType},
+            </if>
+            <if test="creator != null and creator != ''">
+                creator = #{creator},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from radius_endpoint_white
+        where id = #{id}
+    </delete>
+
+</mapper>
+

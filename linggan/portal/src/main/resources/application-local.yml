@@ -1,0 +1,61 @@
+server:
+  port: 14978
+  ssl:
+    enabled: false
+  undertow:
+    io-threads: 4
+    worker-threads: 32
+    max-http-post-size: 0
+
+
+spring:
+  datasource:
+    guard:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://192.168.9.42:3306/guard_scan?autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&autoReconnect=true&failOverReadOnly=false&useSSL=false
+      username: guard
+      password: txsqldb@123456
+    radius:
+      driver-class-name: com.mysql.jdbc.Driver
+      jdbc-url: jdbc:mysql://192.168.9.42:3306/radius?autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull
+      username: guard
+      password: txsqldb@123456
+    # REDIS数据库配置
+  redis:
+    # [必须修改] Redis服务器IP, REDIS安装在本机的,使用127.0.0.1
+    host: 192.168.9.51
+    # [必须修改] 端口号
+    port: 6379
+    # [可选] 数据库 DB
+    database: 3
+    # [可选] 访问密码,若你的redis服务器没有设置密码，就不需要用密码去连接
+    password: redis123
+    # [可选] 超时时间
+    timeout: 10000
+security:
+  exclude-path:
+    swagger: /swagger-ui.html, /swagger/**, /swagger-resources/**, /webjars/**, /v2/api-docs, /statics/**, /doc.html
+    base: /login,/license,/changeLicense,/machineCode, /logout, /verify_login, /error, /favicon.ico, /constant/**, /ip/alloc/download/**, /ip/import/**, /hello, /network/**, /segment/**
+    api: /home/**, /rbac/**, /user/current, /person/**,/user/me,/user/change_password
+  user-verify: jwt
+  jwt:
+    expire-time: 60000000
+
+api:
+  page-size: 10
+  upload:
+    folder: D:\file\upload\
+    max-size: 5
+  export:
+    folder: D:\file\export\
+
+
+logging:
+  level:
+    com.zans.portal.dao : debug
+
+mock-api:
+  mock-dir: ./mock
+
+topo:
+  mock: 1

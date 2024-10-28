@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.IpAllMapper">
+    <select id="findAllIp" resultType="com.zans.portal.vo.ip.IpVO">
+        select a.id,point_name,device_type as device_type,c.type_name as device_type_name,
+        ip_addr,a.vlan,project_name,contractor_person,contractor_phone,
+        project_status,maintain_company,maintain_contact as maintain_person,,maintain_phone,
+        dp.longitude,dp.latitude ,a.model_des, DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+        contractor
+        from asset a
+        left join device_type_guard c on a.device_type = c.type_id
+        left join device_point dp on a.point_code = dp.point_code
+
+
+        <where>
+             c.enable_status=1
+            <if test="ip.deviceType != null">
+                and a.device_type = #{ip.deviceType}
+            </if>
+            <if test="ip.projectStatus != null">
+                and a.project_status = #{ip.projectStatus}
+            </if>
+            <if test="ip.vlan!= null and ip.vlan!=''">
+                and a.vlan = #{ip.vlan}
+            </if>
+            <if test="ip.deviceModelDes != null and ip.deviceModelDes !=''">
+                and a.model_des like concat('%',#{ip.deviceModelDes},'%')
+            </if>
+            <if test="ip.ip != null and ip.ip !=''">
+                and a.ip_addr like concat('%',#{ip.ip},'%')
+            </if>
+            <if test="ip.point != null and ip.point !=''">
+                and a.point_name like concat('%',#{ip.point},'%')
+            </if>
+            <if test="ip.contractor != null and ip.contractor !=''">
+                and a.contractor like concat('%',#{ip.contractor},'%')
+            </if>
+            <if test="ip.maintainCompany != null and ip.maintainCompany !=''">
+                and a.maintain_company like concat('%',#{ip.maintainCompany},'%')
+            </if>
+            <if test="ip.project != null and ip.project !=''">
+                and a.project_name like concat('%',#{ip.project},'%')
+            </if>
+        </where>
+        <if test="ip.orderBy != null and ip.orderBy !=''">
+            order by ${ip.orderBy}
+        </if>
+
+    </select>
+
+    <select id="getIp" resultType="com.zans.portal.vo.ip.IpVO">
+        select
+        a.id,
+        dp.point_name,
+        a.device_type,
+        c.type_name as device_type_name,
+        a.ip_addr,
+        a.vlan,
+        a.project_name,
+        a.contractor_person,
+        a.contractor_phone,
+        a.project_status,
+        a.maintain_company,
+        a.maintain_contact as maintain_person,
+        a.maintain_phone,
+        dp.longitude,
+        dp.latitude,
+        DATE_FORMAT(a.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+        a.contractor,
+        a.model_brand brand_name,
+        a.model_des
+        from asset a
+        left join device_type_guard c on a.device_type = c.`type_id`
+        left join device_point dp on a.point_code = dp.point_code
+        where a.id =#{id} and c.enable_status=1
+    </select>
+
+
+    <select id="getTotolCount" resultType="java.lang.Integer">
+        select count(id) from asset
+    </select>
+    <select id="getGroupByDeviceType" resultType="com.zans.portal.vo.chart.CountUnit">
+        select replace(uuid(),"-","") as id, device_type as count_key, count(id) as val from asset a
+        group by device_type order by val desc limit 5
+    </select>
+    <select id="getGroupByBrand" resultType="com.zans.portal.vo.chart.CountUnit">
+        select replace(uuid(),"-","") as id, brand_name as count_name, count(id) as val from asset a
+        where brand_name is not null and brand_name != ''
+        group by brand_name having val >= 10 order by val desc limit 5
+    </select>
+
+
+    <select id="getByMacAdress" resultType="com.zans.portal.vo.arp.ArpSwitchVO">
+        SELECT p.mac ,it.ip_addr,p.company,d.type_name AS device_type_name,p.cur_model_des as model_des
+        FROM radius_endpoint e
+        LEFT JOIN radius_endpoint_profile p ON e.id = p.endpoint_id
+        LEFT JOIN sys_switcher ss ON ss.`sw_host` = p.`cur_nas_ip_address`
+        LEFT JOIN asset it ON it.ip_addr = p.cur_ip_addr
+        LEFT JOIN device_type_guard d ON p.`cur_device_type` = d.`type_id`
+         WHERE p.mac = #{macAdress} and d.enable_status=1 order by e.id desc limit 1
+    </select>
+
+
+<!--    <select id="getCircleByAuth" resultType="com.zans.portal.vo.chart.CircleUnit">
+        select auth_status as type, count(id) as val from asset a
+        group by auth_status order by val desc limit 5
+    </select>
+    <select id="getCountByAuthStatus" resultType="java.lang.Integer">
+        select count(id) from asset
+        <if test="authStatus != null">
+            and auth_status = #{authStatus}
+        </if>
+    </select>
+    <delete id="deleteIpByAlloc">
+        delete from asset where alloc_id=#{allocId}
+    </delete>-->
+
+
+    <select id="findByIp" resultType="com.zans.portal.vo.radius.QzViewRespVO">
+
+        SELECT p.mac                as mac,
+               p.cur_ip_addr        as ip_addr,
+               p.cur_sw_ip          as sw_ip,
+               p.cur_nas_ip_address as nas_ip_address,
+               p.cur_nas_port_id    as nas_port_id,
+               p.cur_open_port      as open_port,
+               d.`type_name`,
+               p.brand_name         as device_model_brand,
+               p.company,
+               p.cur_mute           as mute,
+               p.cur_server_os      as server_os,
+               p.cur_device_type    as device_type,
+               p.cur_model_des      as device_model_des
+        FROM radius_endpoint e
+                 LEFT JOIN radius_endpoint_profile p ON e.id = p.endpoint_id
+                 LEFT JOIN sys_switcher ss ON ss.`sw_host` = p.`cur_nas_ip_address`
+                 LEFT JOIN device_type_guard d ON p.`cur_device_type` = d.`type_id`
+        WHERE e.delete_status = 0
+          and p.cur_ip_addr = #{ip}
+          and d.enable_status = 1
+        limit 1
+
+    </select>
+
+    <select id="networkin" resultType="com.zans.portal.vo.chart.CircleUnit">
+        SELECT 2 as type, 'auth' as name , COUNT(1) AS val from radius_endpoint WHERE access_policy=2 AND delete_status = 0
+        union all
+        SELECT 0 as type, 'wait' as name , COUNT(1) AS val FROM radius_endpoint WHERE access_policy=1 AND delete_status = 0
+        union all
+        SELECT 4 as type, 'refuse' as name , COUNT(1) AS val from radius_endpoint WHERE access_policy=0 AND delete_status = 0
+    </select>
+
+    <select id="modules" resultType="com.zans.portal.vo.chart.CountUnit">
+        select '网络管理' as countName ,count(1) as val from asset
+        union all
+
+        select '准入管理' as countName,count(1) as val from radius_endpoint WHERE access_policy=2 AND delete_status = 0
+        union all
+        select '用户数据' as countName,count(1) as val from sys_user
+    </select>
+    <select id="getListForConvert" resultType="com.zans.portal.model.IpAll">
+        select * from asset
+    </select>
+    <select id="selectByCondition" resultType="com.zans.portal.model.IpAll">
+        select * from asset
+        <where>
+            <if test="ipAddr != null and ipAddr !=''">
+                ip_addr = #{ipAddr}
+            </if>
+        </where>
+    </select>
+
+    <select id="findLastAssignIp" resultType="com.zans.portal.vo.ip.IpVO">
+        select id,ip_addr,mask,gateway,vlan from asset
+        where area_id=#{area} and device_type=#{deviceType}
+        order by vlan desc, inet_aton(ip_addr) desc limit 1
+    </select>
+    <delete id="deleteIpByAlloc">
+        delete from asset where alloc_id=#{allocId}
+    </delete>
+    <select id="findDefaultAssignIp" resultType="com.zans.portal.vo.ip.IpVO">
+        select id,ip_addr,mask,gateway,vlan from t_area_init
+        where area_id=#{area} and device_type_id=#{deviceType} limit 1
+    </select>
+
+</mapper>

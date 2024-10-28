@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.SysSwitcherMapper">
+
+    <select id="findSwitchList" resultType="com.zans.portal.vo.switcher.SwitchResVO">
+        SELECT dp.point_name as remark,s.*,ap.cur_brand as brand_name, c.item_value AS sw_type_name,
+        CASE WHEN radius_config = 0 THEN '未配置' WHEN radius_config = 1 THEN '已配置' ELSE '' END radius_config_Name,
+        CASE
+        WHEN topo_type = 'ACCESS' THEN '接入'
+        WHEN topo_type = 'CORE' THEN '核心'
+        ELSE '汇聚' END AS typeName
+        FROM sys_switcher s
+        LEFT JOIN device_brand d ON s.brand = d.brand_id
+        LEFT JOIN sys_constant_item c ON s.sw_type = c.item_key AND c.dict_key = 'sw_type'
+        left join network_ip_pool n on s.sw_host = n.ip
+        LEFT JOIN asset a ON a.ip_addr=s.sw_host
+        left join device_point dp on a.point_code = dp.point_code
+        LEFT JOIN asset_profile ap ON ap.ip_addr=s.sw_host
+        WHERE 1=1
+        <if test="reqVo.swType != null">
+            and s.sw_type = #{reqVo.swType}
+        </if>
+        <if test="reqVo.brand != null">
+            and s.brand = #{reqVo.brand}
+        </if>
+        <if test="reqVo.swHost != null and reqVo.swHost != ''">
+            and s.sw_host like CONCAT('%',#{reqVo.swHost},'%')
+        </if>
+        <if test="reqVo.radiusConfig != null">
+            and s.radius_config = #{reqVo.radiusConfig}
+        </if>
+        <if test="reqVo.remark != null and reqVo.remark != '' ">
+            and n.remark like CONCAT('%',#{reqVo.remark},'%')
+        </if>
+        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+            order by ${reqVo.orderBy}
+        </if>
+    </select>
+
+    <select id="findBySwHost" resultType="com.zans.portal.model.SysSwitcher">
+        select * from sys_switcher s where s.sw_host = #{swHost}
+        <if test="id != null">
+            and s.id != #{id}
+        </if>
+        limit 1
+    </select>
+
+
+
+
+    <select id="getScanBySwId" resultType="com.zans.portal.vo.switcher.SwitcherScanRespVO">
+        SELECT s.id,s.`name`,s.sw_host,s.sys_desc,
+        (SELECT DATE_FORMAT(n.begin_time,'%Y-%m-%d %H:%i:%S') as begin_time FROM network_switcher_scan n WHERE n.sw_id = #{reqVo.swId} ORDER BY n.begin_time LIMIT 1) begin_time,
+        (SELECT SUM(n.duration_seconds) FROM network_switcher_scan n WHERE n.sw_id = #{reqVo.swId} AND n.alive = 1 ) online_time ,
+        (SELECT SUM(n.duration_seconds) FROM network_switcher_scan n WHERE n.sw_id = #{reqVo.swId} AND n.alive = 2 ) offline_time
+        FROM sys_switcher s
+        WHERE s.`id`= #{reqVo.swId}
+    </select>
+
+    <select id="getLastScanBySwId" resultType="com.zans.portal.vo.switcher.SwitcherScanRespVO">
+        SELECT id,sw_ip as sw_host, offline_type ,alive from network_switcher_scan where sw_ip =#{ipAddr} ORDER BY update_time desc limit 1
+    </select>
+
+    <select id="findSwitchScanList" resultType="com.zans.portal.vo.switcher.SwitcherScanListRespVO">
+        SELECT n.* FROM network_switcher_scan n WHERE n.sw_id = #{reqVo.swId} order by scan_time desc
+    </select>
+
+    <select id="findSwitchScan" resultType="com.zans.portal.vo.switcher.SwitcherScanListRespVO">
+        SELECT date_format(n.begin_time,'%Y-%m-%d') begin_time,
+               date_format(n.end_time,'%Y-%m-%d') end_time,
+               n.id,n.scan_time,n.alive,n.duration_seconds
+               ,n.offline_type
+        FROM network_switcher_scan n WHERE n.sw_id = #{reqVo.swId}
+        order by scan_time
+    </select>
+
+    <select id="findSwitchDateHourScan" resultType="com.zans.portal.vo.switcher.SwitcherScanListRespVO">
+        SELECT date_format(n.begin_time,'%Y-%m-%d %H') begin_time,
+               date_format(n.end_time,'%Y-%m-%d %H') end_time,
+               n.id,n.scan_time,n.alive,n.duration_seconds
+              ,n.offline_type
+        FROM network_switcher_scan n WHERE n.sw_id = #{reqVo.swId}
+        order by scan_time
+    </select>
+
+    <select id="getSwitchScanReportByDate" resultType="java.lang.Integer">
+        select count(1) from network_switcher_scan n where n.sw_id = #{swId} and n.scan_time between #{start} and #{end} and alive = 1
+        union all
+        select count(1) from network_switcher_scan n where n.sw_id = #{swId} and n.scan_time between #{start} and #{end} and alive = 2
+    </select>
+
+    <select id="getSwitchScanReportByDay" resultType="java.lang.Integer">
+        select count(1) from network_switcher_scan n where n.sw_id = #{swId} and alive = 1 and str_to_date(date_format(n.scan_time, '%Y-%m-%d'),'%Y-%m-%d') = #{dates}
+        union all
+        select count(1) from network_switcher_scan n where n.sw_id = #{swId} and alive = 2 and str_to_date(date_format(n.scan_time, '%Y-%m-%d'),'%Y-%m-%d') = #{dates}
+    </select>
+
+    <select id="getSwitchScanReportByHour" resultType="java.lang.Integer">
+        select count(1) from network_switcher_scan n where n.sw_id = #{swId} and alive = 1 and str_to_date(date_format(n.scan_time, '%Y-%m-%d %H'),'%Y-%m-%d %H') = #{dates}
+        union all
+        select count(1) from network_switcher_scan n where n.sw_id = #{swId} and alive = 2 and str_to_date(date_format(n.scan_time, '%Y-%m-%d %H'),'%Y-%m-%d %H') = #{dates}
+    </select>
+
+    <select id="findAllArpEnabledSwitchWithConfig" resultType="com.zans.portal.vo.switcher.SwitchVlanSplitVO">
+        SELECT ss.id as sw_id,ss.name,ss.sys_name,ss.sys_desc,ssc.config FROM sys_switcher_config ssc JOIN sys_switcher ss ON ss.id =ssc.sw_id
+        WHERE  ss.arp_enable = 1
+    </select>
+    <select id="getListCondition" resultType="com.zans.portal.model.SysSwitcher">
+        select * from  sys_switcher
+        <where>
+            <if test="arpEnable !=null and arpEnable !=''">
+             and   arp_enable =#{arpEnable}
+            </if>
+            <if test="topoType !=null and topoType !=''">
+             and   topo_type =#{topoType}
+            </if>
+            <if test="swHost !=null and swHost !=''">
+             and   sw_host  like concat(#{swHost},"%")
+            </if>
+        </where>
+    </select>
+
+
+    <select id="findSysSwitcherByIp" resultType="com.zans.portal.model.SysSwitcher">
+        select * from  sys_switcher
+        <where>
+            <if test=" ip != null and ip != '' ">
+                sw_host = #{ip}
+            </if>
+        </where>
+       limit 1
+    </select>
+
+
+    <select id="findSwitchAndAssessList3" resultType="com.zans.portal.vo.switcher.SwitchAssessResVO">
+
+        SELECT
+        s.id,
+        s.area_id,
+        s.region,
+        s.sw_type,
+        s.brand,
+        s.ip_addr,
+        s.lon,
+        s.lat,
+        s.sw_account,
+        s.sw_password,
+        s.community,
+        s.acceptance,
+        s.accept_date,
+        s.accept_idea,
+        s.cons_batch,
+        s.dispose_user,
+        s.dispose_time,
+        s.reason,
+        CASE
+
+        WHEN abe.point_name IS NULL THEN
+        s.point_name ELSE abe.point_name
+        END AS point_name,
+        CASE
+
+        WHEN st.model IS NULL THEN
+        s.model ELSE st.model
+        END AS model,
+        t.area_name,
+        r.region_name,
+        p.project_name,
+        scan.alive,
+
+        IFNULL(a.enable_status,1) AS enable_status,
+        abe.model_brand AS brand_name,
+        s.operator,
+        st.id AS sw_id,
+        st.sys_name,
+        st.scan_mac_alive,
+        st.interface_phy_down AS scanInterfaceCount,
+        st.interface_phy_down_used AS scanMacAll,
+        CASE
+
+        WHEN ar.STATUS IS NULL THEN
+        - 1 ELSE ar.STATUS
+        END AS stateStatus,
+        scan.offline_type,
+        DATE_FORMAT( scan.begin_time, '%Y-%m-%d %H:%i:%S' ) AS begin_time,
+        DATE_FORMAT( scan.end_time, '%Y-%m-%d %H:%i:%S' ) AS end_time ,
+        TIMESTAMPDIFF( HOUR, begin_time, end_time ) AS diffHour
+        FROM
+        sys_switcher_branch s
+        LEFT JOIN sys_switcher st ON st.sw_host = s.ip_addr
+        LEFT JOIN t_area t ON s.area_id = t.area_id
+        LEFT JOIN sys_region r ON r.region_id = s.region
+        LEFT JOIN sys_project p ON p.id = s.project_id
+        LEFT JOIN asset_profile a ON a.ip_addr = s.ip_addr
+        LEFT JOIN asset abe ON abe.ip_addr = s.ip_addr
+
+        LEFT JOIN (
+        SELECT
+        ad.sw_ip,
+        ad.STATUS
+        FROM
+        ( SELECT MAX( id ) AS id, sw_ip FROM assess_record GROUP BY sw_ip ORDER BY id DESC ) AS aa
+        LEFT JOIN assess_record AS ad ON ad.id = aa.id
+        ) ar ON st.sw_host = ar.sw_ip
+
+        inner join network_switcher_scan AS scan ON scan.`sw_ip`= s.`ip_addr`
+        where  1=1
+             -- scan.last_flag=1
+        <if test="reqVo.ipAddr != null and reqVo.ipAddr != ''">
+            and s.ip_addr like CONCAT('%',#{reqVo.ipAddr},'%')
+        </if>
+        <if test="reqVo.operator != null and reqVo.operator != ''">
+            and s.operator like CONCAT('%',#{reqVo.operator},'%')
+        </if>
+        <if test="reqVo.areaId != null">
+            and s.area_id = #{reqVo.areaId}
+        </if>
+        <if test="reqVo.online != null">
+            <if test="reqVo.online == 1">
+                and scan.alive = #{reqVo.online}
+            </if>
+            <if test="reqVo.online == 0">
+                and scan.alive = 2 and scan.offline_type = 0
+            </if>
+            <if test="reqVo.online == 2">
+                and scan.alive = 2 and scan.offline_type = 1
+            </if>
+        </if>
+        <if test="reqVo.region != null">
+            and s.region = #{reqVo.region}
+        </if>
+        <if test="reqVo.swType != null">
+            and s.sw_type = #{reqVo.swType}
+        </if>
+        <if test="reqVo.acceptance != null">
+            and s.acceptance = #{reqVo.acceptance}
+        </if>
+        <if test="reqVo.status != null">
+            and a.enable_status = #{reqVo.status}
+        </if>
+        <if test="reqVo.dateRange != null and reqVo.dateRange.size &gt; 0">
+            and s.accept_date &gt;= #{reqVo.dateRange[0]} and s.accept_date &lt;#{reqVo.dateRange[1]}
+        </if>
+        <choose>
+            <when test="reqVo.interfaceRange != null and reqVo.interfaceRange.size &gt; 1">
+                and st.scan_mac_alive &gt;= #{reqVo.interfaceRange[0]} and st.scan_mac_alive &lt;#{reqVo.interfaceRange[1]}
+            </when>
+            <when test="reqVo.interfaceRange != null and reqVo.interfaceRange.size &gt; 0">
+                and st.scan_mac_alive &gt;= #{reqVo.interfaceRange[0]}
+            </when>
+        </choose>
+
+        <if test="reqVo.pointName != null and reqVo.pointName != '' ">
+            and s.point_name like CONCAT('%',#{reqVo.pointName},'%')
+        </if>
+        <if test="reqVo.projectName != null and reqVo.projectName != '' ">
+            and p.project_name like CONCAT('%',#{reqVo.projectName},'%')
+        </if>
+        <if test="reqVo.consBatch != null  ">
+            and s.cons_batch = #{reqVo.consBatch}
+        </if>
+        <if test="reqVo.stateStatus != null  ">
+            and ar.status = #{reqVo.stateStatus}
+        </if>
+        <if test="reqVo.lastTime != null  ">
+            and 	TIMESTAMPDIFF( HOUR, DATE_FORMAT( scan.begin_time, '%Y-%m-%d %H:%i:%S' ), DATE_FORMAT( scan.end_time, '%Y-%m-%d %H:%i:%S' ) )  &gt;= #{reqVo.lastTime}
+        </if>
+        order by scan.alive desc, diffHour desc
+
+    </select>
+
+    <select id="getScanDayByIp" resultType="com.zans.portal.vo.switcher.SwitchAssessResVO">
+        SELECT sw_ip,
+               SUM(offline_duration) AS offline_duration ,
+               SUM(affline_duration) AS affline_duration,
+               SUM(alive_duration) AS alive_duration
+        FROM network_switcher_scan_day
+        WHERE sw_ip=#{ipAddr} and yyyymmdd   BETWEEN DATE_FORMAT(#{approveStartTime},'%Y-%m-%d') AND DATE_FORMAT(#{approveEndTime},'%Y-%m-%d')
+    </select>
+
+</mapper>

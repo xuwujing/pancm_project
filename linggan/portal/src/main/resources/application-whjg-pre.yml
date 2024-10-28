@@ -1,0 +1,99 @@
+server:
+  port: 21000
+  servlet:
+    context-path: /api
+  http2:
+    enabled: true
+  ssl:
+    enabled: false
+  use-forward-headers: true
+  undertow:
+    io-threads: 4
+    worker-threads: 32
+    max-http-post-size: 0
+
+spring:
+  datasource:
+    guard:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://27.10.30.68:3306/guard_scan?autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull
+      username: guard
+      password: Txsqldb@123456
+    radius:
+      driver-class-name: com.mysql.jdbc.Driver
+      jdbc-url: jdbc:mysql://27.10.30.68:3306/radius?autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull
+      username: guard
+      password: Txsqldb@123456
+
+security:
+  exclude-path:
+    swagger: /swagger-ui.html, /swagger/**, /swagger-resources/**, /webjars/**, /v2/api-docs, /statics/**, /doc.html
+    base: /login,/license,/changeLicense,/machineCode, /logout, /verify_login, /error, /favicon.ico, /constant/**, /ip/alloc/download/**, /ip/import/**
+    api: /home/**, /rbac/**, /user/current, /person/** ,/user/me,/user/change_password
+  user-verify: jwt
+  jwt:
+    expire-time: 60000000
+
+api:
+  page-size: 10
+  asset:
+    default-order: id desc
+  ip:
+    default-order: a.id desc
+  model-scan:
+    default-order: a.id desc
+  brand:
+    default-order: s.id desc
+  model-official:
+    default-order: t.id desc
+  log:
+    op:
+      default-order: a.created_at desc
+    task:
+      default-order: a.updated_at desc
+  msg:
+    default-order: a.create_time desc
+  white:
+    ip:
+      default-order: id desc
+    mac:
+      default-order: id desc
+  auth:
+    order:
+      accept: id desc
+      accept-exist: a.id desc
+      reject: id desc
+      reject-exist: a.id desc
+  ip-alloc:
+    default-order: a.id desc
+  network:
+    export: /template/通讯链路申请单.xlsx
+    filename: 通讯链路申请单
+    template: /template/通讯链路申请单模板.xlsx
+  ip-segment:
+    default-order: a.id desc
+  upload:
+    folder: /home/release/file/upload/
+    max-size: 5
+  export:
+    folder: /home/release/file/export/
+  snapshoot:
+    flag: 0
+
+
+logging:
+  level:
+   com.zans.portal.dao : debug
+
+mock-api:
+  mock-dir: ./mock
+
+request:
+  opsnode:
+    url: http://27.10.30.68:29527/node/rad_api
+  power-off:
+    url: http://27.10.30.68:9876/alert/record/add
+snmp:
+  version: 2
+  listen-address: udp:0.0.0.0/161
+  thread-pool-size: 5

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.AssessRecordDao">
+
+    <resultMap type="com.zans.portal.model.AssessRecord" id="AssessRecordMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="networkScanId" column="network_scan_id" jdbcType="INTEGER"/>
+        <result property="swIp" column="sw_ip" jdbcType="VARCHAR"/>
+        <result property="stateRemark" column="state_remark" jdbcType="VARCHAR"/>
+        <result property="approveRemark" column="approve_remark" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="adjunctId" column="adjunct_id" jdbcType="VARCHAR"/>
+        <result property="networkScanId" column="network_scan_id" jdbcType="VARCHAR"/>
+        <result property="approveUser" column="approve_user" jdbcType="VARCHAR"/>
+        <result property="stateUser" column="state_user" jdbcType="VARCHAR"/>
+        <result property="linkRemark" column="link_remark" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+        <result property="beginTime" column="begin_time" jdbcType="VARCHAR"/>
+        <result property="endTime" column="end_time" jdbcType="VARCHAR"/>
+        <collection property="adjunctList" javaType="arraylist" ofType="com.zans.portal.model.BaseVfs">
+            <result column="adjId" property="id"></result>
+            <result column="raw_file_path" property="rawFilePath"></result>
+            <result column="thumbnail_file_path" property="thumbnailFilePath"></result>
+            <result column="content_type" property="contentType"></result>
+        </collection>
+
+
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AssessRecordMap">
+        select id,
+               sw_ip,
+               state_remark,
+               approve_remark,
+               status,
+               adjunct_id,
+               network_scan_id,
+               DATE_FORMAT(`create_time`,'%Y-%m-%d %H:%i:%S') as create_time,
+               DATE_FORMAT(`begin_time`,'%Y-%m-%d %H:%i:%S') as begin_time,
+               DATE_FORMAT(`end_time`,'%Y-%m-%d %H:%i:%S') as end_time,
+               update_time
+        from assess_record
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="AssessRecordMap">
+        select
+        ar.id,ar.network_scan_id, sw_ip, state_remark,  approve_remark, link_remark,
+        ar.status, ar.adjunct_id, DATE_FORMAT(ar.`create_time`,'%Y-%m-%d %H:%i:%S') as create_time,ar.approve_user,ar.state_user,
+        bv.raw_file_path,bv.thumbnail_file_path, bv.id as adjId, bv.img_type
+        from assess_record ar
+        left join sys_switcher_branch s on s.ip_addr = ar.sw_ip
+        LEFT JOIN base_vfs bv ON ar.adjunct_id = bv.adjunct_id
+        <where>
+            <if test="id != null">
+                and ar.id = #{id}
+            </if>
+            <if test="networkScanId != null">
+                and ar.network_scan_id = #{networkScanId}
+            </if>
+            <if test="swIp != null and swIp != ''">
+                and sw_ip = #{swIp}
+            </if>
+            <if test="stateRemark != null and stateRemark != ''">
+                and state_remark = #{stateRemark}
+            </if>
+
+            <if test="approveRemark != null and approveRemark != ''">
+                and approve_remark = #{approveRemark}
+            </if>
+
+            <if test="status != null">
+                and ar.status = #{status}
+            </if>
+        </where>
+    order by ar.update_time desc
+    </select>
+    <select id="findByNetworkScanIdAndIp" resultType="com.zans.portal.model.AssessRecord">
+        select * from   assess_record where sw_ip=#{swIp} and network_scan_id=#{networkScanId}
+    </select>
+
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into assess_record(sw_ip, state_remark,network_scan_id,state_user,
+                                  adjunct_id,link_remark, begin_time,end_time)
+        values (#{swIp}, #{stateRemark},#{networkScanId},#{stateUser},
+                #{adjunctId},#{linkRemark},#{beginTime},#{endTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into assess_record(sw_ip, state_remark,  approve_remark,  status,
+        adjunct_id, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.swIp}, #{entity.stateRemark},  #{entity.approveRemark},
+             #{entity.status}, #{entity.adjunctId}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into assess_record(sw_ip, state_remark,  approve_remark,  status,
+        adjunct_id, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.swIp}, #{entity.stateRemark},  #{entity.approveRemark},
+             #{entity.status}, #{entity.adjunctId}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        sw_ip = values(sw_ip) , state_remark = values(state_remark) ,
+        approve_remark = values(approve_remark) ,  status = values(status)
+        , adjunct_id = values(adjunct_id) , create_time = values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update assess_record
+        <set>
+            <if test="swIp != null and swIp != ''">
+                sw_ip = #{swIp},
+            </if>
+            <if test="stateRemark != null and stateRemark != ''">
+                state_remark = #{stateRemark},
+            </if>
+            <if test="approveRemark != null and approveRemark != ''">
+                approve_remark = #{approveRemark},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="adjunctId != null and adjunctId != ''">
+                adjunct_id = #{adjunctId},
+            </if>
+            <if test="approveUser != null and approveUser != ''">
+                approve_user = #{approveUser},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from assess_record
+        where id = #{id}
+    </delete>
+
+</mapper>
+

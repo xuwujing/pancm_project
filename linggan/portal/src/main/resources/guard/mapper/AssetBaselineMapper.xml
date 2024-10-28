@@ -1,0 +1,1075 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.AssetBaselineDao">
+
+    <resultMap type="com.zans.portal.vo.AssetBaselineVO" id="AssetBaselineMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="ipAddr" column="ip_addr" jdbcType="VARCHAR"/>
+        <result property="mac" column="mac" jdbcType="VARCHAR"/>
+        <result property="modelDes" column="model_des" jdbcType="VARCHAR"/>
+        <result property="brandName" column="brand_name" jdbcType="VARCHAR"/>
+        <result property="deviceType" column="device_type" jdbcType="INTEGER"/>
+        <result property="deviceTypeName" column="deviceTypeName" jdbcType="INTEGER"/>
+        <result property="serverOs" column="server_os" jdbcType="VARCHAR"/>
+        <result property="nasIp" column="nas_ip" jdbcType="VARCHAR"/>
+        <result property="nasPortId" column="nas_port_id" jdbcType="VARCHAR"/>
+        <result property="vlan" column="vlan" jdbcType="VARCHAR"/>
+        <result property="pointName" column="point_name" jdbcType="VARCHAR"/>
+        <result property="longitude" column="longitude" jdbcType="NUMERIC"/>
+        <result property="latitude" column="latitude" jdbcType="NUMERIC"/>
+        <result property="projectName" column="project_name" jdbcType="VARCHAR"/>
+        <result property="contractor" column="contractor" jdbcType="VARCHAR"/>
+        <result property="projectStatus" column="project_status" jdbcType="INTEGER"/>
+        <result property="contractorPerson" column="contractor_person" jdbcType="VARCHAR"/>
+        <result property="contractorPhone" column="contractor_phone" jdbcType="VARCHAR"/>
+        <result property="maintainCompany" column="maintain_company" jdbcType="VARCHAR"/>
+        <result property="maintainPerson" column="maintain_person" jdbcType="VARCHAR"/>
+        <result property="maintainPhone" column="maintain_phone" jdbcType="VARCHAR"/>
+        <result property="mapCatalogueId" column="map_catalogue_id" jdbcType="INTEGER"/>
+        <result property="bindStatus" column="bind_status" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="reviser" column="reviser" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="mute" column="mute" jdbcType="INTEGER"/>
+        <result property="maintainStatus" column="maintain_status" jdbcType="INTEGER"/>
+        <result property="maintainStatusName" column="maintainStatusName"/>
+        <result property="pointName" column="point_name"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap" type="com.zans.portal.model.AssetBaseline">
+        <!--
+          WARNING - @mbg.generated
+        -->
+
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="ip_addr" property="ipAddr" jdbcType="VARCHAR"/>
+        <result column="mac" property="mac" jdbcType="VARCHAR"/>
+        <result column="model_des" property="modelDes" jdbcType="VARCHAR"/>
+        <result column="brand_name" property="brandName" jdbcType="VARCHAR"/>
+        <result column="device_type" property="deviceType" jdbcType="INTEGER"/>
+        <result column="server_os" property="serverOs" jdbcType="VARCHAR"/>
+        <result column="open_port" property="openPort" jdbcType="VARCHAR"/>
+        <result column="nas_ip" property="nasIp" jdbcType="VARCHAR"/>
+        <result column="nas_port_id" property="nasPortId" jdbcType="VARCHAR"/>
+        <result column="vlan" property="vlan" jdbcType="VARCHAR"/>
+        <result column="point_name" property="pointName" jdbcType="VARCHAR"/>
+        <result column="longitude" property="longitude" jdbcType="DECIMAL"/>
+        <result column="latitude" property="latitude" jdbcType="DECIMAL"/>
+        <result column="project_name" property="projectName" jdbcType="VARCHAR"/>
+        <result column="contractor" property="contractor" jdbcType="VARCHAR"/>
+        <result column="project_status" property="projectStatus" jdbcType="INTEGER"/>
+        <result column="contractor_person" property="contractorPerson" jdbcType="VARCHAR"/>
+        <result column="contractor_phone" property="contractorPhone" jdbcType="VARCHAR"/>
+        <result column="maintain_company" property="maintainCompany" jdbcType="VARCHAR"/>
+        <result column="maintain_person" property="maintainPerson" jdbcType="VARCHAR"/>
+        <result column="maintain_phone" property="maintainPhone" jdbcType="VARCHAR"/>
+        <result column="map_catalogue_id" property="mapCatalogueId" jdbcType="INTEGER"/>
+        <result column="bind_status" property="bindStatus" jdbcType="INTEGER"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="reviser" property="reviser" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AssetBaselineMap">
+        select id,
+               ip_addr,
+               mac,
+               model_des,
+               model_brand as brand_name,
+               device_type,
+               server_os,
+               nas_ip,
+               nas_port_id,
+               vlan,
+               point_name,
+               longitude,
+               latitude,
+               project_name,
+               contractor,
+               project_status,
+               contractor_person,
+               contractor_phone,
+               maintain_company,
+               maintain_contact as maintain_person,
+               maintain_phone,
+
+               bind_status,
+               remark,
+               creator,
+               reviser,
+
+               maintain_status,
+               DATE_FORMAT(create_time,
+                           '%Y-%m-%d %k:%i:%s') as create_time,
+               DATE_FORMAT(update_time,
+                           '%Y-%m-%d %k:%i:%s') as update_time
+        from asset
+        where id = #{id}
+    </select>
+
+
+    <!--查询单个-->
+    <select id="queryByIp" resultMap="AssetBaselineMap">
+        select id,
+               ip_addr,
+               mac,
+               model_des,
+               model_brand as brand_name,
+               device_type,
+               server_os,
+               nas_ip,
+               nas_port_id,
+               vlan,
+               point_name,
+               longitude,
+               latitude,
+               project_name,
+               contractor,
+               project_status,
+               contractor_person,
+               contractor_phone,
+               maintain_company,
+               maintain_contact as maintain_person,
+               maintain_phone,
+
+               bind_status,
+               remark,
+               creator,
+               reviser,
+
+               maintain_status,
+               latitude,
+               longitude,
+               (SELECT item_value FROM sys_constant_item WHERE dict_key = 'maintain_status' AND item_key =  maintain_status)
+                   AS maintainStatusName,
+               DATE_FORMAT(create_time,
+                           '%Y-%m-%d %k:%i:%s') as create_time,
+               DATE_FORMAT(update_time,
+                           '%Y-%m-%d %k:%i:%s') as update_time
+        from asset
+        where ip_addr = #{ipAddr}
+    </select>
+
+    <!--通过实体查询一条数据-->
+    <select id="findOne" resultMap="AssetBaselineMap">
+        select
+        id, ip_addr, mac, model_des,model_brand as brand_name, device_type, server_os, nas_ip, nas_port_id, vlan,
+        point_name, longitude, latitude, project_name, contractor, project_status, contractor_person, contractor_phone,
+        maintain_company, maintain_contact as maintain_person, maintain_phone, bind_status, remark, creator, reviser,
+        create_time, update_time,mute,maintain_status from asset
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="ipAddr != null and ipAddr != ''">
+                and ip_addr = #{ipAddr}
+            </if>
+            <if test="mac != null and mac != ''">
+                and mac = #{mac}
+            </if>
+            <if test="modelDes != null and modelDes != ''">
+                and model_des = #{modelDes}
+            </if>
+            <if test="brandName != null and brandName != ''">
+                and brand_name = #{brandName}
+            </if>
+            <if test="deviceType != null">
+                and device_type = #{deviceType}
+            </if>
+            <if test="serverOs != null and serverOs != ''">
+                and server_os = #{serverOs}
+            </if>
+            <if test="nasIp != null and nasIp != ''">
+                and nas_ip = #{nasIp}
+            </if>
+            <if test="nasPortId != null and nasPortId != ''">
+                and nas_port_id = #{nasPortId}
+            </if>
+            <if test="vlan != null and vlan != ''">
+                and vlan = #{vlan}
+            </if>
+            <if test="pointName != null and pointName != ''">
+                and point_name = #{pointName}
+            </if>
+            <if test="longitude != null">
+                and longitude = #{longitude}
+            </if>
+            <if test="latitude != null">
+                and latitude = #{latitude}
+            </if>
+            <if test="projectName != null and projectName != ''">
+                and project_name = #{projectName}
+            </if>
+            <if test="contractor != null and contractor != ''">
+                and contractor = #{contractor}
+            </if>
+            <if test="projectStatus != null">
+                and project_status = #{projectStatus}
+            </if>
+            <if test="contractorPerson != null and contractorPerson != ''">
+                and contractor_person = #{contractorPerson}
+            </if>
+            <if test="contractorPhone != null and contractorPhone != ''">
+                and contractor_phone = #{contractorPhone}
+            </if>
+            <if test="maintainCompany != null and maintainCompany != ''">
+                and maintain_company = #{maintainCompany}
+            </if>
+            <if test="maintainPerson != null and maintainPerson != ''">
+                and maintain_contact = #{maintainPerson}
+            </if>
+            <if test="maintainPhone != null and maintainPhone != ''">
+                and maintain_phone = #{maintainPhone}
+            </if>
+            <if test="mapCatalogueId != null">
+                and map_catalogue_id = #{mapCatalogueId}
+            </if>
+            <if test="bindStatus != null">
+                and bind_status = #{bindStatus}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="creator != null and creator != ''">
+                and creator = #{creator}
+            </if>
+            <if test="reviser != null and reviser != ''">
+                and reviser = #{reviser}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="AssetBaselineMap">
+        select
+        abe.id, abe.ip_addr, abe.mac, abe.model_des, abe.model_brand as brand_name, abe.device_type, abe.server_os, abe.nas_ip, abe.nas_port_id, abe.vlan,
+        dp.point_name, dp.longitude, dp.latitude, abe.project_name, abe.contractor, abe.project_status, abe.contractor_person, abe.contractor_phone,
+        abe.maintain_company, abe.maintain_contact as  maintain_person, abe.maintain_phone, abe.bind_status, abe.remark, abe.creator, abe.reviser,
+        DATE_FORMAT( abe.create_time, '%Y-%m-%d %k:%i:%s' ) as create_time,
+        DATE_FORMAT( abe.update_time, '%Y-%m-%d %k:%i:%s' ) as update_time,
+        (select type_name from device_type_guard t where t.type_id = abe.device_type and t.enable_status=1) as deviceTypeName,
+        maintain_status,
+        IFNULL(ap.asset_id,0) existAssetId
+        from asset abe
+        LEFT JOIN asset_profile ap on abe.ip_addr=ap.ip_addr
+        left join device_point dp on abe.point_code = dp.point_code
+        <where>
+
+            <if test="id != null">
+                and abe.id = #{id}
+            </if>
+            <if test="ipAddr != null and ipAddr != ''">
+                and abe.ip_addr like concat('%',#{ipAddr},'%')
+            </if>
+            <if test="mac != null and mac != ''">
+                and abe.mac like concat('%',#{mac},'%')
+            </if>
+            <if test="modelDes != null and modelDes != ''">
+                and abe.model_des like concat('%',#{modelDes},'%')
+            </if>
+            <if test="brandName != null and brandName != ''">
+                and abe.model_brand = #{brandName}
+            </if>
+            <if test="deviceType != null">
+                and abe.device_type = #{deviceType}
+            </if>
+            <if test="serverOs != null and serverOs != ''">
+                and abe.server_os = #{serverOs}
+            </if>
+            <if test="openPort !=null and openPort!=''">
+                and abe.open_port = #{openPort}
+            </if>
+            <if test="nasIp != null and nasIp != ''">
+                and abe.nas_ip = #{nasIp}
+            </if>
+            <if test="nasPortId != null and nasPortId != ''">
+                and abe.nas_port_id = #{nasPortId}
+            </if>
+            <if test="vlan != null and vlan != ''">
+                and abe.vlan = #{vlan}
+            </if>
+            <if test="pointName != null and pointName != ''">
+                and abe.point_name = #{pointName}
+            </if>
+            <if test="longitude != null">
+                and abe.longitude = #{longitude}
+            </if>
+            <if test="latitude != null">
+                and abe.latitude = #{latitude}
+            </if>
+            <if test="projectName != null and projectName != ''">
+                and abe.project_name = #{projectName}
+            </if>
+            <if test="contractor != null and contractor != ''">
+                and abe.contractor = #{contractor}
+            </if>
+            <if test="projectStatus != null">
+                and abe.project_status = #{projectStatus}
+            </if>
+            <if test="contractorPerson != null and contractorPerson != ''">
+                and abe.contractor_person = #{contractorPerson}
+            </if>
+            <if test="contractorPhone != null and contractorPhone != ''">
+                and abe.contractor_phone = #{contractorPhone}
+            </if>
+            <if test="maintainCompany != null and maintainCompany != ''">
+                and abe.maintain_company = #{maintainCompany}
+            </if>
+            <if test="maintainPerson != null and maintainPerson != ''">
+                and abe.maintain_contact = #{maintainPerson}
+            </if>
+            <if test="maintainPhone != null and maintainPhone != ''">
+                and abe.maintain_phone = #{maintainPhone}
+            </if>
+
+            <if test="bindStatus != null">
+                and abe.bind_status = #{bindStatus}
+            </if>
+            <if test="remark != null and remark != ''">
+                and abe.remark = #{remark}
+            </if>
+            <if test="creator != null and creator != ''">
+                and abe.creator = #{creator}
+            </if>
+            <if test="reviser != null and reviser != ''">
+                and abe.reviser like concat('%',#{reviser},'%')
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and abe.create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and abe.update_time = #{updateTime}
+            </if>
+        </where>
+        order by ${orderString}
+    </select>
+    <select id="historyList" resultType="com.zans.portal.vo.AssetBaselineVersionVO">
+        (SELECT id,
+                mac,
+                ip_addr,
+                model_des,
+                brand_name,
+                device_type,
+                server_os,
+                open_port,
+                nas_ip,
+                nas_port_id,
+                vlan,
+                point_name,
+                longitude,
+                latitude,
+                project_name,
+                contractor,
+                project_status,
+                contractor_person,
+                contractor_phone,
+                maintain_company,
+                maintain_person,
+                maintain_phone,
+                map_catalogue_id,
+                remark,
+                creator,
+                DATE_FORMAT(create_time, '%Y-%m-%d %k:%i:%s') as create_time
+         FROM asset_baseline_version
+         where ip_addr = #{ip}
+         order by create_time asc)
+        union all
+        (SELECT id,
+                mac,
+                ip_addr,
+                model_des,
+                model_brand as brand_name,
+                device_type,
+                server_os,
+                open_port,
+                nas_ip,
+                nas_port_id,
+                vlan,
+                point_name,
+                longitude,
+                latitude,
+                project_name,
+                contractor,
+                project_status,
+                contractor_person,
+                contractor_phone,
+                maintain_company,
+                maintain_contact as maintain_person,
+                maintain_phone,
+                remark,
+                creator,
+                DATE_FORMAT(create_time, '%Y-%m-%d %k:%i:%s') as create_time
+         FROM asset
+         where ip_addr = #{ip}
+         limit 1)
+
+    </select>
+    <select id="getByIp" resultType="com.zans.portal.vo.AssetBaselineVO">
+        select id,
+               ip_addr,
+               mac,
+               model_des,
+               model_brand as brand_name,
+               device_type,
+               server_os,
+               nas_ip,
+               nas_port_id,
+               vlan,
+               point_name,
+               longitude,
+               latitude,
+               project_name,
+               contractor,
+               project_status,
+               contractor_person,
+               contractor_phone,
+               maintain_company,
+               maintain_contact as maintain_person,
+               maintain_phone,
+               bind_status,
+               remark,
+               creator,
+               reviser,
+               create_time,
+               update_time,
+               maintain_status
+        from asset
+        where ip_addr = #{ip}
+    </select>
+    <select id="getByMac" resultType="com.zans.portal.vo.AssetBaselineVO">
+        select id,
+               ip_addr,
+               mac,
+               model_des,
+               model_brand as brand_name,
+               device_type,
+               server_os,
+               nas_ip,
+               nas_port_id,
+               vlan,
+               point_name,
+               longitude,
+               latitude,
+               project_name,
+               contractor,
+               project_status,
+               contractor_person,
+               contractor_phone,
+               maintain_company,
+               maintain_contact as maintain_person,
+               maintain_phone,
+               bind_status,
+               remark,
+               creator,
+               reviser,
+               create_time,
+               update_time,
+
+               maintain_status
+        from asset
+        where mac = #{mac}
+    </select>
+    <select id="historyBaselineList" resultType="com.zans.portal.vo.AssetBaselineVersionVO">
+        SELECT
+        id,
+        asset_baseline_id,
+        mac,
+        ip_addr,
+        model_des,
+        brand_name,
+        device_type,
+        server_os,
+        open_port,
+        nas_ip,
+        nas_port_id,
+        vlan,
+        point_name,
+        longitude,
+        latitude,
+        project_name,
+        contractor,
+        project_status,
+        contractor_person,
+        contractor_phone,
+        maintain_company,
+        maintain_contact as maintain_person,
+        maintain_phone,
+        remark,
+        creator,
+        version_creator,
+        version_create_time
+        FROM
+        asset_baseline_version
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="assetBaselineId != null">
+                and assetBaselineId = #{asset_baseline_id}
+            </if>
+            <if test="ipAddr != null and ipAddr != ''">
+                and ip_addr like concat('%',#{ipAddr},'%')
+            </if>
+            <if test="mac != null and mac != ''">
+                and mac like concat('%',#{mac},'%')
+            </if>
+            <if test="modelDes != null and modelDes != ''">
+                and model_des like concat('%',#{modelDes},'%')
+            </if>
+            <if test="brandName != null and brandName != ''">
+                and brand_name like concat('%',#{brandName},'%')
+            </if>
+            <if test="deviceType != null">
+                and device_type = #{deviceType}
+            </if>
+            <if test="serverOs != null and serverOs != ''">
+                and server_os like concat('%',#{serverOs},'%')
+            </if>
+            <if test="openPort !=null and openPort!=''">
+                and open_port=#{openPort}
+            </if>
+            <if test="nasIp != null and nasIp != ''">
+                and nas_ip = #{nasIp}
+            </if>
+            <if test="nasPortId != null and nasPortId != ''">
+                and nas_port_id = #{nasPortId}
+            </if>
+            <if test="vlan != null and vlan != ''">
+                and vlan = #{vlan}
+            </if>
+            <if test="pointName != null and pointName != ''">
+                and point_name = #{pointName}
+            </if>
+            <if test="longitude != null">
+                and longitude = #{longitude}
+            </if>
+            <if test="latitude != null">
+                and latitude = #{latitude}
+            </if>
+            <if test="projectName != null and projectName != ''">
+                and project_name = #{projectName}
+            </if>
+            <if test="contractor != null and contractor != ''">
+                and contractor = #{contractor}
+            </if>
+            <if test="projectStatus != null">
+                and project_status = #{projectStatus}
+            </if>
+            <if test="contractorPerson != null and contractorPerson != ''">
+                and contractor_person = #{contractorPerson}
+            </if>
+            <if test="contractorPhone != null and contractorPhone != ''">
+                and contractor_phone = #{contractorPhone}
+            </if>
+            <if test="maintainCompany != null and maintainCompany != ''">
+                and maintain_company = #{maintainCompany}
+            </if>
+            <if test="maintainPerson != null and maintainPerson != ''">
+                and maintain_person = #{maintainPerson}
+            </if>
+            <if test="maintainPhone != null and maintainPhone != ''">
+                and maintain_phone = #{maintainPhone}
+            </if>
+
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="creator != null and creator != ''">
+                and creator = #{creator}
+            </if>
+            <if test="versionCreator != null and versionCreator != ''">
+                and versionCreator = #{version_creator}
+            </if>
+            <if test="versionCreateTime != null">
+                and version_create_time = #{versionCreateTime}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asset(ip_addr, mac, model_des, brand_name, device_type, server_os, nas_ip,
+        nas_port_id, vlan,point_name, longitude, latitude, project_name, contractor, project_status,
+        contractor_person, contractor_phone, maintain_company, maintain_person, maintain_phone, map_catalogue_id,
+        bind_status, remark, creator, reviser, create_time, update_time,
+        maintain_status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ipAddr}, #{entity.mac}, #{entity.modelDes}, #{entity.brandName}, #{entity.deviceType},
+            #{entity.serverOs}, #{entity.nasIp}, #{entity.nasPortId}, #{entity.vlan},
+            #{entity.pointName}, #{entity.longitude}, #{entity.latitude}, #{entity.projectName}, #{entity.contractor},
+            #{entity.projectStatus}, #{entity.contractorPerson}, #{entity.contractorPhone}, #{entity.maintainCompany},
+            #{entity.maintainPerson}, #{entity.maintainPhone}, #{entity.mapCatalogueId}, #{entity.bindStatus},
+            #{entity.remark}, #{entity.creator}, #{entity.reviser}, #{entity.createTime},
+            #{entity.updateTime},#{entity.mute},#{entity.maintain_status})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asset(ip_addr, mac, model_des, brand_name, device_type, server_os, nas_ip,
+        nas_port_id, vlan, point_name, longitude, latitude, project_name, contractor, project_status,
+        contractor_person, contractor_phone, maintain_company, maintain_person, maintain_phone, map_catalogue_id,
+        bind_status, remark, creator, reviser, create_time, update_time,
+        maintain_status)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ipAddr}, #{entity.mac}, #{entity.modelDes}, #{entity.brandName}, #{entity.deviceType},
+            #{entity.serverOs}, #{entity.nasIp}, #{entity.nasPortId}, #{entity.vlan},
+            #{entity.pointName}, #{entity.longitude}, #{entity.latitude}, #{entity.projectName}, #{entity.contractor},
+            #{entity.projectStatus}, #{entity.contractorPerson}, #{entity.contractorPhone}, #{entity.maintainCompany},
+            #{entity.maintainPerson}, #{entity.maintainPhone}, #{entity.mapCatalogueId}, #{entity.bindStatus},
+            #{entity.remark}, #{entity.creator}, #{entity.reviser}, #{entity.createTime},
+            #{entity.updateTime},#{entity.mute},#{entity.maintain_status})
+        </foreach>
+        on duplicate key update
+        ip_addr = values(ip_addr) , mac = values(mac) , model_des = values(model_des) , brand_name =
+        values(brand_name) , device_type = values(device_type) , server_os = values(server_os) , nas_ip = values(nas_ip)
+        , nas_port_id = values(nas_port_id) , vlan = values(vlan) ,
+        point_name = values(point_name) , longitude = values(longitude) , latitude = values(latitude) , project_name =
+        values(project_name) , contractor = values(contractor) , project_status = values(project_status) ,
+        contractor_person = values(contractor_person) , contractor_phone = values(contractor_phone) , maintain_company =
+        values(maintain_company) , maintain_person = values(maintain_person) , maintain_phone = values(maintain_phone) ,
+        map_catalogue_id = values(map_catalogue_id) , bind_status = values(bind_status) , remark = values(remark) ,
+        creator = values(creator) , reviser = values(reviser) , create_time = values(create_time) , update_time =
+        values(update_time),mute = values(mute),maintain_status = values(maintain_status)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update asset
+        <set>
+
+            <if test="modelDes != null and modelDes != ''">
+                model_des = #{modelDes},
+            </if>
+            <if test="brandName != null and brandName != ''">
+                brand_name = #{brandName},
+            </if>
+            <if test="deviceType != null">
+                device_type = #{deviceType},
+            </if>
+            <if test="serverOs != null and serverOs != ''">
+                server_os = #{serverOs},
+            </if>
+            <if test="nasIp != null and nasIp != ''">
+                nas_ip = #{nasIp},
+            </if>
+            <if test="nasPortId != null and nasPortId != ''">
+                nas_port_id = #{nasPortId},
+            </if>
+            <if test="vlan != null and vlan != ''">
+                vlan = #{vlan},
+            </if>
+            <if test="pointName != null and pointName != ''">
+                point_name = #{pointName},
+            </if>
+            <if test="longitude != null and longitude != ''">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude != null">
+                latitude = #{latitude},
+            </if>
+            <if test="projectName != null and projectName != ''">
+                project_name = #{projectName},
+            </if>
+            <if test="contractor != null and contractor != ''">
+                contractor = #{contractor},
+            </if>
+            <if test="projectStatus != null">
+                project_status = #{projectStatus},
+            </if>
+            <if test="contractorPerson != null and contractorPerson != ''">
+                contractor_person = #{contractorPerson},
+            </if>
+            <if test="contractorPhone != null and contractorPhone != ''">
+                contractor_phone = #{contractorPhone},
+            </if>
+            <if test="maintainCompany != null and maintainCompany != ''">
+                maintain_company = #{maintainCompany},
+            </if>
+            <if test="maintainPerson != null and maintainPerson != ''">
+                maintain_person = #{maintainPerson},
+            </if>
+            <if test="maintainPhone != null and maintainPhone != ''">
+                maintain_phone = #{maintainPhone},
+            </if>
+            <if test="mapCatalogueId != null">
+                map_catalogue_id = #{mapCatalogueId},
+            </if>
+            <if test="bindStatus != null">
+                bind_status = #{bindStatus},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="creator != null and creator != ''">
+                creator = #{creator},
+            </if>
+            <if test="reviser != null and reviser != ''">
+                reviser = #{reviser},
+            </if>
+            <if test="mute != null">
+                mute = #{mute},
+            </if>
+            <if test="maintainStatus != null">
+                maintain_status = #{maintainStatus},
+            </if>
+            <if test="createTime != null  ">
+                create_time = #{createTime},
+            </if>
+        </set>
+        where   ip_addr = #{ipAddr}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from asset
+        where id = #{id}
+    </delete>
+    <delete id="deleteBaseline">
+        delete from asset  limit 1;
+
+    </delete>
+    <delete id="deleteBaselineVersion">
+        delete from asset_baseline_version  limit 1;
+    </delete>
+
+    <select id="list" resultType="com.zans.portal.model.AssetBaseline">
+        select id,
+               ip_addr,
+               mac,
+               model_des,
+               brand_name,
+               device_type,
+               server_os,
+               open_port,
+               nas_ip,
+               nas_port_id,
+               vlan,
+               point_name,
+               longitude,
+               latitude,
+               project_name,
+               contractor,
+               project_status,
+               contractor_person,
+               contractor_phone,
+               maintain_company,
+               maintain_person,
+               maintain_phone,
+               map_catalogue_id,
+               bind_status,
+               remark,
+               creator,
+               reviser,
+
+               maintain_status,
+               DATE_FORMAT(create_time,
+                           '%Y-%m-%d %k:%i:%s') as create_time,
+               DATE_FORMAT(update_time,
+                           '%Y-%m-%d %k:%i:%s') as update_time
+        from asset
+
+    </select>
+
+    <update id="updateByAddr">
+        update asset
+        <set>
+            <if test="pointName != null and pointName != ''">
+                point_name = #{pointName},
+            </if>
+            <if test="longitude != null and longitude != ''">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude != null and latitude != ''">
+                latitude = #{latitude},
+            </if>
+            <if test="departmentId != null">
+                department_id = #{departmentId},
+            </if>
+            <if test="pointName != null and pointName != ''">
+                point_name = #{pointName},
+            </if>
+            <if test="projectName != null and projectName != ''">
+                project_name = #{projectName},
+            </if>
+            <if test="contractor != null and contractor != ''">
+                contractor = #{contractor},
+            </if>
+            <if test="projectStatus != null">
+                project_status = #{projectStatus},
+            </if>
+            <if test="contractorPerson != null and contractorPerson !=''">
+                contractor_person = #{contractorPerson},
+            </if>
+            <if test="contractorPhone != null and contractorPhone !=''">
+                contractor_phone = #{contractorPhone},
+            </if>
+            <if test="maintainCompany != null and maintainCompany !=''">
+                maintain_company = #{maintainCompany},
+            </if>
+            <if test="maintainPerson != null and maintainPerson !=''">
+                maintain_person = #{maintainPerson},
+            </if>
+            <if test="maintainPhone != null and maintainPhone !=''">
+                maintain_phone = #{maintainPhone},
+            </if>
+            <if test="maintainStatus != null">
+                maintain_status = #{maintainStatus},
+            </if>
+            <if test="deviceModelBrand != null and deviceModelBrand != ''">
+                device_model_brand = #{deviceModelBrand},
+            </if>
+            <if test="deviceType != null">
+                device_type = #{deviceType},
+            </if>
+            <if test="deviceModelDes != null and deviceModelDes != ''">
+                device_model_des = #{deviceModelDes},
+            </if>
+            <if test="source != null">
+                `source` = #{source},
+            </if>
+            <!--            <if test="alive != null">-->
+            <!--                alive = #{alive},-->
+            <!--            </if>-->
+            <!--            <if test="aliveLastTime != null">-->
+            <!--                alive_last_time = #{aliveLastTime},-->
+            <!--            </if>-->
+            <if test="deleteStatus != null">
+                delete_status = #{deleteStatus},
+            </if>
+            <if test="enableStatus != null">
+                enable_status = #{enableStatus},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+        </set>
+        where ip_addr = #{ipAddr}
+    </update>
+
+    <update id="updateAssetBaselineByAddr">
+        update asset
+        <set>
+            <if test="mac != null and mac != ''">
+                mac = #{mac},
+            </if>
+            <if test="modelDes != null and modelDes != ''">
+                model_des = #{modelDes},
+            </if>
+            <if test="brandName != null and brandName != ''">
+                brand_name = #{brandName},
+            </if>
+            <if test="deviceType != null">
+                device_type = #{deviceType},
+            </if>
+            <if test="serverOs != null and serverOs != ''">
+                server_os = #{serverOs},
+            </if>
+            <if test="nasIp != null and nasIp != ''">
+                nas_ip = #{nasIp},
+            </if>
+            <if test="nasPortId != null and nasPortId != ''">
+                nas_port_id = #{nasPortId},
+            </if>
+            <if test="vlan != null and vlan != ''">
+                vlan = #{vlan},
+            </if>
+            <if test="pointName != null and pointName != ''">
+                point_name = #{pointName},
+            </if>
+            <if test="longitude != null and longitude != ''">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude != null">
+                latitude = #{latitude},
+            </if>
+            <if test="projectName != null and projectName != ''">
+                project_name = #{projectName},
+            </if>
+            <if test="contractor != null and contractor != ''">
+                contractor = #{contractor},
+            </if>
+            <if test="projectStatus != null">
+                project_status = #{projectStatus},
+            </if>
+            <if test="contractorPerson != null and contractorPerson != ''">
+                contractor_person = #{contractorPerson},
+            </if>
+            <if test="contractorPhone != null and contractorPhone != ''">
+                contractor_phone = #{contractorPhone},
+            </if>
+            <if test="maintainCompany != null and maintainCompany != ''">
+                maintain_company = #{maintainCompany},
+            </if>
+            <if test="maintainPerson != null and maintainPerson != ''">
+                maintain_person = #{maintainPerson},
+            </if>
+            <if test="maintainPhone != null and maintainPhone != ''">
+                maintain_phone = #{maintainPhone},
+            </if>
+            <if test="mapCatalogueId != null">
+                map_catalogue_id = #{mapCatalogueId},
+            </if>
+            <if test="bindStatus != null">
+                bind_status = #{bindStatus},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="mute != null">
+                mute = #{mute},
+            </if>
+            <if test="maintainStatus != null">
+                maintain_status = #{maintainStatus},
+            </if>
+        </set>
+        where ip_addr = #{ipAddr}
+    </update>
+
+    <update id="unbindByIpAddr">
+        update asset
+        set bind_status=0 , mac = ''
+        where ip_addr = #{ip}
+    </update>
+    <select id="findByIpMac" resultType="com.zans.portal.model.AssetBaseline">
+        SELECT *
+        FROM asset
+        WHERE ip_addr = #{ipAddr}
+           or mac = #{mac}
+    </select>
+    <select id="excelSelect" resultType="com.zans.portal.vo.asset.ExcelAssetBaselineVO">
+        select ip_addr,
+        mac,
+        model_des,
+        brand_name,
+        device_type,
+        server_os,
+        open_port,
+        nas_ip,
+        nas_port_id,
+        vlan,
+        point_name,
+        longitude,
+        latitude,
+        project_name,
+        contractor,
+        project_status,
+        contractor_person,
+        contractor_phone,
+        maintain_company,
+        maintain_person,
+        maintain_phone,
+        map_catalogue_id,
+        bind_status,
+        remark
+        from asset
+        <where>
+            <if test="ipAddr != null and ipAddr != ''">
+                and ip_addr like concat('%',#{ipAddr},'%')
+            </if>
+            <if test="mac != null and mac != ''">
+                and mac like concat('%',#{mac},'%')
+            </if>
+            <if test="deviceType != null">
+                and device_type = #{deviceType}
+            </if>
+            <if test="reviser != null and reviser != ''">
+                and reviser like concat('%',#{reviser},'%')
+            </if>
+        </where>
+        order by update_time DESC
+    </select>
+    <select id="getByIpOrMac" resultType="com.zans.portal.vo.AssetBaselineVO">
+        SELECT id,
+               ip_addr,
+               mac,
+               model_des,
+               brand_name,
+               device_type,
+               server_os,
+               open_port,
+               nas_ip,
+               nas_port_id,
+               vlan,
+               point_name,
+               longitude,
+               latitude,
+               project_name,
+               contractor,
+               project_status,
+               contractor_person,
+               contractor_phone,
+               maintain_company,
+               maintain_person,
+               maintain_phone,
+               map_catalogue_id,
+               bind_status,
+               remark,
+               creator,
+               reviser,
+               DATE_FORMAT(create_time, '%Y-%m-%d %k:%i:%s') as create_time,
+               update_time,
+
+               maintain_status,
+               (select type_name from device_type_guard t where abe.device_type = t.type_id and t.enable_status=1) AS device_type_name
+        FROM asset abe
+        WHERE ip_addr = #{ipAddr}
+           or mac = #{mac}
+    </select>
+
+
+    <select id="assetMapForTreeList" resultType="com.zans.portal.vo.AssetBaselineVO">
+        SELECT
+        abe.id+100000   id,
+        ab.parent_id  parent_id,
+        abe.ip_addr ipAddr,
+        abe.point_name pointName,
+        abe.latitude latitude,
+        abe.longitude longitude,
+        abe.maintain_company,
+        abe.device_type deviceType,
+        dt.type_name as typeName,
+        dt.type_name as  deviceTypeName,
+        abe.model_brand brandName,
+        ab.id department_id,
+        ab.name department_name,
+        2  department_type,
+        CASE
+        WHEN  IFNULL(ah.alive,2) = 2  THEN '2'
+        WHEN  IFNULL(ah.alive,2) = 1  THEN '1'
+        ELSE  '-1' END deviceStatus
+        FROM asset_branch_asset aba
+        left join asset abe on abe.ip_addr = aba.ip_addr
+        left join asset_branch ab on ab.id = aba.asset_branch_id
+        left join alive_heartbeat ah on ah.ip_addr = abe.ip_addr
+        LEFT JOIN device_type_guard dt ON dt.type_id = abe.device_type
+
+        WHERE 1 = 1 and dt.enable_status=1
+        and ifnull(abe.point_name ,'')!=''
+        <if test="assetBranchId != null and assetBranchId != ''">
+            and ab.id = #{assetBranchId}
+        </if>
+        ORDER BY  ab.id asc
+
+    </select>
+
+    <delete id="deleteIpByAlloc">
+        delete from asset where alloc_id=#{allocId}
+    </delete>
+
+</mapper>
+
+

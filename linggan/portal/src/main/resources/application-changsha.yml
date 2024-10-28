@@ -1,0 +1,110 @@
+server:
+  port: 14978
+  servlet:
+    context-path: /api/portal
+  ssl:
+    enabled: false
+  undertow:
+    io-threads: 4
+    worker-threads: 32
+    max-http-post-size: 0
+
+
+spring:
+  datasource:
+    guard:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://192.168.9.42:3306/guard_scan_changsha211208?autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&autoReconnect=true&failOverReadOnly=false&useSSL=false
+      username: guard
+      password: txsqldb@123456
+    radius:
+      driver-class-name: com.mysql.jdbc.Driver
+      jdbc-url: jdbc:mysql://192.168.9.42:3306/radius?autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull
+      username: guard
+      password: txsqldb@123456
+  redis:
+    # [必须修改] Redis服务器IP, REDIS安装在本机的,使用127.0.0.1
+    host: 192.168.9.51
+    # [必须修改] 端口号
+    port: 6379
+    # [可选] 数据库 DB
+    database: 3
+    # [可选] 访问密码,若你的redis服务器没有设置密码，就不需要用密码去连接
+    password: redis123
+    # [可选] 超时时间
+    timeout: 10000
+security:
+  exclude-path:
+    swagger: /swagger-ui.html, /swagger/**, /swagger-resources/**, /webjars/**, /v2/api-docs, /statics/**, /doc.html
+    base: /login,/license,/changeLicense,/machineCode, /logout, /verify_login, /error, /favicon.ico, /constant/**, /ip/alloc/download/**, /ip/import/**, /version
+    api: /home/**, /rbac/**, /user/current, /person/** ,/user/me,/user/change_password
+  user-verify: jwt
+  jwt:
+    expire-time: 60000000
+
+api:
+  page-size: 10
+  asset:
+    default-order: id desc
+  ip:
+    default-order: a.id desc
+    ip-gateway: 27
+  model-scan:
+    default-order: a.id desc
+  brand:
+    default-order: s.id desc
+  model-official:
+    default-order: t.id desc
+  log:
+    op:
+      default-order: a.created_at desc
+    task:
+      default-order: a.updated_at desc
+  msg:
+    default-order: a.create_time desc
+  white:
+    ip:
+      default-order: id desc
+    mac:
+      default-order: id desc
+  auth:
+    order:
+      accept: id desc
+      accept-exist: a.id desc
+      reject: id desc
+      reject-exist: a.id desc
+  ip-alloc:
+    default-order: a.id desc
+  network:
+    export: /template/通讯链路申请单.xlsx
+    filename: 通讯链路申请单
+    template: /template/通讯链路申请单模板.xlsx
+  ip-segment:
+    default-order: a.id desc
+  upload:
+    folder: /home/release/file/upload/
+    max-size: 5
+  export:
+    folder: /home/release/file/export/
+
+
+logging:
+  level:
+    com.zans.portal.dao : debug
+
+mock-api:
+  mock-dir: ./mock
+
+request:
+  opsnode:
+    url: http://192.168.9.42:19527/job/api/node/rad_api
+  power-off:
+    url: http://192.168.9.42:9876/alert/record/add
+es:
+  ip: 192.168.9.42
+  port: 9200
+
+snmp:
+  version: 2
+  listen-address: udp:0.0.0.0/16100
+  thread-pool-size: 5

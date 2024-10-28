@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="portal" default="zip" basedir=".">
+	<property name="build" value="build" />
+	<property name="target" value="target" />
+	<property name="word" value="docs"/>
+	<property name="jar_version" value="porta_whjg-prod_V2.0" />
+	<property name="routine" value="build/${jar_version}/程序包"/>
+
+	<record name="ant.log" loglevel="info" append="no" action="start"/>
+
+	<target name="clean">
+		<delete dir="${target}" />
+		<delete dir="${build}" />
+		<delete dir="${routine}" />
+		<delete dir="${doc}" />
+	</target>
+
+	<target name="create-path" depends="clean">
+		<mkdir dir="${build}" />
+		<mkdir dir="${build}/${jar_version}" />
+	</target>
+
+	<target name="mvn_package" depends="create-path">
+		<exec executable="cmd" failonerror="true">
+			<arg line="/c mvn clean package -P whjg-prod" />
+		</exec>
+	</target>
+
+	<target name="copyAll" depends="mvn_package">
+		<copy todir="${routine}" file="${target}/portal.jar"></copy>
+		<copy todir="${routine}" file="${target}/portal.jar"></copy>
+		<copy todir="${routine}" file="portal-version.txt"></copy>
+	</target>
+
+	<!--文件打包-->
+	 <target name="zip" depends="copyAll">
+        <zip destfile="build/${jar_version}.zip" basedir="${build}" excludes=".svn"/>
+    </target>
+
+	<target name="cleanFiles" depends="zip">
+		<delete dir="${build}/${jar_version}" />
+	</target>
+
+</project>

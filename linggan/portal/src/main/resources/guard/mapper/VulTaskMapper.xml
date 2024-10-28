@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.VulTaskMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.portal.model.VulTask" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="ip_addr" property="ipAddr" jdbcType="VARCHAR" />
+    <result column="job_id" property="jobId" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="progress" property="progress" jdbcType="VARCHAR" />
+    <result column="ret_get_count" property="retGetCount" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <update id="updateStatus">
+    update vul_task set status=#{status} where job_id=#{jobId} and ip_addr=#{ipAddr}
+  </update>
+  <delete id="deleteById">
+    delete from vul_task where id=#{id}
+  </delete>
+  <delete id="deleteRetGetCountMore">
+    delete
+    from vul_task
+    where ret_get_count &gt; 500
+  </delete>
+  <delete id="deleteByIpAddr">
+    delete from vul_task where ip_addr=#{hostIp}
+  </delete>
+  <select id="getVulTaskIpAddr" resultType="java.lang.String">
+      SELECT
+        p.cur_ip_addr ipAddr
+      FROM
+        radius_endpoint e
+          LEFT JOIN radius_endpoint_profile p ON e.mac = p.mac
+          LEFT JOIN vul_task v ON v.ip_addr=p.cur_ip_addr
+      WHERE e.access_policy=1
+        and (v.status is NULL or v.status &gt;3)
+        and (v.ret_get_count &lt; 500 or v.ret_get_count is null)
+      and p.cur_ip_addr ='192.168.9.166'
+      ORDER BY e.id limit ${limit}
+    </select>
+  <select id="getUniqueByIpAddr" resultMap="BaseResultMap">
+    select  * from   vul_task where ip_addr=#{ipAddr} limit 1
+  </select>
+  <select id="getByJobId" resultMap="BaseResultMap">
+    select  * from   vul_task where job_id=#{jobId} limit 1
+  </select>
+</mapper>

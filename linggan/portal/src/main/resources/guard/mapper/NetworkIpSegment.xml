@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.NetworkIpSegmentMapper" >
+
+
+    <select id="list" resultType="com.zans.portal.model.NetworkIpSegment">
+        SELECT
+            id,
+            ip_begin,
+            ip_end,
+            create_time,
+            update_time,
+            creator
+        FROM
+            network_ip_segment
+    </select>
+
+    <select id="getUsedIp" resultType="java.lang.String">
+        SELECT
+            ip_addr
+        FROM
+            asset
+        WHERE
+             substring_index( ip_addr, '.',3 ) = #{ip}
+    </select>
+    <select id="getAsset" resultType="com.zans.portal.model.Asset">
+        SELECT
+            a.ip_addr as ipAddr,
+            p.cur_device_type as deviceType,
+            if(t.type_name is not null,t.type_name,'未知') as deviceModelBrand
+        FROM
+            asset a left join asset_profile p on a.ip_addr=p.ip_addr
+                left join alive_heartbeat ah on ah.ip_addr = a.ip_addr and ah.mac = p.cur_mac
+        left join device_type_guard t on t.type_id=p.cur_device_type
+        WHERE
+            substring_index( a.ip_addr, '.',3 ) = #{ip}
+        and t.enable_status=1
+          <if test="alive !=null">
+              and ah.alive= #{alive}
+          </if>
+
+    </select>
+</mapper>

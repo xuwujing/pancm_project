@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.RadiusNasMapper">
+
+    <select id="getByNasIpAndSwIP" resultType="com.zans.portal.model.RadiusNas">
+        SELECT * FROM radius_nas s WHERE s.`nas_sw_ip` = #{swIp} AND nas_ip = #{nasIp} and delete_status = 0 limit 1
+    </select>
+
+    <select id="findRadiusNasList" resultType="com.zans.portal.vo.radius.RadiusNasRespVO">
+        select r.*,t.area_name from network_nas r
+        left join t_area t on r.area_id = t.area_id
+        where 1=1
+        <if test="reqVo.areaId != null">
+            and r.area_id = #{reqVo.areaId}
+        </if>
+        <if test="reqVo.nasIp != null and reqVo.nasIp != '' ">
+            and r.nas_ip like concat('%',#{reqVo.nasIp},'%')
+        </if>
+        <if test="reqVo.nasSwIp != null and reqVo.nasSwIp != '' ">
+            and r.nas_sw_ip like concat('%',#{reqVo.nasSwIp},'%')
+        </if>
+        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+            order by ${reqVo.orderBy}
+        </if>
+    </select>
+
+
+    <select id="findByNameOrNasIp" resultType="com.zans.portal.model.RadiusNas">
+        select * from radius_nas r where 1=1
+        <if test="name != null and name != '' ">
+            and r.name = #{name}
+        </if>
+        <if test="nasIp != null and nasIp != '' ">
+            and nas_ip = #{nasIp}
+        </if>
+        <if test="id != null">
+            and id != #{id}
+        </if>
+        limit 1
+    </select>
+
+</mapper>

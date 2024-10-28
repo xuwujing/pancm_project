@@ -1,0 +1,87 @@
+custom:
+  server:
+    http:
+      port: 21000
+
+server:
+  port: 21443
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-password: 123456
+    key-store-type: PKCS12
+    protocol: TLSv1.2
+  http2:
+    enabled: true
+  use-forward-headers: true
+  undertow:
+    io-threads: 8
+    worker-threads: 64
+    max-http-post-size: 0
+
+spring:
+  datasource:
+    guard:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://27.10.27.253:3306/guard_scan?autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull
+      username: guard
+      password: txsqldb@123456
+    radius:
+      driver-class-name: com.mysql.jdbc.Driver
+      jdbc-url: jdbc:mysql://27.10.27.253:3306/radius?autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull
+      username: guard
+      password: txsqldb@123456
+
+security:
+  exclude-path:
+    swagger: /swagger-ui.html, /swagger/**, /swagger-resources/**, /webjars/**, /v2/api-docs, /statics/**, /doc.html
+    base: /login,/license,/changeLicense,/machineCode, /logout, /verify_login, /error, /favicon.ico, /constant/**, /ip/alloc/download/**, /ip/import/**
+    api: /home/**, /rbac/**, /user/current, /person/**,/user/me,/user/change_password
+  user-verify: jwt
+  jwt:
+    expire-time: 60000000
+
+api:
+  page-size: 20
+  asset:
+    default-order: id desc
+  ip:
+    default-order: a.id desc
+  model-scan:
+    default-order: id desc
+  log:
+    op:
+      default-order: a.created_at desc
+    task:
+      default-order: a.updated_at desc
+  msg:
+    default-order: a.create_time desc
+  white:
+    ip:
+      default-order: id desc
+    mac:
+      default-order: id desc
+  auth:
+    order:
+      accept: id desc
+      accept-exist: a.id desc
+      reject: id desc
+      reject-exist: a.id desc
+  ip-alloc:
+    default-order: a.id desc
+  upload:
+    folder: /home/release/upload/
+    max-size: 5
+
+
+#logging:
+#  level:
+#    com.zans.portal.dao : debug
+
+mock-api:
+  mock-dir: ./mock
+
+snmp:
+  version: 2
+  listen-address: udp:0.0.0.0/161
+  thread-pool-size: 5

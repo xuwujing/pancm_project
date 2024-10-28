@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.AssetBaselineAreaDao">
+
+    <resultMap type="com.zans.portal.model.AssetBaselineArea" id="AssetBaselineAreaMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
+        <result property="areaName" column="area_name" jdbcType="VARCHAR"/>
+        <result property="ipSegBegin" column="ip_seg_begin" jdbcType="VARCHAR"/>
+        <result property="ipSegEnd" column="ip_seg_end" jdbcType="VARCHAR"/>
+        <result property="vlan" column="vlan" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AssetBaselineAreaMap">
+        select id,
+               parent_id,
+               area_name,
+               ip_seg_begin,
+               ip_seg_end,
+               create_time,
+               update_time
+        from asset_baseline_area
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="AssetBaselineAreaMap">
+        select
+        id, parent_id, area_name, ip_seg_begin, ip_seg_end, create_time, update_time,vlan,level
+        from asset_baseline_area
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+            <if test="areaName != null and areaName != ''">
+                and area_name = #{areaName}
+            </if>
+            <if test="ipSegBegin != null and ipSegBegin != ''">
+                and ip_seg_begin = #{ipSegBegin}
+            </if>
+            <if test="ipSegEnd != null and ipSegEnd != ''">
+                and ip_seg_end = #{ipSegEnd}
+            </if>
+            <if test="vlan != null and vlan != ''">
+                and vlan = #{vlan}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="queryByIp" resultType="com.zans.portal.vo.AssetBaselineAreaVO">
+        SELECT
+            *
+        FROM
+            asset_baseline_area
+        WHERE
+            INET_ATON(#{ip}) BETWEEN  INET_ATON(ip_seg_begin)
+                AND  INET_ATON(ip_seg_end)
+         order by update_time desc limit 1
+    </select>
+
+    <select id="queryByAreaName" resultType="com.zans.portal.vo.AssetBaselineAreaVO">
+        SELECT *
+        FROM asset_baseline_area
+        WHERE id = (SELECT parent_id AS id FROM asset_baseline_area  WHERE area_name = #{areaName} LIMIT 1)
+    </select>
+    <select id="getByName" resultMap="AssetBaselineAreaMap">
+        select * from asset_baseline_area   WHERE area_name = #{areaName} LIMIT 1
+    </select>
+
+    <select id="getOnlyLevel" resultType="com.zans.portal.model.AssetBaselineArea">
+        select * from asset_baseline_area   WHERE level = 1 LIMIT 1
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into asset_baseline_area(parent_id,level, area_name, ip_seg_begin, ip_seg_end)
+        values (#{parentId},#{level}, #{areaName}, #{ipSegBegin}, #{ipSegEnd})
+    </insert>
+
+
+
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update asset_baseline_area
+        <set>
+            <if test="parentId != null">
+                parent_id = #{parentId},
+            </if>
+            <if test="areaName != null and areaName != ''">
+                area_name = #{areaName},
+            </if>
+            <if test="ipSegBegin != null and ipSegBegin != ''">
+                ip_seg_begin = #{ipSegBegin},
+            </if>
+            <if test="ipSegEnd != null and ipSegEnd != ''">
+                ip_seg_end = #{ipSegEnd},
+            </if>
+            <if test="vlan != null and vlan != ''">
+                vlan = #{vlan},
+            </if>
+            <if test="level != null and level != ''">
+                level = #{level},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from asset_baseline_area
+        where id = #{id}
+    </delete>
+
+</mapper>
+

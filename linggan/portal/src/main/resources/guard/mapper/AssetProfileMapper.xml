@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.AssetProfileMapper">
+  <resultMap id="BaseResultMap" type="com.zans.portal.model.AssetProfile">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="asset_id" jdbcType="INTEGER" property="assetId" />
+    <result column="base_mac_addr" jdbcType="VARCHAR" property="baseMacAddr" />
+    <result column="base_company" jdbcType="VARCHAR" property="baseCompany" />
+    <result column="base_brand" jdbcType="VARCHAR" property="baseBrand" />
+    <result column="device_type_guard" jdbcType="INTEGER" property="baseDeviceType" />
+    <result column="base_model_des" jdbcType="VARCHAR" property="baseModelDes" />
+    <result column="base_mute" jdbcType="INTEGER" property="baseMute" />
+    <result column="base_server_os" jdbcType="VARCHAR" property="baseServerOs" />
+    <result column="base_sw_ip" jdbcType="VARCHAR" property="baseSwIp" />
+    <result column="cur_mac" jdbcType="VARCHAR" property="curMacAddr" />
+    <result column="cur_company" jdbcType="VARCHAR" property="curCompany" />
+    <result column="cur_brand" jdbcType="VARCHAR" property="curBrand" />
+    <result column="cur_device_type" jdbcType="INTEGER" property="curDeviceType" />
+    <result column="cur_model_des" jdbcType="VARCHAR" property="curModelDes" />
+    <result column="cur_mute" jdbcType="INTEGER" property="curMute" />
+    <result column="cur_server_os" jdbcType="VARCHAR" property="curServerOs" />
+    <result column="cur_sw_ip" jdbcType="VARCHAR" property="curSwIp" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_person" jdbcType="VARCHAR" property="createPerson" />
+    <result column="creator_id" jdbcType="INTEGER" property="creatorId" />
+    <result column="update_id" jdbcType="INTEGER" property="updateId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="base_open_port" jdbcType="LONGVARCHAR" property="baseOpenPort" />
+    <result column="cur_open_port" jdbcType="LONGVARCHAR" property="curOpenPort" />
+  </resultMap>
+    <delete id="deleteById">
+      delete from asset_profile where asset_id=#{id}
+    </delete>
+
+  <delete id="deleteByIp">
+      delete from asset_profile where ip_addr=#{ip}
+    </delete>
+
+    <select id="findByIdAddr" resultType="com.zans.portal.model.AssetProfile">
+    select  a.*  from  asset_profile a
+    where a.ip_addr =#{ipAddr} limit 1
+  </select>
+
+
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.RadiusEndpointProfileMapper">
+    <resultMap id="BaseResultMap" type="com.zans.portal.model.RadiusEndpointProfile">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="endpoint_id" property="endpointId" jdbcType="INTEGER"/>
+        <result column="ip_addr" property="ipAddr" jdbcType="VARCHAR"/>
+<!--        <result column="alive" property="alive" jdbcType="INTEGER"/>-->
+        <result column="alive_not_node" property="aliveNotNode" jdbcType="VARCHAR"/>
+<!--        <result column="alive_last_time" property="aliveLastTime" jdbcType="TIMESTAMP"/>-->
+<!--        <result column="alive_qz" property="aliveQz" jdbcType="INTEGER"/>-->
+<!--        <result column="alive_qz_last_time" property="aliveQzLastTime" jdbcType="TIMESTAMP"/>-->
+        <result column="sw_ip" property="swIp" jdbcType="VARCHAR"/>
+        <result column="nas_ip_address" property="nasIpAddress" jdbcType="VARCHAR"/>
+        <result column="nas_port_id" property="nasPortId" jdbcType="VARCHAR"/>
+        <result column="reply_message" property="replyMessage" jdbcType="VARCHAR"/>
+        <result column="filter_id" property="filterId" jdbcType="VARCHAR"/>
+        <result column="acct_session_id" property="acctSessionId" jdbcType="VARCHAR"/>
+        <result column="acct_update_time" property="acctUpdateTime" jdbcType="TIMESTAMP"/>
+        <result column="company" property="company" jdbcType="VARCHAR"/>
+        <result column="brand_name" property="brandName" jdbcType="VARCHAR"/>
+        <result column="open_port" property="openPort" jdbcType="VARCHAR"/>
+        <result column="mute" property="mute" jdbcType="INTEGER"/>
+        <result column="server_os" property="serverOs" jdbcType="VARCHAR"/>
+        <result column="device_type" property="deviceType" jdbcType="INTEGER"/>
+        <result column="model_level" property="modelLevel" jdbcType="INTEGER"/>
+        <result column="model_des" property="modelDes" jdbcType="VARCHAR"/>
+        <result column="serial_no" property="serialNo" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="VARCHAR"/>
+        <result column="mac_scan" property="macScan" jdbcType="VARCHAR"/>
+        <result column="cur_ip_addr" property="curIpAddr" jdbcType="VARCHAR"/>
+        <result column="cur_sw_ip" property="curSwIp" jdbcType="VARCHAR"/>
+        <result column="cur_nas_ip_address" property="curNasIpAddress" jdbcType="VARCHAR"/>
+        <result column="cur_nas_port_id" property="curNasPortId" jdbcType="VARCHAR"/>
+        <result column="cur_open_port" property="curOpenPort" jdbcType="VARCHAR"/>
+        <result column="cur_mute" property="curMute" jdbcType="INTEGER"/>
+        <result column="cur_device_type" property="curDeviceType" jdbcType="INTEGER"/>
+        <result column="cur_model_des" property="curModelDes" jdbcType="VARCHAR"/>
+        <result column="check_last_time" property="checkLastTime" jdbcType="TIMESTAMP"/>
+        <result column="source" property="source" jdbcType="BIT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="open_port_all" property="openPortAll" jdbcType="LONGVARCHAR"/>
+        <result column="cur_server_os" property="curServerOs" jdbcType="VARBINARY"/>
+    </resultMap>
+
+
+    <select id="findIpEndpointAliveNum" resultType="com.zans.portal.vo.arp.AssetRespVO">
+        SELECT cur_ip_addr as ip_addr,count(endpoint_id) as cur_alive_device_num
+        from radius_endpoint_profile rep
+        left join alive_heartbeat ah on ah.mac = rep.mac
+        where
+        IFNULL(ah.alive,2) = 1 and cur_ip_addr in
+        <foreach collection="ipList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        group by cur_ip_addr
+    </select>
+    <select id="getOne" resultType="com.zans.portal.model.RadiusEndpointProfile">
+        SELECT
+            rep.endpoint_id,
+            rep.mac,
+            rep.cur_ip_addr as ip_addr,
+            rep.alive_not_node,
+            rep.cur_sw_ip as sw_ip,
+            rep.cur_nas_ip_address as nas_ip_address,
+            rep.cur_nas_port_id as nas_port_id,
+            rep.reply_message,
+            rep.filter_id,
+            rep.acct_session_id,
+            rep.acct_update_time,
+            rep.company,
+            rep.brand_name,
+            rep.cur_open_port as open_port,
+            rep.open_port_all,
+            rep.cur_mute as mute,
+            rep.cur_server_os as server_os,
+            rep.cur_device_type as device_type,
+            rep.model_level,
+            rep.cur_model_des as model_des,
+            rep.serial_no,
+            rep.version,
+            rep.mac_scan,
+            rep.cur_ip_addr,
+            rep.cur_sw_ip,
+            rep.cur_nas_ip_address,
+            rep.cur_nas_port_id,
+            rep.cur_vlan,
+            rep.cur_open_port,
+            rep.cur_mute,
+            rep.cur_server_os,
+            rep.cur_device_type,
+            rep.cur_model_des,
+            rep.device_lock,
+            rep.remark,
+            rep.check_last_time,
+            rep.source,
+            IFNULL(ah.alive,2) as alive,
+            ah.alive_last_time,
+            rep.create_time,
+            rep.update_time
+        FROM
+            radius_endpoint_profile rep left join alive_heartbeat ah on rep.mac=ah.mac
+        where rep.endpoint_id = #{id}
+    </select>
+</mapper>

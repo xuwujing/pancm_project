@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.SysRegionMapper">
+
+    <select id="findRegionByName" resultType="com.zans.portal.model.SysRegion">
+        select * from sys_region where 1=1
+        <if test=" regionName != null and regionName != '' ">
+            and region_name like CONCAT('%',#{regionName},'%')
+        </if>
+        order by region_id
+    </select>
+
+    <select id="findByRegionName" resultType="java.lang.Integer">
+        select count(1) from sys_region s where s.region_name = #{regionName}
+        <if test=" regionId != null ">
+            and s.region_id = #{regionId}
+        </if>
+    </select>
+
+    <select id="getRegionNameById" resultType="java.lang.String">
+        select s.region_name from sys_region s where  s.region_id = #{id}
+
+    </select>
+
+</mapper>

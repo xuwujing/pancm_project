@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.IpAllocMapper" >
+    <select id="findAllIpAlloc" resultType="com.zans.portal.vo.ip.IpAllocRespVO">
+        select a.*, b.area_name, c.type_name as device_type_name, c.template from t_ip_alloc a
+        left join t_area b on a.area_id=b.id
+        left join device_type_guard c on a.device_type = c.type_id
+        <where>
+            1=1
+            <if test="ip.area != null">
+              and a.area_id = #{ip.area}
+            </if>
+            <if test="ip.deviceType != null">
+              and a.device_type = #{ip.deviceType}
+            </if>
+            <if test="ip.insertStatus != null">
+              and a.insert_status = #{ip.insertStatus}
+            </if>
+            <if test="ip.startDate != null and ip.startDate !=''">
+              and alloc_day &gt;= #{ip.startDate}
+            </if>
+            <if test="ip.endDate != null and ip.endDate !=''">
+              and alloc_day &lt;= #{ip.endDate}
+            </if>
+            <if test="ip.contractor != null and ip.contractor !=''">
+                and a.contractor like concat('%',#{ip.contractor},'%')
+            </if>
+            <if test="ip.projectName != null and ip.projectName !=''">
+              and a.project_name like concat('%',#{ip.projectName},'%')
+            </if>
+            <if test="ip.contractorPerson != null and ip.contractorPerson !=''">
+              and a.contractor_person like concat('%',#{ip.contractorPerson},'%')
+            </if>
+        </where>
+        <if test="ip.orderBy != null and ip.orderBy !=''">
+            order by ${ip.orderBy}
+        </if>
+    </select>
+    <select id="findIpAlloc" resultType="com.zans.portal.vo.ip.IpAllocRespVO">
+        select a.*, b.area_name, c.type_name as device_type_name, c.template from t_ip_alloc a
+        left join t_area b on a.area_id=b.id
+        left join device_type_guard c on a.device_type = c.type_id
+        where a.id=#{id}
+    </select>
+    <select id="isIpAlloc" resultType="java.lang.Long">
+        select count(id) from t_ip_all where alloc_id=#{id}
+    </select>
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.TUserMapper" >
+    <delete id="deleteById">
+        delete from sys_user where  id=#{id}
+    </delete>
+
+    <select id="findUserByName" resultType="com.zans.portal.model.TUser">
+        select * from sys_user where user_name=#{userName} and ifnull(delete_status,0) =0 limit 1
+    </select>
+
+    <select id="findUserByNameExceptId" resultType="com.zans.portal.model.TUser">
+        select * from sys_user where user_name=#{userName} and id!=#{userId} and ifnull(delete_status,0) =0 limit 1
+    </select>
+
+    <update id="changeUserEnableStatus">
+        update sys_user set enable=#{status} where id=#{userId}
+    </update>
+
+    <select id="findUserList" resultType="com.zans.portal.vo.user.UserRespVO">
+        select a.*,sr.role_id as role,sr.role_name as roleName from sys_user a
+        left join sys_user_role sur on a.id = sur.user_id
+        left join sys_role sr on sur.role_id = sr.role_id
+        where 1=1 and  ifnull(a.delete_status,0) =0
+        order by id desc
+    </select>
+
+    <select id="findUserPageWHJG" resultType="com.zans.portal.vo.user.UserRespVO">
+        select a.*,sr.role_id as role,sr.role_name as roleName from sys_user a
+        left join sys_user_role sur on a.id = sur.user_id
+        left join sys_role sr on sur.role_id = sr.role_id
+        where 1=1
+        <if test=" reqVo.userName != null and reqVo.userName != '' ">
+            and user_name like concat('%',#{reqVo.userName},'%')
+        </if>
+        <if test=" reqVo.role != null and reqVo.role != '' ">
+            and sr.role_id like concat('%',#{reqVo.role},'%')
+        </if>
+        <if test=" reqVo.nickName != null and reqVo.nickName != '' ">
+            and nick_name like concat('%',#{reqVo.nickName},'%')
+        </if>
+        <if test=" reqVo.department != null ">
+            and department = #{reqVo.department}
+        </if>
+        order by id desc
+    </select>
+
+
+    <select id="findUserByIdWHJG" resultType="com.zans.portal.vo.user.UserRespVO">
+        select a.*,sr.role_id as role,sr.role_name as roleName from sys_user a
+        left join sys_user_role sur on a.id = sur.user_id
+        left join sys_role sr on sur.role_id = sr.role_id
+        where a.id = #{id}
+    </select>
+
+    <select id="selectNickName" resultType="com.zans.portal.model.TUser">
+        SELECT id,nick_name from sys_user order by nick_name
+    </select>
+
+</mapper>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.AssetLocalTrackSubsetDao">
+
+    <resultMap type="com.zans.portal.model.AssetLocalTrackSubset" id="AssetLocalTrackSubsetMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="groupId" column="group_id" jdbcType="VARCHAR"/>
+        <result property="groupName" column="group_name" jdbcType="VARCHAR"/>
+        <result property="ipAddr" column="ip_addr" jdbcType="VARCHAR"/>
+        <result property="longitude" column="longitude" jdbcType="NUMERIC"/>
+        <result property="latitude" column="latitude" jdbcType="NUMERIC"/>
+        <result property="pointName" column="point_name" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AssetLocalTrackSubsetMap">
+        select id,
+               group_id,
+               group_name,
+               ip_addr,
+               longitude,
+               latitude,
+               point_name,
+               create_time,
+               update_time
+        from asset_local_track_subset
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="AssetLocalTrackSubsetMap">
+        select
+        id, group_id, group_name, ip_addr, longitude, latitude, point_name, create_time, update_time
+        from asset_local_track_subset
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="groupId != null and groupId != ''">
+                and group_id = #{groupId}
+            </if>
+            <if test="groupName != null and groupName != ''">
+                and group_name = #{groupName}
+            </if>
+            <if test="ipAddr != null and ipAddr != ''">
+                and ip_addr = #{ipAddr}
+            </if>
+            <if test="longitude != null">
+                and longitude = #{longitude}
+            </if>
+            <if test="latitude != null">
+                and latitude = #{latitude}
+            </if>
+            <if test="pointName != null and pointName != ''">
+                and point_name = #{pointName}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into asset_local_track_subset(group_id, group_name, ip_addr, longitude, latitude, point_name,
+                                             create_time, update_time)
+        values (#{groupId}, #{groupName}, #{ipAddr}, #{longitude}, #{latitude}, #{pointName}, #{createTime},
+                #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asset_local_track_subset(group_id, group_name, ip_addr, longitude, latitude, point_name,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.groupId}, #{entity.groupName}, #{entity.ipAddr}, #{entity.longitude}, #{entity.latitude},
+            #{entity.pointName}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asset_local_track_subset(group_id, group_name, ip_addr, longitude, latitude, point_name,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.groupId}, #{entity.groupName}, #{entity.ipAddr}, #{entity.longitude}, #{entity.latitude},
+            #{entity.pointName}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        group_id = values(group_id) , group_name = values(group_name) , ip_addr = values(ip_addr) , longitude =
+        values(longitude) , latitude = values(latitude) , point_name = values(point_name) , create_time =
+        values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update asset_local_track_subset
+        <set>
+            <if test="groupId != null and groupId != ''">
+                group_id = #{groupId},
+            </if>
+            <if test="groupName != null and groupName != ''">
+                group_name = #{groupName},
+            </if>
+            <if test="ipAddr != null and ipAddr != ''">
+                ip_addr = #{ipAddr},
+            </if>
+            <if test="longitude != null">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude != null">
+                latitude = #{latitude},
+            </if>
+            <if test="pointName != null and pointName != ''">
+                point_name = #{pointName},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from asset_local_track_subset
+        where id = #{id}
+    </delete>
+
+</mapper>
+

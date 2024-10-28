@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.AssetScanMapper" >
+
+  <select id="findAssetAndAssessList" resultType="com.zans.portal.vo.asset.resp.AssetAssessResVO">
+    SELECT s.asset_id as id,s.ip_addr,ab.device_type as device_type,
+           ab.maintain_status as maintainStatus,
+      s.enable_status as enableStatus,
+      dp.longitude as lon,dp.latitude as lat,
+      dp.point_name,
+           '航天大为' as operator,
+      ab.model_des as model,
+      ab.model_brand as brand_name,
+            tdt.type_name as deviceTypeName,
+           scan.alive,
+           scan.offline_type,
+          DATE_FORMAT( scan.begin_time, '%Y-%m-%d %H:%i:%S' ) AS begin_time,
+          DATE_FORMAT( scan.end_time, '%Y-%m-%d %H:%i:%S' ) AS end_time ,
+          TIMESTAMPDIFF( HOUR, begin_time, end_time ) AS diffHour
+    FROM  asset_profile s
+    LEFT JOIN asset ab ON ab.ip_addr=s.ip_addr
+      left join device_point dp on ab.point_code = dp.point_code
+        left join device_type_guard tdt on s.cur_device_type = tdt.type_id
+    LEFT JOIN (
+      SELECT ad.ip_addr,ad.status
+      from (
+        SELECT MAX(id) AS id, ip_addr FROM assess_record GROUP BY ip_addr ORDER BY id desc
+      )AS aa
+      left JOIN assess_record AS ad ON ad.id = aa.id
+    ) ar on s.ip_addr = ar.ip_addr
+    LEFT JOIN (
+      SELECT sa.ip_addr,sa.alive,sa.offline_type,sa.update_time,
+             TIMESTAMPDIFF(HOUR,sa.begin_time,sa.end_time) as diffHour,sa.begin_time,sa.end_time,sa.last_flag
+      from (
+        SELECT MAX(id) AS id, ip_addr FROM asset_scan GROUP BY ip_addr ORDER BY id desc
+      )AS sb
+      left JOIN asset_scan AS sa ON sa.id = sb.id
+    ) AS scan ON scan.ip_addr = s.ip_addr
+    WHERE 1=1 and scan.last_flag =1
+      <if test="reqVo.ipAddr != null and reqVo.ipAddr != ''">
+          and ab.ip_addr like CONCAT('%',#{reqVo.ipAddr},'%')
+      </if>
+
+      <if test="reqVo.online != null">
+          <if test="reqVo.online == 1">
+              and scan.alive = #{reqVo.online}
+          </if>
+          <if test="reqVo.online == 0">
+              and scan.alive = 2 and scan.offline_type = 0
+          </if>
+          <if test="reqVo.online == 2">
+              and scan.alive = 2 and scan.offline_type = 1
+          </if>
+      </if>
+      <if test="reqVo.deviceType != null">
+          and ab.device_type = #{reqVo.deviceType}
+      </if>
+<!--      <if test="reqVo.dateRange != null and reqVo.dateRange.size &gt; 0">-->
+<!--          and s.accept_date &gt;= #{reqVo.dateRange[0]} and s.accept_date &lt;#{reqVo.dateRange[1]}-->
+<!--      </if>-->
+
+      <if test="reqVo.pointName != null and reqVo.pointName != '' ">
+          and dp.point_name like CONCAT('%',#{reqVo.pointName},'%')
+      </if>
+      <if test="reqVo.lastTime != null  ">
+          and TIMESTAMPDIFF( HOUR, DATE_FORMAT(scan.begin_time, '%Y-%m-%d %H:%i:%S' ), DATE_FORMAT( scan.end_time, '%Y-%m-%d %H:%i:%S' ) )  &gt;= #{reqVo.lastTime}
+      </if>
+<!--      <if test="reqVo.status != null">-->
+<!--          and ab.maintain_status = #{reqVo.status}-->
+<!--      </if>-->
+      order by scan.alive asc, diffHour desc
+  </select>
+
+  <select id="findLastScanRecordByIp" resultType="com.zans.portal.model.AssetScan">
+    select * from asset_scan where ip_addr=#{ip} order by create_time desc limit 1
+  </select>
+
+  <select id="findRepetitionIp" resultType="com.zans.portal.model.AssetScan">
+    SELECT ip_addr, begin_time,COUNT(1) as diffHour
+    FROM asset_scan WHERE alive=2 GROUP BY ip_addr,begin_time HAVING COUNT(1)>1;
+  </select>
+
+  <delete id="deleteRepetitionIp">
+    delete from asset_scan
+    where ip_addr = #{ip}
+      and begin_time = #{time}
+      and alive = 2 limit 1
+  </delete>
+
+  <select id="findLastScanRecordByIpAndTime" resultType="com.zans.portal.model.AssetScan">
+    SELECT nss.id,nss.id as networkScanId, nss.ip_addr,nss.alive,nss.offline_type,
+           DATE_FORMAT(nss.begin_time,'%Y-%m-%d %H:%i:%S') as begin_time,
+           DATE_FORMAT(nss.end_time,'%Y-%m-%d %H:%i:%S') as end_time,
+           case when  ar.status is null then -1 else  ar.status end as stateStatus
+    FROM asset_scan nss
+           left join  (
+      SELECT ad.ip_addr,ad.status, ad.network_scan_id
+      from ( SELECT MAX(id) AS id, network_scan_id FROM assess_record GROUP BY network_scan_id ORDER BY id desc)AS aa
+             left JOIN assess_record AS ad ON ad.id = aa.id)  ar on ar.network_scan_id = nss.id
+    WHERE nss.ip_addr = #{ip}
+      AND (nss.begin_time >=#{startTime} OR nss.end_time>=#{startTime})
+    order by nss.id desc
+  </select>
+
+    <select id="getScanDayByIp" resultType="com.zans.portal.vo.asset.resp.AssetAssessResVO">
+        SELECT ip_addr,
+               SUM(offline_duration) AS offline_duration ,
+               SUM(affline_duration) AS affline_duration,
+               SUM(alive_duration) AS alive_duration
+        FROM asset_scan_day
+        WHERE ip_addr=#{ipAddr} and yyyymmdd   BETWEEN DATE_FORMAT(#{approveStartTime},'%Y-%m-%d') AND DATE_FORMAT(#{approveEndTime},'%Y-%m-%d')
+    </select>
+</mapper>

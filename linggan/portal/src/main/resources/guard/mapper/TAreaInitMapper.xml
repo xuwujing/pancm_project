@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.TAreaInitMapper">
+
+    <select id="findAreaInitList" resultType="com.zans.portal.vo.area.AreaInitResVO">
+        SELECT t.*,a.`area_name`,d.`type_name` as device_type_name FROM t_area_init t
+        LEFT JOIN t_area a ON t.`area_id` = a.`area_id`
+        LEFT JOIN device_type_guard d ON t.`device_type_id` = d.`type_id`
+        WHERE 1=1
+        <if test="reqVo.area != null ">
+            and t.area_id = #{reqVo.area}
+        </if>
+        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+            order by ${reqVo.orderBy}
+        </if>
+    </select>
+
+    <select id="getByAreaIdAndDeviceTypeId" resultType="com.zans.portal.model.TAreaInit">
+        select * from t_area_init t where t.area_id = #{areaId} and t.device_type_id = #{deviceTypeId}
+        <if test=" id != null ">
+            and t.id != #{id}
+        </if>
+    </select>
+
+    <select id="getCountByAreaId" resultType="java.lang.Integer">
+        select count(1) from t_area_init t where t.area_id = #{areaId}
+    </select>
+
+    <select id="getCountByDeviceTypeId" resultType="java.lang.Integer">
+        select count(1) from t_area_init t where t.device_type_id = #{deviceTypeId}
+    </select>
+
+</mapper>

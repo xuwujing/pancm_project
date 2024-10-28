@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.SysBrandMapper">
+
+    <select id="getBrandPage" resultType="com.zans.portal.vo.brand.BrandResponseVO">
+        select s.* from device_brand s where 1=1
+        <if test="reqVo.brandName != null and reqVo.brandName != '' ">
+            and s.brand_name like concat('%',#{reqVo.brandName},'%')
+        </if>
+        <if test="reqVo.company != null and reqVo.company != '' ">
+            and s.company like concat('%',#{reqVo.company},'%')
+        </if>
+        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+            order by ${reqVo.orderBy}
+        </if>
+    </select>
+
+    <select id="findBrandCountByElement" resultType="java.util.Map">
+        select '品牌名称' as element,count(1) as qty from device_brand s where s.brand_name = #{mergeVO.brandName}
+        <if test="mergeVO.brandId != null ">
+            and s.brand_id != #{mergeVO.brandId}
+        </if>
+        union
+        select '公司名称' as element,count(1) as qty from device_brand s where s.company = #{mergeVO.company}
+        <if test="mergeVO.brandId != null ">
+            and s.brand_id != #{mergeVO.brandId}
+        </if>
+        union
+        select '公司关键词' as element,count(1) as qty from device_brand s where s.brand_desc = #{mergeVO.brandDesc}
+        <if test="mergeVO.brandId != null ">
+            and s.brand_id != #{mergeVO.brandId}
+        </if>
+    </select>
+
+    <select id="findBrand" resultType="com.zans.base.vo.SelectVO">
+        select brand_id as item_key, brand_name as item_value from device_brand
+        where 1=1
+        order by device_default desc,CONVERT(brand_name USING gbk) asc
+    </select>
+
+</mapper>

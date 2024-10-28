@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.AlertOfflineDeviceMapper">
+
+
+    <select id="getAlertOfflineDevicePage" resultType="com.zans.portal.vo.alert.offlineDevice.OfflineDeviceResVO">
+        select
+         ao.device_type_name,ao.point_name,
+        ao.ip_addr,IFNULL(ah.alive,2) as alive,ah.alive_last_time,
+        rs.group_name as groupName,
+        ao.id as alert_id,ao.mac as mac,
+        DATE_FORMAT(ao.`update_time`,'%Y-%m-%d %H:%i:%S') AS noticeTime,
+        ao.dispose_user ,ao.keyword_value as keywordValue
+        from alert_rule_original ao
+        left join alert_rule_strategy rs on ao.strategy_id = rs.id
+        left join alive_heartbeat ah on ah.ip_addr=ao.ip_addr
+        left join device_type_guard tdt on tdt.type_name=ao.device_type_name
+        where ao.rule_id = 3  and ao.`deal_status`  <![CDATA[<]]> 2
+        and tdt.enable_status=1
+        <if test=" reqVo.pointName != null and reqVo.pointName != '' ">
+            and  ao.point_name like CONCAT('%',#{reqVo.pointName},'%')
+        </if>
+        <if test=" reqVo.ipAddr != null and reqVo.ipAddr != '' ">
+            and  ao.ip_addr like CONCAT('%',#{reqVo.ipAddr},'%')
+        </if>
+        <if test=" reqVo.mac != null and reqVo.mac != '' ">
+            and ao.mac like CONCAT('%',#{reqVo.mac},'%')
+        </if>
+        <if test=" reqVo.deviceType != null ">
+            and tdt.type_id =#{reqVo.deviceType}
+        </if>
+
+        <if test=" reqVo.aliveLastTime != null ">
+            and ah.alive_last_time &gt; #{reqVo.aliveLastTime}
+        </if>
+        <if test=" reqVo.beforeAliveLastTime != null ">
+            and ah.alive_last_time &lt; #{reqVo.beforeAliveLastTime}
+        </if>
+        <if test="reqVo.isRead != null and reqVo.isRead > -1 ">
+            and ao.is_read = #{reqVo.isRead}
+        </if>
+
+<!--        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">-->
+<!--            order by ${reqVo.orderBy}-->
+<!--        </if>-->
+
+        order by ah.alive_last_time desc
+    </select>
+
+    <select id="countOfflineDeviceByTime" resultType="int">
+        select count(ao.id)
+        from alert_rule_original ao
+        left join alert_rule_strategy rs on ao.strategy_id = rs.id
+        left join asset_profile a on ao.keyword_value = a.ip_addr
+        left join alive_heartbeat ah on ah.ip_addr = a.ip_addr
+        where ao.rule_id=3 and ao.`deal_status`  <![CDATA[<]]> 2
+
+        <if test="aliveLastTime != null and isLessThan == false">
+            and ah.alive_last_time <![CDATA[>=]]> #{aliveLastTime}
+        </if>
+        <if test="aliveLastTime != null and isLessThan== true">
+            and ah.alive_last_time  <![CDATA[<=]]> #{aliveLastTime}
+        </if>
+    </select>
+
+    <select id="getByIds" resultType="com.zans.portal.vo.alert.offlineDevice.OfflineDeviceResVO">
+        select id,keyword_value as ip_addr,dispose_user  from alert_rule_original where id in
+        <foreach item="item" collection="ids" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <update id="dispose">
+        update alert_rule_original set
+    </update>
+
+</mapper>

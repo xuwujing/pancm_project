@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.DeviceTypeMapper">
+    <select id="findDeviceTypeToSelect" resultType="com.zans.base.vo.SelectVO">
+        select type_id as item_key, type_name as item_value from device_type_guard
+            where enable_status=1 and guard_enable=1
+        order by sort desc,CONVERT(type_name USING gbk) asc
+    </select>
+    <select id="findDeviceTypeHasTemplateToSelect" resultType="com.zans.base.vo.SelectVO">
+        select type_id as item_key, type_name as item_value from device_type_guard
+        where template is not null and template != '' and enable_status=1 and guard_enable=1
+        order by CONVERT(type_name USING gbk)
+    </select>
+    <select id="findTypeByName" resultType="java.lang.Integer">
+        select type_id from device_type_guard where type_name=#{name} and enable_status=1 and guard_enable=1 limit 1
+    </select>
+
+    <select id="findDeviceTypeList" resultType="com.zans.portal.vo.device.DeviceTypeResVO">
+        select * from device_type_guard t where 1=1 and t.enable_status=1 and guard_enable=1
+        <if test="reqVo.typeName != null and reqVo.typeName != '' ">
+            and t.type_name like concat('%',#{reqVo.typeName},'%')
+        </if>
+        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+            order by ${reqVo.orderBy}
+        </if>
+    </select>
+
+    <select id="findMmsDeviceTypeToSelect" resultType="com.zans.base.vo.SelectVO">
+        select type_id as item_key, type_name as item_value from base_device_type where enable_status=1
+        order by sort
+    </select>
+
+</mapper>

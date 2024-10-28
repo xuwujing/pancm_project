@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.AssetMapper">
+    <resultMap id="BaseResultMap" type="com.zans.portal.model.Asset">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="point_name" jdbcType="VARCHAR" property="pointName"/>
+        <result column="longitude" jdbcType="DECIMAL" property="longitude"/>
+        <result column="latitude" jdbcType="DECIMAL" property="latitude"/>
+        <result column="ip_addr" jdbcType="VARCHAR" property="ipAddr"/>
+        <result column="department_id" jdbcType="INTEGER" property="departmentId"/>
+        <result column="project_name" jdbcType="VARCHAR" property="projectName"/>
+        <result column="contractor" jdbcType="VARCHAR" property="contractor"/>
+        <result column="project_status" jdbcType="INTEGER" property="projectStatus"/>
+        <result column="contractor_person" jdbcType="VARCHAR" property="contractorPerson"/>
+        <result column="contractor_phone" jdbcType="VARCHAR" property="contractorPhone"/>
+        <result column="maintain_company" jdbcType="VARCHAR" property="maintainCompany"/>
+        <result column="maintain_person" jdbcType="VARCHAR" property="maintainPerson"/>
+        <result column="maintain_phone" jdbcType="VARCHAR" property="maintainPhone"/>
+        <result column="maintain_status" jdbcType="INTEGER" property="maintainStatus"/>
+        <result column="device_model_brand" jdbcType="VARCHAR" property="deviceModelBrand"/>
+        <result column="device_type" jdbcType="INTEGER" property="deviceType"/>
+        <result column="device_model_des" jdbcType="VARCHAR" property="deviceModelDes"/>
+        <result column="source" jdbcType="INTEGER" property="source"/>
+        <!--    <result column="alive" jdbcType="INTEGER" property="alive" />-->
+        <!--    <result column="alive_last_time" jdbcType="TIMESTAMP" property="aliveLastTime" />-->
+        <result column="delete_status" jdbcType="INTEGER" property="deleteStatus"/>
+        <result column="enable_status" jdbcType="INTEGER" property="enableStatus"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="create_person" jdbcType="VARCHAR" property="createPerson"/>
+        <result column="creator_id" jdbcType="INTEGER" property="creatorId"/>
+        <result column="update_id" jdbcType="INTEGER" property="updateId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <update id="disposeAsset">
+        update asset_profile set remark =#{reqVO.remark},enable_status=#{reqVO.enableStatus},update_id=#{reqVO.updateId}
+        <!--     <if test="reqVO.enableStatus==0">-->
+        <!--    &lt;!&ndash; 如果资产停用设置为不在线 20201028 北傲确认 &ndash;&gt;-->
+        <!--       ,alive=2-->
+        <!--     </if>-->
+        where ip_addr in
+        <foreach item="item" index="index" collection="reqVO.ipAddr.split(',')" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+    <update id="editAssetCoordinates">
+        update asset_profile
+        set longitude=#{longitude},
+            latitude=#{latitude}
+        where asset_id = #{id}
+    </update>
+
+    <select id="findByIpAddr" resultType="com.zans.portal.vo.asset.AssetVO">
+        select IFNULL(ap.enable_status, 1) AS enable_status, a.*, IFNULL(ah.alive, 2), ah.alive_last_time
+        from asset a
+                 left join asset_profile ap on ap.ip_addr = a.ip_addr
+                 left join alive_heartbeat ah on ah.ip_addr = a.ip_addr
+        where a.ip_addr = #{ipAddr}
+        limit 1
+    </select>
+
+    <select id="findAliveHeartBeat" resultType="com.zans.portal.vo.AliveHeartbeatVO">
+        select *
+        from alive_heartbeat
+        where ip_addr = #{ipAddr}
+          and mac = #{mac}
+    </select>
+
+    <update id="updateAliveByIpAddr">
+        update alive_heartbeat
+        set alive           = #{alive},
+            alive_last_time = #{aliveLastTime}
+        where ip_addr = #{ipAddr}
+          and mac = #{mac}
+    </update>
+
+    <select id="findAssetDynamicDetail" resultType="com.zans.portal.vo.arp.AssetRespVO">
+        select p.ip_addr,
+               case
+                   when ifnull(p.cur_device_type, 0) = 0 then abe.device_type
+                   else p.cur_device_type end as device_type,
+               case
+                   when (p.cur_brand is NULL OR p.cur_brand = '') then abe.model_brand
+                   else p.cur_brand end       as brandName,
+               case
+                   when (p.cur_device_type is NULL OR p.cur_device_type = '') then abe.device_type
+                   else p.cur_device_type end as device_type,
+               case
+                   when (p.cur_model_des is NULL OR p.cur_model_des = '') then abe.model_des
+                   else p.cur_model_des end   as model_des,
+               p.cur_company                  as company,
+               p.cur_mac,
+               p.cur_mac                      as mac,
+
+               ah.alive_last_time,
+               IFNULL(ah.alive, 2)            as alive,
+               p.create_time                  as online_time,
+               p.cur_server_os                as server_os,
+               abe.maintain_contact as maintain_person,
+               abe.maintain_company,
+               abe.maintain_phone,
+               abe.contractor,
+               abe.contractor_person,
+               abe.contractor_phone,
+               dp.point_name,
+               abe.project_name,
+               abe.maintain_status,
+               (SELECT item_value
+                FROM sys_constant_item
+                WHERE dict_key = 'maintain_status'
+                  AND item_key = abe.maintain_status)
+                                              AS maintainStatusName,
+               abe.vlan,
+               dp.longitude,
+               dp.latitude,
+               e.cur_open_port                as open_port,
+               ta.create_time,
+               ta.project_status              as project_status
+        from asset abe
+                 left join asset_profile p on p.ip_addr = abe.ip_addr
+                 left join radius_endpoint_profile e on p.cur_mac = e.mac
+                 left join asset ta on ta.ip_addr = p.ip_addr
+                 left join alive_heartbeat ah on ah.ip_addr = p.ip_addr
+                 left join device_point dp on abe.point_code = dp.point_code
+        where p.asset_id = #{id}
+        limit 1
+    </select>
+
+    <select id="findAssetDynamicDetailByIp" resultType="com.zans.portal.vo.arp.AssetRespVO">
+        select p.ip_addr                    as ipAddr,
+               ifnull(abe.device_sub_type, 0)   as device_type,
+               (SELECT tdt.type_name FROM base_device_type tdt WHERE tdt.type_id =abe.device_sub_type ) as      device_type_name,
+               ifnull(p.cur_device_type, 0) as deviceTypeDetect,
+               abe.model_brand               as brand_name,
+               p.cur_brand                  as brandNameDetect,
+               abe.model_des                as model_des,
+               p.cur_model_des              as modelDesDetect,
+               p.cur_company                as company,
+               p.cur_mac                    as curMacAddr,
+               abe.mac                      as mac,
+               ah.alive_last_time,
+               IFNULL(ah.alive, 2)          as alive,
+               p.create_time                as online_time,
+               p.cur_server_os              as cur_server_os,
+               p.cur_open_port              as cur_open_port,
+               abe.maintain_contact as maintain_person,
+               abe.maintain_company,
+               abe.maintain_phone,
+               abe.contractor,
+               abe.contractor_person,
+               abe.contractor_phone,
+               dp.point_name,
+               abe.project_name,
+               abe.maintain_status,
+               (SELECT item_value
+                FROM sys_constant_item
+                WHERE dict_key = 'maintain_status'
+                  AND item_key = abe.maintain_status)
+                                            AS maintainStatusName,
+               abe.vlan,
+               dp.longitude,
+               dp.latitude,
+               abe.open_port                as open_port,
+               p.create_time,
+               abe.project_status           as project_status,
+               p.detect_type,
+               IFNULL(abe.asset_source,2) as assetSource,
+               IFNULL(abe.asset_manage,1) as assetManage
+        from asset_profile p
+                 left join asset abe on p.ip_addr = abe.ip_addr
+                 left join alive_heartbeat ah on p.ip_addr = ah.ip_addr
+                 left join device_point dp on abe.point_code = dp.point_code
+        where p.ip_addr = #{ip}
+        limit 1
+    </select>
+
+
+    <select id="uniqueByCondition" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select * from asset_profile
+        <where>
+            <if test="ipAddr != null and ipAddr != ''">
+                ip_addr = #{ipAddr}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <select id="findAssetDeviceStatis" resultType="com.zans.portal.vo.asset.resp.AssetStatisRespVO">
+        SELECT dt.type_name                                             AS deviceTypeName,
+               dt.type_id                                               as id,
+               COUNT(abe.ip_addr)                                       AS totalNum,
+               SUM(CASE WHEN IFNULL(ah.alive, 2) = 2 THEN 1 ELSE 0 END) AS offlineNum,
+               SUM(CASE WHEN IFNULL(ah.alive, 1) = 1 THEN 1 ELSE 0 END) AS aliveNum,
+               SUM(CASE WHEN ap.enable_status = 1 THEN 0 ELSE 1 END)    AS disableNum
+        FROM asset abe
+                 left join asset_profile ap on abe.ip_addr = ap.ip_addr
+                 LEFT JOIN device_type_guard dt ON ap.cur_device_type = dt.type_id
+                 left join alive_heartbeat ah on ah.ip_addr = ap.ip_addr
+        WHERE ap.delete_status = 0
+          and dt.enable_status = 1
+          and dt.guard_enable=1
+          AND dt.type_name IS NOT NULL
+        GROUP BY dt.type_name, dt.type_id
+        -- ORDER BY totalNum asc
+    </select>
+
+    <select id="findAssetDeviceStatis2" resultType="com.zans.portal.vo.asset.resp.AssetStatisRespVO">
+        SELECT dt.type_name                                             AS deviceTypeName,
+               dt.type_id                                               as id,
+               COUNT(ap.asset_id)                                       AS totalNum,
+               SUM(CASE WHEN IFNULL(ah.alive, 2) = 2 THEN 1 ELSE 0 END) AS offlineNum,
+               SUM(CASE WHEN IFNULL(ah.alive, 1) = 1 THEN 1 ELSE 0 END) AS aliveNum,
+               SUM(CASE WHEN ap.enable_status = 1 THEN 0 ELSE 1 END)    AS disableNum
+        FROM asset_profile ap
+                 LEFT JOIN device_type_guard dt ON ap.cur_device_type = dt.type_id
+                 left join alive_heartbeat ah on ah.ip_addr = ap.ip_addr
+        WHERE ap.delete_status = 0
+          and dt.enable_status = 1
+          and dt.guard_enable=1
+          AND dt.type_name IS NOT NULL
+        GROUP BY dt.type_name, dt.type_id
+        limit 3
+        -- ORDER BY totalNum asc
+    </select>
+
+
+    <select id="findAuthByDate" resultType="com.zans.portal.vo.chart.CountUnit">
+        SELECT 'auth' AS countName, COUNT(1) AS val
+        FROM radius_endpoint e
+                 LEFT JOIN radius_endpoint_profile rep ON e.mac = rep.mac
+                 LEFT JOIN device_type_guard dt ON rep.cur_device_type = dt.type_id
+        WHERE e.access_policy >= 2
+          AND e.delete_status = 0
+          and dt.guard_enable=1
+          and dt.enable_status = 1
+          AND DATE_FORMAT(e.update_time, '%Y-%m-%d') = #{date}
+    </select>
+
+    <select id="findRefuseByDate" resultType="com.zans.portal.vo.chart.CountUnit">
+        SELECT 'refuse' AS countName, COUNT(1) AS val
+        FROM radius_endpoint e
+                 LEFT JOIN radius_endpoint_profile rep ON e.mac = rep.mac
+                 LEFT JOIN device_type_guard dt ON rep.cur_device_type = dt.type_id
+        WHERE e.access_policy = 0
+          AND e.delete_status = 0
+          and dt.enable_status = 1
+          and dt.guard_enable=1
+          AND DATE_FORMAT(e.update_time, '%Y-%m-%d') = #{date}
+    </select>
+
+    <select id="findAssetsForExport2" resultType="com.zans.portal.vo.arp.ExcelAssetVO">
+        select
+        a.asset_id as id,
+        a.ip_addr,
+        abe.project_name,
+        dp.point_name as pointName,
+
+        a.create_person,
+        a.create_time,
+        a.source,
+        abe.maintain_status,
+        IFNULL(ah.alive,2) as alive,
+        ah.alive_last_time as aliveLastTime,
+        dp.longitude,
+        dp.latitude,
+        case when (a.cur_brand is NULL OR a.cur_brand = '') then abe.model_brand else a.cur_brand end as brandName,
+        abe.device_type,
+        case when (a.cur_model_des is NULL OR a.cur_model_des = '') then abe.model_des else a.cur_model_des end as
+        model_des,
+        a.cur_mac as mac_addr
+        from asset_profile a
+        left join asset abe on a.ip_addr = abe.ip_addr
+        left join alive_heartbeat ah on ah.ip_addr=a.ip_addr
+        left join device_point dp on abe.point_code = dp.point_code
+        where a.delete_status = 0
+        <if test="asset.ipAddr != null and asset.ipAddr !=''">
+            and a.ip_addr like concat('%',#{asset.ipAddr},'%')
+        </if>
+        <if test="asset.deviceType != null">
+            and (a.cur_device_type = #{asset.deviceType} or abe.device_type = #{asset.deviceType} )
+        </if>
+
+        <if test="asset.alive != null">
+            and ah.alive = #{asset.alive}
+        </if>
+        <if test="asset.aliveStartDate != null and asset.aliveStartDate !=''">
+            and a.create_time &gt;= #{asset.aliveStartDate}
+        </if>
+        <if test="asset.aliveEndDate != null and asset.aliveEndDate !=''">
+            and a.create_time &lt;= #{asset.aliveEndDate}
+        </if>
+        <if test="asset.startDate != null and asset.startDate !=''">
+            and ah.alive_last_time &gt;= #{asset.startDate}
+        </if>
+        <if test="asset.endDate != null and asset.endDate !=''">
+            and ah.alive_last_time &lt;= #{asset.endDate}
+        </if>
+        <if test="asset.mac != null and asset.mac !=''">
+            and a.cur_mac like concat('%',#{asset.mac},'%')
+        </if>
+        <if test="asset.company != null and asset.company !=''">
+            and a.cur_company like concat('%',#{asset.company},'%')
+        </if>
+        <if test="asset.project != null and asset.project !=''">
+            and abe.project_name like concat('%',#{asset.project},'%')
+        </if>
+        <if test="asset.point != null and asset.point !=''">
+            and abe.point_name like concat('%',#{asset.point},'%')
+        </if>
+        <if test="asset.contractor != null and asset.contractor !=''">
+            and abe.contractor like concat('%',#{asset.contractor},'%')
+        </if>
+        <if test="asset.maintain != null and asset.maintain !=''">
+            and abe.maintain_company like concat('%',#{asset.maintain},'%')
+        </if>
+        <if test="asset.source != null and asset.source == 0">
+            and a.source in (1,2,3)
+        </if>
+        <if test="asset.source != null and asset.source == 1">
+            and a.source = 4
+        </if>
+        <if test="asset.source != null and asset.source == 2">
+            and a.source = 5
+        </if>
+        order by ${asset.orderString}
+    </select>
+
+    <select id="findNetWorkSwitchByMac" resultType="com.zans.portal.vo.arp.NetworkSwitchVO">
+        SELECT n.sw_ip,
+               s.sys_name,
+               s.sys_desc,
+               c.`item_value`                                  AS sw_type,
+               n.interface_index,
+               n.interface_detail,
+               DATE_FORMAT(s.create_time, '%Y-%m-%d %H:%i:%s') as create_time
+        FROM network_switcher_mac n
+                 LEFT JOIN sys_switcher s ON n.`sw_id` = s.`id`
+                 LEFT JOIN sys_constant_item c ON s.`sw_type` = c.`item_key` AND c.`dict_key` = 'sw_type'
+        WHERE n.`mac` = #{mac}
+        ORDER BY s.sw_type DESC, s.`create_time` DESC
+    </select>
+
+    <select id="findNetWorkSwitchByMacTopo" resultType="com.zans.portal.vo.arp.NetworkSwitchVO">
+        SELECT n.sw_ip,
+               s.sys_name,
+               s.sys_desc,
+               c.`item_value`                                  AS sw_type,
+               n.interface_index,
+               n.interface_detail,
+               DATE_FORMAT(n.update_time, '%Y-%m-%d %H:%i:%s') as create_time
+        FROM network_switcher_mac n
+                 LEFT join network_topology nt on nt.dest_ip = n.sw_ip
+                 LEFT JOIN sys_switcher s ON n.`sw_id` = s.`id`
+                 LEFT JOIN sys_constant_item c ON s.`sw_type` = c.`item_key` AND c.`dict_key` = 'sw_type'
+        WHERE n.`mac` = #{mac}
+          and ifnull(nt.up_ip, '') != ''
+          and nt.source_interface_alive = 1
+        ORDER BY s.sw_type desc, n.update_time desc
+        LIMIT 1
+    </select>
+
+    <select id="findSwitcherTopo" resultType="com.zans.portal.vo.arp.NetworkSwitchVO">
+        SELECT nt.source_ip                                     as sw_ip,
+               s.sys_name,
+               s.sys_desc,
+               c.`item_value`                                   AS sw_type,
+               nt.source_interface                              as interface_detail,
+               DATE_FORMAT(nt.create_time, '%Y-%m-%d %H:%i:%s') as create_time
+        FROM network_topology nt
+                 LEFT JOIN sys_switcher s ON nt.source_ip = s.sw_host
+                 LEFT JOIN sys_constant_item c ON s.`sw_type` = c.`item_key` AND c.`dict_key` = 'sw_type'
+        WHERE nt.dest_ip = #{swIp}
+          and nt.up_ip != ''
+          and nt.source_interface_alive = 1
+        limit 1
+    </select>
+
+
+    <select id="getBrand" resultType="com.zans.portal.vo.chart.CircleUnit">
+        SELECT REPLACE
+                   (UUID(), "-", "") AS id,
+               abe.model_brand        AS name,
+               COUNT(1)              AS val
+        FROM asset abe
+                 LEFT JOIN asset_profile ap ON abe.ip_addr = ap.ip_addr
+        WHERE 1 = 1
+          AND IFNULL(abe.model_brand, '') != ''
+        GROUP BY abe.model_brand
+        HAVING val >= 10
+        ORDER BY val DESC
+        LIMIT 5
+    </select>
+
+
+    <!--资产辖区 基准表改为 asset -->
+    <select id="findAssetByBrand" resultType="com.zans.portal.vo.chart.CompareUnit">
+        SELECT CASE WHEN ap.cur_brand = '创宇' THEN '其他' ELSE ap.cur_brand END AS NAME,
+               COUNT(1)                                                      AS totalNum,
+               SUM(CASE WHEN ah.alive = 1 THEN 1 ELSE 0 END)                 AS success,
+               SUM(CASE WHEN ah.alive = 2 THEN 1 ELSE 0 END)                 AS failed
+        FROM asset_profile ap
+                 LEFT JOIN alive_heartbeat ah ON ap.ip_addr = ah.ip_addr
+                 LEFT JOIN device_type_guard dt ON ap.cur_device_type = dt.type_id
+        WHERE dt.`enable_status` = 1 and dt.guard_enable=1
+          AND ap.cur_brand IS NOT NULL
+          AND ap.cur_brand != ''
+        GROUP BY ap.cur_brand
+        ORDER BY totalNum DESC
+        LIMIT 5
+    </select>
+
+
+    <select id="findAssetDeviceStatisBySwitch" resultType="com.zans.portal.vo.asset.resp.AssetStatisRespVO">
+        SELECT dt.type_name                                             AS name,
+               dt.type_id                                               as id,
+               COUNT(ap.asset_id)                                       AS totalNum,
+               SUM(CASE WHEN IFNULL(ah.alive, 2) = 2 THEN 1 ELSE 0 END) AS offlineNum,
+               SUM(CASE WHEN IFNULL(ah.alive, 1) = 1 THEN 1 ELSE 0 END) AS aliveNum,
+               SUM(CASE WHEN ap.enable_status = 1 THEN 0 ELSE 1 END)    AS disableNum
+        FROM asset_profile ap
+                 LEFT JOIN device_type_guard dt ON ap.cur_device_type = dt.type_id
+                 left join alive_heartbeat ah on ah.ip_addr = ap.ip_addr
+        WHERE ap.delete_status = 0
+          and dt.enable_status = 1 and dt.guard_enable=1
+          AND dt.type_name IS NOT NULL
+          and ap.cur_device_type = 18
+        GROUP BY dt.type_name, dt.type_id
+
+    </select>
+
+
+    <select id="countGroupByBrand" resultType="com.zans.portal.vo.common.ChartStatisVO">
+        SELECT ap.`cur_brand` AS NAME, COUNT(ap.`asset_id`) AS COUNT
+        FROM asset_profile ap
+        WHERE ap.cur_device_type = 18
+        GROUP BY ap.`cur_brand`
+        ORDER BY COUNT DESC
+        LIMIT 3
+    </select>
+
+    <select id="countGroupBySwType" resultType="com.zans.portal.vo.common.ChartStatisVO">
+        SELECT COUNT(1)          AS count,
+               CASE
+                   WHEN topo_type = 'ACCESS' THEN '接入'
+                   WHEN topo_type = 'CORE' THEN '核心'
+                   ELSE '汇聚' END AS name
+        FROM sys_switcher
+        GROUP BY topo_type
+
+    </select>
+
+    <select id="queryDeviceType" resultType="java.util.Map">
+        SELECT
+            COUNT(1)                                      AS totalNum,
+            IFNULL(SUM(CASE WHEN ah.alive = 1 THEN 1 ELSE 0 END),0) AS success,
+            IFNULL(SUM(CASE WHEN ah.alive = 2 THEN 1 ELSE 0 END),0) AS failed,
+            ROUND(( IFNULL(SUM(CASE WHEN ah.alive = 1 THEN 1 ELSE 0 END),0)/COUNT(1) )*100,2) AS d
+        FROM asset_profile ap
+                 LEFT JOIN alive_heartbeat ah ON ap.ip_addr = ah.ip_addr
+                 LEFT JOIN device_type_guard dt ON ap.cur_device_type = dt.type_id
+        WHERE dt.`enable_status` = 1 AND dt.guard_enable=1 AND ap.`cur_device_type` = 18
+    </select>
+
+    <select id="findAssetByBrandByOther" resultType="com.zans.portal.vo.chart.CompareUnit">
+        SELECT '其他'                                          AS name,
+               COUNT(1)                                      AS totalNum,
+               SUM(CASE WHEN ah.alive = 1 THEN 1 ELSE 0 END) AS success,
+               SUM(CASE WHEN ah.alive = 2 THEN 1 ELSE 0 END) AS failed
+        FROM asset_profile ap
+                 LEFT JOIN alive_heartbeat ah ON ap.ip_addr = ah.ip_addr
+                 LEFT JOIN device_type_guard dt ON ap.cur_device_type = dt.type_id
+        WHERE dt.`enable_status` = 1 and dt.guard_enable=1
+          AND ap.cur_brand IS NOT NULL
+          AND ap.cur_brand != ''
+        GROUP BY ap.cur_brand
+        ORDER BY totalNum DESC
+        LIMIT 5,100
+    </select>
+
+    <select id="findAssetNewDynamicDetailByIp" resultType="com.zans.portal.vo.arp.AssetRespVO">
+        select rep.cur_ip_addr                    as ipAddr,
+               ifnull(abe.device_type, 0)   as device_type,
+               ifnull(rep.cur_device_type, 0) as deviceTypeDetect,
+
+               IFNULL(abe.device_type, 0) AS device_type,
+               IFNULL(rep.cur_device_type, 0) AS deviceTypeDetect,
+               IFNULL(abe.model_brand, '') AS brand_name,
+               IFNULL(rep.brand_name, '') AS brandNameDetect,
+               IFNULL(abe.model_des, '') AS model_des,
+               IFNULL(rep.cur_model_des, '') AS modelDesDetect,
+               p.cur_company                as company,
+               rep.mac                    as curMacAddr,
+               rep.mac                     as mac,
+               ah.alive_last_time,
+               IFNULL(ah.alive, 2)          as alive,
+               p.create_time                as online_time,
+               p.cur_server_os              as cur_server_os,
+               rep.cur_open_port              as cur_open_port,
+               abe.maintain_contact as maintain_person,
+               abe.maintain_company,
+               abe.maintain_phone,
+               abe.contractor,
+               abe.contractor_person,
+               abe.contractor_phone,
+               dp.point_name,
+               abe.project_name,
+               abe.maintain_status,
+               (SELECT item_value
+                FROM sys_constant_item
+                WHERE dict_key = 'maintain_status'
+                  AND item_key = abe.maintain_status)
+                                            AS maintainStatusName,
+               abe.vlan,
+               dp.longitude,
+               dp.latitude,
+               abe.open_port                as open_port,
+               rep.create_time,
+               abe.project_status           as project_status,
+               rep.detect_type,
+               abe.asset_source,
+               abe.asset_manage
+        from radius_endpoint re
+                 LEFT JOIN radius_endpoint_profile rep
+                           ON rep.mac = re.mac
+                 LEFT JOIN asset_profile p
+                           ON p.ip_addr = rep.cur_ip_addr
+                 LEFT JOIN asset abe
+                           ON rep.cur_ip_addr = abe.ip_addr
+                 LEFT JOIN alive_heartbeat ah
+                           ON rep.cur_ip_addr = ah.ip_addr
+                 left join device_point dp on abe.point_code = dp.point_code
+        WHERE 1 = 1
+          and rep.cur_ip_addr = #{ip}
+        limit 1
+    </select>
+
+</mapper>

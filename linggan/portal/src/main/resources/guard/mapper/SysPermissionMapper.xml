@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.SysPermissionMapper">
+
+    <select id="findUserFrontRoutes" resultType="java.lang.String">
+        select sp.route from sys_permission sp inner join sys_role_perm srp on sp.perm_id = srp.perm_id
+        inner join sys_user_role sur on srp.role_id = sur.role_id
+        where sur.user_id=#{userId} and sp.enable=1
+    </select>
+    <select id="findUserApiRoutes" resultType="java.lang.String">
+        select sp.api from sys_permission sp inner join sys_role_perm srp on sp.perm_id = srp.perm_id
+        inner join sys_user_role sur on srp.role_id = sur.role_id
+        where sur.user_id=#{userId} and sp.enable=1
+    </select>
+    <select id="findPermissionByRole" resultType="com.zans.portal.vo.perm.PermissionRespVO">
+        select sp.*, sm.name as module_name from sys_permission sp
+        inner join sys_role_perm srp on sp.perm_id = srp.perm_id
+        inner join sys_module sm on sm.id=sp.module
+        where srp.role_id = #{roleId} and sp.enable=1 and sm.enable=1
+        order by sm.seq, sp.seq
+    </select>
+    <select id="findAllPermissions" resultType="com.zans.portal.vo.perm.PermissionRespVO">
+        select sp.*, sm.name as module_name from sys_permission sp
+        inner join sys_module sm on sm.id=sp.module
+        where sp.enable=1 and sm.enable=1
+        <if test="permName != null and permName != ''">
+            and sm.name LIKE CONCAT('%',#{permName},'%')
+        </if>
+        order by sm.seq, sp.seq
+    </select>
+    <delete id="deletePermissionByRole">
+        delete from sys_role_perm where role_id = #{roleId}
+    </delete>
+    <insert id="insertRolePerm">
+        insert into sys_role_perm(role_id, perm_id) values (#{roleId}, #{permId})
+    </insert>
+    <select id="findPermissionByName" resultType="com.zans.portal.vo.perm.PermissionRespVO">
+        select sp.*, sm.name as module_name from sys_permission sp
+        inner join sys_module sm on sm.id=sp.module
+        where sp.perm_name = #{name}
+    </select>
+    <select id="findPermissionByNameExceptId" resultType="com.zans.portal.vo.perm.PermissionRespVO">
+        select sp.*, sm.name as module_name from sys_permission sp
+        inner join sys_module sm on sm.id=sp.module
+        where sp.perm_name = #{name} and sp.perm_id != #{id}
+    </select>
+
+    <select id="findByModuleId" resultType="java.lang.Integer">
+        select count(1) from sys_permission sp where sp.`module` = #{moduleId}
+    </select>
+
+    <select id="findByRouteAndUserId" resultType="java.lang.Integer">
+        SELECT route FROM `sys_permission` WHERE enable = 1
+        and module = (SELECT id FROM `sys_module` WHERE route = #{route} and enable = 1)
+        AND route LIKE '%getpasswd%' LIMIT 1
+    </select>
+
+</mapper>

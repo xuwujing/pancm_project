@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.TMacMapper">
+
+    <select id="findMacList" resultType="com.zans.portal.vo.mac.MacRespVO">
+        SELECT * FROM t_mac t WHERE 1=1
+        <if test=" reqVo.macAddr != null and reqVo.macAddr != '' ">
+            AND t.`mac` like CONCAT('%',#{reqVo.macAddr},'%')
+        </if>
+        <if test=" reqVo.company != null and reqVo.company != '' ">
+            AND t.`company` like CONCAT('%',#{reqVo.company},'%')
+        </if>
+        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+            order by ${reqVo.orderBy}
+        </if>
+    </select>
+
+    <select id="getByMacAddress" resultType="java.lang.Integer">
+        select count(1) from t_mac t where t.mac = #{macAddress}
+        <if test="id != null">
+            and id != #{id}
+        </if>
+        limit 1
+    </select>
+
+
+    <update id="batchUpdateCompany" parameterType="java.util.Map">
+        <foreach collection="macMap.entrySet()" item="value" index="key" separator=";">
+            update t_mac set company = #{value} where mac = #{key}
+        </foreach>
+    </update>
+
+    <update id="updateCompany" >
+        update t_mac set company = #{value} where mac = #{key}
+    </update>
+
+    <insert id="insertBatch" >
+        insert into t_mac ( `mac`, `company` )
+        values
+        <foreach collection="macMap.entrySet()" item="value" index="key" separator=",">
+            (#{key},#{value})
+        </foreach>
+    </insert>
+
+    <select id="findMacListByMacAddr" parameterType="java.util.Map" resultType="com.zans.portal.vo.mac.MacRespVO">
+        SELECT mac,company FROM t_mac t WHERE
+          t.mac in
+        <foreach collection="macMap.entrySet()" index="key" item="item"
+                 separator="," open="(" close=")">
+            #{key}
+        </foreach>
+    </select>
+
+
+</mapper>

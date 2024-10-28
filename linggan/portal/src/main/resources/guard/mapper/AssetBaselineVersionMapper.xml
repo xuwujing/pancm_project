@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.AssetBaselineVersionDao">
+
+    <resultMap type="com.zans.portal.vo.AssetBaselineVersionVO" id="AssetBaselineVersionMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="assetBaselineId" column="asset_baseline_id" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="ipAddr" column="ip_addr" jdbcType="VARCHAR"/>
+        <result property="modelDes" column="model_des" jdbcType="VARCHAR"/>
+        <result property="brandName" column="brand_name" jdbcType="VARCHAR"/>
+        <result property="deviceType" column="device_type" jdbcType="INTEGER"/>
+        <result property="serverOs" column="server_os" jdbcType="VARCHAR"/>
+        <result property="nasIp" column="nas_ip" jdbcType="VARCHAR"/>
+        <result property="nasPortId" column="nas_port_id" jdbcType="VARCHAR"/>
+        <result property="vlan" column="vlan" jdbcType="VARCHAR"/>
+        <result property="mask" column="mask" jdbcType="VARCHAR"/>
+        <result property="gateway" column="gateway" jdbcType="VARCHAR"/>
+        <result property="pointName" column="point_name" jdbcType="VARCHAR"/>
+        <result property="longitude" column="longitude" jdbcType="NUMERIC"/>
+        <result property="latitude" column="latitude" jdbcType="NUMERIC"/>
+        <result property="projectName" column="project_name" jdbcType="VARCHAR"/>
+        <result property="contractor" column="contractor" jdbcType="VARCHAR"/>
+        <result property="projectStatus" column="project_status" jdbcType="INTEGER"/>
+        <result property="contractorPerson" column="contractor_person" jdbcType="VARCHAR"/>
+        <result property="contractorPhone" column="contractor_phone" jdbcType="VARCHAR"/>
+        <result property="maintainCompany" column="maintain_company" jdbcType="VARCHAR"/>
+        <result property="maintainPerson" column="maintain_person" jdbcType="VARCHAR"/>
+        <result property="maintainPhone" column="maintain_phone" jdbcType="VARCHAR"/>
+        <result property="mapCatalogueId" column="map_catalogue_id" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="versionCreator" column="version_creator" jdbcType="VARCHAR"/>
+        <result property="versionCreateTime" column="version_create_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AssetBaselineVersionMap">
+        select id,
+               asset_baseline_id,
+               username,
+               ip_addr,
+               model_des,
+               brand_name,
+               device_type,
+               server_os,
+               nas_ip,
+               nas_port_id,
+               vlan,
+               mask,
+               gateway,
+               point_name,
+               longitude,
+               latitude,
+               project_name,
+               contractor,
+               project_status,
+               contractor_person,
+               contractor_phone,
+               maintain_company,
+               maintain_person,
+               maintain_phone,
+               map_catalogue_id,
+               remark,
+               creator,
+               version_creator,
+               version_create_time
+        from asset_baseline_version
+        where id = #{id}
+    </select>
+
+    <!--通过实体查询一条数据-->
+    <select id="findOne" resultMap="AssetBaselineVersionMap">
+        select
+        id, asset_baseline_id, username, ip_addr, model_des, brand_name, device_type, server_os, nas_ip, nas_port_id,
+        vlan, mask, gateway, point_name, longitude, latitude, project_name, contractor, project_status,
+        contractor_person, contractor_phone, maintain_company, maintain_person, maintain_phone, map_catalogue_id,
+        remark, creator, version_creator, version_create_time from asset_baseline_version
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="assetBaselineId != null">
+                and asset_baseline_id = #{assetBaselineId}
+            </if>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="ipAddr != null and ipAddr != ''">
+                and ip_addr = #{ipAddr}
+            </if>
+            <if test="modelDes != null and modelDes != ''">
+                and model_des = #{modelDes}
+            </if>
+            <if test="brandName != null and brandName != ''">
+                and brand_name = #{brandName}
+            </if>
+            <if test="deviceType != null">
+                and device_type = #{deviceType}
+            </if>
+            <if test="serverOs != null and serverOs != ''">
+                and server_os = #{serverOs}
+            </if>
+            <if test="nasIp != null and nasIp != ''">
+                and nas_ip = #{nasIp}
+            </if>
+            <if test="nasPortId != null and nasPortId != ''">
+                and nas_port_id = #{nasPortId}
+            </if>
+            <if test="vlan != null and vlan != ''">
+                and vlan = #{vlan}
+            </if>
+            <if test="mask != null and mask != ''">
+                and mask = #{mask}
+            </if>
+            <if test="gateway != null and gateway != ''">
+                and gateway = #{gateway}
+            </if>
+            <if test="pointName != null and pointName != ''">
+                and point_name = #{pointName}
+            </if>
+            <if test="longitude != null">
+                and longitude = #{longitude}
+            </if>
+            <if test="latitude != null">
+                and latitude = #{latitude}
+            </if>
+            <if test="projectName != null and projectName != ''">
+                and project_name = #{projectName}
+            </if>
+            <if test="contractor != null and contractor != ''">
+                and contractor = #{contractor}
+            </if>
+            <if test="projectStatus != null">
+                and project_status = #{projectStatus}
+            </if>
+            <if test="contractorPerson != null and contractorPerson != ''">
+                and contractor_person = #{contractorPerson}
+            </if>
+            <if test="contractorPhone != null and contractorPhone != ''">
+                and contractor_phone = #{contractorPhone}
+            </if>
+            <if test="maintainCompany != null and maintainCompany != ''">
+                and maintain_company = #{maintainCompany}
+            </if>
+            <if test="maintainPerson != null and maintainPerson != ''">
+                and maintain_person = #{maintainPerson}
+            </if>
+            <if test="maintainPhone != null and maintainPhone != ''">
+                and maintain_phone = #{maintainPhone}
+            </if>
+            <if test="mapCatalogueId != null">
+                and map_catalogue_id = #{mapCatalogueId}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="creator != null and creator != ''">
+                and creator = #{creator}
+            </if>
+            <if test="versionCreator != null and versionCreator != ''">
+                and version_creator = #{versionCreator}
+            </if>
+            <if test="versionCreateTime != null and versionCreateTime != ''">
+                and version_create_time = #{versionCreateTime}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="AssetBaselineVersionMap">
+        select
+        id, asset_baseline_id, username, ip_addr, model_des, brand_name, device_type, server_os, nas_ip, nas_port_id,
+        vlan, mask, gateway, point_name, longitude, latitude, project_name, contractor, project_status,
+        contractor_person, contractor_phone, maintain_company, maintain_person, maintain_phone, map_catalogue_id,
+        remark, creator, version_creator, version_create_time
+        from asset_baseline_version
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="assetBaselineId != null">
+                and asset_baseline_id = #{assetBaselineId}
+            </if>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="ipAddr != null and ipAddr != ''">
+                and ip_addr = #{ipAddr}
+            </if>
+            <if test="modelDes != null and modelDes != ''">
+                and model_des = #{modelDes}
+            </if>
+            <if test="brandName != null and brandName != ''">
+                and brand_name = #{brandName}
+            </if>
+            <if test="deviceType != null">
+                and device_type = #{deviceType}
+            </if>
+            <if test="serverOs != null and serverOs != ''">
+                and server_os = #{serverOs}
+            </if>
+            <if test="nasIp != null and nasIp != ''">
+                and nas_ip = #{nasIp}
+            </if>
+            <if test="nasPortId != null and nasPortId != ''">
+                and nas_port_id = #{nasPortId}
+            </if>
+            <if test="vlan != null and vlan != ''">
+                and vlan = #{vlan}
+            </if>
+            <if test="mask != null and mask != ''">
+                and mask = #{mask}
+            </if>
+            <if test="gateway != null and gateway != ''">
+                and gateway = #{gateway}
+            </if>
+            <if test="pointName != null and pointName != ''">
+                and point_name = #{pointName}
+            </if>
+            <if test="longitude != null">
+                and longitude = #{longitude}
+            </if>
+            <if test="latitude != null">
+                and latitude = #{latitude}
+            </if>
+            <if test="projectName != null and projectName != ''">
+                and project_name = #{projectName}
+            </if>
+            <if test="contractor != null and contractor != ''">
+                and contractor = #{contractor}
+            </if>
+            <if test="projectStatus != null">
+                and project_status = #{projectStatus}
+            </if>
+            <if test="contractorPerson != null and contractorPerson != ''">
+                and contractor_person = #{contractorPerson}
+            </if>
+            <if test="contractorPhone != null and contractorPhone != ''">
+                and contractor_phone = #{contractorPhone}
+            </if>
+            <if test="maintainCompany != null and maintainCompany != ''">
+                and maintain_company = #{maintainCompany}
+            </if>
+            <if test="maintainPerson != null and maintainPerson != ''">
+                and maintain_person = #{maintainPerson}
+            </if>
+            <if test="maintainPhone != null and maintainPhone != ''">
+                and maintain_phone = #{maintainPhone}
+            </if>
+            <if test="mapCatalogueId != null">
+                and map_catalogue_id = #{mapCatalogueId}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="creator != null and creator != ''">
+                and creator = #{creator}
+            </if>
+            <if test="versionCreator != null and versionCreator != ''">
+                and version_creator = #{versionCreator}
+            </if>
+            <if test="versionCreateTime != null and versionCreateTime != ''">
+                and version_create_time = #{versionCreateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into asset_baseline_version(asset_baseline_id, username, ip_addr, model_des, brand_name, device_type,
+                                           server_os, nas_ip, nas_port_id, vlan, mask, gateway, point_name, longitude,
+                                           latitude, project_name, contractor, project_status, contractor_person,
+                                           contractor_phone, maintain_company, maintain_person, maintain_phone,
+                                           map_catalogue_id, remark, creator, version_creator, version_create_time)
+        values (#{assetBaselineId}, #{username}, #{ipAddr}, #{modelDes}, #{brandName}, #{deviceType}, #{serverOs},
+                #{nasIp}, #{nasPortId}, #{vlan}, #{mask}, #{gateway}, #{pointName}, #{longitude}, #{latitude},
+                #{projectName}, #{contractor}, #{projectStatus}, #{contractorPerson}, #{contractorPhone},
+                #{maintainCompany}, #{maintainPerson}, #{maintainPhone}, #{mapCatalogueId}, #{remark}, #{creator},
+                #{versionCreator}, #{versionCreateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asset_baseline_version(asset_baseline_id, username, ip_addr, model_des, brand_name, device_type,
+        server_os, nas_ip, nas_port_id, vlan, mask, gateway, point_name, longitude, latitude, project_name, contractor,
+        project_status, contractor_person, contractor_phone, maintain_company, maintain_person, maintain_phone,
+        map_catalogue_id, remark, creator, version_creator, version_create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.assetBaselineId}, #{entity.username}, #{entity.ipAddr}, #{entity.modelDes}, #{entity.brandName},
+            #{entity.deviceType}, #{entity.serverOs}, #{entity.nasIp}, #{entity.nasPortId}, #{entity.vlan},
+            #{entity.mask}, #{entity.gateway}, #{entity.pointName}, #{entity.longitude}, #{entity.latitude},
+            #{entity.projectName}, #{entity.contractor}, #{entity.projectStatus}, #{entity.contractorPerson},
+            #{entity.contractorPhone}, #{entity.maintainCompany}, #{entity.maintainPerson}, #{entity.maintainPhone},
+            #{entity.mapCatalogueId}, #{entity.remark}, #{entity.creator}, #{entity.versionCreator},
+            #{entity.versionCreateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asset_baseline_version(asset_baseline_id, username, ip_addr, model_des, brand_name, device_type,
+        server_os, nas_ip, nas_port_id, vlan, mask, gateway, point_name, longitude, latitude, project_name, contractor,
+        project_status, contractor_person, contractor_phone, maintain_company, maintain_person, maintain_phone,
+        map_catalogue_id, remark, creator, version_creator, version_create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.assetBaselineId}, #{entity.username}, #{entity.ipAddr}, #{entity.modelDes}, #{entity.brandName},
+            #{entity.deviceType}, #{entity.serverOs}, #{entity.nasIp}, #{entity.nasPortId}, #{entity.vlan},
+            #{entity.mask}, #{entity.gateway}, #{entity.pointName}, #{entity.longitude}, #{entity.latitude},
+            #{entity.projectName}, #{entity.contractor}, #{entity.projectStatus}, #{entity.contractorPerson},
+            #{entity.contractorPhone}, #{entity.maintainCompany}, #{entity.maintainPerson}, #{entity.maintainPhone},
+            #{entity.mapCatalogueId}, #{entity.remark}, #{entity.creator}, #{entity.versionCreator},
+            #{entity.versionCreateTime})
+        </foreach>
+        on duplicate key update
+        asset_baseline_id = values(asset_baseline_id) , username = values(username) , ip_addr = values(ip_addr) ,
+        model_des = values(model_des) , brand_name = values(brand_name) , device_type = values(device_type) , server_os
+        = values(server_os) , nas_ip = values(nas_ip) , nas_port_id = values(nas_port_id) , vlan = values(vlan) , mask =
+        values(mask) , gateway = values(gateway) , point_name = values(point_name) , longitude = values(longitude) ,
+        latitude = values(latitude) , project_name = values(project_name) , contractor = values(contractor) ,
+        project_status = values(project_status) , contractor_person = values(contractor_person) , contractor_phone =
+        values(contractor_phone) , maintain_company = values(maintain_company) , maintain_person =
+        values(maintain_person) , maintain_phone = values(maintain_phone) , map_catalogue_id = values(map_catalogue_id)
+        , remark = values(remark) , creator = values(creator) , version_creator = values(version_creator) ,
+        version_create_time = values(version_create_time)
+    </insert>
+    <insert id="insertFromAssetBaseline">
+
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update asset_baseline_version
+        <set>
+            <if test="assetBaselineId != null">
+                asset_baseline_id = #{assetBaselineId},
+            </if>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="ipAddr != null and ipAddr != ''">
+                ip_addr = #{ipAddr},
+            </if>
+            <if test="modelDes != null and modelDes != ''">
+                model_des = #{modelDes},
+            </if>
+            <if test="brandName != null and brandName != ''">
+                brand_name = #{brandName},
+            </if>
+            <if test="deviceType != null">
+                device_type = #{deviceType},
+            </if>
+            <if test="serverOs != null and serverOs != ''">
+                server_os = #{serverOs},
+            </if>
+            <if test="nasIp != null and nasIp != ''">
+                nas_ip = #{nasIp},
+            </if>
+            <if test="nasPortId != null and nasPortId != ''">
+                nas_port_id = #{nasPortId},
+            </if>
+            <if test="vlan != null and vlan != ''">
+                vlan = #{vlan},
+            </if>
+            <if test="mask != null and mask != ''">
+                mask = #{mask},
+            </if>
+            <if test="gateway != null and gateway != ''">
+                gateway = #{gateway},
+            </if>
+            <if test="pointName != null and pointName != ''">
+                point_name = #{pointName},
+            </if>
+            <if test="longitude != null">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude != null">
+                latitude = #{latitude},
+            </if>
+            <if test="projectName != null and projectName != ''">
+                project_name = #{projectName},
+            </if>
+            <if test="contractor != null and contractor != ''">
+                contractor = #{contractor},
+            </if>
+            <if test="projectStatus != null">
+                project_status = #{projectStatus},
+            </if>
+            <if test="contractorPerson != null and contractorPerson != ''">
+                contractor_person = #{contractorPerson},
+            </if>
+            <if test="contractorPhone != null and contractorPhone != ''">
+                contractor_phone = #{contractorPhone},
+            </if>
+            <if test="maintainCompany != null and maintainCompany != ''">
+                maintain_company = #{maintainCompany},
+            </if>
+            <if test="maintainPerson != null and maintainPerson != ''">
+                maintain_person = #{maintainPerson},
+            </if>
+            <if test="maintainPhone != null and maintainPhone != ''">
+                maintain_phone = #{maintainPhone},
+            </if>
+            <if test="mapCatalogueId != null">
+                map_catalogue_id = #{mapCatalogueId},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="creator != null and creator != ''">
+                creator = #{creator},
+            </if>
+            <if test="versionCreator != null and versionCreator != ''">
+                version_creator = #{versionCreator},
+            </if>
+            <if test="versionCreateTime != null and versionCreateTime != ''">
+                version_create_time = #{versionCreateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from asset_baseline_version
+        where id = #{id}
+    </delete>
+
+</mapper>
+

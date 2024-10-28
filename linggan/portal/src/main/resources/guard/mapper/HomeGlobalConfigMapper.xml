@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.HomeGlobalConfigDao">
+
+    <resultMap type="com.zans.portal.model.HomeGlobalConfig" id="HomeGlobalConfigMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="coordData" column="coord_data" jdbcType="VARCHAR"/>
+        <result property="indexData" column="index_data" jdbcType="VARCHAR"/>
+        <result property="count" column="count" jdbcType="INTEGER"/>
+        <result property="enable" column="enable" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="HomeGlobalConfigMap">
+        select id,
+               count,
+               enable,
+               create_time,
+               update_time
+        from home_global_config
+        where id = #{id}
+    </select>
+
+
+    <select id="queryByGlobalId" resultType="com.zans.portal.vo.HomeGlobalConfigVo">
+        select
+         index_id as id,index_id as i,x,y,w,h,
+        hic.type,hic.title,hic.uri,hic.is_chart,hic.is_title,hic.is_blend
+        from home_global_index hgi
+        left join home_index_config hic  on hgi.index_id = hic.id
+        where  hic.enable =1
+            <if test="globalId != null">
+                and global_id = #{globalId}
+            </if>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="HomeGlobalConfigMap">
+        select
+        id,  count, enable, create_time, update_time
+        from home_global_config
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="coordData != null and coordData != ''">
+                and coord_data = #{coordData}
+            </if>
+            <if test="indexData != null and indexData != ''">
+                and index_data = #{indexData}
+            </if>
+            <if test="count != null">
+                and count = #{count}
+            </if>
+            <if test="enable != null">
+                and enable = #{enable}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into home_global_config( count, enable, create_time, update_time)
+        values (#{coordData}, #{indexData}, #{count}, #{enable}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into home_global_config( count, enable, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.coordData}, #{entity.indexData}, #{entity.count}, #{entity.enable}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into home_global_config( count, enable, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.coordData}, #{entity.indexData}, #{entity.count}, #{entity.enable}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        count = values(count) , enable =
+        values(enable) , create_time = values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update home_global_config
+        <set>
+            <if test="coordData != null and coordData != ''">
+                coord_data = #{coordData},
+            </if>
+            <if test="indexData != null and indexData != ''">
+                index_data = #{indexData},
+            </if>
+            <if test="count != null">
+                count = #{count},
+            </if>
+            <if test="enable != null">
+                enable = #{enable},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from home_global_config
+        where id = #{id}
+    </delete>
+
+</mapper>
+

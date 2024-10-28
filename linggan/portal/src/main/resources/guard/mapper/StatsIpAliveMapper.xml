@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.StatsIpAliveMapper">
+
+    <select id="findIpAliveList" resultType="com.zans.portal.vo.stats.IpAliveResponseVO">
+        SELECT DATE_FORMAT(s.create_time,'%Y-%m-%d %H:%i:%s') AS DATA,
+        s.packet_loss packet_loss_rate,
+        s.rtt_min rttMin,s.rtt_avg rttAvg,s.rtt_max rttMax,s.rtt_mdev rttMdev
+        FROM stats_ip_alive s WHERE 1=1
+        <if test=" start != null and end != null ">
+            and s.create_time between #{start} and #{end}
+        </if>
+        <if test=" reqVo.ipAddr != null and reqVo.ipAddr != null ">
+            and s.ip_addr = #{reqVo.ipAddr}
+        </if>
+        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+            order by ${reqVo.orderBy}
+        </if>
+    </select>
+
+    <select id="findPacketLoss" resultType="java.lang.Double">
+        SELECT case when max(s.packet_loss) is null then 0 else max(s.packet_loss) end
+        FROM stats_ip_alive s WHERE 1=1
+        <if test=" start != null and end != null ">
+            and s.create_time between #{start} and #{end}
+        </if>
+        <if test=" ip != null and ip != null ">
+            and s.ip_addr = #{ip}
+        </if>
+        order by create_time desc
+    </select>
+
+    <select id="findPacketTime" resultType="java.lang.Double">
+        SELECT case when avg (s.rtt_avg) is null then 0 else avg (s.rtt_avg) end
+        FROM stats_ip_alive s WHERE 1=1
+        <if test=" start != null and end != null ">
+            and s.create_time between #{start} and #{end}
+        </if>
+        <if test=" ip != null and ip != null ">
+            and s.ip_addr = #{ip}
+        </if>
+        order by create_time desc
+    </select>
+
+</mapper>

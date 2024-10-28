@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.TDeviceModelScanMapper" >
+
+    <select id="findModelList" resultType="com.zans.portal.vo.model.ModelScanRespVO">
+        select a.*,b.type_name as device_type_name from t_device_model_scan a
+        inner join device_type_guard b on a.device_type = b.type_id
+        <where>
+            1 = 1 and b.enable_status=1
+            <if test="req.deviceType != null">
+                and a.device_type= #{req.deviceType}
+            </if>
+            <if test="req.confirm != null">
+                and a.confirm = #{req.confirm}
+            </if>
+            <if test="req.mute != null">
+                and a.mute = #{req.mute}
+            </if>
+            <if test="req.insertSource != null">
+                and a.insert_source = #{req.insertSource}
+            </if>
+            <if test="req.openPort != null and req.openPort !=''">
+                and a.open_port like concat('%',#{req.openPort},'%')
+            </if>
+            <if test="req.deviceDes != null and req.deviceDes !=''">
+                and a.device_des like concat('%',#{req.deviceDes},'%')
+            </if>
+            <if test="req.company != null and req.company !=''">
+                and company like concat('%',#{req.company},'%')
+            </if>
+        </where>
+        <if test="req.orderBy != null and req.orderBy !=''">
+            order by ${req.orderBy}
+        </if>
+    </select>
+    <select id="getModelById" resultType="com.zans.portal.vo.model.ModelScanRespVO">
+        select a.*,b.type_name as device_type_name from t_device_model_scan a
+        inner join device_type_guard b on a.device_type = b.type_id where a.id = #{id} and b.enable_status=1
+    </select>
+</mapper>

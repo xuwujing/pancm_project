@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.SysConstantMapper">
+
+    <select id="findSelectVOByKey" resultType="com.zans.base.vo.SelectVO">
+        select constant_key as itemKey,constant_value as itemValue
+        from sys_constant s where s.constant_key = #{key}  limit 1
+    </select>
+
+    <select id="findConstantByKey" resultType="com.zans.portal.model.SysConstant">
+        select * from sys_constant s where s.constant_key = #{key} limit 1
+    </select>
+
+    <select id="findConstantList" resultType="com.zans.portal.vo.constant.ConstantReqVO">
+        select * from sys_constant s where 1=1
+        <if test="reqVo.status != null">
+            and s.status =#{reqVo.status}
+        </if>
+        <if test="reqVo.comment != null">
+            and s.comment like CONCAT('%',#{reqVo.comment},'%')
+        </if>
+        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+            order by ${reqVo.orderBy}
+        </if>
+    </select>
+
+</mapper>

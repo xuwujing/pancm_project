@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.SysIpSegmentMapper">
+    <select id="findAllIpSegment" resultType="com.zans.portal.vo.segment.SegmentVO">
+        select a.id,a.name,a.segment as segment_short,a.ip_count,a.sw_ip,a.tag,a.enable
+        from sys_ip_segment a
+        <where>
+            1=1
+            <if test="ip.ip != null and ip.ip !=''">
+                and a.segment like concat('%',#{ip.ip},'%')
+            </if>
+            <if test="ip.name != null and ip.name !=''">
+                and a.name like concat('%',#{ip.name},'%')
+            </if>
+        </where>
+        <if test="ip.orderBy != null and ip.orderBy !=''">
+            order by ${ip.orderBy}
+        </if>
+    </select>
+    <select id="findIpSegment" resultType="com.zans.portal.vo.segment.SegmentVO">
+        select a.id,a.name,a.segment as segmentShort,a.ip_count,a.sw_ip,a.tag,a.enable
+        from sys_ip_segment a
+        where a.id=#{id}
+    </select>
+</mapper>

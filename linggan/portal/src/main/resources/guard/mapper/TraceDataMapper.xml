@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.TraceDataDao">
+
+    <resultMap type="com.zans.portal.model.TraceData" id="TraceDataMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="traceId" column="trace_id" jdbcType="VARCHAR"/>
+        <result property="traceType" column="trace_type" jdbcType="INTEGER"/>
+        <result property="traceSource" column="trace_source" jdbcType="VARCHAR"/>
+        <result property="traceTarget" column="trace_target" jdbcType="VARCHAR"/>
+        <result property="isFail" column="is_fail" jdbcType="INTEGER"/>
+        <result property="traceOrder" column="trace_order" jdbcType="INTEGER"/>
+        <result property="reqData" column="req_data" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="logTime" column="log_time" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TraceDataMap">
+        select
+            id, trace_id, trace_type, trace_source, trace_target, is_fail, trace_order, req_data, remark, log_time, create_time
+        from trace_data
+        where id = #{id}
+    </select>
+
+    <select id="queryByTraceId" resultType="com.zans.portal.model.TraceData">
+        select
+            id, trace_id, trace_type, trace_source, trace_target, is_fail, trace_order, req_data, remark, log_time, create_time
+        from trace_data
+        where trace_id = #{traceId}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="TraceDataMap">
+        select
+        id, trace_id, trace_type, trace_source, trace_target, is_fail, trace_order, req_data, remark, log_time, create_time
+        from trace_data
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="traceType != null">
+                and trace_type = #{traceType}
+            </if>
+            <if test="traceSource != null and traceSource != ''">
+                and trace_source = #{traceSource}
+            </if>
+            <if test="traceId != null and traceId != ''">
+                and trace_id = #{traceId}
+            </if>
+            <if test="reqData != null and reqData != ''">
+                and req_data = #{reqData}
+            </if>
+
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+        </where>
+    </select>
+
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into trace_data(trace_id, trace_type, trace_source, trace_target, is_fail, trace_order, req_data, remark,
+                               log_time)
+        values (#{traceId}, #{traceType}, #{traceSource}, #{traceTarget}, #{isFail}, #{traceOrder}, #{reqData}, #{remark},
+                #{logTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into trace_data(trace_type, trace_source, trace_id, req_data,   create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.traceType}, #{entity.traceSource}, #{entity.traceId}, #{entity.reqData}, #{entity.respData},
+            #{entity.createTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into trace_data(trace_type, trace_source, trace_id, req_data,   create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.traceType}, #{entity.traceSource}, #{entity.traceId}, #{entity.reqData}, #{entity.respData},
+            #{entity.createTime})
+        </foreach>
+        on duplicate key update
+        trace_type = values(trace_type) , trace_source = values(trace_source) , trace_id = values(trace_id) , req_data =
+        values(req_data) ,   = values( ) , create_time = values(create_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update trace_data
+        <set>
+            <if test="traceType != null">
+                trace_type = #{traceType},
+            </if>
+            <if test="traceSource != null and traceSource != ''">
+                trace_source = #{traceSource},
+            </if>
+            <if test="traceId != null and traceId != ''">
+                trace_id = #{traceId},
+            </if>
+            <if test="reqData != null and reqData != ''">
+                req_data = #{reqData},
+            </if>
+            <if test="respData != null and respData != ''">
+                  = #{respData},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from trace_data
+        where id = #{id}
+    </delete>
+
+</mapper>
+

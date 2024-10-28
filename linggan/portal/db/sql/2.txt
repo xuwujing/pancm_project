@@ -1,0 +1,23 @@
+CREATE TABLE `t_deny` (
+  `` int(4) NOT NULL AUTO_INCREMENT,
+  `` int(4) DEFAULT NULL COMMENT '在arp表中的ID号',
+  `` int(4) DEFAULT NULL COMMENT '在arpout表中的ID',
+  `` int(4) DEFAULT NULL,
+  `` varchar(30) DEFAULT NULL COMMENT 'ip地址',
+  `` varchar(30) DEFAULT NULL COMMENT 'mac地址',
+  `` varchar(30) DEFAULT NULL COMMENT '变化之前的MAC地址',
+  `` varchar(30) DEFAULT NULL COMMENT '交换机IP',
+  `` varchar(255) DEFAULT NULL COMMENT '开放端口',
+  `` varchar(255) DEFAULT NULL COMMENT '变化之前的开放端口列表',
+  `` int(4) DEFAULT NULL COMMENT '学习端口',
+  `` varchar(30) DEFAULT NULL COMMENT '拒绝时间',
+  `` varchar(255) DEFAULT NULL COMMENT '拒绝原因',
+  `` tinyint(1) DEFAULT NULL COMMENT '拒绝类型:1,mac不一致；2,学习端口不一致；3，使用了未分配地址;',
+  `` tinyint(1) DEFAULT '0' COMMENT '处理意见0:未处理;1:已拒绝;2：已忽略；3，加入白名单',
+  `` varchar(30) DEFAULT NULL COMMENT '处理时间',
+  `` varchar(255) DEFAULT NULL COMMENT '处理时候的备注意见',
+  `` tinyint(1) DEFAULT '-1' COMMENT '地区代码',
+  `` varchar(100) DEFAULT NULL COMMENT '设备型号',
+  `` varchar(100) DEFAULT NULL COMMENT '变化之前的设备型号',
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM AUTO_INCREMENT=656679 DEFAULT CHARSET=utf8

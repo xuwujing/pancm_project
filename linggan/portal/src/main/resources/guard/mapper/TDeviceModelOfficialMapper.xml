@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.TDeviceModelOfficialMapper">
+
+    <select id="findOfficialList" resultType="com.zans.portal.vo.device.DeviceResponseVO">
+        select t.id,t.brand_id,t.model_code,t.remark,t.device_type_id,t.mute,
+        t.model_des, d.type_name as device_type_name,s.brand_name as company
+        from t_device_model_official t
+        left join device_type_guard d on t.device_type_id = d.type_id
+        left join device_brand s on t.brand_id = s.brand_id
+        where 1=1
+        and d.enable_status=1
+        <if test="reqVo.deviceTypeId != null ">
+            and t.device_type_id = #{reqVo.deviceTypeId}
+        </if>
+        <if test="reqVo.modelCode != null and reqVo.modelCode != '' ">
+            and t.model_code
+        </if>
+        <if test="reqVo.modelDes != null and reqVo.modelDes != '' ">
+            and t.model_des like CONCAT('%',#{reqVo.modelDes},'%')
+        </if>
+        <if test="reqVo.mute != null ">
+            and t.mute = #{reqVo.mute}
+        </if>
+        <if test="reqVo.company != null and reqVo.company != '' ">
+            and s.brand_name like CONCAT('%',#{reqVo.company},'%')
+        </if>
+        <if test="reqVo.brandId != null and reqVo.brandId != '' ">
+            and t.brand_id = #{reqVo.brandId}
+        </if>
+        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+            order by ${reqVo.orderBy}
+        </if>
+    </select>
+
+    <select id="findUnknownDevicePage" resultType="com.zans.portal.vo.device.ExcelUnknownDeviceVO">
+        SELECT d.company,p.cur_model_des as model_code,d.device_type_name,d.model_code model_des,d.remark,d.mute,p.endpoint_id,p.ip_addr
+        FROM radius_endpoint_profile  p
+        left join (select t.model_code,t.remark,t.mute,
+        t.model_des, d.type_name as device_type_name,s.brand_name as company
+        from t_device_model_official t
+        left join device_type_guard d on t.device_type_id = d.type_id
+        left join device_brand s on t.brand_id = s.brand_id) as d
+        on p.cur_model_des=d.model_code
+        WHERE  IFNULL(p.cur_model_des,'')!='' and d.enable_status=1 and d.model_code is null and   (p.cur_device_type='98' or p.cur_device_type='0') limit 1000;
+    </select>
+
+    <select id="findOffcialCountByCode" resultType="java.lang.Integer">
+        select count(1) from t_device_model_official t where t.model_code = #{modelCode}
+        <if test=" id != null ">
+            and t.id != #{id}
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.NetworkSwitcherInterfaceMapper" >
+
+    <select id="getInterfaceBySwId" resultType="com.zans.base.vo.SelectVO">
+        select mac_index itemKey,interface_detail itemValue
+        from network_switcher_interface n
+        where n.mac_index > 0 and n.sw_id = #{swId}
+    </select>
+
+    <select id="getSwitcherInterfacePage" resultType="com.zans.portal.vo.switcher.SwitcherInterfaceRespVO">
+        SELECT sw_id,i.interface_index,interface_detail ,
+        i.`mac_index`,i.up_status,i.mac,i.stream_type,
+        (SELECT COUNT(1) FROM network_switcher_mac m WHERE m.interface_index = i.`mac_index` AND m.sw_id = i.sw_id) scan_mac_all,
+        (SELECT COUNT(1) FROM network_switcher_mac m WHERE m.interface_index = i.`mac_index` AND m.sw_id = i.sw_id and m.mac_alive = 1) scan_mac_alive
+        FROM network_switcher_interface i
+        WHERE i.`sw_id`= #{reqVo.swId}
+        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+            order by ${reqVo.orderBy}
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,25 @@
+{
+  "device":[
+    {
+      "name":"阻断",
+      "type":4,
+      "value":47245
+    },
+    {
+      "name":"放行",
+      "type":2,
+      "value":228437
+    },
+    {
+      "name":"白名单",
+      "type":3,
+      "value":61567
+    }
+  ],
+  "err_arp_out":30558,
+  "err_mac":180565,
+  "err_model":48443,
+  "err_port":128974,
+  "safe_index":4.8,
+  "total":388540
+}

@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.ArpMapper">
+
+    <select id="getAsset" resultType="com.zans.portal.vo.arp.AssetRespVO">
+        select
+        e.id,
+        e.source,
+        e.enable_status,
+        e.create_time,
+        e.create_person,
+        c.type_name AS device_type_name,
+        a.username as mac_addr,
+        a.server_os,
+        a.cur_nas_port_id as arp_out_desc,
+        a.create_time as online_time,
+        a.model_des,
+        a.brand_name as brand,
+        a.cur_ip_addr as ip_addr,
+        a.device_type,
+        IFNULL(ah.alive,2),
+        a.company,
+        a.cur_mute as mute,
+        ah.alive_last_time,
+        a.open_port,
+        a.cur_open_port,
+        a.cur_model_des,
+        a.server_os,
+        t.contractor,
+        t.contractor_person,
+        t.contractor_phone,
+        t.maintain_company,
+        t.maintain_contact as maintain_person,
+        t.maintain_phone,
+        t.project_status,
+        t.project_name,
+        t.point_name
+        from radius_endpoint e
+        left join radius_endpoint_profile a on e.id=a.endpoint_id
+        left join alive_heartbeat ah on ah.username = a.username
+        left join asset t on t.ip_addr= a.cur_ip_addr
+        left join device_type_guard c on a.device_type=c.type_id
+        where c.enable_status=1 and e.id= #{id}
+
+    </select>
+
+
+    <select id="findChangeList" resultType="com.zans.portal.vo.arp.AssetRespVO">
+        select c.type_name AS device_type_name,
+        a.*,a.endpoint_id id,
+        a.username mac_addr,
+        t.project_name,t.point_name
+        from radius_endpoint_profile a
+        left join asset t on t.ip_addr= a.cur_ip_addr
+        left join device_type_guard c on a.device_type=c.type_id
+        left join alive_heartbeat ah on ah.username = a.username
+        <where>
+            1=1  and c.enable_status=1
+            <if test="asset.deviceType != null and asset.deviceType !=''">
+                and a.device_type = #{asset.deviceType}
+            </if>
+            <if test="asset.riskType != null">
+                and a.risk_type = #{asset.riskType}
+            </if>
+            <if test="asset.alive != null">
+                and ah.alive = #{asset.alive}
+            </if>
+            <if test="asset.mute != null">
+                and a.mute = #{asset.mute}
+            </if>
+            <if test="asset.ip != null and asset.ip !=''">
+                and ip_addr = #{asset.ip}
+            </if>
+            <if test="asset.changeType != null and asset.changeType == 4">
+                and mac_change = 1
+            </if>
+            <if test="asset.changeType != null and asset.changeType == 5">
+                and arp_out_change = 1
+            </if>
+            <if test="asset.changeType != null and asset.changeType == 6">
+                and open_port_change = 1
+            </if>
+            <if test="asset.changeType != null and asset.changeType == 9">
+                and model_des_change = 1
+            </if>
+            <if test="asset.startDate != null and asset.startDate !=''">
+                and check_last_time &gt;= #{asset.startDate}
+            </if>
+            <if test="asset.endDate != null and asset.endDate !=''">
+                and check_last_time &lt;= #{asset.endDate}
+            </if>
+            <if test="asset.mac != null and asset.mac !=''">
+                and mac_addr like concat('%',#{asset.mac},'%')
+            </if>
+            <if test="asset.company != null and asset.company !=''">
+                and company like concat('%',#{asset.company},'%')
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getGroupByBrand" resultType="com.zans.portal.vo.chart.CountUnit">
+        select replace(uuid(), "-", "") as id, brand as count_name, count(id) as val
+        from t_arp a
+        where brand is not null
+        group by brand
+        having val >= 10
+        order by val desc limit 10
+    </select>
+    <select id="getGroupByDeviceType" resultType="com.zans.portal.vo.chart.CountUnit">
+        select replace(uuid(), "-", "") as id, device_type as count_key, count(id) as val
+        from t_arp a
+        group by device_type
+        order by val desc limit 5
+    </select>
+    <select id="getTotalCount" resultType="java.lang.Integer">
+        select count(1)
+        from t_arp
+    </select>
+    <select id="getAliveCount" resultType="java.lang.Integer">
+        select count(1)
+        from t_arp
+        where alive = 1
+    </select>
+    <select id="getArpHourStats" resultType="com.zans.portal.vo.stats.ArpHourStatVO">
+        select *
+        from stats_arp_hour
+        order by dim_hour desc limit #{limit}
+    </select>
+    <select id="getCountOfRiskType" resultType="com.zans.portal.vo.chart.CircleUnit">
+        select risk_type as type, count(1) as val from t_arp
+        where risk_type>0
+        <if test="dayStart != null and dayStart != ''">
+            and check_last_time >= #{dayStart}
+        </if>
+        group by type
+    </select>
+
+    <select id="findAssetsForExport2" resultType="com.zans.portal.vo.arp.ExcelAssetVO">
+        select
+        t.id,
+        t.ip_addr as ip,
+        t.project_name,
+        t.point_name,
+        t.create_person,
+        t.create_time,
+        t.source,
+        t.maintain_status,
+        IFNULL(ah.alive,2),
+        ah.alive_last_time,
+        case when a.cur_device_type is null then t.device_type else a.cur_device_type end as device_type,
+        case when (a.cur_model_des is NULL OR a.cur_model_des = '') then t.device_model_des else a.cur_model_des end as
+        model_des,
+        case when a.cur_mute is null then t.mute else a.cur_mute end as mute,
+        a.cur_mac as mac_addr,
+        t.enable_status,
+        a.cur_company as device_company,
+        t.project_status,
+        t.contractor,
+        t.contractor_person,
+        t.contractor_phone,
+        t.maintain_company,
+        t.maintain_contact as maintain_person,
+        t.maintain_phone
+        from asset t
+        left join asset_profile a ON t.id = a.asset_id
+        left join alive_heartbeat ah on ah.ip_addr = t.ip_addr
+        where t.delete_status = 0
+
+        <if test="asset.ip != null and asset.ip !=''">
+            and t.ip_addr like concat('%',#{asset.ip},'%')
+        </if>
+        <if test="asset.deviceType != null">
+            and a.cur_device_type = #{asset.deviceType}
+        </if>
+        <if test="asset.enableStatus != null">
+            and t.enable_status = #{asset.enableStatus}
+        </if>
+        <if test="asset.alive != null">
+            and ah.alive = #{asset.alive}
+        </if>
+        <if test="asset.maintainStatus != null">
+            and t.maintain_status = #{asset.maintainStatus}
+        </if>
+        <if test="asset.mute != null">
+            and a.cur_mute = #{asset.mute}
+        </if>
+        <if test="asset.aliveStartDate != null and asset.aliveStartDate !=''">
+            and t.create_time &gt;= #{asset.aliveStartDate}
+        </if>
+        <if test="asset.aliveEndDate != null and asset.aliveEndDate !=''">
+            and t.create_time &lt;= #{asset.aliveEndDate}
+        </if>
+        <if test="asset.startDate != null and asset.startDate !=''">
+            and ah.alive_last_time &gt;= #{asset.startDate}
+        </if>
+        <if test="asset.endDate != null and asset.endDate !=''">
+            and ah.alive_last_time &lt;= #{asset.endDate}
+        </if>
+        <if test="asset.mac != null and asset.mac !=''">
+            and a.cur_mac like concat('%',#{asset.mac},'%')
+        </if>
+        <if test="asset.company != null and asset.company !=''">
+            and a.cur_company like concat('%',#{asset.company},'%')
+        </if>
+        <if test="asset.project != null and asset.project !=''">
+            and t.project_name like concat('%',#{asset.project},'%')
+        </if>
+        <if test="asset.point != null and asset.point !=''">
+            and t.point_name like concat('%',#{asset.point},'%')
+        </if>
+        <if test="asset.contractor != null and asset.contractor !=''">
+            and t.contractor like concat('%',#{asset.contractor},'%')
+        </if>
+        <if test="asset.maintain != null and asset.maintain !=''">
+            and t.maintain_company like concat('%',#{asset.maintain},'%')
+        </if>
+        <if test="asset.source != null and asset.source == 0">
+            and t.source in (1,2,3)
+        </if>
+        <if test="asset.source != null and asset.source == 1">
+            and t.source = 4
+        </if>
+        <if test="asset.source != null and asset.source == 2">
+            and t.source = 5
+        </if>
+        order by t.update_time desc
+    </select>
+
+
+    <select id="getCountByBrand" resultType="java.lang.Integer">
+        select count(1)
+        from t_arp a
+        where a.brand = #{brand}
+    </select>
+
+
+    <select id="getGroupByBrandAndSearch" resultType="com.zans.portal.vo.chart.CountUnit">
+        select replace(uuid(),"-","") as id, brand as count_name, count(id) as val from t_arp a
+        where brand is not null
+        <if test="req.ip != null and req.ip != ''">
+            and a.ip_addr like concat('%',#{req.ip},'%')
+        </if>
+        <if test="req.deviceType != null">
+            and a.device_type = #{req.deviceType}
+        </if>
+        <if test="req.point != null  and req.point != ''">
+            and a.point_name like concat('%',#{req.point},'%')
+        </if>
+        group by brand having val >= 10 order by val desc limit 10
+    </select>
+    <select id="getGroupByDeviceTypeAndSearch" resultType="com.zans.portal.vo.chart.CountUnit">
+        select replace(uuid(),"-","") as id, device_type as count_key, count(id) as val from t_arp a where 1=1
+        <if test="req.ip != null and req.ip != ''">
+            and a.ip_addr like concat('%',#{req.ip},'%')
+        </if>
+        <if test="req.deviceType != null">
+            and a.device_type = #{req.deviceType}
+        </if>
+        <if test="req.point != null  and req.point != ''">
+            and a.point_name like concat('%',#{req.point},'%')
+        </if>
+        group by device_type order by val desc limit 5
+    </select>
+
+    <select id="getByDeviceTypeId" resultType="java.lang.Integer">
+        select count(1)
+        from t_arp t
+        where t.device_type = #{deviceTypeId}
+    </select>
+
+
+    <select id="getByMacAdress" resultType="com.zans.portal.vo.arp.ArpSwitchVO">
+        SELECT t.mac_addr, t.ip_addr, t.company, d.type_name AS device_type_name, t.model_des
+        FROM t_arp t
+                 LEFT JOIN device_type_guard d ON t.device_type = d.type_id
+        where t.mac_addr = #{macAdress} and d.enable_status=1
+        order by id desc limit 1
+    </select>
+
+    <select id="findNetWorkSwitchByMac" resultType="com.zans.portal.vo.arp.NetworkSwitchVO">
+        SELECT n.sw_ip,
+               s.sys_name,
+               s.sys_desc,
+               c.`item_value`                                  AS sw_type,
+               n.interface_index,
+               n.interface_detail,
+               DATE_FORMAT(s.create_time, '%Y-%m-%d %H:%i:%s') as create_time
+        FROM network_switcher_mac n
+                 LEFT JOIN sys_switcher s ON n.`sw_id` = s.`id`
+                 LEFT JOIN sys_constant_item c ON s.`sw_type` = c.`item_key` AND c.`dict_key` = 'sw_type'
+        WHERE n.`mac` = #{mac}
+        ORDER BY s.sw_type DESC, s.`create_time` DESC
+    </select>
+
+    <select id="findNetWorkSwitchByMacTopo" resultType="com.zans.portal.vo.arp.NetworkSwitchVO">
+        SELECT n.sw_ip,
+               s.sys_name,
+               s.sys_desc,
+               c.`item_value`                                  AS sw_type,
+               n.interface_index,
+               n.interface_detail,
+               DATE_FORMAT(n.update_time, '%Y-%m-%d %H:%i:%s') as create_time
+        FROM network_switcher_mac n
+                 LEFT join network_topology nt on nt.dest_ip = n.sw_ip
+                 LEFT JOIN sys_switcher s ON n.`sw_id` = s.`id`
+                 LEFT JOIN sys_constant_item c ON s.`sw_type` = c.`item_key` AND c.`dict_key` = 'sw_type'
+        WHERE n.`mac` = #{mac}
+          and ifnull(nt.up_ip, '') !='' and nt.source_interface_alive=1
+        ORDER BY s.sw_type desc, n.update_time desc LIMIT 1
+    </select>
+
+    <select id="findSwitcherTopo" resultType="com.zans.portal.vo.arp.NetworkSwitchVO">
+        SELECT nt.source_ip                                     as sw_ip,
+               s.sys_name,
+               s.sys_desc,
+               c.`item_value`                                   AS sw_type,
+               nt.source_interface                              as interface_detail,
+               DATE_FORMAT(nt.create_time, '%Y-%m-%d %H:%i:%s') as create_time
+        FROM network_topology nt
+                 LEFT JOIN sys_switcher s ON nt.source_ip = s.sw_host
+                 LEFT JOIN sys_constant_item c ON s.`sw_type` = c.`item_key` AND c.`dict_key` = 'sw_type'
+        WHERE nt.dest_ip = #{swIp}
+          and nt.up_ip!='' and nt.source_interface_alive=1 limit 1
+    </select>
+
+    <select id="findByCurMac" resultType="com.zans.portal.vo.radius.QzViewRespVO">
+        SELECT a.server_os,
+               a.cur_mac AS                                                     mac,
+               a.cur_company  as                                                     company,
+               t.type_name,
+               CASE WHEN cur_open_port IS NULL THEN open_port ELSE cur_open_port END cur_open_port,
+               CASE WHEN cur_model_des IS NULL THEN model_des ELSE cur_model_des END device_model_des
+        FROM t_arp a
+                 LEFT JOIN device_type_guard t ON a.cur_model = t.type_id
+        where a.cur_mac = #{mac} and t.enable_status=1
+        order by update_time desc limit 1
+    </select>
+
+    <select id="summary" resultType="com.zans.portal.vo.chart.CountUnit">
+        SELECT COUNT(1) AS val, 'total' AS countName
+        FROM t_arp t
+        WHERE t.alive IS NOT NULL
+        UNION ALL
+        SELECT COUNT(1) AS val, 'online' AS countName
+        FROM t_arp t
+        WHERE t.alive = 1
+        UNION ALL
+        SELECT COUNT(1) AS val, 'offline' AS countName
+        FROM t_arp t
+        WHERE t.alive = 2
+        UNION ALL
+        SELECT COUNT(1) AS val, 'auth' AS countName
+        FROM radius_endpoint
+        WHERE access_policy = 2
+          AND delete_status = 0
+        UNION ALL
+        SELECT COUNT(1) AS val, 'wait' AS countName
+        FROM radius_endpoint
+        WHERE access_policy = 1
+          AND delete_status = 0
+        UNION ALL
+        SELECT COUNT(1) AS val, 'refuse' AS countName
+        FROM radius_endpoint
+        WHERE access_policy = 0
+          AND delete_status = 0
+    </select>
+
+    <select id="findByDevice" resultType="com.zans.portal.vo.chart.CountUnit">
+        SELECT left (IFNULL(t.type_name, ''), 5) countName, IFNULL(a.qty, 0) val
+        FROM device_type_guard t
+            LEFT JOIN ( SELECT device_type, COUNT (1) AS qty FROM t_arp a GROUP BY device_type ) a
+        ON t.`type_id` = a.device_type
+            where t.enable_status=1
+        ORDER BY a.qty DESC
+    </select>
+
+
+    <select id="findAuthByDate" resultType="com.zans.portal.vo.chart.CountUnit">
+        SELECT 'auth' AS countName, COUNT(1) AS val
+        FROM radius_endpoint
+        WHERE access_policy = 2
+          AND delete_status = 0
+          AND DATE_FORMAT(update_time, '%Y-%m-%d') = #{date}
+    </select>
+
+    <select id="findRefuseByDate" resultType="com.zans.portal.vo.chart.CountUnit">
+        SELECT 'refuse' AS countName, COUNT(1) AS val
+        FROM radius_endpoint
+        WHERE access_policy = 0
+          AND delete_status = 0
+          AND DATE_FORMAT(update_time, '%Y-%m-%d') = #{date}
+    </select>
+
+
+    <select id="getCountOfArpReport" resultType="com.zans.portal.vo.chart.CircleUnit">
+        SELECT COUNT(1) AS val, 'total' AS name
+        FROM t_arp t
+        WHERE t.alive IS NOT NULL
+        UNION ALL
+        SELECT COUNT(1) AS val, 'online' AS name
+        FROM t_arp t
+        WHERE t.alive = 1
+        UNION ALL
+        SELECT COUNT(1) AS val, 'offline' AS name
+        FROM t_arp t
+        WHERE t.alive = 2
+        UNION ALL
+        SELECT COUNT(1) AS val, 'auth' AS name
+        FROM radius_endpoint
+        WHERE access_policy = 2
+          AND delete_status = 0
+        UNION ALL
+        SELECT COUNT(1) AS val, 'wait' AS name
+        FROM radius_endpoint
+        WHERE access_policy = 1
+          AND delete_status = 0
+        UNION ALL
+        SELECT COUNT(1) AS val, 'refuse' AS name
+        FROM radius_endpoint
+        WHERE access_policy = 0
+          AND delete_status = 0
+        UNION ALL
+        SELECT COUNT(1) AS val, 'dis' AS name
+        FROM t_arp t
+        WHERE t.dis_status = 2
+           OR t.dis_status = 3
+        UNION ALL
+        SELECT COUNT(1) AS val, 'exception' AS name
+        FROM t_arp t
+        WHERE t.risk_type = 4
+    </select>
+
+
+</mapper>

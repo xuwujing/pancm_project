@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.LogOperationMapper">
+    <select id="findLogList" resultType="com.zans.portal.vo.log.OpLogRespVO">
+        select a.id,a.operation,a.module,a.content,a.from_ip,a.result,a.created_at,
+        b.user_name,b.nick_name,c.role_id as role,d.role_desc as role_name from log_operation a
+        inner join sys_user b on a.user_id = b.id
+        inner join sys_user_role c on b.id = c.user_id
+        inner join sys_role d on c.role_id = d.role_id
+        <where>
+            1 = 1
+            <if test="req.userName != null and req.userName !=''">
+                and b.user_name = #{req.userName}
+            </if>
+            <if test="req.role != null">
+                and c.role_id = #{req.role}
+            </if>
+            <if test="req.module">
+                and a.module = #{req.module}
+            </if>
+            <if test="req.startDate != null and req.startDate !=''">
+                and a.created_at &gt;= #{req.startDate}
+            </if>
+            <if test="req.endDate != null and req.endDate !=''">
+                and a.created_at &lt;= #{req.endDate}
+            </if>
+            <if test="req.content != null and req.content !=''">
+                and a.content like concat('%',#{req.content},'%')
+            </if>
+        </where>
+        <if test="req.orderBy != null and req.orderBy !=''">
+            order by ${req.orderBy}
+        </if>
+    </select>
+    <select id="findGroupOfModule" resultType="com.zans.portal.vo.chart.CircleUnit">
+        select operation as name, count(id) as val
+        from log_operation
+        where module = #{module}
+        group by operation
+    </select>
+    <select id="getOpLog" resultType="com.zans.portal.vo.log.OpLogRespVO">
+        select a.id,
+               a.operation,
+               a.module,
+               a.content,
+               a.from_ip,
+               a.result,
+               a.created_at,
+               b.user_name,
+               b.nick_name,
+               c.role_id   as role,
+               d.role_desc as role_name
+        from log_operation a
+                 inner join sys_user b on a.user_id = b.id
+                 inner join sys_user_role c on b.id = c.user_id
+                 inner join sys_role d on c.role_id = d.role_id
+        where a.id = #{id}
+    </select>
+
+    <select id="loginLog" resultType="com.zans.portal.vo.log.LogOperation52VO">
+        select
+        log.id,log.user_name,log.op_platform,log.module,log.operation,log.class_name,log.method_name,log.req_data,log.rep_data,log.from_ip,log.result,log.trace_id,DATE_FORMAT(log.create_time,
+        '%Y-%m-%d %k:%i:%s') as create_time,role.role_name from log_operation log
+        LEFT JOIN sys_user user on user.user_name = log.user_name
+        LEFT JOIN sys_user_role sur on sur.user_id = user.id
+        LEFT JOIN sys_role role on role.role_id = sur.role_id
+        <where>
+            <if test="userName != null and userName != ''">
+                and log.user_name LIKE CONCAT('%',CONCAT(#{userName}),'%')
+            </if>
+            <if test="loginTimeStart != null and loginTimeStart != ''">
+                and log.create_time >= #{loginTimeStart}
+            </if>
+            <if test="loginTimeEnd != null and loginTimeEnd != ''">
+                and #{loginTimeEnd} >= log.create_time
+            </if>
+            <if test="roleName != null and roleName != ''">
+                and role.role_name LIKE CONCAT('%',CONCAT(#{roleName}),'%')
+            </if>
+            and log.method_name = "login"
+        </where>
+        order by log.update_time DESC
+    </select>
+
+    <select id="operationLog" resultType="com.zans.portal.vo.log.LogOperation52VO">
+        select
+        log.id,log.user_name,log.op_platform,log.module,log.operation,log.class_name,log.method_name,log.req_data,log.rep_data,log.from_ip,log.result,log.trace_id,DATE_FORMAT(log.create_time,
+        '%Y-%m-%d %k:%i:%s') as create_time,role.role_name,log.remark from log_operation log
+        LEFT JOIN sys_user user on user.user_name = log.user_name
+        LEFT JOIN sys_user_role sur on sur.user_id = user.id
+        LEFT JOIN sys_role role on role.role_id = sur.role_id
+        <where>
+            <if test="operationName != null and operationName != ''">
+                and log.user_name LIKE CONCAT('%',CONCAT(#{operationName}),'%')
+            </if>
+            <if test="operationType != null and operationType != ''">
+                and log.operation LIKE CONCAT('%',CONCAT(#{operationType}),'%')
+            </if>
+            <if test="module != null and module != ''">
+                and log.module LIKE CONCAT('%',CONCAT(#{module}),'%')
+            </if>
+            <if test="operationUser != null and operationUser != ''">
+                and role.role_name LIKE CONCAT('%',CONCAT(#{operationUser}),'%')
+            </if>
+            <if test="operationTimeStart != null and operationTimeStart != ''">
+                and log.create_time >= #{operationTimeStart}
+            </if>
+            <if test="operationTimeEnd != null and operationTimeEnd != ''">
+                and #{operationTimeEnd} >= log.create_time
+            </if>
+        and module != "登录"
+        </where>
+        order by log.update_time DESC
+    </select>
+
+    <update id="updateByTraceId">
+        update log_operation
+        set rep_data = #{repData},
+            result   = #{result}
+        where trace_id = #{traceId}
+    </update>
+
+    <select id="findLogByUserNameRecently" resultType="com.zans.portal.model.LogOperation">
+        select log.id,
+               log.user_name,
+               log.op_platform,
+               log.module,
+               log.operation,
+               log.class_name,
+               log.method_name,
+               log.req_data,
+               log.rep_data,
+               log.from_ip,
+               log.result,
+               log.trace_id,
+               log.create_time,
+               log.update_time
+        from log_operation log
+        where user_name = #{userName}
+          and operation = "登陆"
+          and method_name = "login"
+        order by log.create_time DESC
+        limit 1
+    </select>
+</mapper>

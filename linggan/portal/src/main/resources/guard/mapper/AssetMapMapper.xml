@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.AssetMapMapper">
+
+  <select id="assetMapList" resultType="com.zans.portal.vo.asset.resp.AssetMapRespVO">
+    SELECT
+    abe.id,abe.ip_addr,
+    dp.latitude latitude,
+    dp.longitude longitude,
+    abe.contractor_person,abe.project_name,
+     abe.maintain_company,dp.point_name,dp.point_name name,
+    abe.model_brand brand_name,IFNULL(ah.alive,2) alive,
+    ifnull(dt.type_id,0) device_type,dt.type_name,
+    CASE
+    WHEN  IFNULL(ah.alive,2) = 2  THEN '2'
+    WHEN  IFNULL(ah.alive,2) = 1  THEN '1'
+    ELSE  '-1'
+    <!--设备状态;-1 未知;0.阻断;1.在线;2.离线;3.告警;-->
+    END deviceStatus
+    FROM asset abe
+    left join alive_heartbeat ah on ah.ip_addr = abe.ip_addr
+    LEFT JOIN device_type_guard dt ON dt.type_id = abe.device_type
+    left join device_point dp on abe.point_code = dp.point_code
+    WHERE
+       1 =1  and dt.enable_status=1
+
+
+    <if test="buildTypes != null and buildTypes.size >0">
+      and abe.device_type in
+      <foreach collection="buildTypes" item="buildType" separator="," open="(" close=")">
+        #{buildType}
+      </foreach>
+
+    </if>
+
+    <if test="brandName != null and brandName !='' ">
+      AND abe.model_brand = #{brandName}
+    </if>
+
+    <if test="brandNameIsNoHaiKang != null and brandNameIsNoHaiKang !='' ">
+      AND  IFNULL(abe.model_brand,'')
+      <![CDATA[<>]]>
+      #{brandNameIsNoHaiKang}
+    </if>
+
+       <if test="leftLatitude != null and leftLatitude !=''">
+         AND dp.`latitude` <![CDATA[>]]> #{leftLatitude}
+       </if>
+       <if test="leftLongitude != null and leftLongitude !=''">
+         AND dp.`longitude` <![CDATA[>]]> #{leftLongitude}
+       </if>
+
+       <if test="rightLatitude != null and rightLatitude !=''">
+         AND dp.`latitude` <![CDATA[<]]> #{rightLatitude}
+       </if>
+       <if test="rightLongitude != null and rightLongitude !=''">
+         AND dp.`longitude` <![CDATA[<]]> #{rightLongitude}
+       </if>
+
+     </select>
+
+  <select id="assetMapForTreeList" resultType="com.zans.portal.vo.common.MapCatalogueVO">
+    SELECT
+    t.id+100000   id,
+    t.department_id  parent_id,
+    dp.point_name name,
+    dp.latitude latitude,
+     dp.longitude longitude,
+     t.maintain_company,
+    dt.type_id device_type,dt.type_name,
+    a.cur_brand brand_name,
+    d.id department_id,
+    d.name department_name,
+    2  department_type,
+    CASE
+    WHEN  IFNULL(ah.alive,2) = 2  THEN '2'
+    WHEN  IFNULL(ah.alive,2) = 1  THEN '1'
+    ELSE  '-1'
+    <!--设备状态;-1 未知;0.阻断;1.在线;2.离线;3.告警;-->
+    END deviceStatus
+    FROM asset t
+    left join alive_heartbeat ah on ah.ip_addr = t.ip_addr
+    left join asset_profile a ON t.id = a.asset_id
+    LEFT JOIN department d ON d.id = t.department_id
+    LEFT JOIN device_type_guard dt ON dt.type_id = a.cur_device_type
+    left join device_point dp on t.point_code = dp.point_code
+    WHERE  t.delete_status=0 and t.department_id is not null
+    and dt.enable_status=1
+    <if test="pointName != null and pointName != ''">
+      and   t.point_name like  CONCAT('%',#{pointName},'%')
+    </if>
+    ORDER BY  t.department_id,t.id asc
+  </select>
+
+    <select id="assetMapForXGJGTreeList" resultType="com.zans.portal.vo.common.MapCatalogueVO">
+      SELECT
+      t.id+100000   id,
+      t.map_catalogue_id  parent_id,
+      t.point_name name,
+      dp.latitude latitude,
+      dp.longitude longitude,
+       t.maintain_company,
+      dt.type_id device_type,dt.type_name,
+      a.cur_brand brand_name,
+      d.id department_id,
+      d.name department_name,
+      2  department_type,
+      CASE
+      WHEN  IFNULL(ah.alive,2) = 2  THEN '2'
+      WHEN  IFNULL(ah.alive,2) = 1  THEN '1'
+      ELSE  '-1'
+
+      END deviceStatus
+      FROM asset t
+      left join alive_heartbeat ah on ah.ip_addr = t.ip_addr
+      left join asset_profile a ON t.id = a.asset_id
+      LEFT JOIN map_catalogue d ON d.id = t.map_catalogue_id
+      LEFT JOIN device_type_guard dt ON dt.type_id = a.cur_device_type
+      left join device_point dp on t.point_code = dp.point_code
+      WHERE  t.delete_status=0 and t.map_catalogue_id is not null
+      and ifnull(t.point_name ,'')!=''
+      and dt.enable_status=1
+      <if test="pointName != null and pointName != ''">
+        and   t.point_name like  CONCAT('%',#{pointName},'%')
+      </if>
+      ORDER BY  t.department_id,t.id asc
+    </select>
+
+
+
+  <select id="assetMapList2" resultType="com.zans.portal.vo.asset.resp.AssetMapRespVO">
+    SELECT
+    t.id,t.ip_addr,
+    dp.latitude latitude,
+    dp.longitude longitude,
+    t.contractor_person,t.project_name,t.maintain_company,t.point_name,t.point_name name,
+    a.cur_brand brand_name,t.alive,
+    a.cur_mac username,
+    dt.type_id device_type,dt.type_name,
+    CASE
+    WHEN  IFNULL(ah.alive,2) = 2  THEN '2'
+    WHEN  IFNULL(ah.alive,2) = 1  THEN '1'
+    ELSE  '-1'
+    <!--设备状态;-1 未知;0.阻断;1.在线;2.离线;3.告警;-->
+    END deviceStatus
+    FROM asset t
+    left join alive_heartbeat ah on ah.ip_addr = t.ip_addr
+    left join asset_profile a ON t.id = a.asset_id
+    LEFT JOIN device_type_guard dt ON dt.type_id = a.cur_device_type
+    left join device_point dp on t.point_code = dp.point_code
+    WHERE
+    t.delete_status=0
+    and dt.enable_status=1
+    <if test="alive != null ">
+      AND ah.alive = #{alive}
+    </if>
+
+    <if test="brandName != null and brandName !='' ">
+      AND a.cur_brand = #{brandName}
+    </if>
+    <if test="brandNameIsNoHaiKang != null and brandNameIsNoHaiKang !='' ">
+      AND  IFNULL(a.cur_brand,'')
+      <![CDATA[<>]]>
+      #{brandNameIsNoHaiKang}
+    </if>
+
+    <if test="unknownDevice != null and unknownDevice !='' ">
+      and (IFNULL(t.latitude,0)=0 or IFNULL(t.longitude,0)=0)  and IFNULL(t.ip_addr,'')!=''
+    </if>
+
+    <if test="ipAddr != null and ipAddr != '' ">
+      AND t.`ip_addr` like CONCAT('%',#{ipAddr},'%')
+    </if>
+    <if test="pointName != null and pointName != '' ">
+      AND t.point_name like CONCAT('%',#{pointName},'%')
+    </if>
+    <if test="username != null and username != '' ">
+     and   a.cur_mac like CONCAT('%',#{username},'%')
+    </if>
+    <if test="orderBy != null and orderBy !=''">
+      order by ${orderBy}
+    </if>
+  </select>
+
+  <select id="findMapTreeByName" resultType="com.zans.portal.vo.common.MapCatalogueVO">
+    select * from map_catalogue where visible=1 and enable=1 order by parent_id, seq
+  </select>
+
+</mapper>

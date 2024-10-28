@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.AssetBranchAssetStatisticsMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.portal.model.AssetBranchAssetStatistics" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="asset_branch_statistics_id" property="assetBranchStatisticsId" jdbcType="INTEGER" />
+    <result column="ip_addr" property="ipAddr" jdbcType="VARCHAR" />
+    <result column="point_name" property="pointName" jdbcType="VARCHAR" />
+    <result column="enable_status" property="enableStatus" jdbcType="INTEGER" />
+    <result column="alive" property="alive" jdbcType="INTEGER" />
+    <result column="alive_last_time" property="aliveLastTime" jdbcType="TIMESTAMP" />
+    <result column="pass" property="pass" jdbcType="VARCHAR" />
+    <result column="device_type" property="deviceType" jdbcType="INTEGER" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="model_des" property="modelDes" jdbcType="VARCHAR" />
+    <result column="statistics_time" property="statisticsTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="runningDetailList" resultType="com.zans.portal.vo.asset.branch.req.AssetBranchStatisticsVO">
+    <include refid="runningDetailListSql"/>
+
+    <if test="reqVO.alive != null">
+      and   abes.alive = #{reqVO.alive}
+    </if>
+
+    <if test="reqVO.pointName != null and reqVO.pointName !='' ">
+      and   abes.point_name like concat('%',#{reqVO.pointName},'%')
+    </if>
+    <if test="reqVO.deviceType != null">
+      and   abes.device_type = #{reqVO.deviceType}
+    </if>
+    <if test="reqVO.ipAddr != null and reqVO.ipAddr !=''">
+      and  abes.ip_addr like concat('%',#{reqVO.ipAddr},'%')
+    </if>
+    <if test="reqVO.enableStatus != null">
+      and  abes.enable_status = #{reqVO.enableStatus}
+    </if>
+  </select>
+  <sql id="runningDetailListSql">
+        SELECT
+        ab.name assetBranchName,
+        abes.asset_branch_statistics_id assetBranchStatisticsId,
+        abes.username,
+        abes.pass,
+        abes.point_name pointName,
+        abes.device_type deviceType,
+        abes.brand_name brandName,
+        abes.model_des modelDes,
+        abes.ip_addr ipAddr,
+        abes.enable_status enableStatus,
+        abes.alive,
+        abes.alive_last_time aliveLastTime,
+        d.type_name deviceTypeName
+        FROM
+        asset_branch_asset_statistics abes
+        inner join asset_branch_statistics abs on abes.asset_branch_statistics_id=abs.id
+        inner join asset_branch ab  on abs.asset_branch_id = ab.id
+        LEFT JOIN device_type_guard d ON abes.device_type = d.type_id
+        WHERE
+         t.enable_status=1 and
+        abes.asset_branch_statistics_id = #{reqVO.assetBranchStatisticsId}
+    </sql>
+
+  <select id="runningDetailListForExcel"
+          resultType="com.zans.portal.vo.asset.branch.req.ExcelAssetBranchStatisticsVO">
+    <include refid="runningDetailListSql"/>
+
+    <if test="reqVO.alive != null">
+      and   abes.alive = #{reqVO.alive}
+    </if>
+    <if test="reqVO.pointName != null and reqVO.pointName !='' ">
+      and   abes.point_name like concat('%',#{reqVO.pointName},'%')
+    </if>
+    <if test="reqVO.deviceType != null">
+      and   abes.device_type = #{reqVO.deviceType}
+    </if>
+    <if test="reqVO.ipAddr != null and reqVO.ipAddr !=''">
+      and  abes.ip_addr like concat('%',#{reqVO.ipAddr},'%')
+    </if>
+    <if test="reqVO.enableStatus != null">
+      and  abes.enable_status = #{reqVO.enableStatus}
+    </if>
+  </select>
+</mapper>

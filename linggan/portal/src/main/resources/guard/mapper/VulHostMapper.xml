@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.VulHostDao">
+
+    <resultMap type="com.zans.portal.model.VulHost" id="VulHostMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="jobId" column="job_id" jdbcType="VARCHAR"/>
+        <result property="jobStatus" column="job_status" jdbcType="INTEGER"/>
+        <result property="ipAddr" column="ip_addr" jdbcType="VARCHAR"/>
+        <result property="port" column="port" jdbcType="VARCHAR"/>
+        <result property="critical" column="critical" jdbcType="INTEGER"/>
+        <result property="high" column="high" jdbcType="INTEGER"/>
+        <result property="medium" column="medium" jdbcType="INTEGER"/>
+        <result property="low" column="low" jdbcType="INTEGER"/>
+        <result property="info" column="info" jdbcType="INTEGER"/>
+        <result property="score" column="score" jdbcType="VARCHAR"/>
+        <result property="total" column="total" jdbcType="INTEGER"/>
+        <result property="level" column="level" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="VulHostMap">
+        select id,
+               job_id,
+               job_status,
+               ip_addr,
+               port,
+               critical,
+               high,
+               medium,
+               low,
+               info,
+               score,
+               total,
+               level,
+               create_time
+        from vul_host
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="VulHostMap">
+        select
+        id, job_id, job_status, ip_addr, port, critical, high, medium, low, info, score, total, level, create_time
+        from vul_host
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="jobId != null and jobId != ''">
+                and job_id = #{jobId}
+            </if>
+            <if test="jobStatus != null">
+                and job_status = #{jobStatus}
+            </if>
+            <if test="ipAddr != null and ipAddr != ''">
+                and ip_addr = #{ipAddr}
+            </if>
+            <if test="port != null and port != ''">
+                and port = #{port}
+            </if>
+            <if test="critical != null">
+                and critical = #{critical}
+            </if>
+            <if test="high != null">
+                and high = #{high}
+            </if>
+            <if test="medium != null">
+                and medium = #{medium}
+            </if>
+            <if test="low != null">
+                and low = #{low}
+            </if>
+            <if test="info != null">
+                and info = #{info}
+            </if>
+            <if test="score != null and score != ''">
+                and score = #{score}
+            </if>
+            <if test="total != null">
+                and total = #{total}
+            </if>
+            <if test="level != null and level != ''">
+                and level = #{level}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryOne" resultType="com.zans.portal.model.VulHost">
+        select
+        id, job_id, job_status, ip_addr, port, critical, high,
+        medium, low, info, score, total, level,
+        DATE_FORMAT(`create_time`,'%Y-%m-%d %H:%i:%S') as  create_time
+        from vul_host
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="jobId != null and jobId != ''">
+                and job_id = #{jobId}
+            </if>
+            <if test="jobStatus != null">
+                and job_status = #{jobStatus}
+            </if>
+            <if test="ipAddr != null and ipAddr != ''">
+                and ip_addr = #{ipAddr}
+            </if>
+            <if test="port != null and port != ''">
+                and port = #{port}
+            </if>
+            <if test="critical != null">
+                and critical = #{critical}
+            </if>
+            <if test="high != null">
+                and high = #{high}
+            </if>
+            <if test="medium != null">
+                and medium = #{medium}
+            </if>
+            <if test="low != null">
+                and low = #{low}
+            </if>
+            <if test="info != null">
+                and info = #{info}
+            </if>
+            <if test="score != null and score != ''">
+                and score = #{score}
+            </if>
+            <if test="total != null">
+                and total = #{total}
+            </if>
+            <if test="level != null and level != ''">
+                and level = #{level}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into vul_host(job_id, job_status, ip_addr, port, critical, high, medium, low, info, score, total, level,
+                             create_time)
+        values (#{jobId}, #{jobStatus}, #{ipAddr}, #{port}, #{critical}, #{high}, #{medium}, #{low}, #{info}, #{score},
+                #{total}, #{level}, #{createTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into vul_host(job_id, job_status, ip_addr, port, critical, high, medium, low, info, score, total, level,
+        create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.jobId}, #{entity.jobStatus}, #{entity.ipAddr}, #{entity.port}, #{entity.critical}, #{entity.high},
+            #{entity.medium}, #{entity.low}, #{entity.info}, #{entity.score}, #{entity.total}, #{entity.level},
+            #{entity.createTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into vul_host(job_id, job_status, ip_addr, port, critical, high, medium, low, info, score, total, level,
+        create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.jobId}, #{entity.jobStatus}, #{entity.ipAddr}, #{entity.port}, #{entity.critical}, #{entity.high},
+            #{entity.medium}, #{entity.low}, #{entity.info}, #{entity.score}, #{entity.total}, #{entity.level},
+            #{entity.createTime})
+        </foreach>
+        on duplicate key update
+        job_id = values(job_id) , job_status = values(job_status) , ip_addr = values(ip_addr) , port = values(port) ,
+        critical = values(critical) , high = values(high) , medium = values(medium) , low = values(low) , info =
+        values(info) , score = values(score) , total = values(total) , level = values(level) , create_time =
+        values(create_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update vul_host
+        <set>
+            <if test="jobId != null and jobId != ''">
+                job_id = #{jobId},
+            </if>
+            <if test="jobStatus != null">
+                job_status = #{jobStatus},
+            </if>
+            <if test="ipAddr != null and ipAddr != ''">
+                ip_addr = #{ipAddr},
+            </if>
+            <if test="port != null and port != ''">
+                port = #{port},
+            </if>
+            <if test="critical != null">
+                critical = #{critical},
+            </if>
+            <if test="high != null">
+                high = #{high},
+            </if>
+            <if test="medium != null">
+                medium = #{medium},
+            </if>
+            <if test="low != null">
+                low = #{low},
+            </if>
+            <if test="info != null">
+                info = #{info},
+            </if>
+            <if test="score != null and score != ''">
+                score = #{score},
+            </if>
+            <if test="total != null">
+                total = #{total},
+            </if>
+            <if test="level != null and level != ''">
+                level = #{level},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from vul_host
+        where id = #{id}
+    </delete>
+    <delete id="deleteByIpAddr">
+        delete
+        from vul_host
+        where ip_addr = #{hostIp}
+    </delete>
+
+</mapper>
+

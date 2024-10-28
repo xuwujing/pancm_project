@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.AssetBranchEndpointMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.portal.model.AssetBranchEndpoint" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="pass" property="pass" jdbcType="VARCHAR" />
+    <result column="asset_branch_id" property="assetBranchId" jdbcType="INTEGER" />
+    <result column="delete_status" property="deleteStatus" jdbcType="INTEGER" />
+    <result column="creator_id" property="creatorId" jdbcType="INTEGER" />
+    <result column="update_id" property="updateId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+    <sql id="baseColumn">
+      username as username,
+      pass as pass,
+      asset_branch_id as assetBranchId,
+      delete_status as deleteStatus,
+      creator_id as creatorId,
+      create_time as createTime,
+      update_time as updateTime
+    </sql>
+
+    <select id="getByUsername" resultType="com.zans.portal.model.AssetBranchEndpoint">
+     select
+      <include refid="baseColumn"/>
+      from asset_branch_endpoint
+      where asset_branch_id = #{assetBranchId} and username = #{username}
+
+    </select>
+</mapper>

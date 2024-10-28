@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.AreaMapper">
+
+    <select id="findAreaToSelect" resultType="com.zans.base.vo.SelectVO">
+        select area_id as item_key, area_name as item_value from t_area
+        order by CONVERT(area_name USING gbk), area_id
+    </select>
+    <select id="findAreaWithSwTypeById" resultType="com.zans.portal.model.Area">
+        select a.*,b.sw_type from t_area a inner join sys_switcher_processor b on a.sw_model=b.id where a.id=#{id}
+    </select>
+    <select id="findRegionToSelect" resultType="com.zans.base.vo.SelectVO">
+        select region_id as item_key, region_name as item_value from sys_region
+        <if test="city != null">
+            where city_id=#{city}
+        </if>
+        order by CONVERT(region_name USING gbk), region_id
+    </select>
+    <select id="findRegion" resultType="com.zans.portal.vo.area.RegionVO">
+        select region_id, parent_id, region_name from sys_region
+        where parent_id is not null
+        <if test="city != null">
+            and city_id=#{city}
+        </if>
+        order by region_name
+    </select>
+
+    <select id="findAreaByName" resultType="java.lang.Integer">
+        select id from t_area where area_name=#{name} limit 1
+    </select>
+
+    <select id="findAreaCountByName" resultType="java.lang.Integer">
+        select count(1) from t_area where area_name=#{name}
+        <if test="id != null">
+        and  id != #{id}
+        </if>
+    </select>
+
+    <select id="findAreaList" resultType="com.zans.portal.vo.area.AreaRespVO">
+        SELECT CONCAT (r.`region_name`,'-',t.`area_name`) as admin_area_name,t.*
+        FROM `t_area` t
+        LEFT JOIN `sys_region` r ON t.`region` = r.region_id
+        where 1=1
+        <if test=" reqVo.areaName != null and reqVo.areaName != '' ">
+            and t.area_name like CONCAT('%',#{reqVo.areaName},'%')
+        </if>
+        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+            order by ${reqVo.orderBy}
+        </if>
+    </select>
+
+    <select id="findRegionByParentId" resultType="com.zans.portal.vo.area.RegionVO">
+        select region_id, parent_id, region_name from sys_region
+        where parent_id is not null
+        <if test="city != null">
+            and city_id=#{city}
+        </if>
+        <if test="parentId != null">
+            and parent_id=#{parentId}
+        </if>
+        order by region_name
+    </select>
+
+    <select id="findAreaByRegion" resultType="com.zans.portal.vo.area.RegionVO">
+        select area_id region_id, region as parent_id,area_name as region_name
+        from t_area t where 1=1
+        <if test="parentId != null">
+            and region = #{parentId}
+        </if>
+    </select>
+
+    <select id="findAreaByParentId" resultType="com.zans.base.vo.SelectVO">
+        select t.area_id as itemKey, t.area_name as itemValue
+        from t_area t
+        left join sys_region r
+        on t.region=r.region_id
+        where r.region_id = #{parentId}
+    </select>
+
+    <select id="findRegionById" resultType="com.zans.portal.vo.area.RegionVO">
+        select region_id, parent_id, region_name from sys_region where region_id = #{regionId}
+    </select>
+    <select id="getListCondition" resultType="com.zans.portal.model.Area">
+        select  * from t_area
+        <where>
+            <if test="region != null">
+                region = #{region}
+            </if>
+        </where>
+    </select>
+
+</mapper>

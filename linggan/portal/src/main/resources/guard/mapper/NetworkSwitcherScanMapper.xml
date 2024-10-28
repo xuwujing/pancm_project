@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.NetworkSwitcherScanMapper" >
+    <select id="findLastScanRecordByIp" resultType="com.zans.portal.model.NetworkSwitcherScan">
+        select * from network_switcher_scan where sw_ip=#{ip} order by create_time desc limit 1
+    </select>
+</mapper>

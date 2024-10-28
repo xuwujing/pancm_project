@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.RadiusPolicyConfigDao">
+
+    <resultMap type="com.zans.portal.model.RadiusPolicyConfig" id="RadiusPolicyConfigMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="ruleName" column="rule_name" jdbcType="VARCHAR"/>
+        <result property="ruleDesc" column="rule_desc" jdbcType="VARCHAR"/>
+        <result property="rule" column="rule" jdbcType="VARCHAR"/>
+        <result property="policy" column="policy" jdbcType="INTEGER"/>
+        <result property="hintStatus" column="hint_status" jdbcType="INTEGER"/>
+        <result property="level" column="level" jdbcType="INTEGER"/>
+        <result property="result" column="result" jdbcType="INTEGER"/>
+        <result property="enable" column="enable" jdbcType="INTEGER"/>
+        <result property="seq" column="seq" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="RadiusPolicyConfigMap">
+        select id,
+               rule_name,
+               rule_desc,
+               rule,
+               policy,
+               hint_status,
+               level,
+               result,
+               enable,
+               seq,
+               create_time,
+               update_time
+        from radius_policy_config
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="RadiusPolicyConfigMap">
+        select
+        id, rule_name, rule_desc, rule, policy, hint_status, level, result, enable, seq, create_time, update_time
+        from radius_policy_config
+        <where>
+            enable = 1
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="ruleName != null and ruleName != ''">
+                and rule_name = #{ruleName}
+            </if>
+            <if test="ruleDesc != null and ruleDesc != ''">
+                and rule_desc = #{ruleDesc}
+            </if>
+            <if test="rule != null and rule != ''">
+                and rule = #{rule}
+            </if>
+            <if test="policy != null">
+                and policy = #{policy}
+            </if>
+            <if test="hintStatus != null">
+                and hint_status = #{hintStatus}
+            </if>
+            <if test="level != null">
+                and level = #{level}
+            </if>
+            <if test="result != null">
+                and result = #{result}
+            </if>
+            <if test="enable != null">
+                and enable = #{enable}
+            </if>
+            <if test="seq != null">
+                and seq = #{seq}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        order by level,seq asc
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into radius_policy_config(rule_name, rule_desc, rule, policy, hint_status, level, result, enable, seq,
+                                         create_time, update_time)
+        values (#{ruleName}, #{ruleDesc}, #{rule}, #{policy}, #{hintStatus}, #{level}, #{result}, #{enable}, #{seq},
+                #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into radius_policy_config(rule_name, rule_desc, rule, policy, hint_status, level, result, enable, seq,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ruleName}, #{entity.ruleDesc}, #{entity.rule}, #{entity.policy}, #{entity.hintStatus},
+            #{entity.level}, #{entity.result}, #{entity.enable}, #{entity.seq}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into radius_policy_config(rule_name, rule_desc, rule, policy, hint_status, level, result, enable, seq,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ruleName}, #{entity.ruleDesc}, #{entity.rule}, #{entity.policy}, #{entity.hintStatus},
+            #{entity.level}, #{entity.result}, #{entity.enable}, #{entity.seq}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        rule_name = values(rule_name) , rule_desc = values(rule_desc) , rule = values(rule) , policy = values(policy) ,
+        hint_status = values(hint_status) , level = values(level) , result = values(result) , enable = values(enable) ,
+        seq = values(seq) , create_time = values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update radius_policy_config
+        <set>
+            <if test="ruleName != null and ruleName != ''">
+                rule_name = #{ruleName},
+            </if>
+            <if test="ruleDesc != null and ruleDesc != ''">
+                rule_desc = #{ruleDesc},
+            </if>
+            <if test="rule != null and rule != ''">
+                rule = #{rule},
+            </if>
+            <if test="policy != null">
+                policy = #{policy},
+            </if>
+            <if test="hintStatus != null">
+                hint_status = #{hintStatus},
+            </if>
+            <if test="level != null">
+                level = #{level},
+            </if>
+            <if test="result != null">
+                result = #{result},
+            </if>
+            <if test="enable != null">
+                enable = #{enable},
+            </if>
+            <if test="seq != null">
+                seq = #{seq},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from radius_policy_config
+        where id = #{id}
+    </delete>
+
+</mapper>
+

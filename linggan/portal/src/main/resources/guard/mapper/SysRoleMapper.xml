@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.SysRoleMapper" >
+
+    <select id="findRoleToSelect" resultType="com.zans.base.vo.SelectVO">
+        select role_id as item_key, role_name as item_value from sys_role
+        where enable = 1
+        order by role_name
+    </select>
+    <select id="findRoleById" resultType="com.zans.portal.vo.role.RoleRespVO">
+        select * from sys_role where role_id=#{roleId}
+    </select>
+
+    <select id="findAllRoles" resultType="com.zans.portal.vo.role.RoleRespVO">
+        select * from sys_role where 1 = 1
+        <if test="enable != null">
+            and enable = #{enable}
+        </if>
+        <if test="roleName != null and roleName != ''">
+            and role_name like concat('%',#{roleName},'%')
+        </if>
+        order by role_id desc
+    </select>
+
+    <select id="findRoleByName" resultType="com.zans.portal.model.SysRole">
+        select * from sys_role where role_name = #{roleName}
+    </select>
+    <select id="findRoleByNameExceptId" resultType="com.zans.portal.model.SysRole">
+        select * from sys_role where role_name = #{roleName} and role_id != #{roleId}
+    </select>
+
+    <select id="selectRoleName" resultType="com.zans.portal.model.SysRole">
+        select *
+        from sys_role role
+                 LEFT JOIN sys_user_role sur on role.role_id = sur.role_id
+                 LEFT JOIN sys_user user on user.id = sur.user_id
+        where user.id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.AssetBranchSnapShootMapper" >
+
+    <select id="getAssetBranchSnapShoot" resultType="com.zans.portal.vo.asset.resp.AssetBranchSnapShootRespVO">
+        select id,snapshoot_time as snapShootTime,enable,
+        exec_enable as execEnable, exec_start_time as execStartTime,exec_end_time as execEndTime
+         from asset_branch_job where 1 = 1
+        <if test="id != null ">
+            and id =#{id}
+        </if>
+        <if test="enable != null ">
+            and enable =#{enable}
+        </if>
+        order by enable desc,create_time desc
+    </select>
+
+
+    <insert id="save">
+        insert into asset_branch_job (snapshoot_time,enable,creator_id)
+        values (#{snapShootTime},#{enable},#{creatorId})
+    </insert>
+
+    <update id="update">
+        update asset_branch_job
+        <set>
+
+            <if test="snapShootTime != null and snapShootTime != '' ">
+                snapshoot_time = #{snapShootTime},
+                update_time= now(),
+            </if>
+            <if test="creatorId != null ">
+                update_id = #{creatorId},
+            </if>
+            <if test="enable != null ">
+                enable = #{enable},
+            </if>
+
+            <if test="execEnable != null ">
+                exec_enable = #{execEnable},
+            </if>
+
+            <if test="execStartTime != null and execStartTime != '' ">
+                exec_start_time = now(),
+            </if>
+
+            <if test="execEndTime != null and execEndTime != '' ">
+                exec_end_time = now(),
+            </if>
+
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="disableAll">
+        update asset_branch_job set enable = 0
+    </update>
+
+    <select id="findJobByTime" resultType="com.zans.portal.vo.asset.resp.AssetBranchSnapShootRespVO">
+        select id,snapshoot_time as snapShootTime,enable,
+        exec_enable as execEnable, exec_start_time as execStartTime,exec_end_time as execEndTime
+         from asset_branch_job where snapshoot_time=#{snapShootTime}
+    </select>
+
+</mapper>

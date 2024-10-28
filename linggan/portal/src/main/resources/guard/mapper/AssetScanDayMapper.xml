@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.AssetScanDayMapper" >
+
+  <resultMap type="com.zans.portal.model.AssetScanDay" id="AssetScanDayMap">
+    <result property="id" column="id" jdbcType="INTEGER"/>
+    <result property="ipAddr" column="ip_addr" jdbcType="VARCHAR"/>
+    <result property="yyyymmdd" column="yyyymmdd" jdbcType="INTEGER"/>
+    <result property="offlineDuration" column="offline_duration" jdbcType="INTEGER"/>
+    <result property="afflineDuration" column="affline_duration" jdbcType="INTEGER"/>
+    <result property="aliveDuration" column="alive_duration" jdbcType="INTEGER"/>
+    <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+  </resultMap>
+
+  <!--查询单个-->
+  <select id="queryById" resultMap="AssetScanDayMap">
+    select id,
+           ip_addr,
+           yyyymmdd,
+           offline_duration,
+           affline_duration,
+           alive_duration,
+           create_time,
+           update_time
+    from asset_scan_day
+    where id = #{id}
+  </select>
+
+
+  <!--通过实体作为筛选条件查询-->
+  <select id="queryAll" resultMap="AssetScanDayMap">
+    select
+    id, ip_addr, yyyymmdd,  offline_duration, affline_duration, alive_duration, create_time,
+    update_time
+    from network_switcher_scan_day
+    <where>
+      <if test="id != null">
+        and id = #{id}
+      </if>
+      <if test="ipAddr != null and ipAddr != ''">
+        and ip_addr = #{ipAddr}
+      </if>
+      <if test="yyyymmdd != null">
+        and yyyymmdd = #{yyyymmdd}
+      </if>
+      <if test="offlineDuration != null">
+        and offline_duration = #{offlineDuration}
+      </if>
+      <if test="afflineDuration != null">
+        and affline_duration = #{afflineDuration}
+      </if>
+      <if test="aliveDuration != null">
+        and alive_duration = #{aliveDuration}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime}
+      </if>
+      <if test="updateTime != null">
+        and update_time = #{updateTime}
+      </if>
+    </where>
+  </select>
+
+  <select id="queryLast" resultType="com.zans.portal.model.AssetScanDay">
+    select
+      DISTINCT yyyymmdd
+    from asset_scan_day order by yyyymmdd desc limit 1
+  </select>
+
+  <select id="queryByIpAndDate" resultType="com.zans.portal.model.AssetScanDay">
+    select * from asset_scan_day where ip_addr=#{ipAddr} and yyyymmdd=#{yyyymmdd}
+  </select>
+
+  <!--新增所有列-->
+  <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+    insert into asset_scan_day(ip_addr, yyyymmdd,  offline_duration, affline_duration,
+                                          alive_duration, create_time, update_time)
+    values (#{ipAddr}, #{yyyymmdd}, #{offlineDuration}, #{afflineDuration}, #{aliveDuration},
+            #{createTime}, #{updateTime})
+  </insert>
+
+  <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+    insert into asset_scan_day(ip_addr, yyyymmdd,  offline_duration, affline_duration,
+    alive_duration, create_time, update_time)
+    values
+    <foreach collection="entities" item="entity" separator=",">
+      (#{entity.ipAddr}, #{entity.yyyymmdd}, #{entity.offlineDuration},
+      #{entity.afflineDuration}, #{entity.aliveDuration}, #{entity.createTime}, #{entity.updateTime})
+    </foreach>
+  </insert>
+
+  <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+    insert into asset_scan_day(ip_addr, yyyymmdd, offline_duration, affline_duration,
+    alive_duration)
+    values
+    <foreach collection="entities" item="entity" separator=",">
+      (#{entity.ipAddr}, #{entity.yyyymmdd},  #{entity.offlineDuration},
+      #{entity.afflineDuration}, #{entity.aliveDuration})
+    </foreach>
+    on duplicate key update
+    offline_duration = values(offline_duration) , affline_duration = values(affline_duration) , alive_duration =
+    values(alive_duration)
+  </insert>
+
+  <!--通过主键修改数据-->
+  <update id="update">
+    update asset_scan_day
+    <set>
+      <if test="ipAddr != null and ipAddr != ''">
+        ip_addr = #{ipAddr},
+      </if>
+      <if test="yyyymmdd != null">
+        yyyymmdd = #{yyyymmdd},
+      </if>
+      <if test="offlineDuration != null">
+        offline_duration = #{offlineDuration},
+      </if>
+      <if test="afflineDuration != null">
+        affline_duration = #{afflineDuration},
+      </if>
+      <if test="aliveDuration != null">
+        alive_duration = #{aliveDuration},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+  <!--通过主键删除-->
+  <delete id="deleteById">
+    delete
+    from asset_scan_day
+    where id = #{id}
+  </delete>
+</mapper>

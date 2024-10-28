@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.TraceOperateDao">
+
+    <resultMap type="com.zans.portal.model.TraceOperate" id="TraceOperateMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="traceId" column="trace_id" jdbcType="VARCHAR"/>
+        <result property="traceType" column="trace_type" jdbcType="INTEGER"/>
+        <result property="traceStartType" column="trace_start_type" jdbcType="VARCHAR"/>
+        <result property="traceEndType" column="trace_end_type" jdbcType="VARCHAR"/>
+        <result property="traceResult" column="trace_result" jdbcType="VARCHAR"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TraceOperateMap">
+        select id,
+               trace_id,
+               trace_type,
+               trace_start_type,
+               trace_end_type,
+               trace_result,
+               creator,
+               create_time,
+               update_time
+        from trace_operate
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="TraceOperateMap">
+        select
+        id, trace_id, trace_type, trace_start_type, trace_end_type, trace_result, creator,
+            DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%S') as create_time,
+           DATE_FORMAT(update_time, '%Y-%m-%d %H:%i:%S') as update_time
+        from trace_operate
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="traceId != null and traceId != ''">
+                and  trace_id  like concat('%',#{traceId},'%')
+            </if>
+            <if test="traceType != null">
+                and trace_type = #{traceType}
+            </if>
+            <if test="traceStartType != null and traceStartType != ''">
+                and trace_start_type = #{traceStartType}
+            </if>
+            <if test="traceEndType != null and traceEndType != ''">
+                and trace_end_type = #{traceEndType}
+            </if>
+            <if test="traceResult != null and traceResult != ''">
+                and trace_result = #{traceResult}
+            </if>
+            <if test="creator != null and creator != ''">
+                and creator  like concat('%',#{creator},'%')
+            </if>
+            <if test=" startDate != null and startDate != '' and endDate != null and endDate != null ">
+                AND `create_time` between #{startDate} and #{endDate}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into trace_operate(trace_id, trace_type, trace_start_type, trace_end_type,  creator)
+        values (#{traceId}, #{traceType}, #{traceStartType}, #{traceEndType},  #{creator})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into trace_operate(trace_id, trace_type, trace_start_type, trace_end_type, trace_result, creator,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.traceId}, #{entity.traceType}, #{entity.traceStartType}, #{entity.traceEndType},
+            #{entity.traceResult}, #{entity.creator}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into trace_operate(trace_id, trace_type, trace_start_type, trace_end_type, trace_result, creator,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.traceId}, #{entity.traceType}, #{entity.traceStartType}, #{entity.traceEndType},
+            #{entity.traceResult}, #{entity.creator}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        trace_id = values(trace_id) , trace_type = values(trace_type) , trace_start_type = values(trace_start_type) ,
+        trace_end_type = values(trace_end_type) , trace_result = values(trace_result) , creator = values(creator) ,
+        create_time = values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update trace_operate
+        <set>
+            <if test="traceType != null">
+                trace_type = #{traceType},
+            </if>
+            <if test="traceStartType != null and traceStartType != ''">
+                trace_start_type = #{traceStartType},
+            </if>
+            <if test="traceEndType != null and traceEndType != ''">
+                trace_end_type = #{traceEndType},
+            </if>
+            <if test="traceResult != null and traceResult != ''">
+                trace_result = #{traceResult},
+            </if>
+            <if test="creator != null and creator != ''">
+                creator = #{creator},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where trace_id = #{traceId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from trace_operate
+        where id = #{id}
+    </delete>
+
+</mapper>
+

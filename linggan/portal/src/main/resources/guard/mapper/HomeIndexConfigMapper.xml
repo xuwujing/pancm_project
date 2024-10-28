@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.HomeIndexConfigDao">
+
+    <resultMap type="com.zans.portal.model.HomeIndexConfig" id="HomeIndexConfigMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="dataList" column="data_list" jdbcType="VARCHAR"/>
+        <result property="uri" column="uri" jdbcType="VARCHAR"/>
+        <result property="enable" column="enable" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultType="com.zans.portal.vo.HomeIndexConfigVO">
+        select
+            title,
+            type,
+            class_name,
+            method_name,
+            query_sql,
+            uri,
+            template_text
+        from home_index_config
+        where enable =1 and  id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="HomeIndexConfigMap">
+        select
+        id, title, type, data_list, uri, enable, create_time, update_time
+        from home_index_config
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="title != null and title != ''">
+                and title = #{title}
+            </if>
+            <if test="type != null and type != ''">
+                and type = #{type}
+            </if>
+            <if test="dataList != null and dataList != ''">
+                and data_list = #{dataList}
+            </if>
+            <if test="uri != null and uri != ''">
+                and uri = #{uri}
+            </if>
+            <if test="enable != null">
+                and enable = #{enable}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into home_index_config(title, type, data_list, uri, enable, create_time, update_time)
+        values (#{title}, #{type}, #{dataList}, #{uri}, #{enable}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into home_index_config(title, type, data_list, uri, enable, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.title}, #{entity.type}, #{entity.dataList}, #{entity.uri}, #{entity.enable}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into home_index_config(title, type, data_list, uri, enable, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.title}, #{entity.type}, #{entity.dataList}, #{entity.uri}, #{entity.enable}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        title = values(title) , type = values(type) , data_list = values(data_list) , uri = values(uri) , enable =
+        values(enable) , create_time = values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update home_index_config
+        <set>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="type != null and type != ''">
+                type = #{type},
+            </if>
+            <if test="dataList != null and dataList != ''">
+                data_list = #{dataList},
+            </if>
+            <if test="uri != null and uri != ''">
+                uri = #{uri},
+            </if>
+            <if test="enable != null">
+                enable = #{enable},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from home_index_config
+        where id = #{id}
+    </delete>
+
+</mapper>
+

@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.AssetBranchMapper">
+    <resultMap id="BaseResultMap" type="com.zans.portal.model.AssetBranch">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="delete_status" property="deleteStatus" jdbcType="INTEGER"/>
+        <result column="creator_id" property="creatorId" jdbcType="INTEGER"/>
+        <result column="update_id" property="updateId" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <delete id="deleteHistoryStatistics">
+        DELETE
+        FROM asset_branch_statistics
+        WHERE id NOT IN
+              (SELECT asset_branch_statistics_id FROM asset_branch_asset_statistics GROUP BY asset_branch_statistics_id)
+          AND statistics_time <![CDATA[<]]> #{statisticsTime}
+    </delete>
+    <select id="findByName" resultType="java.lang.Integer">
+        select id from asset_branch where name=#{name} and delete_status=0
+        <if test="id != null">
+            and id != #{id}
+        </if>
+    </select>
+    <select id="statisticsAssetBranch" resultType="com.zans.portal.vo.asset.branch.req.AssetBranchStatisticsVO">
+        SELECT aba.id                                      assetBranchAssetId,
+               p.cur_mac                              mac,
+               e.enable_status                             enableStatus,
+               IFNULL(ah.alive) as                         alive,
+               ah.alive_last_time                          aliveLastTime,
+               ifnull(p.cur_device_type, e.device_type)    deviceType,
+               ifnull(p.cur_model_des, e.device_model_des) modelDes,
+               p.cur_brand                                 brandName,
+               e.point_name                                pointName,
+               e.ip_addr                                   ipAddr
+        FROM asset_branch_asset aba
+                 INNER JOIN asset_branch ab ON ab.id = aba.asset_branch_id
+                 INNER JOIN asset e ON aba.asset_id = e.id
+                 left join alive_heartbeat ah on ah.ip_addr = e.ip_addr
+                 left JOIN asset_profile p ON e.id = p.asset_id
+        WHERE aba.asset_branch_id = #{assetBranchId}
+          AND e.delete_status = 0
+          and aba.delete_status = 0
+          and ab.delete_status = 0
+    </select>
+    <select id="getIds" resultType="java.lang.Integer">
+        select id
+        from asset_branch
+        where ifnull(delete_status, 0) = 0
+    </select>
+    <select id="choiceDeviceList" resultType="com.zans.portal.vo.asset.branch.resp.ChoiceDeviceRespVO">
+        SELECT
+        p.cur_device_type deviceType,
+        c.type_name deviceTypeName,
+        t.ip_addr ipAddr,
+        e.mac,
+        e.pass,
+        t.point_name pointName,
+        p.company,
+        p.brand_name brandName,
+        p.cur_model_des curModelDes,
+        IFNULL(ah.alive,2) alive,
+        e.create_time
+        FROM
+        radius_endpoint e
+        LEFT JOIN radius_endpoint_profile p ON e.id = p.endpoint_id
+        LEFT JOIN alive_heartbeat ah on ah.mac = p.mac
+        LEFT JOIN asset t ON t.ip_addr = p.cur_ip_addr
+        LEFT JOIN device_type_guard c ON p.cur_device_type = c.type_id
+        WHERE
+        e.delete_status = 0 and c.enable_status=1
+        <if test="reqVO.passList !=null and reqVO.passList.size &gt; 0">
+            and e.pass not in
+            <foreach item="item" collection="reqVO.passList" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="reqVO.deviceType != null">
+            and p.cur_device_type = #{reqVO.deviceType}
+        </if>
+        <if test="reqVO.ipAddr != null and reqVO.ipAddr !=''">
+            and t.ip_addr like concat('%',#{reqVO.ipAddr},'%')
+        </if>
+        <if test="reqVO.mac != null and reqVO.mac != ''">
+            and p.mac like concat('%',#{reqVO.mac},'%')
+        </if>
+        <if test="reqVO.pointName != null and reqVO.pointName != ''">
+            and t.point_name like concat('%',#{reqVO.pointName},'%')
+        </if>
+    </select>
+
+    <!-- 2021-9-15 将资产的数据改为基线数据 -->
+    <select id="choiceDeviceAssetList" resultType="com.zans.portal.vo.asset.branch.resp.ChoiceDeviceRespVO">
+        SELECT
+        abe.ip_addr ipAddr,
+        abe.device_type deviceType,
+        abe.model_des curModelDes,
+        abe.maintain_company company,
+        abe.model_brand brandName,
+        abe.mac,
+        abe.point_name pointName,
+        ah.alive,
+        ap.asset_id,
+        abe.create_time
+        FROM
+        asset abe
+        LEFT JOIN alive_heartbeat ah on ah.ip_addr=abe.ip_addr and abe.mac = ah.mac
+        LEFT JOIN asset_profile ap on ap.ip_addr=abe.ip_addr
+        WHERE 1=1
+        <if test="reqVO.existAssetIds !=null and reqVO.existAssetIds.size &gt; 0">
+            and abe.ip_addr not in
+            <foreach item="item" collection="reqVO.existAssetIds" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="reqVO.deviceType != null">
+            and abe.device_type = #{reqVO.deviceType}
+        </if>
+        <if test="reqVO.ipAddr != null and reqVO.ipAddr !=''">
+            and abe.ip_addr like concat('%',#{reqVO.ipAddr},'%')
+        </if>
+        <if test="reqVO.mac != null and reqVO.mac != ''">
+            and abe.mac like concat('%',#{reqVO.mac},'%')
+        </if>
+        <if test="reqVO.pointName != null and reqVO.pointName != ''">
+            and abe.point_name like concat('%',#{reqVO.pointName},'%')
+        </if>
+    </select>
+
+    <select id="runningList" resultType="com.zans.portal.vo.asset.branch.resp.RunningListRespVO">
+        SELECT ab.`name`           assetBranchName,
+               ab.id               assetBranchId,
+               ab.delete_status    deleteStatus,
+               abs.statistics_time statisticsTime,
+               abs.id              assetBranchStatisticsId,
+               abs.branch_total    branchTotal,
+               abs.online_number   onlineNumber,
+               abs.offline_number  offlineNumber,
+               abs.disable_number  disableNumber,
+               abs.online_rate     onlineRate,
+               ab.creator_id       creatorId,
+               ab.create_time      createTime,
+               u.nick_name         createName
+        FROM asset_branch_statistics abs
+                 INNER JOIN asset_branch ab ON ab.id = abs.asset_branch_id
+                 LEFT JOIN sys_user u ON u.id = ab.creator_id
+        WHERE abs.statistics_time = #{reqVO.statisticsTime}
+    </select>
+
+    <select id="runningListExport" resultType="com.zans.portal.vo.asset.branch.resp.ExcelAssetRunStatisticsVO">
+        SELECT ab.`name`          assetBranchName,
+               ab.id              assetBranchId,
+               abs.id             assetBranchStatisticsId,
+               abs.branch_total   branchTotal,
+               abs.online_number  onlineNumber,
+               abs.offline_number offlineNumber,
+               abs.disable_number disableNumber,
+               abs.online_rate    onlineRate,
+               ab.creator_id      creatorId,
+               ab.create_time     createTime,
+               u.nick_name        createName
+        FROM asset_branch_statistics abs
+                 INNER JOIN asset_branch ab ON ab.id = abs.asset_branch_id
+                 LEFT JOIN sys_user u ON u.id = ab.creator_id
+        WHERE abs.statistics_time = #{reqVO.statisticsTime}
+    </select>
+
+
+    <select id="runningDetailList" resultType="com.zans.portal.vo.asset.branch.req.AssetBranchStatisticsVO">
+        <include refid="runningDetailListSql"/>
+
+        <if test="reqVO.alive != null">
+            and abes.alive = #{reqVO.alive}
+        </if>
+        <if test="reqVO.pointName != null and reqVO.pointName !='' ">
+            and abes.point_name like concat('%',#{reqVO.pointName},'%')
+        </if>
+        <if test="reqVO.deviceType != null">
+            and abes.device_type = #{reqVO.deviceType}
+        </if>
+        <if test="reqVO.ipAddr != null and reqVO.ipAddr !=''">
+            and abes.ip_addr like concat('%',#{reqVO.ipAddr},'%')
+        </if>
+        <if test="reqVO.enableStatus != null">
+            and abes.enable_status = #{reqVO.enableStatus}
+        </if>
+
+    </select>
+
+    <sql id="runningDetailListSql">
+        SELECT ab.name                         assetBranchName,
+               abes.asset_branch_statistics_id assetBranchStatisticsId,
+               abes.mac,
+               abes.pass,
+               abes.point_name                 pointName,
+               abes.device_type                deviceType,
+               abes.brand_name                 brandName,
+               abes.model_des                  modelDes,
+               abes.ip_addr                    ipAddr,
+               abes.enable_status              enableStatus,
+               abes.alive,
+               abes.alive_last_time            aliveLastTime,
+               d.type_name                     deviceTypeName
+        FROM asset_branch_endpoint_statistics abes
+                 inner join asset_branch_statistics abs on abes.asset_branch_statistics_id = abs.id
+                 inner join asset_branch ab on abs.asset_branch_id = ab.id
+                 LEFT JOIN device_type_guard d ON abes.device_type = d.type_id
+        WHERE abes.asset_branch_statistics_id = #{reqVO.assetBranchStatisticsId} and d.enable_status=1
+    </sql>
+    <select id="runningDetailListForExcel"
+            resultType="com.zans.portal.vo.asset.branch.req.ExcelAssetBranchStatisticsVO">
+        <include refid="runningDetailListSql"/>
+
+        <if test="reqVO.alive != null">
+            and abes.alive = #{reqVO.alive}
+        </if>
+        <if test="reqVO.pointName != null and reqVO.pointName !='' ">
+            and abes.point_name like concat('%',#{reqVO.pointName},'%')
+        </if>
+        <if test="reqVO.deviceType != null">
+            and abes.device_type = #{reqVO.deviceType}
+        </if>
+        <if test="reqVO.ipAddr != null and reqVO.ipAddr !=''">
+            and abes.ip_addr like concat('%',#{reqVO.ipAddr},'%')
+        </if>
+        <if test="reqVO.enableStatus != null">
+            and abes.enable_status = #{reqVO.enableStatus}
+        </if>
+    </select>
+
+
+    <select id="assetBranchEndpointList"
+            resultType="com.zans.portal.vo.asset.branch.req.AssetBranchStatisticsVO">
+
+        <include refid="assetBranchEndpointListSql"/>
+
+        <if test="reqVO.assetBranchId != null">
+            and abe.asset_branch_id = #{reqVO.assetBranchId}
+        </if>
+        <if test="reqVO.alive != null">
+            and ah.alive = #{reqVO.alive}
+        </if>
+
+        <if test="reqVO.pointName != null and reqVO.pointName !='' ">
+            and t.point_name like concat('%',#{reqVO.pointName},'%')
+        </if>
+        <if test="reqVO.deviceType != null">
+            and p.cur_device_type = #{reqVO.deviceType}
+        </if>
+        <if test="reqVO.ipAddr != null and reqVO.ipAddr !=''">
+            and p.cur_ip_addr like concat('%',#{reqVO.ipAddr},'%')
+        </if>
+        <if test="reqVO.enableStatus != null">
+            and e.enable_status = #{reqVO.enableStatus}
+        </if>
+        ORDER BY ah.alive_last_time desc
+    </select>
+
+    <sql id="assetBranchEndpointListSql">
+        SELECT abe.id                                   assetBranchEndpointId,
+               ab.NAME                                  assetBranchName,
+               abe.mac,
+               abe.pass,
+               e.enable_status                          enableStatus,
+               e.id                                     endpointId,
+               IFNULL(ah.alive,2),
+               ah.alive_last_time                        aliveLastTime,
+               t.point_name                             pointName,
+               ifnull(p.cur_device_type, p.device_type) deviceType,
+               p.brand_name                             brandName,
+               p.company,
+               ifnull(p.cur_model_des, p.model_des)     modelDes,
+               ifnull(p.cur_ip_addr, p.ip_addr)         ipAddr,
+               d.type_name                              deviceTypeName
+        FROM asset_branch_endpoint abe
+                 INNER JOIN asset_branch ab ON ab.id = abe.asset_branch_id
+                 INNER JOIN radius_endpoint e ON abe.mac = e.mac
+                 INNER JOIN radius_endpoint_profile p ON abe.mac = p.mac
+                 LEFT JOIN alive_heartbeat ah on ah.mac = p.mac
+                 LEFT JOIN asset t ON t.ip_addr = p.cur_ip_addr
+                 LEFT JOIN device_type_guard d ON p.cur_device_type = d.type_id
+        WHERE e.delete_status = 0
+          and abe.delete_status = 0
+          and ab.delete_status = 0
+        and d.enable_status=1
+    </sql>
+    <select id="assetBranchEndpointListForExcel"
+            resultType="com.zans.portal.vo.asset.branch.req.ExcelAssetBranchStatisticsVO">
+
+        <include refid="assetBranchEndpointListSql"/>
+
+        <if test="reqVO.assetBranchId != null">
+            and abe.asset_branch_id = #{reqVO.assetBranchId}
+        </if>
+        <if test="reqVO.alive != null">
+            and ah.alive = #{reqVO.alive}
+        </if>
+        <if test="reqVO.pointName != null and reqVO.pointName !='' ">
+            and t.point_name like concat('%',#{reqVO.pointName},'%')
+        </if>
+        <if test="reqVO.deviceType != null">
+            and p.cur_device_type = #{reqVO.deviceType}
+        </if>
+        <if test="reqVO.ipAddr != null and reqVO.ipAddr !=''">
+            and p.cur_ip_addr like concat('%',#{reqVO.ipAddr},'%')
+        </if>
+        <if test="reqVO.enableStatus != null">
+            and e.enable_status = #{reqVO.enableStatus}
+        </if>
+        ORDER BY p.alive_last_time desc
+    </select>
+
+    <select id="findToSelect" resultType="com.zans.base.vo.SelectVO">
+        select id as item_key, name as item_value from asset_branch
+        where delete_status=0
+        <if test="name !=null and name !=''">
+            and name like concat('%',#{name},'%')
+        </if>
+        order by seq asc
+    </select>
+    <select id="timeList" resultType="java.lang.String">
+        SELECT DATE_FORMAT(statistics_time, '%Y-%m-%d %H:%i:%s') AS statisticsTime
+        FROM asset_branch_statistics
+        GROUP BY statistics_time
+        ORDER BY statistics_time DESC
+    </select>
+    <select id="getAll" resultType="com.zans.portal.model.AssetBranch">
+        SELECT id,
+               name,
+               parent_id,
+               level,
+               delete_status deleteStatus,
+               creator_id    creatorId,
+               update_id     updateId,
+               create_time   createTime,
+               update_time   updateTime,
+               seq
+        FROM asset_branch
+        WHERE ifnull(delete_status, 0) = 0
+        <if test="parentId !=null and parentId !=''">
+            and parent_id = #{parentId}
+        </if>
+        ORDER BY parent_id,seq asc
+    </select>
+    <select id="getNextSeq" resultType="java.lang.Integer">
+        SELECT ifnull(max(seq), 0) + 1
+        FROM asset_branch
+        where    parent_id = #{parentId}
+    </select>
+    <select id="countEndpointStatistics" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM asset_branch_asset_statistics
+    </select>
+
+    <select id="getExistAssetIds" resultType="java.lang.Integer">
+        SELECT id
+        FROM asset_branch_asset
+        WHERE asset_branch_id = #{assetBranchId}
+          and delete_status = 0
+    </select>
+
+    <select id="getExistAssetIps" resultType="java.lang.String">
+        SELECT ip_addr
+        FROM asset_branch_asset
+        WHERE asset_branch_id = #{assetBranchId}
+          and delete_status = 0
+    </select>
+
+    <select id="findToTreeSelect" resultType="com.zans.portal.model.AssetBranch">
+        select * from asset_branch
+        where 1 = 1  and delete_status = 0
+        <if test="parentId !=null">
+            and parent_id = #{parentId}
+        </if>
+        order by parent_id,name,seq;
+    </select>
+
+    <select id="findByParentId" resultType="com.zans.portal.model.AssetBranch">
+        select * from asset_branch
+        where parent_id = #{parentId}  and delete_status = 0
+        order by parent_id,seq
+    </select>
+    <select id="findById" resultType="com.zans.portal.model.AssetBranch">
+        select * from asset_branch
+        where id = #{id}
+    </select>
+    <select id="getAssetBranchByAreaId" resultType="com.zans.portal.model.AssetBranch">
+        SELECT id,
+        name,
+        parent_id,
+        level,
+        delete_status deleteStatus,
+        creator_id    creatorId,
+        update_id     updateId,
+        create_time   createTime,
+        update_time   updateTime,
+        seq
+        FROM asset_branch
+        WHERE ifnull(delete_status, 0) = 0
+        and baseline_area_id=#{baselineAreaId}
+    </select>
+
+</mapper>

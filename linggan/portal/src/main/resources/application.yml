@@ -1,0 +1,33 @@
+server:
+  servlet:
+    context-path: /api/portal
+    session:
+      timeout: PT30M
+  max-http-post-size: 1048576000
+  max-http-header-size: 1048576000
+
+api:
+  area:
+    # 所属城市编号
+    city: 27
+
+spring:
+  http:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
+  profiles:
+    active: dev
+  application:
+    name: zans-portal
+  cache:
+    type: caffeine
+    caffeine:
+      spec: initialCapacity=10,maximumSize=200,expireAfterWrite=30s
+  devtools:
+    restart:
+      enabled: true

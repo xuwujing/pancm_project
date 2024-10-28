@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.NetworkTopologyMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.portal.model.NetworkTopology" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="source_ip" property="sourceIp" jdbcType="VARCHAR" />
+    <result column="source_interface" property="sourceInterface" jdbcType="VARCHAR" />
+    <result column="dest_ip" property="destIp" jdbcType="VARCHAR" />
+    <result column="dest_interface" property="destInterface" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+    <sql id="BaseColumn">
+      id,
+      source_ip sourceIp,
+      source_interface sourceInterface,
+      dest_ip destIp,
+      dest_interface destInterface
+    </sql>
+    <update id="updateSeq">
+        update network_topology set visible=#{visible}
+        where  source_ip =#{sourceIp}
+        <if test="destIps !=null and destIps.size &gt;0">
+            and  dest_ip in
+            <foreach item="item" collection="destIps" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <select id="getListCondition" resultType="com.zans.portal.model.NetworkTopology">
+       select
+        id,
+        source_ip sourceIp,
+        source_interface sourceInterface,
+        dest_ip destIp,
+        dest_interface destInterface,
+        visible visible
+      from network_topology
+      <where>
+        <if test="ipAddr !=null and ipAddr !=''">
+          source_ip=#{ipAddr}
+        </if>
+        <if test="visible !=null and visible !=''">
+          and visible=#{visible}
+        </if>
+        <if test="sourceIps !=null and sourceIps.size &gt;0">
+          and  source_ip in
+          <foreach item="item" collection="sourceIps" index="index" open="(" separator="," close=")">
+            #{item}
+          </foreach>
+        </if>
+        <if test="rootIps !=null and rootIps.size &gt;0">
+         and  dest_ip not in
+          <foreach item="item" collection="rootIps" index="index" open="(" separator="," close=")">
+            #{item}
+          </foreach>
+        </if>
+
+        <if test="sourceTopologyList !=null and sourceTopologyList.size &gt;0">
+            and  source_interface not in
+            <foreach item="item" collection="sourceTopologyList" index="index" open="(" separator="," close=")">
+                #{item.destInterface}
+            </foreach>
+        </if>
+        <if test="destIp !=null and destIp !=''">
+            and dest_ip=#{destIp}
+        </if>
+          <if test="ipAddrForAB !=null and ipAddrForAB !=''">
+              and dest_ip like concat(#{ipAddrForAB},'%')
+          </if>
+            and source_interface_alive=1
+      </where>
+
+
+    </select>
+  <select id="findViewByIdAndIp" resultType="com.zans.portal.vo.network.topology.resp.TopologyRespVO">
+      SELECT
+        source_ip,
+        ss.id  swId,
+        source_interface,
+        dest_ip,
+        dest_interface,
+        ss.name,
+        ss.sys_name sysName,
+        ss.sys_desc sysDesc,
+        ss.sw_host swHost,
+
+        ss.brand brandId,
+        b.brand_name brandName
+    FROM
+        sys_switcher ss
+        LEFT JOIN device_brand b ON ss.brand = b.brand_id
+        LEFT JOIN network_topology nt ON ss.sw_host = nt.dest_ip
+    WHERE
+        sw_host = #{ipAddr}
+        AND nt.id = #{id}  and nt.source_interface_alive=1 limit 1
+  </select>
+    <select id="findViewByIp" resultType="com.zans.portal.vo.network.topology.resp.TopologyRespVO">
+        SELECT
+            ss.name,
+            ss.id  swId,
+            ss.sys_name sysName,
+            ss.sys_desc sysDesc,
+            ss.sw_host swHost,
+            ss.brand brandId,
+            b.brand_name brandName,
+            ah.alive  alive,
+            case when ah.alive =2 then '离线' else '在线' end  as aliveName,
+            sb.acceptance acceptance,
+            sb.point_name pointName,
+            case when sb.acceptance=0 then '未验收' else '已验收' end as acceptanceName,
+			ss.version version,
+			tmp.sys_up_time upTime,
+			ss.scan_mac_alive,ss.interface_phy_down as scanInterfaceCount ,
+            ss.topo_type topoType,
+			ss.interface_phy_down_used as scanMacAll
+        FROM
+            sys_switcher ss
+            LEFT JOIN device_brand b ON ss.brand = b.brand_id
+            left join sys_switcher_branch sb on ss.sw_host = sb.ip_addr
+			left join asset ast on ast.ip_addr=ss.sw_host
+            left join asset_profile ap on ap.ip_addr = ast.ip_addr
+            left join alive_heartbeat ah on ah.ip_addr = ast.ip_addr and ah.mac = ap.cur_mac
+			left join (SELECT sw_ip,sys_up_time FROM network_switcher_scan WHERE sw_ip=#{ipAddr} ORDER BY id desc limit 1) tmp  on tmp.sw_ip =ss.sw_host
+        WHERE
+            ss.sw_host = #{ipAddr}  limit 1
+    </select>
+
+    <select id="listNetworkSwitcherMac"
+            resultType="com.zans.portal.vo.network.topology.resp.NetworkSwitcherMacRespVO">
+        SELECT
+            ap.asset_id as id,
+            ap.ip_addr ipAddr,
+            nsm.interface_detail interfaceDetail,
+            nsm.mac,
+            nsm.mac as mac_addr,
+            nsm.mac as macAddr,
+            case when IFNULL(dp.point_name,'')!='' then 	dp.point_name else dp.point_name end as  pointName,
+            tdt.type_name deviceTypeName
+        FROM
+            network_switcher_mac nsm
+                inner join asset_profile ap on nsm.mac = ap.cur_mac
+                left join asset a on ap.ip_addr=a.ip_addr
+                left join device_type_guard tdt on tdt.type_id=ap.cur_device_type
+                left join device_point dp on a.point_code = dp.point_code
+
+        WHERE
+            nsm.sw_ip = #{ipAddr} and nsm.mac_alive=1
+          and tdt.enable_status=1
+        order by pointName desc
+    </select>
+    <select id="listTopologyExcept" resultType="com.zans.portal.vo.network.topology.resp.TopologyExceptRespVO">
+        SELECT
+            nte.source_ip sourceIp,
+            nte.source_interface sourceInterface,
+            nte.dest_mac destMac,
+            nte.dest_interface destInterface,
+            c.`item_value` AS sourceTypeDesc
+        FROM
+            network_topology_except nte
+            LEFT JOIN sys_switcher s ON nte.source_ip = s.sw_host
+            LEFT JOIN sys_constant_item c ON s.`sw_type` = c.`item_key` AND c.`dict_key`='sw_type'
+        WHERE  nte.source_ip= #{ipAddr} and nte.remark!='macAddress(3)'
+    </select>
+    <select id="switchList" resultType="com.zans.portal.vo.switcher.SwitchBaseInfoVO">
+        SELECT
+            name as label,sw_host as id
+        FROM
+            sys_switcher
+        WHERE
+            arp_enable =1
+    </select>
+    <select id="getNextLevelIp" resultType="java.lang.String">
+        SELECT
+            dest_ip
+        FROM
+            network_topology
+        WHERE
+            source_ip = #{ip}
+    </select>
+    <select id="switchRelation" resultType="com.zans.portal.vo.switcher.SwitchTopologyVO">
+        SELECT
+            t.source_ip as `from`,
+            t.dest_ip as `to`
+        FROM
+            `network_topology` t
+
+        WHERE
+            source_ip IN ( SELECT sw_host FROM sys_switcher WHERE arp_enable = 1 )
+          AND dest_ip IN ( SELECT sw_host FROM sys_switcher WHERE arp_enable = 1 )
+          AND source_ip != dest_ip
+    </select>
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.NetworkSwitcherMacMapper" >
+
+    <select id="findSwitcherMacList" resultType="com.zans.portal.vo.switcher.SwitcherMacRespVO">
+        SELECT m.id,m.`mac`,m.`interface_index`,m.`interface_detail`,m.company,m.arp_id,m.ip_addr, mac_alive alive,
+        d.type_name as device_type_name,t.model_des,t.point_name
+        FROM network_switcher_mac m
+        left join t_arp t on m.arp_id = t.id
+        left join device_type_guard d on t.device_type = d.type_id
+        where 1=1 and d.enable_status=1
+        <if test=" reqVo.swId != null ">
+            and m.sw_id = #{reqVo.swId}
+        </if>
+        <if test=" reqVo.interfaceIndex != null ">
+            and m.interface_index = #{reqVo.interfaceIndex}
+        </if>
+        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+            order by ${reqVo.orderBy}
+        </if>
+    </select>
+
+</mapper>

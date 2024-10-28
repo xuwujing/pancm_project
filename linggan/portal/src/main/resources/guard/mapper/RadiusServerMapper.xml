@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.RadiusServerMapper">
+
+    <select id="getRadiusServerPage" resultType="com.zans.portal.vo.radius.ServerRespVO">
+        SELECT * FROM radius_server r where 1=1
+        <if test="reqVo.serverName != null and reqVo.serverName != '' ">
+            and r.server_name like CONCAT('%',#{reqVo.serverName},'%')
+        </if>
+        <if test="reqVo.serviceHost != null and reqVo.serviceHost != '' ">
+            and r.service_host like CONCAT('%',#{reqVo.serviceHost},'%')
+        </if>
+        <if test="reqVo.sqlHost != null and reqVo.sqlHost != '' ">
+            and r.sql_host like CONCAT('%',#{reqVo.sqlHost},'%')
+        </if>
+        <if test="reqVo.enable != null ">
+            and r.enable = #{reqVo.enable}
+        </if>
+        <if test="reqVo.alive != null ">
+            and r.alive = #{reqVo.alive}
+        </if>
+        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+            order by ${reqVo.orderBy}
+        </if>
+    </select>
+
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.NetworkArpChangeMapper">
+
+    <select id="findNetworkArpChangeOldByIp" resultType="com.zans.portal.vo.network.NetworkArpChangeRespVO">
+         SELECT nac.`arp_mac` AS oldMacAddr,p.`cur_open_port` AS oldOpenPort,p.`cur_model_des` AS oldModelDes,
+        t.`type_name` AS oldDeviceType,p.cur_company AS oldCompany
+     FROM network_arp_change nac LEFT JOIN asset_profile p ON nac.`cur_arp_ip` = p.`ip_addr`
+     LEFT JOIN device_type_guard t ON t.`type_id` = p.`cur_device_type`
+     WHERE nac.cur_arp_ip = #{ip} and t.enable_status=1   ORDER BY nac.update_time ASC  LIMIT 1;
+    </select>
+
+    <select id="findNetworkArpChangeCurByIp" resultType="com.zans.portal.vo.network.NetworkArpChangeRespVO">
+        SELECT nac.`arp_mac` AS macAddr,p.`cur_open_port` AS openPort,p.`cur_model_des` AS modelDes,
+        t.`type_name` AS deviceType,p.cur_company AS company
+        FROM network_arp_change nac LEFT JOIN asset_profile p ON nac.`cur_arp_ip` = p.`ip_addr`
+        LEFT JOIN device_type_guard t ON t.`type_id` = p.`cur_device_type`
+        WHERE cur_arp_ip = (SELECT cur_arp_ip  FROM network_arp_change WHERE cur_arp_ip =#{ip}
+            and t.enable_status=1
+        GROUP BY cur_arp_ip HAVING COUNT(DISTINCT(arp_mac)) >1)
+        ORDER BY nac.update_time DESC  LIMIT 1;
+    </select>
+
+    <select id="findNetworkArpChangeByIp" resultType="com.zans.portal.vo.network.NetworkArpChangeRespVO">
+       SELECT nac.`arp_mac` AS macAddr,p.`cur_open_port` AS openPort,p.`cur_model_des` AS modelDes,
+        t.`type_name` AS deviceType,p.cur_company AS company ,p.`update_time` AS updateTime
+        FROM network_arp_change nac LEFT JOIN asset_profile p ON nac.`arp_mac` = p.`cur_mac`
+        LEFT JOIN device_type_guard t ON t.`type_id` = p.`cur_device_type`
+        WHERE
+         cur_arp_ip = (SELECT cur_arp_ip  FROM network_arp_change WHERE cur_arp_ip =#{ip}
+               and t.enable_status=1
+        GROUP BY cur_arp_ip HAVING COUNT(DISTINCT(arp_mac)) >1)
+        ORDER BY p.`update_time` DESC
+    </select>
+
+
+</mapper>

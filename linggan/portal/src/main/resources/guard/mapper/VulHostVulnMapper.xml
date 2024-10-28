@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.VulHostVulnDao">
+
+    <resultMap type="com.zans.portal.model.VulHostVuln" id="VulHostVulnMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="port" column="port" jdbcType="VARCHAR"/>
+        <result property="vulType" column="vul_type" jdbcType="VARCHAR"/>
+        <result property="vulLevel" column="vul_level" jdbcType="INTEGER"/>
+        <result property="vulName" column="vul_name" jdbcType="VARCHAR"/>
+        <result property="vulObject" column="vul_object" jdbcType="VARCHAR"/>
+        <result property="vulMessage" column="vul_message" jdbcType="VARCHAR"/>
+        <result property="vulSolution" column="vul_solution" jdbcType="VARCHAR"/>
+        <result property="ipAddr" column="ip_addr" jdbcType="VARCHAR"/>
+        <result property="cve" column="cve" jdbcType="VARCHAR"/>
+        <result property="cnnvd" column="cnnvd" jdbcType="VARCHAR"/>
+        <result property="cnvd" column="cnvd" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="VulHostVulnMap">
+        select id,
+               ip_addr,
+               port,
+               vul_type,
+               vul_level,
+               vul_name,
+               vul_object,
+               vul_message,
+               vul_solution,
+               cve,
+               cnnvd,
+               cnvd,
+               create_time
+        from vul_host_vuln
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="VulHostVulnMap">
+        select
+        vhv.id, vhv.port, vul_type, vul_level, vul_name, vul_object, vul_message, vul_solution, cve, cnnvd,
+        cnvd,vh.ip_addr,
+        DATE_FORMAT(vhv.`create_time`,'%Y-%m-%d %H:%i:%S') as  create_time
+        from vul_host_vuln vhv
+        left join  vul_host vh on vhv.ip_addr = vh.ip_addr
+        <where>
+            <if test="id != null">
+                and vhv.id = #{id}
+            </if>
+
+            <if test="port != null and port != ''">
+                and vhv.port = #{port}
+            </if>
+            <if test="vulType != null and vulType != ''">
+                and vul_type = #{vulType}
+            </if>
+            <if test="vulLevel != null">
+                and vul_level = #{vulLevel}
+            </if>
+            <if test="vulName != null and vulName != ''">
+                and vul_name = #{vulName}
+            </if>
+            <if test="vulObject != null and vulObject != ''">
+                and vul_object = #{vulObject}
+            </if>
+            <if test="vulMessage != null and vulMessage != ''">
+                and vul_message = #{vulMessage}
+            </if>
+            <if test="vulSolution != null and vulSolution != ''">
+                and vul_solution = #{vulSolution}
+            </if>
+            <if test="cve != null and cve != ''">
+                and cve = #{cve}
+            </if>
+            <if test="cnnvd != null and cnnvd != ''">
+                and cnnvd = #{cnnvd}
+            </if>
+            <if test="cnvd != null and cnvd != ''">
+                and cnvd = #{cnvd}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and vhv.create_time = #{createTime}
+            </if>
+            <if test="ipAddr != null and ipAddr != ''">
+                and vh.ip_addr = #{ipAddr}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into vul_host_vuln(ip_addr, port, vul_type, vul_level, vul_name, vul_object, vul_message,
+                                  vul_solution, cve, cnnvd, cnvd)
+        values (#{ipAddr }, #{port}, #{vulType}, #{vulLevel}, #{vulName}, #{vulObject}, #{vulMessage},
+                #{vulSolution}, #{cve}, #{cnnvd}, #{cnvd})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into vul_host_vuln(ip_addr, port, vul_type, vul_level, vul_name, vul_object, vul_message,
+        vul_solution, cve, cnnvd, cnvd, create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ipAddr }, #{entity.port}, #{entity.vulType}, #{entity.vulLevel}, #{entity.vulName},
+            #{entity.vulObject}, #{entity.vulMessage}, #{entity.vulSolution}, #{entity.cve}, #{entity.cnnvd},
+            #{entity.cnvd}, #{entity.createTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into vul_host_vuln(ip_addr, port, vul_type, vul_level, vul_name, vul_object, vul_message,
+        vul_solution, cve, cnnvd, cnvd, create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ipAddr }, #{entity.port}, #{entity.vulType}, #{entity.vulLevel}, #{entity.vulName},
+            #{entity.vulObject}, #{entity.vulMessage}, #{entity.vulSolution}, #{entity.cve}, #{entity.cnnvd},
+            #{entity.cnvd}, #{entity.createTime})
+        </foreach>
+        on duplicate key update
+        ip_addr = values(ip_addr) , port = values(port) , vul_type = values(vul_type) , vul_level =
+        values(vul_level) , vul_name = values(vul_name) , vul_object = values(vul_object) , vul_message =
+        values(vul_message) , vul_solution = values(vul_solution) , cve = values(cve) , cnnvd = values(cnnvd) , cnvd =
+        values(cnvd) , create_time = values(create_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update vul_host_vuln
+        <set>
+            <if test="ipAddr != null and ipAddr !=''">
+                ip_addr = #{ipAddr },
+            </if>
+            <if test="port != null and port != ''">
+                port = #{port},
+            </if>
+            <if test="vulType != null and vulType != ''">
+                vul_type = #{vulType},
+            </if>
+            <if test="vulLevel != null">
+                vul_level = #{vulLevel},
+            </if>
+            <if test="vulName != null and vulName != ''">
+                vul_name = #{vulName},
+            </if>
+            <if test="vulObject != null and vulObject != ''">
+                vul_object = #{vulObject},
+            </if>
+            <if test="vulMessage != null and vulMessage != ''">
+                vul_message = #{vulMessage},
+            </if>
+            <if test="vulSolution != null and vulSolution != ''">
+                vul_solution = #{vulSolution},
+            </if>
+            <if test="cve != null and cve != ''">
+                cve = #{cve},
+            </if>
+            <if test="cnnvd != null and cnnvd != ''">
+                cnnvd = #{cnnvd},
+            </if>
+            <if test="cnvd != null and cnvd != ''">
+                cnvd = #{cnvd},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from vul_host_vuln
+        where id = #{id}
+    </delete>
+    <delete id="deleteByIpAddr">
+        delete
+        from vul_host_vuln
+        where ip_addr = #{hostIp}
+    </delete>
+
+</mapper>
+

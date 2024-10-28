@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.portal.dao.AssetBranchStatisticsMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.portal.model.AssetBranchStatistics" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="asset_branch_id" property="assetBranchId" jdbcType="INTEGER" />
+    <result column="branch_total" property="branchTotal" jdbcType="INTEGER" />
+    <result column="online_number" property="onlineNumber" jdbcType="INTEGER" />
+    <result column="offline_number" property="offlineNumber" jdbcType="INTEGER" />
+    <result column="disable_number" property="disableNumber" jdbcType="INTEGER" />
+    <result column="statistics_time" property="statisticsTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+    <select id="getNextId" resultType="java.lang.Integer">
+      SELECT ifnull(max(id),0)+1 FROM asset_branch_statistics
+    </select>
+</mapper>

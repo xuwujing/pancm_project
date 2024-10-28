@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.portal.dao.AssetLocalTrackDao">
+
+    <resultMap type="com.zans.portal.model.AssetLocalTrack" id="AssetLocalTrackMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="lineId" column="line_id" jdbcType="VARCHAR"/>
+        <result property="groupId" column="group_id" jdbcType="VARCHAR"/>
+        <result property="groupName" column="group_name" jdbcType="VARCHAR"/>
+        <result property="ipAddr" column="ip_addr" jdbcType="VARCHAR"/>
+        <result property="longitude" column="longitude" jdbcType="NUMERIC"/>
+        <result property="latitude" column="latitude" jdbcType="NUMERIC"/>
+        <result property="pointName" column="point_name" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AssetLocalTrackMap">
+        select id,
+               line_id,
+               group_id,
+               group_name,
+               ip_addr,
+               longitude,
+               latitude,
+               point_name,
+               create_time,
+               update_time
+        from asset_local_track
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="AssetLocalTrackMap">
+        select
+        id, line_id, group_id, group_name, ip_addr, longitude, latitude, point_name, create_time, update_time
+        from asset_local_track
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="lineId != null and lineId != ''">
+                and line_id = #{lineId}
+            </if>
+            <if test="groupId != null and groupId != ''">
+                and group_id = #{groupId}
+            </if>
+            <if test="groupName != null and groupName != ''">
+                and group_name = #{groupName}
+            </if>
+            <if test="ipAddr != null and ipAddr != ''">
+                and ip_addr = #{ipAddr}
+            </if>
+            <if test="longitude != null">
+                and longitude = #{longitude}
+            </if>
+            <if test="latitude != null">
+                and latitude = #{latitude}
+            </if>
+            <if test="pointName != null and pointName != ''">
+                and point_name = #{pointName}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="getGroupId" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT COUNT(1) AS total,
+               SUM(CASE WHEN  ah.alive = 1 THEN 1 ELSE 0 END) AS onlineTotal,
+               SUM(CASE WHEN  ap.`enable_status` = 0 THEN 1 ELSE 0 END) AS stopTotal,
+               ROUND(SUM(CASE WHEN  ah.alive = 1 THEN 1 ELSE 0 END)/COUNT(1) *100,2) AS onlineRate
+        FROM asset_local_track_subset alts
+                 LEFT JOIN asset_profile ap ON alts.ip_addr=ap.ip_addr
+                 LEFT JOIN alive_heartbeat ah ON alts.ip_addr=ah.ip_addr
+        WHERE alts.group_id = 1;
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into asset_local_track(line_id, group_id, group_name, ip_addr, longitude, latitude, point_name,
+                                      create_time, update_time)
+        values (#{lineId}, #{groupId}, #{groupName}, #{ipAddr}, #{longitude}, #{latitude}, #{pointName}, #{createTime},
+                #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asset_local_track(line_id, group_id, group_name, ip_addr, longitude, latitude, point_name,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.lineId}, #{entity.groupId}, #{entity.groupName}, #{entity.ipAddr}, #{entity.longitude},
+            #{entity.latitude}, #{entity.pointName}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asset_local_track(line_id, group_id, group_name, ip_addr, longitude, latitude, point_name,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.lineId}, #{entity.groupId}, #{entity.groupName}, #{entity.ipAddr}, #{entity.longitude},
+            #{entity.latitude}, #{entity.pointName}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        line_id = values(line_id) , group_id = values(group_id) , group_name = values(group_name) , ip_addr =
+        values(ip_addr) , longitude = values(longitude) , latitude = values(latitude) , point_name = values(point_name)
+        , create_time = values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update asset_local_track
+        <set>
+            <if test="lineId != null and lineId != ''">
+                line_id = #{lineId},
+            </if>
+            <if test="groupId != null and groupId != ''">
+                group_id = #{groupId},
+            </if>
+            <if test="groupName != null and groupName != ''">
+                group_name = #{groupName},
+            </if>
+            <if test="ipAddr != null and ipAddr != ''">
+                ip_addr = #{ipAddr},
+            </if>
+            <if test="longitude != null">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude != null">
+                latitude = #{latitude},
+            </if>
+            <if test="pointName != null and pointName != ''">
+                point_name = #{pointName},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from asset_local_track
+        where id = #{id}
+    </delete>
+
+</mapper>
+
