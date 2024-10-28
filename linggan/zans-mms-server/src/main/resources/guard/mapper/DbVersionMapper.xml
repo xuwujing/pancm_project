@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.DbVersionDao">
+
+    <resultMap type="com.zans.mms.vo.DbVersionVO" id="DbVersionMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="version" column="version" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DbVersionMap">
+        select
+          id, version, remark, create_time, update_time
+        from db_version
+        where id = #{id}
+    </select>
+
+    <select id="queryNewOne" resultMap="DbVersionMap">
+        select id,
+               version,
+               remark,
+               create_time,
+               update_time
+        from db_version
+        ORDER BY create_time DESC LIMIT 1
+
+    </select>
+
+
+     <!--通过实体查询一条数据-->
+    <select id="findOne" resultMap="DbVersionMap">
+        select
+          id, version, remark, create_time, update_time        from db_version
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="version != null and version != ''">
+                and version = #{version}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DbVersionMap">
+        select
+          id, version, remark, create_time, update_time
+        from db_version
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="version != null and version != ''">
+                and version = #{version}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into db_version(version, remark, create_time, update_time)
+        values (#{version}, #{remark}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into db_version(version, remark, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.version}, #{entity.remark}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into db_version(version, remark, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.version}, #{entity.remark}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+         version = values(version) , remark = values(remark) , create_time = values(create_time) , update_time = values(update_time)     </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update db_version
+        <set>
+            <if test="version != null and version != ''">
+                version = #{version},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from db_version where id = #{id}
+    </delete>
+
+</mapper>
+

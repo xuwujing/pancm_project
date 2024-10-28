@@ -1,0 +1,42 @@
+server:
+  servlet:
+    context-path: /api
+    session:
+      timeout: PT30M
+  max-http-header-size: 1048576000
+
+api:
+  area:
+    # 所属城市编号
+    city: 27
+
+swagger:
+  enable: true
+
+
+spring:
+  http:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
+  profiles:
+    active: '@spring.profiles.active@'
+  application:
+    name: zans-portal
+  cache:
+    type: caffeine
+    caffeine:
+      spec: initialCapacity=10,maximumSize=200,expireAfterWrite=30s
+  devtools:
+    restart:
+      enabled: true
+  activiti:
+    database-schema-update: true
+    check-process-definitions: true
+    process-definition-location-prefix: classpath:/processes/
+    history-level: full
+    db-history-used: true

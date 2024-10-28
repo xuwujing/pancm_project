@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.SysDataPermDefineMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.SysDataPermDefine" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="perm_id" property="permId" jdbcType="INTEGER" />
+    <result column="data_name" property="dataName" jdbcType="VARCHAR" />
+    <result column="data_value" property="dataValue" jdbcType="INTEGER" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="data_group" property="dataGroup" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="getListByCondition" resultType="com.zans.mms.vo.perm.DataPermMenuVO">
+    SELECT
+    d.perm_id permId,
+    data_name dataName,
+    data_value dataValue,
+    data_group dataGroup
+    FROM
+    sys_data_perm_define d
+
+    <where>
+      <if test="permId != null">
+        and d.perm_id =#{permId}
+      </if>
+    </where>
+    order by d.perm_id,d.sort
+  </select>
+
+</mapper>

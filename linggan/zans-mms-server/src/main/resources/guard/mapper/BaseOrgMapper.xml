@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.BaseOrgMapper">
+
+    <resultMap type="com.zans.mms.vo.baseorg.BaseOrgRepVO" id="BaseOrgMap">
+        <result property="orgId" column="org_id" jdbcType="VARCHAR"/>
+        <result property="orgName" column="org_name" jdbcType="VARCHAR"/>
+        <result property="orgFullName" column="org_full_name" jdbcType="VARCHAR"/>
+        <result property="orgContact" column="org_contact" jdbcType="VARCHAR"/>
+        <result property="orgPhone" column="org_phone" jdbcType="VARCHAR"/>
+        <result property="orgType" column="org_type" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+  <select id="queryBaseOrg" resultType="com.zans.base.vo.SelectVO">
+    select bo.org_id as itemKey, bo.org_name as itemValue  from base_org bo where bo.org_type = 3;
+  </select>
+
+  <select id="orgList" resultType="com.zans.base.vo.SelectVO">
+    select bo.org_id as itemKey, bo.org_name as itemValue  from base_org bo;
+  </select>
+
+    <select id="orgTypeList" resultType="com.zans.base.vo.SelectVO">
+        select bo.code as itemKey, bo.name as itemValue  from dict_org_type bo
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BaseOrgMap">
+        select
+        org_id, org_name, org_full_name, org_contact, org_phone, org_type, remark, creator,DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') create_time,DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') update_time
+        from base_org
+        <where>
+            <if test="orgId != null and orgId != ''">
+                and org_id = #{orgId}
+            </if>
+            <if test="orgName != null and orgName != ''">
+                and org_name like   CONCAT('%',#{orgName},'%')
+            </if>
+            <if test="orgFullName != null and orgFullName != ''">
+                and org_full_name = #{orgFullName}
+            </if>
+            <if test="orgContact != null and orgContact != ''">
+                and org_contact = #{orgContact}
+            </if>
+            <if test="orgType != null and orgType != ''">
+                and org_type = #{orgType}
+            </if>
+            <if test="startDate !=null and startDate != '' and  endDate !=null and  endDate !=''">
+                and create_time between #{startDate} and #{endDate}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="findOne" resultType="com.zans.mms.vo.baseorg.BaseOrgRepVO">
+        select
+        org_id, org_name, org_full_name, org_contact, org_phone, org_type, remark, creator, create_time, update_time
+        from base_org
+        <where>
+            <if test="orgId != null and orgId != ''">
+                and org_id = #{orgId}
+            </if>
+            <if test="orgName != null and orgName != ''">
+                and org_name like   CONCAT('%',#{orgName},'%')
+            </if>
+            <if test="orgFullName != null and orgFullName != ''">
+                and org_full_name = #{orgFullName}
+            </if>
+            <if test="orgContact != null and orgContact != ''">
+                and org_contact = #{orgContact}
+            </if>
+            <if test="orgType != null and orgType != ''">
+                and org_type = #{orgType}
+            </if>
+            <if test="startDate !=null and startDate != '' and  endDate !=null and  endDate !=''">
+                and create_time between #{startDate} and #{endDate}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <select id="queryByOrgId" resultType="com.zans.mms.vo.baseorg.BaseOrgRepVO">
+        select
+        org_id, org_name, org_full_name, org_contact, org_phone, org_type, remark, creator, create_time, update_time
+        from base_org
+        where org_id = #{orgId}
+
+        limit 1
+    </select>
+    <select id="getOrgIdByOrgName" resultType="java.lang.String">
+        SELECT
+            org_id
+        FROM
+            base_org
+        WHERE
+            org_name = #{departmentName}
+           OR org_full_name = #{departmentName}
+    </select>
+    <select id="getIdByName" resultType="java.lang.String">
+        SELECT
+            org_id
+        FROM
+            base_org
+        WHERE
+            org_name IN
+        <foreach collection="deptNameList" item="deptName" open="(" close=")" separator="," index="index">
+            #{deptName}
+        </foreach>
+           OR org_full_name IN
+        <foreach collection="deptNameList" item="deptFullName" open="(" close=")" separator="," index="index">
+            #{deptFullName}
+        </foreach>
+    </select>
+    <select id="queryMapOrg" resultType="com.zans.base.vo.SelectVO">
+        select bo.org_id as itemKey, bo.org_name as itemValue  from base_org bo where bo.org_type = 3 or  bo.org_type = 2;
+    </select>
+    <select id="queryBaseOrgInfo" resultType="com.zans.mms.model.BaseOrg">
+        select bo.org_id as orgId, bo.org_name as orgName,bo.apply_contact as applyContact,bo.duty_contact as dutyContact
+        from base_org bo where (bo.org_type = 3 or bo.org_type = 2);
+    </select>
+    <select id="queryDutyInfo" resultType="java.lang.String">
+        select duty_contact from base_org where (org_type = 3 or org_type = 2) and org_id = #{orgId} limit 1
+    </select>
+    <select id="queryContactInfo" resultType="java.lang.String">
+        select apply_contact from base_org where (org_type = 3 or org_type = 2) and org_id = #{orgId} limit 1
+    </select>
+    <select id="getOrgType" resultType="java.lang.String">
+        select org_type from base_org where org_id = #{orgId} limit 1
+    </select>
+
+
+</mapper>
+

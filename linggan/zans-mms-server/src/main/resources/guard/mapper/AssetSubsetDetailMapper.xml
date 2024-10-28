@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.AssetSubsetDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.AssetSubsetDetail" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="subset_id" property="subsetId" jdbcType="INTEGER" />
+    <result column="asset_id" property="assetId" jdbcType="INTEGER" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+    <delete id="removeAsset">
+        delete from asset_subset_detail where subset_id=#{subsetId} and asset_id=#{assetId}
+    </delete>
+    <delete id="deleteDetailBySubsetId">
+        delete from asset_subset_detail where subset_id=#{subsetId}
+    </delete>
+    <delete id="deleteDetailByAssetId" parameterType="java.lang.String">
+        delete from asset_subset_detail where asset_id = #{assetId}
+    </delete>
+    <delete id="clearById" parameterType="java.lang.Long">
+        delete from asset_subset_detail where subset_id = #{subsetId}
+    </delete>
+
+    <select id="groupList" resultType="com.zans.mms.vo.asset.AssetResVO">
+        SELECT
+            dp.area_id areaId,
+            dp.point_name pointName,
+            a.device_direction deviceDirection,
+            dp.point_code pointCode,
+            a.asset_code assetCode,
+            a.network_ip networkIp,
+            a.maintain_company maintainCompany,
+            a.build_company buildCompany,
+            a.online_status onlineStatus,
+            a.maintain_status maintainStatus,
+            a.id assetId,
+            a.device_model_brand deviceModelBrand,
+            a.install_time installTime,
+            a.device_model_des deviceModelDes,
+            a.lane_number laneNumber,
+            a.device_sub_type deviceSubType
+        FROM
+            asset_subset_detail asd
+            LEFT JOIN asset a ON a.id = asd.asset_id
+            LEFT JOIN device_point dp ON a.point_id = dp.id
+      <where>
+        asd.subset_id = #{subsetId}
+
+        <if test="deviceType != null and deviceType !=''">
+          and a.device_type = #{deviceType}
+        </if>
+        <if test="areaId != null and areaId.size>0">
+            and dp.area_id   in
+            <foreach collection="areaId" item="areaid" separator="," open="(" close=")" >
+                #{areaid}
+            </foreach>
+        </if>
+        <if test="pointCode != null and pointCode !=''">
+          and dp.point_code like concat('%',#{pointCode},'%')
+        </if>
+        <if test="pointName != null and pointName !=''">
+          and dp.point_name like concat('%',#{pointName},'%')
+        </if>
+
+        <if test="assetCode != null and assetCode !=''">
+          and a.asset_code  like concat('%',#{assetCode},'%')
+        </if>
+        <if test="maintainStatus != null and maintainStatus.size >0">
+              and a.maintain_status  in
+              <foreach collection="maintainStatus" item="status" separator="," open="(" close=")" >
+                  #{status}
+              </foreach>
+        </if>
+        <if test="onlineStatus != null and onlineStatus !=''">
+          and a.online_status = #{onlineStatus}
+        </if>
+        <if test="networkIp != null and networkIp !=''">
+          and a.network_ip = #{networkIp}
+        </if>
+        <if test="projectName != null and projectName !=''">
+          and a.project_name  like concat('%',#{projectName},'%')
+        </if>
+        <if test="orgId != null and orgId!=''">
+              and a.org_id = #{orgId}
+        </if>
+      </where>
+    </select>
+
+    <select id="getAssetIdBySubsetId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select asset_id from asset_subset_detail where subset_id=#{subsetId}
+    </select>
+
+    <select id="getByAssetId" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select count(*) from asset_subset_detail where asset_id =#{assetId}
+    </select>
+    <select id="selectBySubsetIdAndAssetId" resultType="java.lang.String" parameterType="java.lang.Long">
+        select id from asset_subset_detail where subset_id = #{subsetId} and asset_id=#{assetId}
+    </select>
+    <select id="selectExportData" resultType="com.zans.mms.vo.asset.subset.AssetSubsetDetailExportVO">
+        SELECT
+            subset.subset_name AS subsetName,
+            type.type_name AS deviceType,
+            point.point_name AS pointName,
+            point.point_code AS pointCode,
+            area.area_name AS areaName,
+            asset.device_direction AS deviceDirection,
+            asset.asset_code AS assetCode,
+            asset.network_ip AS ip,
+            asset.maintain_company AS maintainCompany,
+            asset.online_status AS onlineStatus,
+            asset.maintain_status AS maintainStatus
+        FROM
+            asset_subset_detail detail
+                LEFT JOIN asset_subset subset ON detail.subset_id = subset.id
+                LEFT JOIN asset asset ON asset.id = detail.asset_id
+                LEFT JOIN base_device_type type ON asset.device_type = type.type_id
+                LEFT JOIN device_point point ON asset.point_id = point.id
+                LEFT JOIN base_area area ON point.area_id = area.area_id
+    </select>
+    <select id="getListForMap" resultType="com.zans.mms.vo.asset.AssetForMapResVO">
+        SELECT
+        a.id aId,
+        a.device_type dType,
+        x ( p.gis ) AS longitude,
+        y ( p.gis ) AS latitude,
+        a.online_status onlineStatus
+        FROM
+        asset_subset_detail asd  inner join
+        asset a on asd.subset_id=#{subsetId} and asd.asset_id=a.id
+        LEFT JOIN device_point p ON a.point_id = p.id
+        WHERE
+        y ( p.gis ) &lt; 90
+    </select>
+    <select id="getExportData" resultType="com.zans.mms.vo.asset.subset.AssetExportVO">
+        SELECT
+            asset.id,
+            asset.asset_code,
+            asset.point_id,
+            asset.device_direction,
+            asset.device_type,
+            asset.device_sub_type,
+            asset.network_ip,
+            asset.network_mac,
+            asset.network_mask,
+            asset.network_geteway,
+            asset.device_sn,
+            asset.device_model_des,
+            asset.device_model_brand,
+            asset.device_software_version,
+            asset.project_name,
+            asset.build_year,
+            asset.build_company,
+            asset.build_contact,
+            asset.build_phone,
+            asset.maintain_company,
+            asset.maintain_contact,
+            asset.maintain_phone,
+            asset.detect_mode,
+            asset.maintain_status,
+            asset.device_account,
+            asset.device_pwd,
+            asset.online_status,
+            asset.offline_status,
+            asset.install_time,
+            asset.lane_number,
+            asset.remark,
+            asset.creator,
+            asset.create_time,
+            asset.update_time,
+            asset.last_scan_time,
+            asset.is_test,
+            asset.org_id,
+            point.point_code,
+            point.point_name,
+            type.type_name AS device_type
+        FROM
+            asset asset
+                LEFT JOIN device_point point ON asset.point_id = point.id
+                LEFT JOIN base_device_type type ON type.type_id = asset.device_type
+        WHERE
+                asset.id IN ( SELECT asset_id FROM asset_subset_detail WHERE subset_id = #{subsetId} )
+    </select>
+    <select id="getSubsetNameById" resultType="java.lang.String">
+        SELECT
+            subset_name
+        FROM
+            asset_subset
+        WHERE
+            id = #{subsetId}
+    </select>
+
+</mapper>

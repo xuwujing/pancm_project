@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.SysConstantItemMapper">
+    <update id="updateByConstantKey">
+        update sys_constant set constant_value = #{constantValue} where constant_key = #{constantKey}
+    </update>
+    <update id="updateStringByConstantKey">
+        update sys_constant set constant_value = #{constantValue} where constant_key = #{constantKey}
+    </update>
+
+    <select id="findItemsByDict" resultType="com.zans.base.vo.SelectVO">
+        select item_key, item_value, class_type from sys_constant_item where dict_key=#{dictKey} order by ordinal, id
+    </select>
+
+    <select id="getDictKeys" resultType="java.lang.String">
+        select distinct(dict_key) from sys_constant_item order by dict_key
+    </select>
+
+    <select id="findConstantItemList" resultType="com.zans.mms.vo.constant.ConstantItemReqVO">
+        select * from sys_constant_item s
+        left join sys_constant_dict d on s.dict_key = d.dict_key
+        where 1=1
+        <if test="reqVO.dictKey !=null and reqVO.dictKey !=''">
+            and s.dict_key = #{reqVO.dictKey}
+        </if>
+        <if test="reqVO.dictName !=null and reqVO.dictName !=''">
+            and d.dict_name like CONCAT('%',#{reqVO.dictName},'%')
+        </if>
+        <if test="reqVO.moduleId !=null and reqVO.moduleId !=''">
+            and d.module_id = #{reqVO.moduleId}
+        </if>
+        <if test="reqVO.tableName !=null and reqVO.tableName !=''">
+            and d.table_name like CONCAT('%',#{reqVO.tableName},'%')
+        </if>
+        <if test="reqVO.columnName !=null and reqVO.columnName !=''">
+            and d.column_name like CONCAT('%',#{reqVO.columnName},'%')
+        </if>
+        <if test="reqVO.orderBy != null and reqVO.orderBy !=''">
+            order by ${reqVO.orderBy}
+        </if>
+    </select>
+
+    <select id="getOrdinalByDictKeyAndItemKey" resultType="java.lang.Integer">
+        select case when max(ordinal) is null then 0 else max(ordinal) end
+        from sys_constant_item s where s.dict_key = #{dictKey}
+        <if test="itemKey != null and itemKey != '' ">
+            and s.item_key = #{itemKey}
+        </if>
+    </select>
+
+    <select id="findItemsByDictAndOridinal" resultType="com.zans.mms.model.SysConstantItem">
+        select * from sys_constant_item where dict_key=#{dictKey} and ordinal = #{ordinal}
+    </select>
+
+    <select id="findByDictKeyAndItemKey" resultType="com.zans.mms.model.SysConstantItem">
+        select * from sys_constant_item where dict_key=#{dictKey} and item_key = #{itemKey}
+        <if test="id != null">
+            and id != #{id}
+        </if>
+        limit 1
+    </select>
+    <select id="getConstantValueByKey" resultType="java.lang.String">
+        select   constant_value from  sys_constant where constant_key=#{constantKey}  limit 1
+    </select>
+    <select id="getTimeByKey" resultType="java.lang.String">
+        select   DATE_FORMAT( constant_value, '%Y-%m-%d %k:%i:%s' ) as constant_value from  sys_constant where constant_key='sqsj'  limit 1
+    </select>
+    <select id="getItemKey" resultType="java.lang.Integer">
+        select item_key from sys_constant_item where item_value=#{itemValue} and dict_key = #{dictKey} limit 1
+    </select>
+
+    <select id="getItemValue" resultType="java.lang.String">
+        select item_value from sys_constant_item where item_key=#{itemKey} and dict_key = #{dictKey} limit 1
+    </select>
+    <select id="getCurrentItemKeyByDictKey" resultType="java.lang.String">
+        select IFNULL(max(item_key+0),0)+1 from sys_constant_item where dict_key='project_name'
+    </select>
+    <select id="existProjectName" resultType="java.lang.Integer">
+        select count(*) from sys_constant_item where dict_key = 'project_name' and item_value = #{itemValue}
+    </select>
+    <select id="getSysConstantItem" resultType="com.zans.mms.model.SysConstantItem">
+        select id,dict_key,item_key,item_value from sys_constant_item where dict_key = #{dictKey} and item_value = #{itemValue} limit 1
+    </select>
+
+</mapper>

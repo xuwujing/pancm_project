@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.TicketPointDao">
+
+    <resultMap type="com.zans.mms.model.TicketPoint" id="TicketPointMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="ticketId" column="ticket_id" jdbcType="INTEGER"/>
+        <result property="pointId" column="point_id" jdbcType="INTEGER"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap type="com.zans.mms.vo.ticket.TicketPointResVO" id="TicketPointResMap">
+        <result property="pointId" column="point_id" jdbcType="INTEGER"/>
+        <result property="pointCode" column="point_code" jdbcType="INTEGER"/>
+        <result property="pointName" column="point_name" jdbcType="INTEGER"/>
+        <result property="pointType" column="point_type" jdbcType="INTEGER"/>
+        <result property="projectId" column="project_id" jdbcType="INTEGER"/>
+        <result property="areaId" column="area_id" jdbcType="INTEGER"/>
+        <result property="longitude" column="longitude" />
+        <result property="latitude" column="latitude" />
+        <result property="deviceType" column="deviceType" />
+        <collection property="deviceLists" javaType="arraylist" ofType="com.zans.mms.vo.asset.AssetResVO">
+            <id column="asset_code" property="assetCode"></id>
+            <result column="device_direction" property="deviceDirection"></result>
+            <result column="device_type_name" property="deviceTypeName"></result>
+            <result column="device_type" property="deviceType"></result>
+        </collection>
+    </resultMap>
+
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TicketPointMap">
+        select id,
+               ticket_id,
+               point_id,
+               creator,
+               create_time,
+               update_time
+        from ticket_point
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="TicketPointMap">
+        select
+        id, ticket_id, point_id, creator, create_time, update_time
+        from ticket_point
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="ticketId != null">
+                and ticket_id = #{ticketId}
+            </if>
+            <if test="pointId != null and pointId != ''">
+                and point_id = #{pointId}
+            </if>
+            <if test="creator != null and creator != ''">
+                and creator = #{creator}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryByTicketId" resultMap="TicketPointResMap">
+        select
+        tp.point_id,
+        dp.point_name,
+        dp.area_id,
+        dp.point_code,
+        dp.point_type,
+        dp.project_id,
+        dp.device_type as deviceType,
+        x(dp.gis) as longitude,
+        y(dp.gis) as latitude,
+        ast.asset_code,
+        ast.device_type,
+        bdt.type_name as device_type_name,
+        ast.device_direction
+        from ticket_point tp
+        left join ticket_point_device tpd on tp.ticket_id = tpd.ticket_id and tp.point_id = tpd.point_id
+        left join device_point dp on tp.point_id = dp.id
+        left join asset ast on tpd.asset_id = ast.id
+        left join base_device_type bdt on ast.device_type = bdt.type_id
+        where tp.ticket_id = #{ticketId}
+    </select>
+
+    <select id="findOne" resultType="com.zans.mms.model.TicketPoint">
+        select tp.id,
+               tp.ticket_id,
+               tp.point_id,
+               tp.creator,
+               tp.create_time,
+               tp.update_time,
+               dp.point_name as pointName
+        from ticket_point tp left join device_point dp  on tp.point_id = dp.id
+        where ticket_id = #{ticketId}
+        limit 1
+    </select>
+    <select id="queryByIds" resultType="com.zans.mms.model.TicketPoint">
+        SELECT
+            id,
+            ticket_id,
+            point_id,
+            creator,
+            point_type
+        FROM
+            ticket_point
+        where ticket_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+           #{id}
+        </foreach>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into  ticket_point(ticket_id, point_id, creator, create_time, update_time)
+        values (#{ticketId}, #{pointId}, #{creator}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into  ticket_point(ticket_id, point_id, creator)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ticketId}, #{entity.pointId}, #{entity.creator})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into  ticket_point(ticket_id, point_id, creator, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ticketId}, #{entity.pointId}, #{entity.creator}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        ticket_id = values(ticket_id) , point_id = values(point_id) , creator = values(creator) , create_time =
+        values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update ticket_point
+        <set>
+            <if test="ticketId != null">
+                ticket_id = #{ticketId},
+            </if>
+            <if test="pointId != null and pointId != ''">
+                point_id = #{pointId},
+            </if>
+            <if test="creator != null and creator != ''">
+                creator = #{creator},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteByTicketId">
+        delete
+        from ticket_point
+        where  ticket_id = #{ticketId}
+        <if test="pointId != null">
+            and  point_id = #{pointId}
+        </if>
+    </delete>
+
+    <delete id="deleteById">
+        delete
+        from ticket_point
+        where id = #{id}
+    </delete>
+
+</mapper>
+

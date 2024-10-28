@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.ChartDao" >
+
+
+
+    <select id="getAssetOnline" resultType="com.zans.mms.vo.chart.AssetOnlineChartVO">
+        select total,fault,ordinal,online_rate,device_type_name,area_name as onlineRateNum,device_type from chart_data
+        where dict_key = #{dictKey} order by ordinal
+    </select>
+    <select id="getOverView" resultType="com.zans.mms.vo.chart.DataOverviewChartVO">
+        select total as day,fault as week,online_rate as `month`,device_type_name as linkName from chart_data
+        where dict_key = #{dictKey} order by ordinal
+    </select>
+    <select id="getQualityRanking" resultType="com.zans.mms.vo.chart.QualityRankingChartVO">
+        select device_type_name as orgName,online_rate as score,area_name from chart_data
+        where dict_key = #{dictKey} order by ordinal
+    </select>
+    <select id="getSystemNormal" resultType="com.zans.mms.vo.chart.SystemNormalRateChartVO">
+        select total as normalTotal,fault as faultNum,device_type_name as onlineNum,online_rate as normalRate,
+               area_name as normalRateNum
+        from chart_data
+        where dict_key = #{dictKey} order by ordinal limit 1
+    </select>
+    <select id="getCentralOffice" resultType="com.zans.mms.vo.chart.CentralOfficeChartVO">
+        select total as humidity,fault as temperature,device_type_name as machineRoomName,online_rate as upsStatus,
+               area_name as waterImmersion
+        from chart_data
+        where dict_key = #{dictKey} order by ordinal
+    </select>
+    <select id="getCommunicationNetwork" resultType="com.zans.mms.vo.chart.CommunicationNetworkChartVO">
+        select total,fault,ordinal,online_rate,device_type_name as onlineNum,area_name  from chart_data
+        where dict_key = #{dictKey} order by ordinal
+    </select>
+    <select id="getTodayAdd" resultType="java.lang.Integer">
+        select count(*) from ticket  where ticket_type=1 and edit_status = 20 and to_days(create_time)=TO_DAYS(now()) and is_merge is null
+    </select>
+    <select id="getUnCompletedCount" resultType="java.lang.Integer">
+        select count(*) from ticket where  edit_status = 20 and ticket_type=1 and (maintenance_status =20 or ticket_status = 4 ) and is_merge is null
+    </select>
+    <select id="getToDayDeal" resultType="java.lang.Integer">
+        SELECT
+            IFNULL(count(*),0) as val
+        FROM
+            ticket t
+                LEFT  JOIN
+            (SELECT
+                 tol.`ticket_id`,
+                 MAX(tol.create_time) AS create_time
+             FROM
+                 ticket_op_logs tol
+             WHERE tol.msg='工单#验收'
+             GROUP BY tol.`ticket_id`) d
+            ON t.`id` = d.ticket_id
+        where
+            ticket_type = 1
+          AND (ticket_status=4 or ticket_status=20)
+          AND edit_status=20
+          and is_merge is null
+          and (practical_complete_time BETWEEN DATE_ADD(CURDATE(), INTERVAL 0 HOUR) and DATE_ADD(DATE_ADD(CURDATE(),INTERVAL 1 DAY), INTERVAL 0 HOUR)
+            or d.create_time BETWEEN DATE_ADD(CURDATE(), INTERVAL 0 HOUR) and DATE_ADD(DATE_ADD(CURDATE(),INTERVAL 1 DAY), INTERVAL 0 HOUR))
+
+    </select>
+    <select id="getHeatMap" resultType="com.zans.mms.vo.chart.HeatMapChartVO">
+        select x(dp.gis) as lng,y(dp.gis) as lat,4 as count,
+        bo.org_name as orgName,dp.point_name as pointName
+
+        from device_point dp
+        left join base_org bo on dp.org_id = bo.org_id
+        where device_type = #{deviceType}
+    </select>
+    <select id="getResultAssetOnline" resultType="com.zans.mms.vo.chart.AssetOnlineChartVO">
+        select IFNULL(count(*),0) as total,device_type,IFNULL(sum(IF(maintain_status!='正常',1,0)),0) as fault,bdt.type_name as device_type_name from asset a left join base_device_type bdt on a.device_type=bdt.type_id
+        group by a.device_type
+    </select>
+    <select id="getOnlineResult" resultType="com.zans.mms.vo.chart.OnlineResultVO">
+        select IFNULL(sum(if(asds.online_status='在线',1,0)),0)/IFNULL(sum(if(asds.maintain_status='正常',1,0)),0) as onlineRate,device_type from asset_subset_detail_stats asds left join asset a on asds.asset_id = a.id where stats_time=(select max(stats_time) from asset_subset_detail_stats)
+        group by a.device_type
+    </select>
+    <select id="getCommunicationNetworkResult" resultType="com.zans.mms.vo.chart.CommunicationNetworkChartVO">
+        select IFNULL(sum(if(asds.online_status='在线',1,0)),0) as online_num,count(*) as total,IFNULL(sum(if(asds.maintain_status!='正常',1,0)),0) as fault,concat(truncate(IFNULL(sum(if(asds.online_status='在线',1,0)),0)/IFNULL(sum(if(asds.maintain_status='正常',1,0)),0) *100,2),'%')  as onlineRate ,'汉口片区' as area_name from  asset a  left join asset_subset_detail_stats asds on asds.asset_id = a.id where stats_time=(select max(stats_time) from asset_subset_detail_stats) and a.org_id='10001'
+        UNION all
+        select IFNULL(sum(if(asds.online_status='在线',1,0)),0) as online_num,count(*) as total,IFNULL(sum(if(asds.maintain_status!='正常',1,0)),0) as fault,concat(truncate(IFNULL(sum(if(asds.online_status='在线',1,0)),0)/IFNULL(sum(if(asds.maintain_status='正常',1,0)),0) *100,2),'%')  as onlineRate,'武昌片区' as area_name from  asset a  left join asset_subset_detail_stats asds on asds.asset_id = a.id where stats_time=(select max(stats_time) from asset_subset_detail_stats) and a.org_id='10002'
+        UNION all
+        select IFNULL(sum(if(asds.online_status='在线',1,0)),0) as online_num,count(*) as total,IFNULL(sum(if(asds.maintain_status!='正常',1,0)),0) as fault,concat(truncate(IFNULL(sum(if(asds.online_status='在线',1,0)),0)/IFNULL(sum(if(asds.maintain_status='正常',1,0)),0) *100,2),'%')  as onlineRate ,'汉阳片区' as area_name from  asset a  left join asset_subset_detail_stats asds on asds.asset_id = a.id where stats_time=(select max(stats_time) from asset_subset_detail_stats) and a.org_id='10003'
+        UNION all
+        select IFNULL(sum(if(asds.online_status='在线',1,0)),0) as online_num,count(*) as total,IFNULL(sum(if(asds.maintain_status!='正常',1,0)),0) as fault,concat(truncate(IFNULL(sum(if(asds.online_status='在线',1,0)),0)/IFNULL(sum(if(asds.maintain_status='正常',1,0)),0) *100,2),'%')  as onlineRate,'全市' as area_name from  asset a  left join asset_subset_detail_stats asds on asds.asset_id = a.id where stats_time=(select max(stats_time) from asset_subset_detail_stats)
+    </select>
+    <select id="getTicketChartData" resultType="com.zans.mms.vo.chart.TicketChartRepVO">
+        select
+            t.id, t.device_type,bdt.type_name as deviceTypeName,issue_level,
+            issue_source,sci.item_value as ticketStatusName,
+            IF(practical_issue_type=0,issue_type,practical_issue_type) as issue_type,
+            IFNULL(bft.fault_name,'未知') as reason,t.adjunct_id as adjunctId,
+        IF(t.maintenance_status=20,IFNULL(DATE_FORMAT(t.practical_complete_time,'%Y-%m-%d %H:%i:%s'),DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%s')),DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%s')) AS create_time,
+            t.ticket_status as ticket_status,
+            (select point_id from ticket_point tp where t.id = tp.ticket_id  limit 1 ) as point_id,
+            (select point_name from device_point dp where dp.id=point_id limit 1 ) as point_name,
+        (select x(gis) from device_point dp where dp.id=point_id) as lng,
+        (select y(gis) from device_point dp where dp.id=point_id) as lat,
+        sci2.item_value as issueSourceName
+        from ticket t left join base_device_type bdt on t.device_type = bdt.type_id
+        left join sys_constant_item sci on sci.item_key=t.ticket_status and sci.dict_key='ticket_status'
+            left join base_fault_type  bft on bft.fault_id = issue_type
+            left join sys_constant_item sci2 on sci2.item_key=t.ticket_status and sci2.dict_key='issue_source'
+        where t.edit_status=20 and (IF(t.maintenance_status=20,IFNULL(DATE_FORMAT(t.practical_complete_time,'%Y-%m-%d %H:%i:%s'),DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%s')),DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%s'))&gt;#{startDate}) and t.is_merge is null
+        and (t.ticket_status=1 or t.maintenance_status=20)
+        <if test="deviceTypeList!=null and deviceTypeList.size>0">
+            and   t.device_type in
+            <foreach collection="deviceTypeList" item="deviceType" separator="," open="(" close=")" >
+                #{deviceType}
+            </foreach>
+        </if>
+        order by IF(t.maintenance_status=20,IFNULL(DATE_FORMAT(t.practical_complete_time,'%Y-%m-%d %H:%i:%s'),DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%s')),DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%s'))  asc
+
+    </select>
+    <select id="getPatrolLogList" resultType="com.zans.mms.vo.chart.PatrolLogChartVO">
+        SELECT
+            dp.id,
+            pt.org_id orgId,
+            dp.area_id  areaId,
+            dp.point_name pointName,
+            dp.point_code pointCode,
+            dp.id pointId,
+        x(dp.gis) as lng,
+        y(dp.gis) as lat,
+            dp.device_type deviceType,
+            bdt.type_name as deviceTypeName,
+            ptcr.check_result checkResult,
+        sci.item_value as checkResultName,
+            ptcr.prev_check_result prevCheckResult,
+            su.nick_name nickName,
+            DATE_FORMAT(ptcr.check_time,'%Y-%m-%d %H:%i:%S')  checkTime,
+            ptcr.adjunct_uuid  adjunctUuid,
+            ptcr.check_remark checkRemark,
+            ptcr.ticket_id,
+            (select t.ticket_code from ticket t where id =ptcr.ticket_id ) as ticket_code
+        FROM
+            `patrol_task_check_result` ptcr
+                LEFT JOIN patrol_task pt  on ptcr.patrol_task_id=pt.id
+                LEFT JOIN device_point dp ON ptcr.point_id = dp.id
+                LEFT JOIN sys_user su ON su.user_name = ptcr.check_user
+        left join sys_constant_item sci on sci.item_key = ptcr.check_result and sci.dict_key='patrol_check_result'
+        left join base_device_type bdt on bdt.type_id = dp.device_type
+                  WHERE
+            check_status = 1
+
+                and ptcr.check_time &gt;#{startDate}
+        order by ptcr.check_time asc
+    </select>
+    <select id="getMaintainAdjunctId" resultType="java.lang.String">
+        select adjunct_id from  ticket_op_logs  where op_code  = 3 and maintenance_status=20 and ticket_id = #{ticketId} limit 1
+    </select>
+    <select id="getPatrolToday" resultType="java.lang.Integer">
+        SELECT
+          count(*)
+        FROM
+            `patrol_task_check_result` ptcr
+        WHERE
+            check_status = 1
+          and to_days(ptcr.check_time)=to_days(now())
+    </select>
+    <select id="getActiveDiscovery" resultType="java.lang.Integer">
+        SELECT
+            count(*)
+        FROM
+            `patrol_task_check_result` ptcr
+        WHERE
+            check_status = 1
+          and check_result='0'
+    </select>
+    <select id="getMaintainOrgRank" resultType="com.zans.mms.vo.chart.QualityRankingChartVO">
+        select org_name as orgName, score,area_name,deduct_points as deductPoints from ranking_maintenance
+        where `current_date` = #{startDate} order by score+0 desc
+    </select>
+    <select id="getProjectOnlineRate" resultType="com.zans.mms.vo.chart.ProjectOnlineRateChartVO">
+        select org_name as orgName,online_rate,project_name as projectName, rank from
+        <if test="type !=null and type==1">
+            ranking_quality
+        </if>
+        <if test="type !=null and type==2">
+            ranking_extension
+        </if>
+        where `current_date` = #{startDate} order by online_rate desc
+    </select>
+    <select id="getRecentTicketChartData" resultType="com.zans.mms.vo.chart.TicketChartRepVO">
+        select * from (
+                          SELECT
+                              t.id,
+                              t.device_type,
+                              bdt.type_name AS deviceTypeName,
+                              issue_level,
+                              issue_source,
+                              sci.item_value AS ticketStatusName,
+                              IF
+                                  ( practical_issue_type = 0, issue_type, practical_issue_type ) AS issue_type,
+                              IFNULL( bft.fault_name, '未知' ) AS reason,
+                              t.adjunct_id AS adjunctId,
+                              IF
+                                  (
+                                      t.maintenance_status = 20,
+                                      IFNULL( DATE_FORMAT( t.practical_complete_time, '%Y-%m-%d %H:%i:%s' ), DATE_FORMAT( t.create_time, '%Y-%m-%d %H:%i:%s' ) ),
+                                      DATE_FORMAT( t.create_time, '%Y-%m-%d %H:%i:%s' )
+                                  ) AS create_time,
+                              t.ticket_status AS ticket_status,
+                              ( SELECT point_id FROM ticket_point tp WHERE t.id = tp.ticket_id LIMIT 1 ) AS point_id,
+                      ( SELECT point_name FROM device_point dp WHERE dp.id = point_id LIMIT 1 ) AS point_name,
+                      ( SELECT x ( gis ) FROM device_point dp WHERE dp.id = point_id ) AS lng,
+                      ( SELECT y ( gis ) FROM device_point dp WHERE dp.id = point_id ) AS lat,
+                      sci2.item_value AS issueSourceName
+            FROM
+	ticket t
+	LEFT JOIN base_device_type bdt ON t.device_type = bdt.type_id
+            LEFT JOIN sys_constant_item sci ON sci.item_key = t.ticket_status
+            AND sci.dict_key = 'ticket_status'
+            LEFT JOIN base_fault_type bft ON bft.fault_id = issue_type
+            LEFT JOIN sys_constant_item sci2 ON sci2.item_key = t.ticket_status
+            AND sci2.dict_key = 'issue_source'
+        WHERE
+            t.edit_status = 20
+          AND t.is_merge IS NULL
+          AND ( t.ticket_status = 1 OR t.maintenance_status = 20 )
+        <if test="deviceTypeList!=null and deviceTypeList.size>0">
+            and   t.device_type in
+            <foreach collection="deviceTypeList" item="deviceType" separator="," open="(" close=")" >
+                #{deviceType}
+            </foreach>
+        </if>
+        ORDER BY
+            (
+            IF
+            (
+            t.maintenance_status = 20,
+            IFNULL( DATE_FORMAT( t.practical_complete_time, '%Y-%m-%d %H:%i:%s' ), DATE_FORMAT( t.create_time, '%Y-%m-%d %H:%i:%s' ) ),
+            DATE_FORMAT( t.create_time, '%Y-%m-%d %H:%i:%s' )
+            )) desc limit 20) t order by t.create_time asc
+    </select>
+    <select id="getRecentPatrolLogList" resultType="com.zans.mms.vo.chart.PatrolLogChartVO">
+        select * from (SELECT
+                           dp.id,
+                           pt.org_id orgId,
+                           dp.area_id  areaId,
+                           dp.point_name pointName,
+                           dp.point_code pointCode,
+                           dp.id pointId,
+                           x(dp.gis) as lng,
+                           y(dp.gis) as lat,
+                           dp.device_type deviceType,
+                           bdt.type_name as deviceTypeName,
+                           ptcr.check_result checkResult,
+                           sci.item_value as checkResultName,
+                           ptcr.prev_check_result prevCheckResult,
+                           su.nick_name nickName,
+                           DATE_FORMAT(ptcr.check_time,'%Y-%m-%d %H:%i:%S')  checkTime,
+                           ptcr.adjunct_uuid  adjunctUuid,
+                           ptcr.check_remark checkRemark,
+                           ptcr.ticket_id,
+                           (select t.ticket_code from ticket t where id =ptcr.ticket_id ) as ticket_code
+                       FROM
+                           `patrol_task_check_result` ptcr
+                               LEFT JOIN patrol_task pt  on ptcr.patrol_task_id=pt.id
+                               LEFT JOIN device_point dp ON ptcr.point_id = dp.id
+                               LEFT JOIN sys_user su ON su.user_name = ptcr.check_user
+                               left join sys_constant_item sci on sci.item_key = ptcr.check_result and sci.dict_key='patrol_check_result'
+                               left join base_device_type bdt on bdt.type_id = dp.device_type
+                       WHERE
+                           check_status = 1
+                       order by ptcr.check_time desc limit 20) t order by t.checkTime asc
+    </select>
+    <select id="getMaintenanceList" resultType="com.zans.mms.vo.chart.QualityRankingChartVO">
+        select  id,org_name, score,area_name,deduct_points from ranking_maintenance
+        <where>
+            <if test="currentDate!=null and currentDate!=''">
+                `current_date` = #{currentDate}
+            </if>
+        </where>
+        order by score+ 0 desc
+    </select>
+    <select id="maxMaintenanceList" resultType="com.zans.mms.vo.chart.QualityRankingChartVO">
+        select  id,org_name, score,area_name,deduct_points from ranking_maintenance
+            where
+                `current_date` = (select max(`current_date`) from ranking_maintenance)
+
+        order by score+ 0 desc
+    </select>
+
+    <insert id="insertMaintence">
+        insert into ranking_maintenance (org_name,score,area_name,deduct_points,`current_date`,creator )
+        values (#{orgName},#{score},#{areaName},#{deductPoints},#{currentDate},#{creator})
+    </insert>
+
+
+    <update id="editMaintenance">
+        update ranking_maintenance
+        <set>
+            <if test="orgName!=null and orgName !=''">
+                org_name=#{orgName},
+            </if>
+            <if test="score!=null and score !=''">
+                score=#{score},
+            </if>
+            <if test="areaName!=null and areaName !=''">
+                area_name=#{areaName},
+            </if>
+            <if test="deductPoints!=null and deductPoints !=''">
+                deduct_points=#{deductPoints}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <delete id="delMaintenance">
+        delete from ranking_maintenance where id = #{id}
+    </delete>
+    <delete id="delQuality">
+        delete from
+        <if test="type !=null and type==1">
+            ranking_quality
+        </if>
+        <if test="type !=null and type==2">
+            ranking_extension
+        </if>
+            where id = #{id}
+    </delete>
+
+    <select id="getQualityList" resultType="com.zans.mms.vo.chart.ProjectOnlineRateChartVO">
+        select id,org_name as orgName,online_rate,project_name as projectName, rank from
+          <if test="type !=null and type==1">
+              ranking_quality
+          </if>
+          <if test="type !=null and type==2">
+              ranking_extension
+          </if>
+          <where>
+              <if test="currentDate!=null and currentDate !=''">
+                  `current_date` = #{currentDate}
+              </if>
+          </where>
+
+    </select>
+    <select id="getQualityCount" resultType="java.lang.Integer">
+        select count(*) from
+        <if test="type !=null and type==1">
+            ranking_quality
+        </if>
+        <if test="type !=null and type==2">
+            ranking_extension
+        </if>
+        where `current_date`=#{currentMonth}
+    </select>
+    <select id="getMAXQualityList" resultType="com.zans.mms.vo.chart.ProjectOnlineRateChartVO">
+        select org_name as orgName,online_rate,project_name as projectName, rank from
+        <if test="type !=null and type==1">
+            ranking_quality
+        </if>
+        <if test="type !=null and type==2">
+            ranking_extension
+        </if>
+            where `current_date` = (select max(`current_date`) from
+        <if test="type !=null and type==1">
+            ranking_quality
+        </if>
+        <if test="type !=null and type==2">
+            ranking_extension
+        </if>
+                )
+
+    </select>
+    <select id="getDelayList" resultType="com.zans.mms.vo.chart.DelayRepVO">
+        select area_name,total as `delayed`,fault as rate from chart_data
+            where dict_key = #{dictKey} order by ordinal
+    </select>
+    <select id="getTodayAddPoManager" resultType="java.lang.Integer">
+        select count(*) from po_manager where to_days(breakdown_time) = to_days(now());
+    </select>
+    <select id="getDealPoManagerCount" resultType="java.lang.Integer">
+        select count(*) from po_manager where repair_status=5
+    </select>
+    <select id="getRecentPoManager" resultType="com.zans.mms.vo.chart.PoManagerRepVO">
+        select * from (
+                          SELECT
+                              IFNULL(pbd.item_value,'未知来源') AS event_source,
+                              problem_description,
+                              DATE_FORMAT( breakdown_time, '%Y-%m-%d %H:%i:%S' ) AS breakdown_time
+                          FROM
+                              po_manager p
+                                  LEFT JOIN po_base_dict pbd ON p.event_source = pbd.item_key
+                                  AND pbd.dict_key = 'event_source'
+                          order by p.breakdown_time desc limit 30 ) t
+        order by t.breakdown_time asc
+    </select>
+    <select id="getCurrentPoManager" resultType="com.zans.mms.vo.chart.PoManagerRepVO">
+        SELECT
+            IFNULL(pbd.item_value,'未知来源') AS event_source,
+            problem_description,
+            DATE_FORMAT( breakdown_time, '%Y-%m-%d %H:%i:%S' ) AS breakdown_time
+        FROM
+            po_manager p
+                LEFT JOIN po_base_dict pbd ON p.event_source = pbd.item_key
+                AND pbd.dict_key = 'event_source'
+        <where>
+        <if test="startDate !=null and startDate !=''">
+             p.breakdown_time > #{startDate}
+        </if>
+       </where>
+        order by p.breakdown_time asc
+    </select>
+
+
+    <update id="editQuality">
+        update
+        <if test="type !=null and type==1">
+            ranking_quality
+        </if>
+        <if test="type !=null and type==2">
+            ranking_extension
+        </if>
+        <set>
+            <if test="orgName!=null and orgName !=''">
+                org_name = #{orgName},
+            </if>
+            <if test="onlineRate!=null and onlineRate !=''">
+                online_rate = #{onlineRate},
+            </if>
+            <if test="projectName!=null and projectName !=''">
+                project_name = #{projectName},
+            </if>
+            <if test="rank!=null and rank !=''">
+                rank = #{rank}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <insert id="insertQaulity">
+        insert into
+        <if test="type !=null and type==1">
+            ranking_quality
+        </if>
+        <if test="type !=null and type==2">
+            ranking_extension
+        </if>
+        (org_name,project_name,rank,online_rate,`current_date`,creator )
+        values (#{orgName},#{projectName},#{rank},#{onlineRate},#{currentDate},#{creator})
+    </insert>
+
+</mapper>

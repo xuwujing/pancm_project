@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.LogOperationDao">
+
+    <resultMap type="com.zans.mms.model.LogOperation" id="LogOperationMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="opPlatform" column="op_platform" jdbcType="VARCHAR"/>
+        <result property="module" column="module" jdbcType="VARCHAR"/>
+        <result property="operation" column="operation" jdbcType="VARCHAR"/>
+        <result property="className" column="class_name" jdbcType="VARCHAR"/>
+        <result property="methodName" column="method_name" jdbcType="VARCHAR"/>
+        <result property="reqData" column="req_data" jdbcType="VARCHAR"/>
+        <result property="repData" column="rep_data" jdbcType="VARCHAR"/>
+        <result property="fromIp" column="from_ip" jdbcType="VARCHAR"/>
+        <result property="result" column="result" jdbcType="VARCHAR"/>
+        <result property="traceId" column="trace_id" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="LogOperationMap">
+        select id,
+               user_name,
+               op_platform,
+               module,
+               operation,
+               class_name,
+               method_name,
+               req_data,
+               rep_data,
+               from_ip,
+               result,
+               trace_id,
+               create_time
+        from log_operation
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="LogOperationMap">
+        select
+        id, user_name, op_platform, module, operation, class_name, method_name, req_data, rep_data, from_ip, result,
+        trace_id, create_time
+        from log_operation
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="opPlatform != null and opPlatform != ''">
+                and op_platform = #{opPlatform}
+            </if>
+            <if test="module != null and module != ''">
+                and module = #{module}
+            </if>
+            <if test="operation != null and operation != ''">
+                and operation = #{operation}
+            </if>
+            <if test="className != null and className != ''">
+                and class_name = #{className}
+            </if>
+            <if test="methodName != null and methodName != ''">
+                and method_name = #{methodName}
+            </if>
+            <if test="reqData != null and reqData != ''">
+                and req_data = #{reqData}
+            </if>
+            <if test="repData != null and repData != ''">
+                and rep_data = #{repData}
+            </if>
+            <if test="fromIp != null and fromIp != ''">
+                and from_ip = #{fromIp}
+            </if>
+            <if test="result != null and result != ''">
+                and result = #{result}
+            </if>
+            <if test="traceId != null and traceId != ''">
+                and trace_id = #{traceId}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into log_operation(user_name, op_platform, module, operation, class_name, method_name, req_data,
+                                  from_ip,  trace_id)
+        values (#{userName}, #{opPlatform}, #{module}, #{operation}, #{className}, #{methodName}, #{reqData},
+                 #{fromIp}, #{traceId})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into log_operation(user_name, op_platform, module, operation, class_name, method_name, req_data,
+        rep_data, from_ip, result, trace_id, create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userName}, #{entity.opPlatform}, #{entity.module}, #{entity.operation}, #{entity.className},
+            #{entity.methodName}, #{entity.reqData}, #{entity.repData}, #{entity.fromIp}, #{entity.result},
+            #{entity.traceId}, #{entity.createTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into log_operation(user_name, op_platform, module, operation, class_name, method_name, req_data,
+        rep_data, from_ip, result, trace_id, create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userName}, #{entity.opPlatform}, #{entity.module}, #{entity.operation}, #{entity.className},
+            #{entity.methodName}, #{entity.reqData}, #{entity.repData}, #{entity.fromIp}, #{entity.result},
+            #{entity.traceId}, #{entity.createTime})
+        </foreach>
+        on duplicate key update
+        user_name = values(user_name) , op_platform = values(op_platform) , module = values(module) , operation =
+        values(operation) , class_name = values(class_name) , method_name = values(method_name) , req_data =
+        values(req_data) , rep_data = values(rep_data) , from_ip = values(from_ip) , result = values(result) , trace_id
+        = values(trace_id) , create_time = values(create_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update log_operation
+        <set>
+            <if test="repData != null and repData != ''">
+                rep_data = #{repData},
+            </if>
+            <if test="result != null and result != ''">
+                result = #{result},
+            </if>
+        </set>
+        where  trace_id = #{traceId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from log_operation
+        where id = #{id}
+    </delete>
+
+</mapper>
+

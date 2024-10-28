@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.WorkflowTaskInfoMapper" >
+    <delete id="deleteByBusinessIdAndType">
+        delete from workflow_task_info where  business_id=#{id} and type=#{type}
+    </delete>
+
+
+    <select id="getByBusinessIdAndWorkflowId" resultType="java.lang.String">
+        select task_id from workflow_task_info
+            where business_id= #{businessId}
+            and type = #{workflowId}
+            order by create_time desc limit 1
+    </select>
+
+    <select id="getByWorkflowId" resultType="com.zans.mms.vo.ticket.TicketWorkFlowRespVO">
+        SELECT task_name,business_status_name,business_status_code FROM workflow_state_mapping
+        WHERE is_flow = 1
+        AND workflow_id = #{workflowId}
+        <if test="status != null ">
+            and business_status_code > #{status}
+        </if>
+        <if test="threshold != null ">
+            and threshold  &lt;= #{threshold}
+        </if>
+        order by business_status_code asc
+    </select>
+    <select id="getTicketBusinessStatusNameList" resultType="com.zans.mms.dto.workflow.BusinessStatusInfoDto">
+        SELECT
+            workflow_state_mapping.workflow_id,
+            workflow_state_mapping.business_status_name,
+            workflow_state_mapping.business_status_code,
+            workflow_state_mapping.role_name
+        FROM
+            workflow_state_mapping
+
+        where is_flow=1
+    </select>
+    <select id="getBusinessKeyByProcessInstanceId" resultType="java.lang.String">
+        SELECT
+            BUSINESS_KEY_
+        FROM
+            act_hi_procinst
+        WHERE
+            ID_ = #{processInstanceId}
+    </select>
+
+    <select id="getUserIdList" resultType="java.lang.String">
+        SELECT
+	wuw.wx_unionid
+FROM
+	wechat_user_wxbind wuw
+	INNER JOIN sys_user su ON su.user_name = wuw.user_name
+	INNER JOIN act_hi_identitylink u ON u.USER_ID_ = su.user_name
+WHERE
+	wechat_push_enable = 1
+	 and wechat_enable =1
+	AND u.TASK_ID_ = #{taskId}
+
+    </select>
+    <select id="getUserIdListByTaskId" resultType="java.lang.String">
+        SELECT
+            USER_ID_
+        FROM
+            act_hi_identitylink
+        WHERE
+            TASK_ID_ = #{taskId}
+    </select>
+    <select id="getUserByAssigneeList" resultType="java.lang.String">
+        select wx_unionid from wechat_user_wxbind
+        <where>
+            <if test="assigneeList != null and assigneeList.size >0">
+                and user_name in
+                <foreach collection="assigneeList" item="assignee" separator="," open="(" close=")" >
+                    #{assignee}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <select id="getRoleNameByStatusCode" resultType="java.lang.String">
+        select role_name from workflow_state_mapping where task_status_code = #{opStatus} and workflow_id=#{workflowId}
+    </select>
+    <select id="getDispatchInit" resultType="com.zans.base.vo.SelectVO">
+        SELECT
+            IF
+                ( business_status_name != '已审批', business_status_name, '审批完成' ) AS item_value,
+            business_status_code AS item_key
+        FROM
+            workflow_state_mapping
+        WHERE
+            workflow_id = 'dispatch'
+          AND business_status_code > 1
+        ORDER BY
+            business_status_code ASC
+
+    </select>
+    <select id="getAcceptanceInit" resultType="com.zans.base.vo.SelectVO">
+        SELECT
+            IF
+                ( business_status_name != '已审批', business_status_name, '审批完成' ) AS  item_value,
+            business_status_code AS item_key
+        FROM
+            workflow_state_mapping
+        WHERE
+            workflow_id = 'acceptance'
+          AND business_status_code > 1
+        ORDER BY
+            business_status_code ASC
+
+    </select>
+    <select id="getProcessInstanceByIdAndType" resultType="java.lang.String">
+        select process_instance_id from workflow_task_info where business_id=#{id} and type=#{type} order by create_time desc limit 1
+    </select>
+    <select id="getUserByApproved" resultType="java.lang.String">
+        select wux.wx_unionid from wechat_user_wxbind wux
+        left join sys_user su on wux.user_name = su.user_name
+        <where>
+            <if test="usernameList !=null and usernameList.size() > 0">
+                and wux.user_name in
+                <foreach collection="usernameList" item="username" separator="," open="(" close=")" >
+                    #{username}
+                </foreach>
+                and su.wechat_push_enable=1
+            </if>
+
+        </where>
+    </select>
+    <select id="getDefaultComment" resultType="java.lang.String">
+        select default_comment from workflow_state_mapping where workflow_id=#{workflowId} and task_status_code=#{status} order by create_time desc limit 1
+
+    </select>
+
+
+    <select id="getMyFlowList" resultType="com.zans.mms.vo.ticket.AppPendingApprovalRespVO">
+        SELECT DISTINCT
+        D.KEY_ as workflowStr,
+        t.id,
+        t.ticket_code,
+        t.ticket_code_result,
+        t.ticket_type,
+        t.area_id,
+        t.device_type,
+        t.issue_type,
+        t.issue_level,
+        t.issue_source,
+        t.apply_contact,
+        t.apply_phone,
+        t.duty_contact,
+        t.occurred_time,
+        t.predict_cost,
+        t.accept_predict_cost,
+        t.accept_adjust_cost,
+        t.alloc_department_num,
+        t.predict_arrive_time,
+        t.predict_complete_time,
+        t.predict_arrive,
+        t.predict_complete,
+        t.practical_arrive_time,
+        t.practical_complete_time,
+        t.practical_issue_type,
+        t.accept_adjunct_id,
+        DATE_FORMAT(t.dispatch_time,'%Y-%m-%d %H:%i:%s') AS dispatch_time,
+        DATE_FORMAT(t.accept_time,'%Y-%m-%d %H:%i:%s') AS accept_time,
+        t.edit_status,
+        t.ticket_status,
+        t.dispatch_status,
+        t.accept_status,
+        t.maintenance_status,
+        t.is_cost,
+        t.adjunct_id,
+        t.back_dispatch_role_name,
+        t.back_acceptance_role_name,
+        t.op_platform,
+        t.is_merge,
+        t.pid,
+        t.remark,
+        t.creator,
+        DATE_FORMAT(RES.CREATE_TIME_,'%Y-%m-%d %H:%i:%s') AS create_time,
+        RES.CREATE_TIME_,
+        t.acceptance_instructions
+        FROM
+            ACT_RU_TASK RES
+                LEFT JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = RES.ID_
+                INNER JOIN ACT_RE_PROCDEF D ON RES.PROC_DEF_ID_ = D.ID_
+                LEFT JOIN ACT_HI_PROCINST AHP ON AHP.PROC_INST_ID_ = RES.PROC_INST_ID_
+                LEFT JOIN Ticket t ON t.id = AHP.BUSINESS_KEY_
+        WHERE
+            D.KEY_ IN
+        <foreach collection="workflowIdList" item="workflowId" separator="," open="(" close=")" >
+            #{workflowId}
+        </foreach>
+
+        AND (
+                RES.ASSIGNEE_ = #{assign}
+                OR ( RES.ASSIGNEE_ IS NULL AND I.TYPE_ = 'candidate' AND ( I.USER_ID_ = #{assign} ) )
+            )
+
+        <if test="costType !=null">
+
+            <if test="costType == 1">
+                and  IF(D.KEY_='dispatch',predict_cost,accept_predict_cost) &lt; 3000
+            </if>
+            <if test="costType == 2">
+               and IF(D.KEY_='dispatch',predict_cost,accept_predict_cost) &gt;= 3000
+                and IF(D.KEY_='dispatch',predict_cost,accept_predict_cost) &lt; 10000
+            </if>
+            <if test="costType == 3">
+                and  IF(D.KEY_='dispatch',predict_cost,accept_predict_cost) &gt;= 10000
+            </if>
+        </if>
+        <if test="keyword != '' and keyword != null">
+            and (t.ticket_code_result like concat('%',#{keyword},'%') or  IF(D.KEY_='dispatch',t.remark,t.acceptance_instructions) like concat('%',#{keyword},'%'))
+        </if>
+        <if test="allocDepartmentNum != '' and allocDepartmentNum != null">
+            and  alloc_department_num = #{allocDepartmentNum}
+        </if>
+        <if test="sortName == '' or sortName == null">
+            ORDER BY
+            RES.CREATE_TIME_ DESC
+        </if>
+        <if test="sortName !=null and sortName!=''">
+            order by  ${sortName}
+            <if test="sortOrder !=null and  sortOrder!=''">
+                ${sortOrder}
+            </if>
+        </if>
+    </select>
+    <select id="myApprovedTicketList" resultType="com.zans.mms.vo.ticket.AppPendingApprovalRespVO">
+        select distinct
+            D.KEY_ as workflowStr,
+        t.id,
+        t.ticket_code,
+        t.ticket_code_result,
+        t.ticket_type,
+        t.area_id,
+        t.device_type,
+        t.issue_type,
+        t.issue_level,
+        t.issue_source,
+        t.apply_contact,
+        t.apply_phone,
+        t.duty_contact,
+        t.occurred_time,
+        t.predict_cost,
+        t.accept_predict_cost,
+        t.accept_adjust_cost,
+        t.alloc_department_num,
+        t.predict_arrive_time,
+        t.predict_complete_time,
+        t.predict_arrive,
+        t.predict_complete,
+        t.practical_arrive_time,
+        t.practical_complete_time,
+        t.practical_issue_type,
+        t.accept_adjunct_id,
+        DATE_FORMAT(t.dispatch_time,'%Y-%m-%d %H:%i:%s') AS dispatch_time,
+        DATE_FORMAT(t.accept_time,'%Y-%m-%d %H:%i:%s') AS accept_time,
+        t.edit_status,
+        t.ticket_status,
+        t.dispatch_status,
+        t.accept_status,
+        t.maintenance_status,
+        t.is_cost,
+        t.adjunct_id,
+        t.back_dispatch_role_name,
+        t.back_acceptance_role_name,
+        t.op_platform,
+        t.is_merge,
+        t.pid,
+        t.remark,
+        t.creator,
+        DATE_FORMAT(RES.START_TIME_,'%Y-%m-%d %H:%i:%s') AS create_time,
+        RES.START_TIME_,
+        t.acceptance_instructions
+        FROM ACT_HI_TASKINST RES
+                 INNER JOIN ACT_RE_PROCDEF D
+                            ON RES.PROC_DEF_ID_ = D.ID_
+                 LEFT JOIN ACT_HI_PROCINST AHP ON AHP.PROC_INST_ID_ = RES.PROC_INST_ID_
+                 LEFT JOIN Ticket t ON t.id = AHP.BUSINESS_KEY_
+        WHERE D.KEY_ in
+        <foreach collection="workflowIdList" item="workflowId" separator="," open="(" close=")" >
+            #{workflowId}
+        </foreach>
+         and RES.ASSIGNEE_ = #{assign} and RES.END_TIME_ is not null
+        <if test="costType !=null">
+
+            <if test="costType == 1">
+                and  IF(D.KEY_='dispatch',predict_cost,accept_predict_cost) &lt; 3000
+            </if>
+            <if test="costType == 2">
+                and IF(D.KEY_='dispatch',predict_cost,accept_predict_cost) &gt;= 3000
+                and IF(D.KEY_='dispatch',predict_cost,accept_predict_cost) &lt; 10000
+            </if>
+            <if test="costType == 3">
+                and  IF(D.KEY_='dispatch',predict_cost,accept_predict_cost) &gt;= 10000
+            </if>
+        </if>
+        <if test="keyword != '' and keyword != null">
+            and (t.ticket_code_result like concat('%',#{keyword},'%') or  IF(D.KEY_='dispatch',t.remark,t.acceptance_instructions) like concat('%',#{keyword},'%'))
+        </if>
+        <if test="allocDepartmentNum != '' and allocDepartmentNum != null">
+            and  alloc_department_num = #{allocDepartmentNum}
+        </if>
+        <if test="sortName == '' or sortName == null">
+            order by RES.START_TIME_ desc
+        </if>
+        <if test="sortName !=null and sortName!=''">
+            order by  ${sortName}
+            <if test="sortOrder !=null and  sortOrder!=''">
+                ${sortOrder}
+            </if>
+        </if>
+
+    </select>
+    <select id="myAllTicketList" resultType="com.zans.mms.vo.ticket.AppPendingApprovalRespVO">
+        select distinct
+            DEF.KEY_ as workflowStr,
+            t.id,
+            t.ticket_code,
+            t.ticket_code_result,
+            t.ticket_type,
+            t.area_id,
+            t.device_type,
+            t.issue_type,
+            t.issue_level,
+            t.issue_source,
+            t.apply_contact,
+            t.apply_phone,
+            t.duty_contact,
+            t.predict_cost,
+            t.accept_predict_cost,
+            t.accept_adjust_cost,
+            t.alloc_department_num,
+            t.ticket_status,
+            t.dispatch_status,
+            t.accept_status,
+            t.is_cost,
+            t.back_dispatch_role_name,
+            t.back_acceptance_role_name,
+            t.is_merge,
+            t.pid,
+            t.remark,
+            t.creator,
+            DATE_FORMAT(RES.START_TIME_,'%Y-%m-%d %H:%i:%s') AS create_time,
+            RES.START_TIME_,
+            t.acceptance_instructions
+        FROM ACT_HI_PROCINST RES
+        left join Ticket t on t.id=RES.BUSINESS_KEY_
+            left outer join ACT_RE_PROCDEF DEF
+                    ON RES.PROC_DEF_ID_ = DEF.ID_
+
+
+          and ( exists(select LINK.USER_ID_
+                                                                    FROM ACT_HI_IDENTITYLINK LINK
+                                                                    WHERE USER_ID_ = #{assign} and LINK.PROC_INST_ID_ = RES.ID_) )
+        where DEF.KEY_ IN
+        <foreach collection="workflowIdList" item="workflowId" separator="," open="(" close=")" >
+            #{workflowId}
+        </foreach>
+        <if test="costType !=null">
+
+            <if test="costType == 1">
+                and  IF(DEF.KEY_='dispatch',predict_cost,accept_predict_cost) &lt; 3000
+            </if>
+            <if test="costType == 2">
+                and IF(DEF.KEY_='dispatch',predict_cost,accept_predict_cost) &gt;= 3000
+                and IF(DEF.KEY_='dispatch',predict_cost,accept_predict_cost) &lt; 10000
+            </if>
+            <if test="costType == 3">
+                and  IF(DEF.KEY_='dispatch',predict_cost,accept_predict_cost) &gt;= 10000
+            </if>
+        </if>
+        <if test="keyword != '' and keyword != null">
+            and (t.ticket_code_result like concat('%',#{keyword},'%') or  IF(DEF.KEY_='dispatch',t.remark,t.acceptance_instructions) like concat('%',#{keyword},'%'))
+        </if>
+        <if test="allocDepartmentNum != '' and allocDepartmentNum != null">
+            and  t.alloc_department_num = #{allocDepartmentNum}
+        </if>
+        <if test="sortName == '' or sortName == null">
+            order by RES.START_TIME_ DESC
+        </if>
+        <if test="sortName !=null and sortName!=''">
+            order by  ${sortName}
+            <if test="sortOrder !=null and  sortOrder!=''">
+                ${sortOrder}
+            </if>
+        </if>
+    </select>
+    <select id="getOnePendingTicket" resultType="com.zans.mms.vo.ticket.AppPendingApprovalRespVO">
+        SELECT DISTINCT
+        D.KEY_ as workflowStr,
+        t.id,
+        t.ticket_code,
+        t.ticket_code_result,
+        t.ticket_type,
+        t.area_id,
+        t.device_type,
+        t.issue_type,
+        t.issue_level,
+        t.issue_source,
+        t.apply_contact,
+        t.apply_phone,
+        t.duty_contact,
+        t.occurred_time,
+        t.predict_cost,
+        t.accept_predict_cost,
+        t.accept_adjust_cost,
+        t.alloc_department_num,
+        t.predict_arrive_time,
+        t.predict_complete_time,
+        t.predict_arrive,
+        t.predict_complete,
+        t.practical_arrive_time,
+        t.practical_complete_time,
+        t.practical_issue_type,
+        t.accept_adjunct_id,
+        DATE_FORMAT(t.dispatch_time,'%Y-%m-%d %H:%i:%s') AS dispatch_time,
+        DATE_FORMAT(t.accept_time,'%Y-%m-%d %H:%i:%s') AS accept_time,
+        t.edit_status,
+        t.ticket_status,
+        t.dispatch_status,
+        t.accept_status,
+        t.maintenance_status,
+        t.is_cost,
+        t.adjunct_id,
+        t.back_dispatch_role_name,
+        t.back_acceptance_role_name,
+        t.op_platform,
+        t.is_merge,
+        t.pid,
+        t.remark,
+        t.creator,
+        DATE_FORMAT(RES.CREATE_TIME_,'%Y-%m-%d %H:%i:%s') AS create_time,
+        RES.CREATE_TIME_,
+        t.acceptance_instructions
+        FROM
+        ACT_RU_TASK RES
+        LEFT JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = RES.ID_
+        INNER JOIN ACT_RE_PROCDEF D ON RES.PROC_DEF_ID_ = D.ID_
+        LEFT JOIN ACT_HI_PROCINST AHP ON AHP.PROC_INST_ID_ = RES.PROC_INST_ID_
+        LEFT JOIN Ticket t ON t.id = AHP.BUSINESS_KEY_
+        WHERE
+        D.KEY_ IN
+        ( 'dispatch' , 'acceptance')
+        and t.id = #{id}
+
+
+
+
+
+
+
+    </select>
+</mapper>

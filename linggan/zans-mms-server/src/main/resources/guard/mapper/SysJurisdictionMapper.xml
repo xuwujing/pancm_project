@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.SysJurisdictionDao" >
+    <insert id="insertPerm">
+        insert into sys_jurisdiction_perm (jurisdiction_id,perm_id,data_perm,data_perm_desc)
+        values (#{jurisdictionId},#{permId},#{dataPerm},#{dataPermDesc})
+    </insert>
+    <delete id="deleteSysjurisDiction">
+        delete from sys_jurisdiction_perm where jurisdiction_id = #{currentId}
+    </delete>
+
+
+    <select id="list" resultType="com.zans.mms.vo.jurisdiction.SysJurisdictionRepVO">
+        select id,`name`,remark from sys_jurisdiction
+        <where>
+            <if test="keyword !=null and keyword !=''">
+                and (`name` like  concat('%',#{keyword},'%') or remark like  concat('%',#{keyword},'%'))
+            </if>
+        </where>
+        order by id+0 asc
+    </select>
+    <select id="exist" resultType="java.lang.Integer">
+        select count(*) from sys_jurisdiction where id = #{id}
+    </select>
+    <select id="selectList" resultType="com.zans.base.vo.SelectVO">
+        select id as itemKey , `name` as itemValue from sys_jurisdiction
+        order by id+0 asc
+    </select>
+    <select id="getCurrentId" resultType="java.lang.String">
+        select max(id)+1 from sys_jurisdiction
+    </select>
+    <select id="getByJurisdictionId" resultType="com.zans.mms.vo.jurisdiction.SysJurisdictionPermVO">
+        select perm_id,data_perm,data_perm_desc from sys_jurisdiction_perm
+        where jurisdiction_id = #{cloneId}
+    </select>
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="zans-mms-server" default="zip" basedir=".">
+	<property name="build" value="build" />
+	<property name="target" value="target" />
+	<property name="word" value="docs"/>
+	<property name="jar_version" value="zans-mms-server_whjg-prod_app_V1.0" />
+	<property name="routine" value="build/${jar_version}/程序包"/>
+
+	<record name="ant.log" loglevel="info" append="no" action="start"/>
+
+	<target name="clean">
+		<delete dir="${target}" />
+		<delete dir="${build}" />
+		<delete dir="${routine}" />
+		<delete dir="${doc}" />
+	</target>
+
+	<target name="create-path" depends="clean">
+		<mkdir dir="${build}" />
+		<mkdir dir="${build}/${jar_version}" />
+	</target>
+
+	<target name="mvn_package" depends="create-path">
+		<exec executable="cmd" failonerror="true">
+			<arg line="/c mvn clean package -P aliyun-prod-app" />
+		</exec>
+	</target>
+
+	<target name="copyAll" depends="mvn_package">
+		<copy todir="${routine}" file="${target}/zans-mms-server.jar"></copy>
+		<rename src="${routine}/zans-mms-server.jar" dest="${routine}/zans-mms-server-app.jar"/>
+	</target>
+
+	<!--文件打包-->
+	 <target name="zip" depends="copyAll">
+        <zip destfile="build/${jar_version}.zip" basedir="${build}" excludes=".svn"/>
+    </target>
+
+	<target name="cleanFiles" depends="zip">
+		<delete dir="${build}/${jar_version}" />
+	</target>
+
+</project>

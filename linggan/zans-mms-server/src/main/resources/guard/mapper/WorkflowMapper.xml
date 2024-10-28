@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.WorkflowMapper" >
+
+    <!--查询我的待办接口 -->
+    <select id="myApprovalFlowList" parameterType="java.lang.String">
+        SELECT DISTINCT
+            RES.*,
+            t.*
+        FROM
+            ACT_RU_TASK RES
+                LEFT JOIN ACT_RU_IDENTITYLINK I ON I.TASK_ID_ = RES.ID_
+                INNER JOIN ACT_RE_PROCDEF D ON RES.PROC_DEF_ID_ = D.ID_
+                LEFT JOIN ACT_HI_PROCINST AHP ON AHP.PROC_INST_ID_ = RES.PROC_INST_ID_
+                LEFT JOIN Ticket t ON t.id = AHP.BUSINESS_KEY_
+        WHERE
+            D.KEY_ IN ( 'dispatch', 'acceptance', 'maintain' )
+          AND (
+                RES.ASSIGNEE_ = #{username}
+                OR ( RES.ASSIGNEE_ IS NULL AND I.TYPE_ = 'candidate' AND ( I.USER_ID_ = #{username} ) )
+            )
+        ORDER BY
+            RES.CREATE_TIME_ ASC
+            LIMIT 10 OFFSET 0;
+    </select>
+
+
+    <select id="myTicketFlowList" parameterType="java.lang.String">
+        select distinct RES.* ,t.* , DEF.KEY_ as PROC_DEF_KEY_, DEF.NAME_ as PROC_DEF_NAME_, DEF.VERSION_ as PROC_DEF_VERSION_, DEF.DEPLOYMENT_ID_ as DEPLOYMENT_ID_
+        FROM ACT_HI_PROCINST RES left outer join ACT_RE_PROCDEF DEF
+                                                 ON RES.PROC_DEF_ID_ = DEF.ID_
+                                 left join Ticket t on t.id=RES.BUSINESS_KEY_
+        WHERE DEF.KEY_ IN ( 'dispatch' , 'acceptance' , 'maintain' ) and ( exists(select LINK.USER_ID_
+                                                                                  FROM ACT_HI_IDENTITYLINK LINK
+                                                                                  WHERE USER_ID_ = #{username} and LINK.PROC_INST_ID_ = RES.ID_) ) order by RES.ID_ asc
+            LIMIT 10 OFFSET 0;
+
+    </select>
+
+
+</mapper>

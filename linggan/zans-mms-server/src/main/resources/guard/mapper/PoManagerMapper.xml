@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.PoManagerDao" >
+    <update id="updateBase">
+        update po_manager
+        <set>
+            <if test="afterAdjunctId !=null and afterAdjunctId !=''">
+                after_adjunct_id=#{afterAdjunctId},
+            </if>
+            <if test="beforeAdjunctId !=null and beforeAdjunctId !=''">
+                before_adjunct_id=#{beforeAdjunctId}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <update id="updateRepairPerson" parameterType="com.zans.mms.vo.po.PoManagerPushReqVO">
+        update po_manager set repair_person = #{repairPerson} where id = #{id}
+    </update>
+    <update id="updateDispatchTime">
+        update po_manager set dispatch_time = #{dispatchTime} where id = #{id}
+    </update>
+    <update id="clearRepeatMark">
+        update po_manager set repeat_mark= null where id = #{id}
+    </update>
+
+
+    <select id="getList" resultType="com.zans.mms.vo.po.PoManagerRepVO">
+        SELECT
+        p.id,
+        p.po_code,
+        p.area_id,
+        p.point_id,
+        p.breakdown_time,
+        p.po_event,
+        p.event_source,
+        p.reason,
+        p.solution,
+        p.solution_time,
+        p.problem_description,
+        dp.point_name as intersection,
+        p.repair_status,
+        su.nick_name as  dutyContactName,
+        p.fault_phenomenon,
+        p.is_immidiately,
+        p.repeat_mark,
+        (select po_code from po_manager where id = p.repeat_mark) as repeatCode,
+        (select count(*) from po_manager where repeat_mark = p.id) as isPid,
+        IF(p.repair_status=6, (select TIMESTAMPDIFF(MINUTE ,p.synchronization_time,now()))   >30,0) as isDispatchTimeOut,
+        IF(p.repair_status=7, (select TIMESTAMPDIFF(MINUTE ,p.dispatch_time,now())) >30,0) as isMaintainTimeOut
+        FROM
+        po_manager p left join
+        device_point dp on p.point_id = dp.id
+        left join sys_user su on su.user_name = p.duty_contact
+        <where>
+            <if test="id !=null">
+                p.id= #{id}
+            </if>
+            <if test="poCode !=null and poCode !=''">
+                and p.po_code like concat('%',#{poCode},'%')
+            </if>
+            <if test="originalProblemId !=null and originalProblemId !=''">
+                and p.original_problem_id like concat('%',#{originalProblemId},'%')
+            </if>
+            <if test="isImmidiately !=null">
+                and p.is_immidiately= #{isImmidiately}
+            </if>
+            <if test="areaIdList !=null and areaIdList.size > 0">
+                and (p.area_id in
+                <foreach collection="areaIdList" item="areaId" open="(" close=")" separator="," index="index">
+                    #{areaId}
+                </foreach>
+                or p.area_id is null )
+            </if>
+            <if test="intersection !=null and intersection !=''">
+                and dp.point_name like concat('%',#{intersection},'%')
+            </if>
+            <if test="startBreakdownTime !=null and endBreakdownTime !=null">
+                and p.breakdown_time   between  #{startBreakdownTime} and #{endBreakdownTime}
+            </if>
+            <if test="poEvent !=null">
+                and p.po_event = #{poEvent}
+            </if>
+            <if test="eventSource !=null">
+                and p.event_source = #{eventSource}
+            </if>
+            <if test="poType !=null">
+                and p.po_type = #{poType}
+            </if>
+            <if  test="reason !=null">
+                and p.reason = #{reason}
+            </if>
+            <if test="reasonList !=null and reasonList.size > 0">
+                and p.reason in
+                <foreach collection="reasonList" item="reason" open="(" close=")" separator="," index="index">
+                    #{reason}
+                </foreach>
+            </if>
+            <if test="solution !=null and solution !=''">
+                and p.solution like concat('%',#{solution},'%')
+            </if>
+            <if test="startSolutionTime !=null and endSolutionTime !=null">
+                and p.solution_time between  #{startSolutionTime} and #{endSolutionTime}
+            </if>
+            <if test="problemDescription !=null and problemDescription !=''">
+                and p.problem_description like concat('%',#{problemDescription},'%')
+            </if>
+            <if test="repairStatusList !=null and repairStatusList.size > 0">
+                and p.repair_status in
+                <foreach collection="repairStatusList" item="repairStatus" open="(" close=")" separator="," index="index">
+                    #{repairStatus}
+                </foreach>
+            </if>
+            <if test="dutyContactList !=null and dutyContactList.size > 0">
+                and p.duty_contact in
+                <foreach collection="dutyContactList" item="dutyContact" open="(" close=")" separator="," index="index">
+                    #{dutyContact}
+                </foreach>
+            </if>
+            <if test="isImmidiately !=null">
+                and p.is_immidiately= #{isImmidiately}
+            </if>
+            <if test="dataPermissions !=null and dataPermissions == 2 ">
+                and p.duty_contact = #{creator}
+            </if>
+            <if test="dataPermissions !=null and dataPermissions == 3 ">
+                and su.maintain_num = #{creator}
+            </if>
+            <if test="faultPhenomenonList !=null and faultPhenomenonList.size > 0">
+                and p.fault_phenomenon in
+                <foreach collection="faultPhenomenonList" item="faultPhenomenon" open="(" close=")" separator="," index="index">
+                    #{faultPhenomenon}
+                </foreach>
+            </if>
+            <if test="faultPhenomenon !=null">
+                and p.fault_phenomenon = #{faultPhenomenon}
+            </if>
+            <if test="showRepeat !=null and showRepeat == 0 ">
+                and p.repeat_mark is null
+            </if>
+
+        </where>
+        order by p.is_immidiately desc, p.breakdown_time desc
+    </select>
+    <select id="getPoExportData" resultType="com.zans.mms.vo.po.PoExportVO">
+        SELECT
+        p.id,
+        p.po_code,
+        area.item_value as area_id,
+        dp.point_name as intersection,
+        DATE_FORMAT( breakdown_time, '%Y-%m-%d %k:%i:%s' ) breakdown_time,
+        event.item_value as po_event,
+        source.item_value as event_source,
+        type.item_value as po_type,
+        reason.item_value as reason,
+        solution,
+        DATE_FORMAT( solution_time, '%Y-%m-%d %k:%i:%s' ) solution_time,
+        p.problem_description,
+        fault.item_value as faultPhenomenon,
+        p.creator,
+        p.create_time,
+        p.update_time,
+        p.repeat_mark
+        FROM
+        po_manager p
+        left join po_base_dict area on area.dict_key='area_id' and area.item_key=p.area_id
+        left join po_base_dict event on event.dict_key='po_event' and event.item_key=p.po_event
+        left join po_base_dict source on source.dict_key='event_source' and source.item_key=p.event_source
+        left join po_base_dict type on type.dict_key='po_type' and type.item_key=p.po_type
+        left join po_base_dict reason on reason.dict_key='reason' and reason.item_key=p.reason
+        left join po_base_dict fault on fault.dict_key='fault_phenomenon' and fault.item_key=p.fault_phenomenon
+        left join device_point dp on p.point_id = dp.id
+        <where>
+            <if test="id !=null">
+                p.id= #{id}
+            </if>
+            <if test="areaId !=null">
+                and p.area_id = #{areaId}
+            </if>
+            <if test="intersection !=null and intersection !=''">
+                and dp.point_name like concat('%',#{intersection},'%')
+            </if>
+            <if test="startBreakdownTime !=null and endBreakdownTime !=null">
+                and breakdown_time   between  #{startBreakdownTime} and #{endBreakdownTime}
+            </if>
+            <if test="poEvent !=null">
+                and po_event = #{poEvent}
+            </if>
+            <if test="eventSource !=null">
+                and event_source = #{eventSource}
+            </if>
+            <if test="poType !=null">
+                and po_type = #{poType}
+            </if>
+            <if  test="reason !=null">
+                and reason = #{reason}
+            </if>
+            <if test="solution !=null and solution !=''">
+                and solution like concat('%',#{solution},'%')
+            </if>
+            <if test="startSolutionTime !=null and endSolutionTime !=null">
+                and solution_time between  #{startSolutionTime} and #{endSolutionTime}
+            </if>
+            <if test="problemDescription !=null and problemDescription !=''">
+                and problem_description like concat('%',#{problemDescription},'%')
+            </if>
+            <if test="areaIdList !=null and areaIdList.size > 0">
+                and p.area_id in
+                <foreach collection="areaIdList" item="areaId" open="(" close=")" separator="," index="index">
+                    #{areaId}
+                </foreach>
+            </if>
+            <if test="isImmidiately !=null">
+                and p.is_immidiately= #{isImmidiately}
+            </if>
+            <if test="dutyContactList !=null and dutyContactList.size > 0">
+                and p.duty_contact in
+                <foreach collection="dutyContactList" item="dutyContact" open="(" close=")" separator="," index="index">
+                    #{dutyContact}
+                </foreach>
+            </if>
+            <if test="repairStatusList !=null and repairStatusList.size > 0">
+                and p.repair_status in
+                <foreach collection="repairStatusList" item="repairStatus" open="(" close=")" separator="," index="index">
+                    #{repairStatus}
+                </foreach>
+            </if>
+            <if test="faultPhenomenonList !=null and faultPhenomenonList.size > 0">
+                and p.fault_phenomenon in
+                <foreach collection="faultPhenomenonList" item="faultPhenomenon" open="(" close=")" separator="," index="index">
+                    #{faultPhenomenon}
+                </foreach>
+            </if>
+            <if test="reasonList !=null and reasonList.size > 0">
+                and p.reason in
+                <foreach collection="reasonList" item="reason" open="(" close=")" separator="," index="index">
+                    #{reason}
+                </foreach>
+            </if>
+            <if test="showRepeat !=null and showRepeat == 0 ">
+                and p.repeat_mark is null
+            </if>
+        </where>
+        order by breakdown_time desc
+    </select>
+
+    <select id="getAppList" resultType="com.zans.mms.model.PoManager">
+        SELECT
+        p.id,
+        p.po_code,
+        p.area_id,
+        p.point_id,
+        DATE_FORMAT(p.breakdown_time, '%Y-%m-%d %k:%i:%s' )  as breakdown_time,
+        p.po_event,
+        p.event_source,
+        p.po_type,
+        p.reason,
+        p.solution,
+        p.solution_time,
+        p.problem_description,
+        p.creator,
+        p.create_time,
+        p.update_time,
+        dp.point_name as intersection,
+        p.repair_status,
+        p.source_platform,
+        su.nick_name as duty_contact,
+        p.contact,
+        p.contact_phone,
+        p.before_adjunct_id,
+        p.after_adjunct_id,
+        p.confirmer_description,
+        p.closing_person_description,
+        p.original_problem_id,
+        p.is_immidiately,
+        p.repeat_mark,
+        p.device_type,
+        p.remark,
+        IF(p.repair_status=6, (select TIMESTAMPDIFF(MINUTE ,p.synchronization_time,now()))   >30,0) as isDispatchTimeOut,
+        IF(p.repair_status=7, (select TIMESTAMPDIFF(MINUTE ,p.dispatch_time,now())) >30,0) as isMaintainTimeOut
+        FROM
+        po_manager p left join
+        sys_user su on p.duty_contact = su.user_name
+        left join device_point dp on p.point_id = dp.id
+
+        <where>
+        <if test="id !=null">
+            p.id= #{id}
+        </if>
+        <if test="poCode !=null and poCode !=''">
+            and p.po_code like concat('%',#{poCode},'%')
+        </if>
+        <if test="intersection !=null and intersection !=''">
+            and dp.point_name like concat('%',#{intersection},'%')
+        </if>
+        <if test="startBreakdownTime !=null and endBreakdownTime !=null">
+            and p.breakdown_time   between  #{startBreakdownTime} and #{endBreakdownTime}
+        </if>
+        <if test="poEvent !=null">
+            and p.po_event = #{poEvent}
+        </if>
+        <if test="eventSource !=null">
+            and p.event_source = #{eventSource}
+        </if>
+        <if test="poType !=null">
+            and p.po_type = #{poType}
+        </if>
+        <if  test="reason !=null">
+            and p.reason = #{reason}
+        </if>
+        <if test="solution !=null and solution !=''">
+            and p.solution like concat('%',#{solution},'%')
+        </if>
+        <if test="startSolutionTime !=null and endSolutionTime !=null">
+            and p.solution_time between  #{startSolutionTime} and #{endSolutionTime}
+        </if>
+        <if test="problemDescription !=null and problemDescription !=''">
+            and p.problem_description like concat('%',#{problemDescription},'%')
+        </if>
+        <if test="repairStatus !=null and repairStatus!=''">
+                and p.repair_status = #{repairStatus}
+        </if>
+        <if test="keywordList != null and keywordList.size >0">
+
+            <foreach collection="keywordList" item="keyword"  >
+                and (dp.point_name like CONCAT('%',#{keyword},'%') or  p.contact_phone like CONCAT('%',#{keyword},'%')
+                or p.problem_description like  CONCAT('%',#{keyword},'%') or p.original_problem_id like CONCAT('%',#{keyword},'%')
+                or p.po_code like CONCAT('%',#{keyword},'%'))
+            </foreach>
+       </if>
+       <if test="dataPermissions !=null and dataPermissions == 2 ">
+            and p.duty_contact = #{creator}
+       </if>
+        <if test="dataPermissions !=null and dataPermissions == 3 ">
+             and su.maintain_num = #{creator}
+        </if>
+        </where>
+        order by p.is_immidiately desc,p.breakdown_time desc
+    </select>
+    <select id="appView" resultType="com.zans.mms.vo.po.PoManagerRepVO">
+        SELECT
+            p.id,
+            p.po_code,
+            p.area_id,
+            p.point_id,
+            DATE_FORMAT(p.breakdown_time, '%Y-%m-%d %k:%i:%s' )  as breakdown_time,
+            p.po_event,
+            p.event_source,
+            p.po_type,
+            p.reason,
+            p.solution,
+            p.solution_time,
+            p.problem_description,
+            p.fault_phenomenon,
+            p.creator,
+            p.create_time,
+            p.update_time,
+            dp.point_name as intersection,
+            p.repair_status,
+            p.source_platform,
+            su.nick_name as  dutyContactName,
+            p.duty_contact,
+            p.contact,
+            p.contact_phone,
+            p.before_adjunct_id,
+            p.after_adjunct_id,
+            p.confirmer_description,
+            p.closing_person_description,
+            p.original_problem_id,
+            p.is_immidiately,
+            p.device_type,
+            p.repeat_mark,
+            p.remark
+        FROM
+            po_manager p left join
+            device_point dp on p.point_id = dp.id
+            left join sys_user su on su.user_name=p.duty_contact
+            where p.id = #{id}
+    </select>
+    <select id="getLogs" resultType="com.zans.mms.model.PoManagerLogs">
+        SELECT
+            p.id,
+            p.po_id,
+            p.op_code,
+            p.po_status,
+            p.op_type,
+            p.msg,
+            p.op_platform,
+            su.nick_name as creator,
+            DATE_FORMAT( p.create_time, '%Y-%m-%d %k:%i:%s' ) as create_time
+        FROM
+            po_manager_logs p
+                left join
+            sys_user su on su.user_name=p.creator
+        where po_id = #{id}
+        order by p.create_time desc
+    </select>
+    <select id="getAppPoManagerTotal" resultType="com.zans.mms.vo.chart.CircleUnit">
+        SELECT COUNT(1) AS val,'underRepair' AS NAME ,'维修中' AS chineName
+        FROM po_manager p
+        <if test="maintainNum != null and maintainNum !=''">
+            left join sys_user su on p.duty_contact = su.user_name
+        </if>
+        WHERE p.repair_status=2
+        <if test="maintainNum != null and maintainNum !=''">
+           and  su.maintain_num = #{maintainNum}
+        </if>
+        UNION ALL
+        SELECT COUNT(1) AS val,'isImmidiately' AS NAME ,' 紧急舆情' AS chineName
+        FROM po_manager p
+        <if test="maintainNum != null and maintainNum !=''">
+            left join sys_user su on p.duty_contact = su.user_name
+        </if>
+        WHERE p.repair_status=2 and is_immidiately = 1
+        <if test="maintainNum != null and maintainNum !=''">
+           and  su.maintain_num = #{maintainNum}
+        </if>
+        UNION ALL
+        SELECT COUNT(1) AS val,'complete' AS NAME ,'维修完成' AS chineName
+        FROM po_manager p
+        <if test="maintainNum != null and maintainNum !=''">
+            left join sys_user su on p.duty_contact = su.user_name
+        </if>
+        where p.repair_status=3
+        <if test="maintainNum != null and maintainNum !=''">
+            and  su.maintain_num = #{maintainNum}
+        </if>
+    </select>
+    <select id="check" resultType="java.lang.Integer">
+        select count(*) from po_manager
+        <where>
+            <if test="id !=null">
+               id != #{id}
+            </if>
+            <if test="originalProblemId !=null and originalProblemId !=''">
+               and  original_problem_id = #{originalProblemId}
+            </if>
+        </where>
+    </select>
+    <select id="getByCode" resultType="java.lang.Long">
+        select id from po_manager where po_code = #{poCode}  limit 1
+    </select>
+    <select id="isNotExist" resultType="java.lang.Integer">
+        select IFNULL(count(*),0) from  po_manager where breakdown_time = #{breakdownTime}
+        <if test="originalProblemId !=null and originalProblemId !=''">
+            and original_problem_id = #{originalProblemId}
+        </if>
+        limit 1
+    </select>
+    <select id="isDispatchTimeOut" resultType="java.lang.Integer">
+        select   IFNULL(TIMESTAMPDIFF(MINUTE ,p.synchronization_time,dispatch_time)   >30,0)  as isDispatchTimeOut from po_manager p
+        where p.id = #{id}
+
+    </select>
+    <select id="isMaintainTimeOut" resultType="java.lang.Integer">
+        select   IFNULL(TIMESTAMPDIFF(MINUTE ,p.dispatch_time,p.maintain_time)   >30,0)  as isDispatchTimeOut from po_manager p
+        where p.id = #{id}
+    </select>
+
+    <select id="getIds" resultType="java.lang.Long">
+        select id from po_manager where repeat_mark = #{id}
+    </select>
+    <select id="getRepeatMark" resultType="java.lang.Integer">
+        select repeat_mark from po_manager where id = #{id}
+    </select>
+
+    <update id="relationTicket">
+        update po_manager set ticket_id = #{ticketId} where id= #{id}
+    </update>
+
+    <select id="getReason" resultType="java.util.Map">
+        SELECT
+        IFNULL(pbd.item_value,'未知')     AS name,
+        COUNT(1)  AS data
+        FROM  po_manager p
+        LEFT JOIN po_base_dict pbd ON pbd.dict_key='reason' and pbd.item_key=p.reason
+        <where>
+            <if test="type!=null and type ==1">
+                and  p.breakdown_time  BETWEEN DATE_ADD(CURDATE(), INTERVAL 0 HOUR) and DATE_ADD(DATE_ADD(CURDATE(),INTERVAL 1 DAY), INTERVAL 0 HOUR)
+            </if>
+            <if test="startTime != null and startTime !='' and endTime !=null and endTime!=''">
+                and p.breakdown_time  BETWEEN #{startTime} and #{endTime}
+            </if>
+        </where>
+        GROUP BY pbd.item_value
+        ORDER BY data desc
+    </select>
+    <select id="getPoTable" resultType="com.zans.mms.vo.po.PoManagerDataVO">
+        SELECT
+        pbd.item_value as areaName,
+        ( SELECT IFNULL( count( * ), 0 ) FROM po_manager p WHERE p.area_id = pbd.item_key
+        <if test="type!=null and type ==1">
+            and  p.breakdown_time  BETWEEN DATE_ADD(CURDATE(), INTERVAL 0 HOUR) and DATE_ADD(DATE_ADD(CURDATE(),INTERVAL 1 DAY), INTERVAL 0 HOUR)
+        </if>
+        <if test="startTime != null and startTime !='' and endTime !=null and endTime!=''">
+            and p.breakdown_time  BETWEEN #{startTime} and #{endTime}
+        </if>
+        ) AS totalCount,
+        ( SELECT IFNULL( count( * ), 0 ) FROM po_manager p WHERE p.area_id = pbd.item_key and p.repair_status=5
+        <if test="type!=null and type ==1">
+            and  p.breakdown_time  BETWEEN DATE_ADD(CURDATE(), INTERVAL 0 HOUR) and DATE_ADD(DATE_ADD(CURDATE(),INTERVAL 1 DAY), INTERVAL 0 HOUR)
+        </if>
+        <if test="startTime != null and startTime !='' and endTime !=null and endTime!=''">
+            and p.breakdown_time  BETWEEN #{startTime} and #{endTime}
+        </if>
+        ) AS completeCount,
+        ( SELECT IFNULL( count( * ), 0 ) FROM po_manager p WHERE p.area_id = pbd.item_key
+        <if test="type!=null and type ==1">
+            and  p.breakdown_time  BETWEEN DATE_ADD(CURDATE(), INTERVAL 0 HOUR) and DATE_ADD(DATE_ADD(CURDATE(),INTERVAL 1 DAY), INTERVAL 0 HOUR)
+        </if>
+        <if test="startTime != null and startTime !='' and endTime !=null and endTime!=''">
+            and p.breakdown_time  BETWEEN #{startTime} and #{endTime}
+        </if>
+        and (TIMESTAMPDIFF(MINUTE ,p.dispatch_time,p.maintain_time)   >30 or TIMESTAMPDIFF(MINUTE ,p.synchronization_time,dispatch_time)   >30) ) AS timeOutCount
+        FROM
+        po_base_dict pbd
+        WHERE
+        pbd.dict_key = 'area_id'
+        AND pbd.belong IS NOT NULL
+        ORDER BY
+        pbd.ordinal ASC
+    </select>
+    <select id="getCount" resultType="java.lang.Integer">
+        select IFNULL(count(*),0) as total from po_manager p
+        <where>
+            <if test="type!=null and type ==1">
+                and  p.breakdown_time  BETWEEN DATE_ADD(CURDATE(), INTERVAL 0 HOUR) and DATE_ADD(DATE_ADD(CURDATE(),INTERVAL 1 DAY), INTERVAL 0 HOUR)
+            </if>
+            <if test="startTime != null and startTime !='' and endTime !=null and endTime!=''">
+                and p.breakdown_time  BETWEEN #{startTime} and #{endTime}
+            </if>
+        </where>
+    </select>
+    <select id="getMainCityCount" resultType="java.lang.Integer">
+        select IFNULL(count(*),0) as total from po_manager p
+        <where>
+            area_id in(3,4,5,6,7,8,10,18)
+            <if test="type!=null and type ==1">
+                and  p.breakdown_time  BETWEEN DATE_ADD(CURDATE(), INTERVAL 0 HOUR) and DATE_ADD(DATE_ADD(CURDATE(),INTERVAL 1 DAY), INTERVAL 0 HOUR)
+            </if>
+            <if test="startTime != null and startTime !='' and endTime !=null and endTime!=''">
+                and p.breakdown_time  BETWEEN #{startTime} and #{endTime}
+            </if>
+        </where>
+    </select>
+    <select id="getRemoteCityCount" resultType="java.lang.Integer">
+        select IFNULL(count(*),0) as total from po_manager p
+        <where>
+            area_id in(11,12,13,14,15,16,17)
+            <if test="type!=null and type ==1">
+                and  p.breakdown_time  BETWEEN DATE_ADD(CURDATE(), INTERVAL 0 HOUR) and DATE_ADD(DATE_ADD(CURDATE(),INTERVAL 1 DAY), INTERVAL 0 HOUR)
+            </if>
+            <if test="startTime != null and startTime !='' and endTime !=null and endTime!=''">
+                and p.breakdown_time  BETWEEN #{startTime} and #{endTime}
+            </if>
+        </where>
+    </select>
+    <select id="getListByIds" resultType="com.zans.mms.vo.po.PoManagerRepVO">
+        SELECT
+        p.id,
+        p.po_code,
+        p.area_id,
+        p.point_id,
+        p.breakdown_time,
+        p.po_event,
+        p.event_source,
+        p.reason,
+        p.solution,
+        p.solution_time,
+        p.problem_description,
+        dp.point_name as intersection,
+        p.repair_status,
+        su.nick_name as  dutyContactName,
+        p.fault_phenomenon,
+        p.is_immidiately,
+        p.problem_description
+        FROM
+        po_manager p left join
+        device_point dp on p.point_id = dp.id
+        left join sys_user su on su.user_name = p.duty_contact
+        <where>
+            <if test="ids !=null and ids.size > 0">
+                and p.id in
+                <foreach collection="ids" item="id" open="(" close=")" separator="," index="index">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+</mapper>

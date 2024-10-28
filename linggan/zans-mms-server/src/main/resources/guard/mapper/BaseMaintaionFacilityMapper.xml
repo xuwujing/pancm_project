@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.BaseMaintaionFacilityMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.BaseMaintaionFacility" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" property="id" jdbcType="VARCHAR" />
+    <result column="org_id" property="orgId" jdbcType="VARCHAR" />
+    <result column="device_code" property="deviceCode" jdbcType="VARCHAR" />
+    <result column="device_price" property="devicePrice" jdbcType="DECIMAL" />
+    <result column="device_category" property="deviceCategory" jdbcType="VARCHAR" />
+    <result column="device_name" property="deviceName" jdbcType="VARCHAR" />
+    <result column="device_spec" property="deviceSpec" jdbcType="VARCHAR" />
+    <result column="device_brand" property="deviceBrand" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+    <select id="getList" resultType="com.zans.mms.model.BaseMaintaionFacility">
+      select * from base_maintaion_facility
+      <where>
+        <if test="deviceName != null and deviceName !=''">
+          and device_name like  concat('%',#{deviceName},'%')
+        </if>
+        <if test="deviceCategory != null and deviceCategory !=''">
+          and device_category =#{deviceCategory}
+        </if>
+        <if test="orgId != null and orgId !=''">
+          and org_id=#{orgId}
+        </if>
+        <if test="deviceCode != null and deviceCode !=''">
+          and device_code=#{deviceCode}
+        </if>
+      </where>
+    </select>
+
+
+  <select id="getTicketList" resultType="com.zans.mms.model.BaseMaintaionFacility">
+    select bmf.*,0 as isOccur
+
+    from base_maintaion_facility bmf
+    <where>
+      <if test="deviceName != null and deviceName !=''">
+        and bmf.device_name like  concat('%',#{deviceName},'%')
+      </if>
+      <if test="deviceCategory != null and deviceCategory !=''">
+        and bmf.device_category =#{deviceCategory}
+      </if>
+      <if test="orgId != null and orgId !=''">
+        and bmf.org_id=#{orgId}
+      </if>
+      <if test="deviceCode != null and deviceCode !=''">
+        and bmf.device_code=#{deviceCode}
+      </if>
+    </where>
+    order by bmf.id asc
+  </select>
+
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.PoBaseDictDao" >
+
+
+    <select id="findItemsByDict" resultType="com.zans.base.vo.SelectVO">
+        select item_key, item_value, class_type from po_base_dict where dict_key=#{dictKey} order by ordinal, id
+    </select>
+    <select id="findValueByKeyAndDict" resultType="java.lang.Integer">
+        select  item_key from po_base_dict where dict_key=#{dict} and item_value=#{val} limit 1
+    </select>
+    <select id="getDuty" resultType="java.lang.String">
+        select item_key from po_base_dict where dict_key = 'duty_contact'
+    </select>
+    <select id="Key2Value" resultType="java.lang.String">
+        select item_value from po_base_dict where dict_key=#{dictKey} and item_key=#{itemKey}
+    </select>
+    <select id="getAreaBelong" resultType="java.lang.String">
+        select belong from po_base_dict where item_key=#{areaId} and dict_key='area_id' order by ordinal, id
+    </select>
+    <select id="findByCode" resultType="com.zans.mms.model.PoBaseDict">
+        select item_key,belong  from po_base_dict where remark= #{remark}
+    </select>
+    <select id="findPoDeviceType" resultType="com.zans.base.vo.SelectVO">
+        select belong as item_value,item_key from po_base_dict where dict_key= 'po_event'
+    </select>
+    <select id="getEventKey" resultType="java.lang.String">
+        select item_key from po_base_dict where dict_key='po_event'
+    </select>
+    <select id="getReasonList" resultType="com.zans.base.vo.SelectVO">
+        select item_key,item_value from po_base_dict p where dict_key='reason' and  find_in_set( #{param} , p.remark) order by p.ordinal
+    </select>
+    <select id="remark2ItemKey" resultType="java.lang.Integer">
+        select item_key from po_base_dict where dict_key='po_event' and remark = #{remark}
+    </select>
+    <select id="remark2DeviceType" resultType="java.lang.String">
+        select belong from po_base_dict where dict_key='po_event' and remark = #{remark}
+    </select>
+    <select id="getOrgUser" resultType="java.lang.String">
+        SELECT
+            item_key
+        FROM
+            po_base_dict
+        WHERE
+                dict_key IN ( SELECT DISTINCT ( maintain_num ) FROM sys_user WHERE user_name IN
+        <foreach collection="currentUsername" item="username" separator="," open="(" close=")" >
+            #{username}
+        </foreach>
+                 )
+    </select>
+</mapper>

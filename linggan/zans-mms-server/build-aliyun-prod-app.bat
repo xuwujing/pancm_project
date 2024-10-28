@@ -1,0 +1,1 @@
+ant -f build-aliyun-prod-app.xml

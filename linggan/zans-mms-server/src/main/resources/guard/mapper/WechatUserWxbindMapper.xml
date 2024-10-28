@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.WechatUserWxbindDao">
+
+    <resultMap type="com.zans.mms.model.WechatUserWxbind" id="WechatUserWxbindMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="wxAppid" column="wx_appid" jdbcType="VARCHAR"/>
+        <result property="wxOpenid" column="wx_openid" jdbcType="VARCHAR"/>
+        <result property="wxUnionid" column="wx_unionid" jdbcType="VARCHAR"/>
+        <result property="wxNicename" column="wx_nicename" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="WechatUserWxbindMap">
+        select id,
+               user_name,
+               wx_appid,
+               wx_openid,
+               wx_unionid,
+               wx_nicename,
+               create_time,
+               update_time
+        from wechat_user_wxbind
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="WechatUserWxbindMap">
+        select
+        id, user_name, wx_appid, wx_openid, wx_unionid, wx_nicename, create_time, update_time
+        from wechat_user_wxbind
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="wxAppid != null and wxAppid != ''">
+                and wx_appid = #{wxAppid}
+            </if>
+            <if test="wxOpenid != null and wxOpenid != ''">
+                and wx_openid = #{wxOpenid}
+            </if>
+            <if test="wxUnionid != null and wxUnionid != ''">
+                and wx_unionid = #{wxUnionid}
+            </if>
+            <if test="wxNicename != null and wxNicename != ''">
+                and wx_nicename = #{wxNicename}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="queryByOpenId" resultType="com.zans.mms.model.WechatUserWxbind">
+        select id,
+               user_name,
+               wx_appid,
+               wx_openid,
+               wx_unionid,
+               wx_nicename,
+               create_time,
+               update_time
+        from wechat_user_wxbind
+        where wx_appid = #{appId} and wx_openid = #{openId}
+    </select>
+
+
+    <select id="queryByOrgId" resultType="java.lang.String">
+        select wuw.wx_unionid
+        from wechat_user_wxbind wuw
+        left join  sys_user su on su.user_name = wuw.user_name
+        <where>
+            <if test="orgId != null and orgId != '' ">
+                and su.maintain_num = #{orgId}
+            </if>
+            <if test="roleId != null and roleId != ''">
+                and su.role_num  = #{roleId}
+            </if>
+            <if test="weChatEnable != null">
+                and su.wechat_enable  = #{weChatEnable}
+            </if>
+            <if test="weChatPushEnable != null ">
+                and su.wechat_push_enable  = #{weChatPushEnable}
+            </if>
+        </where>
+
+
+
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into wechat_user_wxbind(user_name, wx_appid, wx_openid, wx_unionid, wx_nicename)
+        values (#{userName}, #{wxAppid}, #{wxOpenid}, #{wxUnionid}, #{wxNicename})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into wechat_user_wxbind(user_name, wx_appid, wx_openid, wx_unionid, wx_nicename, create_time,
+        update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userName}, #{entity.wxAppid}, #{entity.wxOpenid}, #{entity.wxUnionid}, #{entity.wxNicename},
+            #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into wechat_user_wxbind(user_name, wx_appid, wx_openid, wx_unionid, wx_nicename, create_time,
+        update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userName}, #{entity.wxAppid}, #{entity.wxOpenid}, #{entity.wxUnionid}, #{entity.wxNicename},
+            #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        user_name = values(user_name) , wx_appid = values(wx_appid) , wx_openid = values(wx_openid) , wx_unionid =
+        values(wx_unionid) , wx_nicename = values(wx_nicename) , create_time = values(create_time) , update_time =
+        values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update wechat_user_wxbind
+        <set>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where  user_name = #{userName}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from wechat_user_wxbind
+        where id = #{id}
+    </delete>
+
+
+    <delete id="deleteByUserName">
+        delete
+        from wechat_user_wxbind
+        where user_name = #{userName}
+    </delete>
+
+</mapper>
+

@@ -1,0 +1,1 @@
+ant -f build-whjg-prod-app.xml

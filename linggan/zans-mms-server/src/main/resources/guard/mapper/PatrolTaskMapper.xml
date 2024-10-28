@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.PatrolTaskMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.PatrolTask" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="patrol_scheme_id" property="patrolSchemeId" jdbcType="BIGINT" />
+    <result column="org_id" property="orgId" jdbcType="VARCHAR" />
+    <result column="task_name" property="taskName" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="DATE" />
+    <result column="end_time" property="endTime" jdbcType="DATE" />
+    <result column="point_count" property="pointCount" jdbcType="INTEGER" />
+    <result column="finished_count" property="finishedCount" jdbcType="INTEGER" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+    <delete id="deleteByUniqueId">
+      delete from patrol_task where id =#{id}
+    </delete>
+    <delete id="deleteCheckResult">
+        delete from patrol_task_check_result where patrol_task_id = #{id}
+    </delete>
+    <select id="getList" resultType="com.zans.mms.vo.patrol.PatrolTaskResVO">
+      SELECT
+         task_name taskName,
+         description,
+         DATE_FORMAT(`start_time`,'%Y-%m-%d')  startDate,
+         DATE_FORMAT(`end_time`,'%Y-%m-%d')  endDate,
+         point_count pointCount,
+         finished_count finishedCount,
+         1 execute_status,
+         finished_count/point_count finishedRate,
+         '启用' enableStatus,
+         org_id orgId,
+         create_time createTime,
+         id
+      FROM
+      patrol_task
+          <where>
+              <if test="patrolTaskId != null ">
+                  and id = #{patrolTaskId}
+              </if>
+              <if test="taskName != null  and taskName != ''">
+                  and task_name  like concat('%',#{taskName},'%')
+              </if>
+              <if test="startDate !=null and startDate != '' and  endDate !=null and  endDate !=''">
+                  and   (start_time &gt;= #{startDate}  and start_time &lt;=#{endDate}  or   end_time &gt;= #{startDate}  and end_time &lt;=#{endDate})
+              </if>
+              <if test="patrolDate !=null and patrolDate != '' ">
+                  and   start_time &lt;= #{patrolDate}  and  #{patrolDate} &lt;= end_time
+              </if>
+
+              <choose>
+                  <when test="orgIdPerm != null  and orgIdPerm !='' and userNamePerm != null and userNamePerm !=''">
+                      and org_id=#{orgIdPerm}
+                  </when>
+                  <otherwise>
+                      <if test="orgIdPerm != null  and orgIdPerm !=''">
+                          and org_id=#{orgIdPerm}
+                      </if>
+                      <if test="userNamePerm != null and userNamePerm !=''">
+                          and creator=#{userNamePerm}
+                      </if>
+                  </otherwise>
+              </choose>
+
+              <if test="orgIds!= null and orgIds.size>0">
+                  and org_id in
+                  <foreach collection="orgIds" item="orgId" index="index" separator="," open="(" close=")">
+                      #{orgId}
+                  </foreach>
+              </if>
+
+          </where>
+       order by end_time,task_name asc
+
+  </select>
+  <select id="getViewById" resultType="com.zans.mms.vo.patrol.PatrolTaskDetailResVO">
+
+  </select>
+    <select id="getPatrolResult" resultType="com.zans.mms.vo.patrol.TaskDetailVO">
+        SELECT
+            dp.area_id areaId,
+            dp.device_type deviceType,
+            dp.point_code pointCode,
+            dp.id pointId,
+            dp.point_name pointName,
+            r.prev_check_result prevCheckResult,
+            r.check_result checkResult,
+            DATE_FORMAT(`check_time`,'%Y-%m-%d %H:%i:%S')  checkTime,
+            r.adjunct_uuid adjunctUuid,
+            u.nick_name  nickName,
+            r.id,
+            r.check_remark checkRemark
+        FROM
+            patrol_task_check_result r
+            LEFT JOIN device_point dp ON r.point_id = dp.id
+            left  join sys_user u on u.user_name = r.check_user
+            <where>
+                <if test="patrolTaskId != null">
+                   and  r.patrol_task_id = #{patrolTaskId}
+                </if>
+                <if test="checkStatus != null">
+                    and  r.check_status = #{checkStatus}
+                </if>
+            </where>
+    </select>
+    <select id="getLastRecord" resultType="com.zans.mms.model.PatrolTask">
+        SELECT * FROM patrol_task WHERE patrol_scheme_id=#{patrolSchemeId} ORDER BY id desc LIMIT 1
+    </select>
+    <select id="getPatrolLogList" resultType="com.zans.mms.vo.patrol.PatrolLogRespVO">
+        SELECT
+        dp.id,
+        pt.org_id orgId,
+        dp.area_id  areaId,
+        dp.point_name pointName,
+        dp.point_code pointCode,
+        dp.id pointId,
+        dp.device_type deviceType,
+        ptcr.check_result checkResult,
+        ptcr.prev_check_result prevCheckResult,
+        su.nick_name nickName,
+        DATE_FORMAT(ptcr.check_time,'%Y-%m-%d %H:%i:%S')  checkTime,
+        ptcr.adjunct_uuid  adjunctUuid,
+        ptcr.check_remark checkRemark,
+        ptcr.ticket_id,
+        (select t.ticket_code from ticket t where id =ptcr.ticket_id ) as ticket_code
+        FROM
+        `patrol_task_check_result` ptcr
+        LEFT JOIN patrol_task pt  on ptcr.patrol_task_id=pt.id
+        LEFT JOIN device_point dp ON ptcr.point_id = dp.id
+        LEFT JOIN sys_user su ON su.user_name = ptcr.check_user
+        WHERE
+        check_status = 1
+
+        <choose>
+            <when test="orgIdPerm != null  and orgIdPerm !='' and userNamePerm != null and userNamePerm !=''">
+                and pt.org_id=#{orgIdPerm}
+            </when>
+            <otherwise>
+                <if test="orgIdPerm != null  and orgIdPerm !=''">
+                    and pt.org_id=#{orgIdPerm}
+                </if>
+                <if test="userNamePerm != null and userNamePerm !=''">
+                    and pt.creator=#{userNamePerm}
+                </if>
+            </otherwise>
+        </choose>
+
+        <if test="orgIds!= null and orgIds.size>0">
+            and pt.org_id in
+            <foreach collection="orgIds" item="orgId" index="index" separator="," open="(" close=")">
+                #{orgId}
+            </foreach>
+        </if>
+        <if test="areaId != null and areaId !=''">
+            and  dp.area_id = #{areaId}
+        </if>
+        <if test="deviceType != null and deviceType !=''">
+            AND dp.device_type = #{deviceType}
+        </if>
+        <if test="pointName != null and pointName !=''">
+            AND dp.point_name LIKE concat('%',#{pointName},'%')
+        </if>
+        <if test="pointCode != null and pointCode !=''">
+            AND dp.point_code LIKE concat('%',#{pointCode},'%')
+        </if>
+        <if test="checkResult != null and checkResult !=''">
+            and ptcr.check_result=#{checkResult}
+        </if>
+        <if test="prevCheckResult != null and prevCheckResult !=''">
+            and ptcr.prev_check_result=#{prevCheckResult}
+        </if>
+        <if test="nickName != null and nickName !=''">
+            and su.nick_name like concat('%',#{nickName},'%') #{prevCheckResult}
+        </if>
+        <if test="id != null">
+            and ptcr.id=#{id}
+        </if>
+        <if test="startDate !=null and startDate != '' and  endDate !=null and  endDate !=''">
+            and  ptcr.check_time between #{startDate} and #{endDate}
+        </if>
+        order by ptcr.check_time desc
+
+
+    </select>
+    <select id="getPushPatrolData" resultType="com.zans.mms.vo.patrol.PatrolPushMessageData">
+	select a.orgId,a.unCheckCount,orgName from (SELECT
+	t.org_id as  orgId,bo.org_name orgName ,count(r.id) as unCheckCount
+    FROM
+	     patrol_task_check_result r
+	      LEFT JOIN patrol_task t ON t.id = r.patrol_task_id
+	      LEFT join  base_org bo  on bo.org_id= t.org_id
+    WHERE
+        t.end_time = curDate()
+        and r.check_status  &lt;&gt; 1
+        GROUP BY t.org_id ) a where a.unCheckCount  &gt; 0
+    </select>
+
+    <select id="getPatrolTotal" resultType="Map">
+        SELECT
+        count( t.point_id ) AS total,
+        IFNULL(sum(IF(DATE_FORMAT(t.check_time,'%Y-%m-%d') = curDate(),1,0)),0) as todayCompleted,
+        IFNULL(sum(IF(t.end_time = curDate() and t.check_status =0 , 1, 0)),0) as todayMustCompleted
+        FROM
+        (
+            SELECT
+            t1.point_id,
+            min( t1.check_status ) AS check_status,
+            max( t1.check_time ) AS check_time,
+            min( t2.end_time ) AS end_time
+            FROM
+            patrol_task_check_result t1
+            LEFT JOIN patrol_task t2 ON t2.id = t1.patrol_task_id
+            WHERE
+            curDate( ) &gt;= t2.start_time
+            AND curDate( ) &lt;= t2.end_time
+            <if test="orgIdPerm != null">
+                AND t2.org_id = #{orgIdPerm}
+            </if>
+            GROUP BY
+            t1.point_id
+        ) t
+    </select>
+    <select id="getPatrolFinshInfo" resultType="com.zans.mms.vo.patrol.PatrolFinshInfoVO">
+        SELECT
+            count( 1 ) AS pointCount,
+            patrol_task_id as patrolTaskId,
+            sum( IF ( check_status = 1, 1, 0 ) ) AS finishedCount,
+            sum( IF ( check_status = 1, 1, 0 ) )/count( 1 )  as finishedRate
+        FROM
+            `patrol_task_check_result`
+        GROUP BY
+            patrol_task_id
+
+    </select>
+    <select id="getRecentCheckResult" resultType="java.lang.String">
+        SELECT
+            check_result
+        FROM
+            patrol_task_check_result
+        WHERE
+            point_id = #{pointId}
+        ORDER BY
+            check_time DESC
+            LIMIT 2
+    </select>
+
+    <select id="getCheckCount" resultType="java.lang.Integer">
+        SELECT
+
+            count(*)
+        FROM
+            patrol_task_check_result ptcr
+                left join patrol_task pt on ptcr.patrol_task_id = pt.id
+                left join device_point dp on dp.id = ptcr.point_id
+        WHERE
+            check_time BETWEEN DATE_ADD( CURDATE( ), INTERVAL 0 HOUR )
+                AND DATE_ADD( DATE_ADD( CURDATE( ), INTERVAL 1 DAY ), INTERVAL 0 HOUR )
+          and  pt.org_id=#{orgId} and dp.device_type='24' and ptcr.check_status=1
+        UNION ALL
+        SELECT
+            count(*)
+        FROM
+            patrol_task_check_result ptcr
+                left join patrol_task pt on ptcr.patrol_task_id = pt.id
+                left join device_point dp on dp.id = ptcr.point_id
+        WHERE
+            check_time BETWEEN DATE_ADD( CURDATE( ), INTERVAL 0 HOUR )
+                AND DATE_ADD( DATE_ADD( CURDATE( ), INTERVAL 1 DAY ), INTERVAL 0 HOUR )
+          and  pt.org_id=#{orgId} and dp.device_type='17' and ptcr.check_status=1
+        UNION ALL
+        SELECT
+            count(*)
+        FROM
+            patrol_task_check_result ptcr
+                left join patrol_task pt on ptcr.patrol_task_id = pt.id
+                left join device_point dp on dp.id = ptcr.point_id
+        WHERE
+            check_time BETWEEN DATE_ADD( CURDATE( ), INTERVAL 0 HOUR )
+                AND DATE_ADD( DATE_ADD( CURDATE( ), INTERVAL 1 DAY ), INTERVAL 0 HOUR )
+          and  pt.org_id=#{orgId} and dp.device_type='02' and ptcr.check_status=1
+        UNION ALL
+        SELECT
+            count(*)
+        FROM
+            patrol_task_check_result ptcr
+                left join patrol_task pt on ptcr.patrol_task_id = pt.id
+                left join device_point dp on dp.id = ptcr.point_id
+        WHERE
+            check_time BETWEEN DATE_ADD( CURDATE( ), INTERVAL 0 HOUR )
+                AND DATE_ADD( DATE_ADD( CURDATE( ), INTERVAL 1 DAY ), INTERVAL 0 HOUR )
+          and  pt.org_id=#{orgId} and dp.device_type='03' and ptcr.check_status=1
+        UNION ALL
+        SELECT
+            count(*)
+        FROM
+            patrol_task_check_result ptcr
+                left join patrol_task pt on ptcr.patrol_task_id = pt.id
+                left join device_point dp on dp.id = ptcr.point_id
+        WHERE
+            check_time BETWEEN DATE_ADD( CURDATE( ), INTERVAL 0 HOUR )
+                AND DATE_ADD( DATE_ADD( CURDATE( ), INTERVAL 1 DAY ), INTERVAL 0 HOUR )
+          and  pt.org_id=#{orgId} and dp.device_type='04' and ptcr.check_status=1
+    </select>
+    <select id="getTimeOutCount" resultType="java.lang.Integer">
+        SELECT
+
+            count(*)
+        FROM
+            patrol_task_check_result ptcr
+                left join patrol_task pt on ptcr.patrol_task_id = pt.id
+                left join device_point dp on dp.id = ptcr.point_id
+        WHERE
+            check_time BETWEEN DATE_ADD( CURDATE( ), INTERVAL 0 HOUR )
+                AND DATE_ADD( DATE_ADD( CURDATE( ), INTERVAL 1 DAY ), INTERVAL 0 HOUR )
+          and  pt.org_id=#{orgId} and dp.device_type='24' and ptcr.check_status=0
+        UNION ALL
+        SELECT
+            count(*)
+        FROM
+            patrol_task_check_result ptcr
+                left join patrol_task pt on ptcr.patrol_task_id = pt.id
+                left join device_point dp on dp.id = ptcr.point_id
+        WHERE
+            check_time BETWEEN DATE_ADD( CURDATE( ), INTERVAL 0 HOUR )
+                AND DATE_ADD( DATE_ADD( CURDATE( ), INTERVAL 1 DAY ), INTERVAL 0 HOUR )
+          and  pt.org_id=#{orgId} and dp.device_type='17' and ptcr.check_status=0
+        UNION ALL
+        SELECT
+            count(*)
+        FROM
+            patrol_task_check_result ptcr
+                left join patrol_task pt on ptcr.patrol_task_id = pt.id
+                left join device_point dp on dp.id = ptcr.point_id
+        WHERE
+            check_time BETWEEN DATE_ADD( CURDATE( ), INTERVAL 0 HOUR )
+                AND DATE_ADD( DATE_ADD( CURDATE( ), INTERVAL 1 DAY ), INTERVAL 0 HOUR )
+          and  pt.org_id=#{orgId} and dp.device_type='02' and ptcr.check_status=0
+        UNION ALL
+        SELECT
+            count(*)
+        FROM
+            patrol_task_check_result ptcr
+                left join patrol_task pt on ptcr.patrol_task_id = pt.id
+                left join device_point dp on dp.id = ptcr.point_id
+        WHERE
+            check_time BETWEEN DATE_ADD( CURDATE( ), INTERVAL 0 HOUR )
+                AND DATE_ADD( DATE_ADD( CURDATE( ), INTERVAL 1 DAY ), INTERVAL 0 HOUR )
+          and  pt.org_id=#{orgId} and dp.device_type='03' and ptcr.check_status=0
+        UNION ALL
+        SELECT
+            count(*)
+        FROM
+            patrol_task_check_result ptcr
+                left join patrol_task pt on ptcr.patrol_task_id = pt.id
+                left join device_point dp on dp.id = ptcr.point_id
+        WHERE
+            check_time BETWEEN DATE_ADD( CURDATE( ), INTERVAL 0 HOUR )
+                AND DATE_ADD( DATE_ADD( CURDATE( ), INTERVAL 1 DAY ), INTERVAL 0 HOUR )
+          and  pt.org_id=#{orgId} and dp.device_type='04' and ptcr.check_status=0
+    </select>
+    <select id="getBreakDownCount" resultType="java.lang.Integer">
+        SELECT
+
+            count(*)
+        FROM
+            patrol_task_check_result ptcr
+                left join patrol_task pt on ptcr.patrol_task_id = pt.id
+                left join device_point dp on dp.id = ptcr.point_id
+        WHERE
+            check_time BETWEEN DATE_ADD( CURDATE( ), INTERVAL 0 HOUR )
+                AND DATE_ADD( DATE_ADD( CURDATE( ), INTERVAL 1 DAY ), INTERVAL 0 HOUR )
+          and  pt.org_id=#{orgId} and dp.device_type='24' and ptcr.check_result=0 and ptcr.check_status=1
+        UNION ALL
+        SELECT
+            count(*)
+        FROM
+            patrol_task_check_result ptcr
+                left join patrol_task pt on ptcr.patrol_task_id = pt.id
+                left join device_point dp on dp.id = ptcr.point_id
+        WHERE
+            check_time BETWEEN DATE_ADD( CURDATE( ), INTERVAL 0 HOUR )
+                AND DATE_ADD( DATE_ADD( CURDATE( ), INTERVAL 1 DAY ), INTERVAL 0 HOUR )
+          and  pt.org_id=#{orgId} and dp.device_type='17' and ptcr.check_result=0 and ptcr.check_status=1
+        UNION ALL
+        SELECT
+            count(*)
+        FROM
+            patrol_task_check_result ptcr
+                left join patrol_task pt on ptcr.patrol_task_id = pt.id
+                left join device_point dp on dp.id = ptcr.point_id
+        WHERE
+            check_time BETWEEN DATE_ADD( CURDATE( ), INTERVAL 0 HOUR )
+                AND DATE_ADD( DATE_ADD( CURDATE( ), INTERVAL 1 DAY ), INTERVAL 0 HOUR )
+          and  pt.org_id=#{orgId} and dp.device_type='02' and ptcr.check_result=0 and ptcr.check_status=1
+        UNION ALL
+        SELECT
+            count(*)
+        FROM
+            patrol_task_check_result ptcr
+                left join patrol_task pt on ptcr.patrol_task_id = pt.id
+                left join device_point dp on dp.id = ptcr.point_id
+        WHERE
+            check_time BETWEEN DATE_ADD( CURDATE( ), INTERVAL 0 HOUR )
+                AND DATE_ADD( DATE_ADD( CURDATE( ), INTERVAL 1 DAY ), INTERVAL 0 HOUR )
+          and  pt.org_id=#{orgId} and dp.device_type='03' and ptcr.check_result=0 and ptcr.check_status=1
+        UNION ALL
+        SELECT
+            count(*)
+        FROM
+            patrol_task_check_result ptcr
+                left join patrol_task pt on ptcr.patrol_task_id = pt.id
+                left join device_point dp on dp.id = ptcr.point_id
+        WHERE
+            check_time BETWEEN DATE_ADD( CURDATE( ), INTERVAL 0 HOUR )
+                AND DATE_ADD( DATE_ADD( CURDATE( ), INTERVAL 1 DAY ), INTERVAL 0 HOUR )
+          and  pt.org_id=#{orgId} and dp.device_type='04' and ptcr.check_result=0 and ptcr.check_status=1
+    </select>
+    <select id="getRate" resultType="java.math.BigDecimal">
+        SELECT
+            IFNULL(checkCount / total,0.0)
+        FROM
+            (
+             (
+                 SELECT
+                     count( r.id ) AS CheckCount
+                 FROM
+                     patrol_task_check_result r
+                         LEFT JOIN patrol_task t ON t.id = r.patrol_task_id
+                 WHERE
+                     t.org_id = #{orgId}
+                   AND t.end_time = curDate( )
+                   AND r.check_status = 1
+             ) AS complete,
+                (
+             SELECT
+             count( r.id ) AS total
+                FROM
+                patrol_task_check_result r
+                LEFT JOIN patrol_task t ON t.id = r.patrol_task_id
+                WHERE
+                t.org_id = #{orgId}
+                AND t.end_time = curDate( )
+                ) AS total
+                )
+    </select>
+
+</mapper>

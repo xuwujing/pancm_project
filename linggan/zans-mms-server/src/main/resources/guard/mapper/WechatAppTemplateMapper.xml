@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.WechatAppTemplateDao">
+
+    <resultMap type="com.zans.mms.model.WechatAppTemplate" id="WechatAppTemplateMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="appid" column="appid" jdbcType="VARCHAR"/>
+        <result property="templateId" column="template_id" jdbcType="VARCHAR"/>
+        <result property="templateType" column="template_type" jdbcType="INTEGER"/>
+        <result property="templateName" column="template_name" jdbcType="VARCHAR"/>
+        <result property="templateMsg" column="template_msg" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="WechatAppTemplateMap">
+        select id,
+               appid,
+               template_id,
+               template_type,
+               template_name,
+               template_msg,
+               create_time,
+               update_time
+        from wechat_app_template
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="WechatAppTemplateMap">
+        select
+        id, appid, template_id, template_type, template_name, template_msg, create_time, update_time
+        from wechat_app_template
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="appid != null and appid != ''">
+                and appid = #{appid}
+            </if>
+            <if test="templateId != null and templateId != ''">
+                and template_id = #{templateId}
+            </if>
+            <if test="templateType != null">
+                and template_type = #{templateType}
+            </if>
+            <if test="templateName != null and templateName != ''">
+                and template_name = #{templateName}
+            </if>
+            <if test="templateMsg != null and templateMsg != ''">
+                and template_msg = #{templateMsg}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="findOne" resultType="com.zans.mms.model.WechatAppTemplate">
+        select
+        id, appid, template_id, template_type, template_name, template_msg,template_rule,template_rule_size, is_redirect,create_time, update_time
+        from wechat_app_template
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="appid != null and appid != ''">
+                and appid = #{appid}
+            </if>
+            <if test="templateId != null and templateId != ''">
+                and template_id = #{templateId}
+            </if>
+            <if test="templateType != null">
+                and template_type = #{templateType}
+            </if>
+            <if test="templateName != null and templateName != ''">
+                and template_name = #{templateName}
+            </if>
+            <if test="templateMsg != null and templateMsg != ''">
+                and template_msg = #{templateMsg}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into wechat_app_template(appid, template_id, template_type, template_name, template_msg, create_time,
+                                        update_time)
+        values (#{appid}, #{templateId}, #{templateType}, #{templateName}, #{templateMsg}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into wechat_app_template(appid, template_id, template_type, template_name, template_msg, create_time,
+        update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.appid}, #{entity.templateId}, #{entity.templateType}, #{entity.templateName},
+            #{entity.templateMsg}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into wechat_app_template(appid, template_id, template_type, template_name, template_msg, create_time,
+        update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.appid}, #{entity.templateId}, #{entity.templateType}, #{entity.templateName},
+            #{entity.templateMsg}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        appid = values(appid) , template_id = values(template_id) , template_type = values(template_type) ,
+        template_name = values(template_name) , template_msg = values(template_msg) , create_time = values(create_time)
+        , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update wechat_app_template
+        <set>
+            <if test="appid != null and appid != ''">
+                appid = #{appid},
+            </if>
+            <if test="templateId != null and templateId != ''">
+                template_id = #{templateId},
+            </if>
+            <if test="templateType != null">
+                template_type = #{templateType},
+            </if>
+            <if test="templateName != null and templateName != ''">
+                template_name = #{templateName},
+            </if>
+            <if test="templateMsg != null and templateMsg != ''">
+                template_msg = #{templateMsg},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from wechat_app_template
+        where id = #{id}
+    </delete>
+
+</mapper>
+

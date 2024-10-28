@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.DevicePointSubsetMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.DevicePointSubset" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="subset_name" property="subsetName" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteById">
+      delete from device_point_subset where id=#{subsetId}
+  </delete>
+  <select id="getList" resultType="com.zans.mms.vo.devicepoint.subset.DevicePointSubsetResVO">
+       SELECT
+          subset_name subsetName,
+          remark,
+          id subsetId
+      FROM
+          device_point_subset
+          <where>
+            <if test="subsetName != null and subsetName !=''">
+              subset_name like concat('%',#{subsetName},'%')
+            </if>
+          </where>
+    </select>
+    <select id="getSelectList" resultType="com.zans.base.vo.SelectVO">
+        select id itemKey,subset_name itemValue from device_point_subset order by id
+    </select>
+    <select id="getIdBySubsetName" resultType="java.lang.String" parameterType="java.lang.String">
+        select id from device_point_subset where subset_name=#{subsetName}
+    </select>
+    <select id="getSubsetNameById" resultType="java.lang.String">
+        select subset_name from device_point_subset where id=#{subsetId}
+    </select>
+</mapper>

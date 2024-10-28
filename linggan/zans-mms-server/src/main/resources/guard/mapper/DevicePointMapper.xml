@@ -1,0 +1,879 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.DevicePointMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.DevicePoint" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="point_type" property="pointType" jdbcType="INTEGER" />
+    <result column="point_code" property="pointCode" jdbcType="VARCHAR" />
+    <result column="point_name" property="pointName" jdbcType="VARCHAR" />
+    <result column="road_type" property="roadType" jdbcType="VARCHAR" />
+    <result column="area_id" property="areaId" jdbcType="VARCHAR" />
+    <result column="device_type" property="deviceType" jdbcType="VARCHAR" />
+    <result column="power_way" property="powerWay" jdbcType="VARCHAR" />
+    <result column="power_place" property="powerPlace" jdbcType="VARCHAR" />
+    <result column="network_linkway" property="networkLinkway" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="DECIMAL" />
+    <result column="latitude" property="latitude" jdbcType="DECIMAL" />
+    <result column="map_source" property="mapSource" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+    <resultMap id="ticketMapRepMap" type="com.zans.mms.vo.devicepoint.map.TicketForMapResVO" >
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="pId" property="pId" jdbcType="INTEGER" />
+        <result column="dType" property="dType" jdbcType="VARCHAR" />
+        <result column="longitude" property="longitude" jdbcType="DECIMAL" />
+        <result column="latitude" property="latitude" jdbcType="DECIMAL" />
+        <result column="pCode" property="pCode" jdbcType="VARCHAR" />
+        <result column="pName" property="pName" jdbcType="VARCHAR" />
+        <result column="projectId" property="projectId" jdbcType="VARCHAR"/>
+        <collection property="assetCodeList" ofType="java.lang.String" javaType="java.util.ArrayList">
+            <result column="assetCode" />
+        </collection>
+    </resultMap>
+    <delete id="deleteByUniqueId">
+        delete  from device_point where id=#{id}
+    </delete>
+    <select id="getList" resultType="com.zans.mms.vo.devicepoint.DevicePointResVO">
+        SELECT
+        p.id pointId,
+        p.area_id areaId,
+        p.point_name pointName,
+        p.point_code pointCode,
+        o.org_name orgName,
+        p.project_id projectId,
+        p.device_type deviceType,
+        x(p.gis)  as longitude,
+        y(p.gis)  as latitude
+        FROM
+        device_point p
+        left join base_org o
+        on p.org_id=o.org_id
+        <where>
+            p.point_type=1
+          <if test="pointIds !=null and pointIds.size &gt; 0">
+              and p.id not in
+              <foreach item="item" collection="pointIds" index="index" open="(" separator="," close=")">
+                  #{item}
+              </foreach>
+          </if>
+            <if test="keywordList != null and keywordList.size >0">
+                <foreach collection="keywordList" item="keyword"  >
+                    and (p.point_name like CONCAT('%',#{keyword},'%') or  p.point_code like CONCAT('%',#{keyword},'%')
+                    or find_in_set( #{keyword}, ( SELECT GROUP_CONCAT( a.asset_code ) FROM asset a WHERE a.point_id = p.id ) ))
+                </foreach>
+            </if>
+            <if test="areaId != null and areaId.size >0">
+                and p.area_id  in
+                <foreach collection="areaId" item="areaid" separator="," open="(" close=")" >
+                    #{areaid}
+                </foreach>
+            </if>
+          <if test="pointCode != null and pointCode !=''">
+            and p.point_code like   CONCAT('%',#{pointCode},'%')
+          </if>
+          <if test="pointName != null and pointName !=''">
+            and p.point_name like   CONCAT('%',#{pointName},'%')
+          </if>
+            <if test="deviceType != null and deviceType.size >0">
+                and p.device_type in
+                <foreach collection="deviceType" item="type" separator="," open="(" close=")" >
+                    #{type}
+                </foreach>
+            </if>
+            <if test="orgId != null and orgId.size >0">
+                and p.org_id  in
+                <foreach collection="orgId" item="orgid" separator="," open="(" close=")" >
+                    #{orgid}
+                </foreach>
+            </if>
+            <if test="projectIdList != null and projectIdList.size >0">
+                and p.project_id  in
+                <foreach collection="projectIdList" item="projectId" separator="," open="(" close=")" >
+                    #{projectId}
+                </foreach>
+            </if>
+            <if test="buildCompany != null and buildCompany !=''">
+                <if test="buildCompany!='无建设单位'">
+                    and p.build_company like concat('%',#{buildCompany},'%')
+                </if>
+                <if test="buildCompany=='无建设单位'">
+                    and (p.build_company is null or p.build_company='')
+                </if>
+            </if>
+            <if test="itemList !=null and itemList.size >0">
+                and p.item_classification  in
+                <foreach collection="itemList" item="item" separator="," open="(" close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+  </select>
+    <select id="getViewById" resultType="com.zans.mms.vo.devicepoint.DevicePointDetailResVO">
+        SELECT
+            area_id areaId,
+            point_name pointName,
+            point_code pointCode,
+            power_way powerWay,
+            project_id projectId,
+            power_place powerPlace,
+            device_type deviceType,
+            x(gis)  as longitude,
+            y(gis)  as latitude,
+            road_type roadType
+        FROM
+            device_point
+        WHERE
+            id = #{id}
+    </select>
+    <select id="getIdByUniqueId" resultType="java.lang.Integer">
+        select id from  device_point where point_id=#{pointId}
+    </select>
+
+    <insert id="insertDevicePoint" parameterType="com.zans.mms.vo.devicepoint.ExcelDevicePointVO">
+        insert into device_point_import (point_code, point_name, road_type, area_id, device_type, power_way,
+                                         network_linkway, map_source, point_type, gis, creator, org_id, is_test,
+                                         import_id)
+        values (#{pointCode}, #{pointName}, #{roadType}, #{areaId}, #{deviceType}, #{powerWay}, #{networkLinkway},
+                #{mapSource}, #{pointType}, ST_GeomFromText(CONCAT('point(', #{longitude}, ' ', #{latitude}, ')')),
+                #{creator}, #{orgId}, #{isTest}, #{importId})
+    </insert>
+    <insert id="insertOne" parameterType="com.zans.mms.vo.devicepoint.ExcelDevicePointVO">
+        insert into device_point (point_code, point_name, road_type, area_id, device_type, power_way, network_linkway,
+                                  map_source, point_type, gis, creator, org_id, is_test)
+        values (#{pointCode}, #{pointName}, #{roadType}, #{areaId}, #{deviceType}, #{powerWay}, #{networkLinkway},
+                #{mapSource}, #{pointType}, ST_GeomFromText(CONCAT('point(', #{longitude}, ' ', #{latitude}, ')')),
+                #{creator}, #{orgId}, #{isTest})
+    </insert>
+
+    <insert id="saveDevicePoint"  keyProperty="id" useGeneratedKeys="true">
+        insert into device_point (point_name,area_id,device_type,point_type,gis,creator)
+        values (#{pointName},#{areaId},#{deviceType},#{pointType},geomfromtext(#{gis}),#{creator})
+    </insert>
+
+    <select id="getByCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from device_point where point_code= #{pointCode}
+    </select>
+
+    <update id="updateByPointCode" parameterType="com.zans.mms.vo.devicepoint.ExcelDevicePointVO">
+        update device_point_import
+        <set>
+
+            <if test="pointCode !=null and pointCode !=''">
+                point_code = #{pointCode} ,
+            </if>
+            <if test="pointName!=null and pointName!=''">
+                point_name = #{pointName},
+            </if>
+            <if test="roadType!=null and roadType!=''">
+                road_type=#{roadType},
+            </if>
+            <if test="areaId!=null and areaId!=''">
+                area_id=#{areaId},
+            </if>
+            <if test="deviceType!=null and deviceType!=''">
+                device_type=#{deviceType},
+            </if>
+            <if test="powerWay!=null and powerWay!=''">
+                power_way=#{powerWay},
+            </if>
+            <if test="networkLinkway!=null and networkLinkway!=''">
+                network_linkway=#{networkLinkway},
+            </if>
+            <if test="mapSource!=null and mapSource!=''">
+                map_source=#{mapSource},
+            </if>
+            <if test="pointType!=null and pointType!=''">
+                point_type=#{pointType},
+            </if>
+            <if test="longitude!=null and longitude!='' and latitude!=null and latitude!=''">
+                gis= ST_GeomFromText ( CONCAT( 'point(', #{longitude}, ' ', #{latitude}, ')' ) ),
+            </if>
+            <if test="areaName !=null and areaName !=''">
+                area_name=#{areaName},
+            </if>
+            <if test="orgId!=null and orgId!=''">
+                org_id=#{orgId},
+            </if>
+            <if test="isTest!=null and isTest!=''">
+                is_test=#{isTest},
+            </if>
+            operation = '2'
+        </set>
+        where point_code=#{pointCode}
+    </update>
+
+    <delete id="deleteByPointCode" parameterType="java.lang.String">
+        delete from device_point_import where point_code = #{pointCode}
+    </delete>
+
+    <select id="getIdByCode" parameterType="java.lang.String" resultType="java.lang.Long">
+        select id from device_point where point_code= #{pointCode}
+    </select>
+
+    <update id="updateByPointCodeChange" parameterType="com.zans.mms.vo.devicepoint.ExcelDevicePointVO">
+        update device_point_import
+        <set>
+            <if test="pointCodeChange !=null and pointCodeChange !=''">
+                point_code = #{pointCodeChange} ,
+            </if>
+            <if test="pointName!=null and pointName!=''">
+                point_name = #{pointName},
+            </if>
+            <if test="roadType!=null and roadType!=''">
+                road_type=#{roadType},
+            </if>
+            <if test="areaId!=null and areaId!=''">
+                area_id=#{areaId},
+            </if>
+            <if test="deviceType!=null and deviceType!=''">
+                device_type=#{deviceType},
+            </if>
+            <if test="powerWay!=null and powerWay!=''">
+                power_way=#{powerWay},
+            </if>
+            <if test="networkLinkway!=null and networkLinkway!=''">
+                network_linkway=#{networkLinkway},
+            </if>
+            <if test="mapSource!=null and mapSource!=''">
+                map_source=#{mapSource},
+            </if>
+            <if test="pointType!=null and pointType!=''">
+                point_type=#{pointType},
+            </if>
+            <if test="longitude!=null and longitude!='' and latitude!=null and latitude!=''">
+                gis= ST_GeomFromText ( CONCAT( 'point(', #{longitude}, ' ', #{latitude}, ')' ) ),
+            </if>
+            <if test="areaName !=null and areaName !=''">
+                area_name=#{areaName},
+            </if>
+            <if test="orgId!=null and orgId!=''">
+                org_id=#{orgId},
+            </if>
+            <if test="isTest!=null and isTest!=''">
+                is_test=#{isTest},
+            </if>
+            operation = '2'
+        </set>
+        where point_code=#{pointCode}
+    </update>
+    <update id="updateDevicePoint" parameterType="com.zans.mms.model.DevicePoint">
+        update device_point
+        <set>
+            <if test="pointCode !=null and pointCode !=''">
+                point_code = #{pointCode},
+            </if>
+            <if test="pointName !=null and pointName !=''">
+                point_name = #{pointName},
+            </if>
+            <if test="roadType !=null and roadType !=''">
+                road_type=#{roadType},
+            </if>
+            <if test="areaId !=null and areaId !=''">
+                area_id=#{areaId},
+            </if>
+            <if test="deviceType !=null and deviceType !=''">
+                device_type=#{deviceType},
+            </if>
+            <if test="powerWay !=null and powerWay !=''">
+                power_way=#{powerWay},
+            </if>
+            <if test="networkLinkway !=null and networkLinkway!=''">
+                network_linkway=#{networkLinkway},
+            </if>
+            <if test="mapSource !=null and mapSource !=''">
+                map_source=#{mapSource},
+            </if>
+            <if test="pointType !=null and pointType !=''">
+                point_type=#{pointType},
+            </if>
+            <if test="longitude !=null and longitude !='' and latitude !=null and latitude !=''">
+                gis= ST_GeomFromText ( CONCAT( 'point(', #{longitude}, ' ', #{latitude}, ')' ) ),
+            </if>
+        </set>
+            where id=#{id}
+    </update>
+    <update id="synchronousProjectId">
+
+        UPDATE device_point dp
+            JOIN asset a ON dp.id = a.point_id
+            SET dp.project_id = a.project_id
+        WHERE
+            dp.point_type = 1
+          AND dp.project_id IS NULL
+    </update>
+    <update id="synchronousBuildCompany">
+        UPDATE device_point dp
+            JOIN asset a ON dp.id = a.point_id
+            SET dp.build_company = a.build_company
+        where dp.point_type = 1  and dp.build_company is null
+    </update>
+    <update id="setDefaultProjectId">
+        update device_point set project_id = 1 where point_type = 1 AND project_id IS NULL
+    </update>
+    <update id="synchronousItemClassification">
+        UPDATE device_point dp
+            JOIN asset a ON dp.id = a.point_id
+            SET dp.item_classification = a.item_classification
+        where dp.point_type = 1  and dp.item_classification is null
+    </update>
+    <update id="backupTable">
+        create table ${backupTableName} like device_point
+    </update>
+    <update id="synchronousData">
+        INSERT INTO ${backupTableName} SELECT * FROM  device_point
+    </update>
+    <update id="updateImportDevicePoint">
+        update device_point_import
+        <set>
+            <if test="pointCode !=null and pointCode !=''">
+                point_code = #{pointCode},
+            </if>
+            <if test="pointName !=null and pointName !=''">
+                point_name = #{pointName},
+            </if>
+            <if test="orgId !=null and orgId !=''">
+                org_id = #{orgId},
+            </if>
+            <if test="roadType !=null and roadType !=''">
+                road_type=#{roadType},
+            </if>
+            <if test="areaId !=null and areaId !=''">
+                area_id=#{areaId},
+            </if>
+            <if test="deviceType !=null and deviceType !=''">
+                device_type=#{deviceType},
+            </if>
+            <if test="powerWay !=null and powerWay !=''">
+                power_way=#{powerWay},
+            </if>
+            <if test="networkLinkway !=null and networkLinkway!=''">
+                network_linkway=#{networkLinkway},
+            </if>
+            <if test="mapSource !=null and mapSource !=''">
+                map_source=#{mapSource},
+            </if>
+            <if test="pointType !=null and pointType !=''">
+                point_type=#{pointType},
+            </if>
+            <if test="longitude !=null and longitude !='' and latitude !=null and latitude !=''">
+                gis= ST_GeomFromText ( CONCAT( 'point(', #{longitude}, ' ', #{latitude}, ')' ) ),
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <update id="updateExcelDevicePoint">
+        update device_point
+        <set>
+            <if test="pointName !=null and pointName !=''">
+                point_name = #{pointName},
+            </if>
+            <if test="roadType !=null and roadType !=''">
+                road_type=#{roadType},
+            </if>
+            <if test="areaId !=null and areaId !=''">
+                area_id=#{areaId},
+            </if>
+            <if test="orgId !=null and orgId !=''">
+                org_id=#{orgId},
+            </if>
+            <if test="deviceType !=null and deviceType !=''">
+                device_type=#{deviceType},
+            </if>
+            <if test="powerWay !=null and powerWay !=''">
+                power_way=#{powerWay},
+            </if>
+            <if test="networkLinkway !=null and networkLinkway!=''">
+                network_linkway=#{networkLinkway},
+            </if>
+            <if test="mapSource !=null and mapSource !=''">
+                map_source=#{mapSource},
+            </if>
+            <if test="pointType !=null and pointType !=''">
+                point_type=#{pointType},
+            </if>
+            <if test="longitude !=null and longitude !='' and latitude !=null and latitude !=''">
+                gis= ST_GeomFromText ( CONCAT( 'point(', #{longitude}, ' ', #{latitude}, ')' ) ),
+            </if>
+        </set>
+        where point_code =#{pointCode}
+    </update>
+
+
+    <select id="getPointIdByCondition" parameterType="com.zans.mms.vo.devicepoint.subset.PointSubsetDetailAddByConditionReqVO" resultType="java.lang.Long">
+        select id from device_point
+        <where>
+            point_type = 1
+            <if test="pointName != null and pointName !=''">
+                and point_name = #{pointName}
+            </if>
+            <if test="areaId !=null and areaId !=''">
+                and area_id = #{areaId}
+            </if>
+            <if test="pointCode !=null and pointCode !=''">
+                and point_code = #{pointCode}
+            </if>
+            <if test="deviceType !=null and deviceType !=''">
+                and device_type = #{deviceType}
+            </if>
+            <if test="orgId != null and orgId.size >0">
+                and org_id  in
+                <foreach collection="orgId" item="orgid" separator="," open="(" close=")" >
+                    #{orgid}
+                </foreach>
+            </if>
+            <if test="projectIdList != null and projectIdList.size >0">
+                and project_id  in
+                <foreach collection="projectIdList" item="projectId" separator="," open="(" close=")" >
+                    #{projectId}
+                </foreach>
+            </if>
+            <if test="buildCompany != null and buildCompany !=''">
+                <if test="buildCompany!='无建设单位'">
+                    and build_company like concat('%',#{buildCompany},'%')
+                </if>
+                <if test="buildCompany=='无建设单位'">
+                    and (build_company is null or build_company='')
+                </if>
+            </if>
+            <if test="itemList !=null and itemList.size >0">
+                and item_classification  in
+                <foreach collection="itemList" item="item" separator="," open="(" close=")" >
+                    #{item}
+                </foreach>
+            </if>
+
+        </where>
+    </select>
+    <select id="getListForMap" resultType="com.zans.mms.vo.devicepoint.map.DevicePointForMapResVO">
+      SELECT
+        p.id pId,
+        p.device_type dType,
+        x ( p.gis ) AS longitude,
+        y ( p.gis ) AS latitude,
+        p.point_code pCode,
+        p.point_name pName
+        FROM
+        device_point p
+        WHERE
+        p.point_type=1 and
+        y ( p.gis ) &lt; 90
+        <if test="areaIdList != null and areaIdList.size>0">
+            and p.area_id in
+            <foreach collection="areaIdList" item="areaId" open="(" close=")" separator="," index="index">
+                #{areaId}
+            </foreach>
+        </if>
+        <if test="deviceTypeList != null and deviceTypeList.size>0">
+            and p.device_type in
+            <foreach collection="deviceTypeList" item="deviceType" open="(" close=")" separator="," index="index">
+                #{deviceType}
+            </foreach>
+        </if>
+        <if test="subsetIdList != null and subsetIdList.size>0">
+            and p.id in (select point_id from device_point_subset_detail where subset_id in
+            <foreach collection="subsetIdList" item="subId" open="(" close=")" separator="," index="index">
+                #{subId}
+            </foreach>
+            )
+        </if>
+        <if test="orgIdList != null and orgIdList.size>0">
+            and p.org_id in
+            <foreach collection="orgIdList" item="orgId" open="(" close=")" separator="," index="index">
+                #{orgId}
+            </foreach>
+        </if>
+        <if test="projectIdList != null and projectIdList.size >0">
+            and p.project_id  in
+            <foreach collection="projectIdList" item="projectId" separator="," open="(" close=")" >
+                #{projectId}
+            </foreach>
+        </if>
+        <if test="buildCompany != null and buildCompany !=''">
+            <if test="buildCompany!='无建设单位'">
+                and p.build_company like concat('%',#{buildCompany},'%')
+            </if>
+            <if test="buildCompany=='无建设单位'">
+                and (p.build_company is null or p.build_company='')
+            </if>
+        </if>
+        <if test="buildCompanyList != null and buildCompanyList.size >0">
+           and (p.build_company in
+            <foreach collection="buildCompanyList" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+            <if test="buildCompanyList.contains('无建设单位')">
+                or p.build_company is null or p.build_company=''
+            </if>
+            )
+        </if>
+        <if test="itemList !=null and itemList.size >0">
+            and p.item_classification  in
+            <foreach collection="itemList" item="item" separator="," open="(" close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test="keyword !=null and keyword !=''">
+            and (p.point_name like concat('%',#{keyword},'%') or p.point_code  like concat('%',#{keyword},'%')
+                or (select count(*) from asset where point_id = p.id  and network_ip  like concat('%',#{keyword},'%') ) >0
+                or  (select count(*) from asset where point_id = p.id  and asset_code  like concat('%',#{keyword},'%') ) >0
+                )
+        </if>
+        order by convert(substr(p.point_name,1,1) using 'GBK')
+    </select>
+    <select id="getListByOrgId" resultType="com.zans.mms.vo.devicepoint.DevicePointExportVO" parameterType="java.lang.String">
+        SELECT
+            dp.id,
+            dp.point_code,
+            dp.point_name,
+            dp.road_type,
+            dp.power_way,
+            dp.power_place,
+            dp.network_linkway,
+            dp.map_source,
+            dp.point_type,
+            o.org_name,
+            t.type_name as device_type,
+            a.area_name,
+            x(dp.gis) as longitude ,
+            y(dp.gis) as latitude
+        FROM
+            device_point dp
+                left join base_org o on o.org_id = dp.org_id
+                left join base_device_type t on t.type_id=dp.device_type
+                left join base_area a on a.area_id=dp.area_id
+        <where>
+            <if test="orgId !=null and orgId !=''">
+                dp.org_id=#{orgId}
+            </if>
+        </where>
+    </select>
+    <select id="getExportList" resultType="com.zans.mms.vo.devicepoint.DevicePointExportVO">
+        SELECT
+            dp.id,
+            dp.point_code,
+            dp.point_name,
+            dp.road_type,
+            dp.power_way,
+            dp.power_place,
+            dp.network_linkway,
+            dp.map_source,
+            dp.point_type,
+            o.org_name,
+            t.type_name as device_type,
+            a.area_name,
+            x(dp.gis) as longitude ,
+            y(dp.gis) as latitude
+        FROM
+            device_point dp
+                left join base_org o on o.org_id = dp.org_id
+                left join base_device_type t on t.type_id=dp.device_type
+                left join base_area a on a.area_id=dp.area_id
+        <where>
+            dp.point_type=1
+            <if test="pointIds !=null and pointIds.size &gt; 0">
+                and dp.id not in
+                <foreach item="item" collection="pointIds" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="areaId != null and areaId.size >0">
+                and dp.area_id  in
+                <foreach collection="areaId" item="areaid" separator="," open="(" close=")" >
+                    #{areaid}
+                </foreach>
+            </if>
+            <if test="pointCode != null and pointCode !=''">
+                and dp.point_code like   CONCAT('%',#{pointCode},'%')
+            </if>
+            <if test="pointName != null and pointName !=''">
+                and dp.point_name like   CONCAT('%',#{pointName},'%')
+            </if>
+            <if test="deviceType != null and deviceType.size >0">
+                and dp.device_type in
+                <foreach collection="deviceType" item="type" separator="," open="(" close=")" >
+                    #{type}
+                </foreach>
+            </if>
+            <if test="orgId != null and orgId.size >0">
+                and dp.org_id  in
+                <foreach collection="orgId" item="orgid" separator="," open="(" close=")" >
+                    #{orgid}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <select id="getExportListBySubsetId" resultType="com.zans.mms.vo.devicepoint.DevicePointExportVO">
+        SELECT
+            dp.id,
+            dp.point_code,
+            dp.point_name,
+            dp.road_type,
+            dp.power_way,
+            dp.power_place,
+            dp.network_linkway,
+            dp.map_source,
+            dp.point_type,
+            o.org_name,
+            t.type_name AS device_type,
+            a.area_name,
+            x ( dp.gis ) AS longitude,
+            y ( dp.gis ) AS latitude
+        FROM
+            device_point_subset_detail det
+                LEFT JOIN device_point dp ON dp.id = det.point_id
+                LEFT JOIN base_org o ON o.org_id = dp.org_id
+                LEFT JOIN base_device_type t ON t.type_id = dp.device_type
+                LEFT JOIN base_area a ON a.area_id = dp.area_id
+        WHERE
+            subset_id = #{subsetId}
+    </select>
+    <select id="getTrafficSignalList" resultType="map">
+        SELECT
+            p.id pointId,
+            p.point_name pointName,
+            p.device_type deviceType,
+            sci.item_value as projectName
+        FROM
+            device_point p
+        left join sys_constant_item sci on p.project_id = sci.item_key and sci.dict_key = 'project_name'
+        where p.point_type=1
+        <if test="deviceType != null and deviceType != ''">
+            and device_type= #{deviceType}
+        </if>
+        <if test="pointNameList != null and pointNameList.size >0">
+
+            <foreach collection="pointNameList" item="pointName"  >
+                and p.point_name  like CONCAT('%',#{pointName},'%')
+            </foreach>
+        </if>
+        <if test="pointNameList != null and pointNameList.size >0">
+        order by CONVERT( p.point_name USING gbk) asc
+            limit 30
+        </if>
+    </select>
+    <select id="getListForTicketMap" resultMap="ticketMapRepMap">
+        SELECT
+        p.id pId,
+        p.device_type dType,
+        x ( p.gis ) AS longitude,
+        y ( p.gis ) AS latitude,
+        p.project_id projectId,
+        p.point_code pCode,
+        p.point_name pName,
+        a.asset_code as assetCode
+        FROM
+        device_point p
+        left join asset a on p.id = a.point_id
+        WHERE
+        p.point_type=1 and
+        y ( p.gis ) &lt; 90
+        <if test="areaId != null and areaId!=''">
+            and p.area_id =#{areaId}
+        </if>
+        <if test="deviceType != null and deviceType!=''">
+            and p.device_type = #{deviceType}
+        </if>
+        <if test="orgId != null and orgId!=''">
+            and p.org_id = #{orgId}
+        </if>
+        <!-- <if test="pointName != null and pointName!=''">
+             and p.point_name like CONCAT('%',#{pointName},'%')
+         </if>-->
+        <if test="pointCode != null and pointCode!=''">
+            and p.point_code like CONCAT('%',#{pointCode},'%')
+        </if>
+        <if test="keyword != null and keyword!=''">
+            and (a.asset_code like CONCAT('%',#{keyword},'%') or a.asset_code like CONCAT('%',#{keyword1},'%')
+            or  p.point_name like CONCAT('%',#{keyword},'%') or  p.point_name like CONCAT('%',#{keyword1},'%'))
+        </if>
+        <if test="projectId !=null">
+            and p.project_id = #{projectId}
+        </if>
+        order by convert(substr(p.point_name,1,1) using 'GBK')
+    </select>
+    <select id="selectPointName" resultType="java.lang.String">
+        select point_name from device_point where id = #{id}
+    </select>
+    <select id="getidByNameAndDeviceType" resultType="java.lang.Long">
+        select id from device_point where point_name = #{pointName}
+                          <if test="deviceType !=null and deviceType!=''">
+                              and device_type = #{deviceType}
+                          </if>
+                                      limit 1
+    </select>
+    <select id="getAllPoint" resultType="java.util.Map">
+        select id,point_name as pointName from device_point
+    </select>
+    <select id="getBuildCompany" resultType="java.lang.String">
+        select distinct (IFNULL(build_company,'无建设单位')) from device_point
+    </select>
+    <select id="getOne" resultType="com.zans.mms.model.DevicePoint">
+        select point_code,point_name,road_type,area_id,device_type,
+        power_way,network_linkway,point_type,x(gis) as longitude,y(gis) as latitude
+        from  device_point
+        where id=#{id}
+    </select>
+    <select id="getOneByCode" resultType="com.zans.mms.vo.devicepoint.ExcelDevicePointVO">
+        SELECT
+            id,
+            point_code,
+            point_name,
+            road_type,
+            area_id,
+            device_type,
+            power_way,
+            power_place,
+            network_linkway,
+            x(gis) as longitude,
+            y(gis) as latitude,
+            map_source,
+            point_type,
+            gis,
+            area_name,
+            creator,
+            create_time,
+            update_time,
+            is_test,
+            affiliated_units,
+            org_id,
+            induction_screen_type,
+            induction_screen_level,
+            logo_content,
+            road_name,
+            detailed_location,
+            project_id,
+            build_company,
+            item_classification
+        FROM
+            device_point
+        where point_code = #{pointCode} limit 1
+
+    </select>
+    <select id="getImportList" resultType="com.zans.mms.vo.devicepoint.DevicePointResVO">
+        SELECT
+        p.id pointId,
+        p.area_id areaId,
+        p.point_name pointName,
+        p.point_code pointCode,
+        o.org_name orgName,
+        p.project_id projectId,
+        p.device_type deviceType,
+        x(p.gis)  as longitude,
+        y(p.gis)  as latitude,
+        p.road_type,
+        p.power_way,
+        p.network_linkway,
+        p.org_id
+        FROM
+        device_point_import p
+        left join base_org o
+        on p.org_id=o.org_id
+        <where>
+            p.point_type=1
+            <if test="importId !=null">
+                and p.import_id = #{importId}
+            </if>
+            <if test="operation !=null">
+                and p.operation = #{operation}
+            </if>
+            <if test="pointIds !=null and pointIds.size &gt; 0">
+                and p.id not in
+                <foreach item="item" collection="pointIds" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="keywordList != null and keywordList.size >0">
+                <foreach collection="keywordList" item="keyword"  >
+                    and (p.point_name like CONCAT('%',#{keyword},'%') or  p.point_code like CONCAT('%',#{keyword},'%')
+                    or find_in_set( #{keyword}, ( SELECT GROUP_CONCAT( a.asset_code ) FROM asset a WHERE a.point_id = p.id ) ))
+                </foreach>
+            </if>
+            <if test="areaId != null and areaId.size >0">
+                and p.area_id  in
+                <foreach collection="areaId" item="areaid" separator="," open="(" close=")" >
+                    #{areaid}
+                </foreach>
+            </if>
+            <if test="pointCode != null and pointCode !=''">
+                and p.point_code like   CONCAT('%',#{pointCode},'%')
+            </if>
+            <if test="pointName != null and pointName !=''">
+                and p.point_name like   CONCAT('%',#{pointName},'%')
+            </if>
+            <if test="deviceType != null and deviceType.size >0">
+                and p.device_type in
+                <foreach collection="deviceType" item="type" separator="," open="(" close=")" >
+                    #{type}
+                </foreach>
+            </if>
+            <if test="orgId != null and orgId.size >0">
+                and p.org_id  in
+                <foreach collection="orgId" item="orgid" separator="," open="(" close=")" >
+                    #{orgid}
+                </foreach>
+            </if>
+            <if test="projectIdList != null and projectIdList.size >0">
+                and p.project_id  in
+                <foreach collection="projectIdList" item="projectId" separator="," open="(" close=")" >
+                    #{projectId}
+                </foreach>
+            </if>
+            <if test="buildCompany != null and buildCompany !=''">
+                <if test="buildCompany!='无建设单位'">
+                    and p.build_company like concat('%',#{buildCompany},'%')
+                </if>
+                <if test="buildCompany=='无建设单位'">
+                    and (p.build_company is null or p.build_company='')
+                </if>
+            </if>
+            <if test="itemList !=null and itemList.size >0">
+                and p.item_classification  in
+                <foreach collection="itemList" item="item" separator="," open="(" close=")" >
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <select id="getByImportId" resultType="com.zans.mms.vo.devicepoint.ExcelDevicePointVO">
+        SELECT
+            point_code,
+            point_name,
+            road_type,
+            area_id,
+            device_type,
+            power_way,
+            power_place,
+            network_linkway,
+            x(gis) as longitude,
+            y(gis) as latitude,
+            map_source,
+            point_type,
+            gis,
+            area_name,
+            creator,
+            create_time,
+            update_time,
+            is_test,
+            affiliated_units,
+            org_id,
+            induction_screen_type,
+            induction_screen_level,
+            logo_content,
+            road_name,
+            detailed_location,
+            project_id,
+            build_company,
+            item_classification,
+            operation
+        FROM
+            device_point_import
+        where import_id = #{importId}
+    </select>
+</mapper>

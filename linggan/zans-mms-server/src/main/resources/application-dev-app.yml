@@ -1,0 +1,55 @@
+server:
+  port: 6666
+  ssl:
+    enabled: false
+  undertow:
+    io-threads: 4
+    worker-threads: 32
+    max-http-post-size: 0
+
+
+spring:
+  datasource:
+    guard:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://192.168.9.52:3306/mms_dev11?autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull
+      username: guard_2
+      password: Txsqldb@123456
+
+security:
+  exclude-path:
+    swagger: /swagger-ui.html, /swagger/**, /swagger-resources/**, /webjars/**, /v2/api-docs, /statics/**, /doc.html
+    base: /login, /logout, /verify_login, /app/login, /app/logout, /app/verify_login,/app/loginByWxCode,/app/loginByWxPhone, /error, /favicon.ico, /constant/**, /ip/alloc/download/**, /ip/import/**, /hello, /network/**, /segment/**,/app/stats/**
+    api: /home/**, /rbac/**, /user/current, /person/**, /durid/**,/user/me,/user/change_password,/app/base/**,/app/stats/**
+  user-verify: jwt
+  jwt:
+    expire-time: 60000000
+    app-expire-time: 6000000000
+
+api:
+  upload:
+    folder: /home/release/file/upload/
+    max-size: 5
+  export:
+    folder: /home/release/file/export/
+  imgUrl:
+    folder: /home/release/img/
+
+request:
+  wechat:
+    url: https://27.17.0.121:10000/wxpush_api
+
+file:
+  img:
+    retentionDays: 60
+
+
+logging:
+  level:
+    com.zans.mms.dao : debug
+
+mock-api:
+  mock-dir: ./mock
+
+patrol:
+  task: 1

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.AssetDiagnosisInfoHisDao">
+
+    <resultMap type="com.zans.mms.vo.asset.diagnosis.AssetDiagnosisInfoHisVO" id="AssetDiagnosisInfoHisMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="assetCode" column="asset_code" jdbcType="VARCHAR"/>
+        <result property="traceId" column="trace_id" jdbcType="VARCHAR"/>
+        <result property="diagnosisResult" column="diagnosis_result" jdbcType="INTEGER"/>
+        <result property="faultTypes" column="fault_types" jdbcType="VARCHAR"/>
+        <result property="faultTypesName" column="fault_types_name" jdbcType="VARCHAR"/>
+        <result property="imgUrl" column="img_url" jdbcType="VARCHAR"/>
+        <result property="diagnosisTime" column="diagnosis_time" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AssetDiagnosisInfoHisMap">
+        select id,
+               asset_code,
+               trace_id,
+               diagnosis_result,
+               fault_types,
+               fault_types_name,
+               img_url,
+               diagnosis_time,
+               create_time,
+               update_time
+        from asset_diagnosis_info_his
+        where id = #{id}
+    </select>
+
+    <!--通过实体查询一条数据-->
+    <select id="findOne" resultMap="AssetDiagnosisInfoHisMap">
+        select
+        id, asset_code, trace_id, diagnosis_result, fault_types, fault_types_name, img_url, diagnosis_time, create_time,
+        update_time from asset_diagnosis_info_his
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="assetCode != null and assetCode != ''">
+                and asset_code = #{assetCode}
+            </if>
+            <if test="traceId != null and traceId != ''">
+                and trace_id = #{traceId}
+            </if>
+            <if test="diagnosisResult != null">
+                and diagnosis_result = #{diagnosisResult}
+            </if>
+            <if test="faultTypes != null and faultTypes != ''">
+                and fault_types = #{faultTypes}
+            </if>
+            <if test="faultTypesName != null and faultTypesName != ''">
+                and fault_types_name = #{faultTypesName}
+            </if>
+            <if test="imgUrl != null and imgUrl != ''">
+                and img_url = #{imgUrl}
+            </if>
+            <if test="diagnosisTime != null and diagnosisTime != ''">
+                and diagnosis_time = #{diagnosisTime}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="AssetDiagnosisInfoHisMap">
+        select
+        id, asset_code, trace_id, diagnosis_result, fault_types, fault_types_name, img_url, diagnosis_time, create_time,
+        update_time
+        from asset_diagnosis_info_his
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="assetCode != null and assetCode != ''">
+                and asset_code = #{assetCode}
+            </if>
+            <if test="traceId != null and traceId != ''">
+                and trace_id = #{traceId}
+            </if>
+            <if test="diagnosisResult != null">
+                and diagnosis_result = #{diagnosisResult}
+            </if>
+            <if test="faultTypes != null and faultTypes != ''">
+                and fault_types = #{faultTypes}
+            </if>
+            <if test="faultTypesName != null and faultTypesName != ''">
+                and fault_types_name = #{faultTypesName}
+            </if>
+            <if test="imgUrl != null and imgUrl != ''">
+                and img_url = #{imgUrl}
+            </if>
+            <if test="diagnosisTime != null and diagnosisTime != ''">
+                and diagnosis_time = #{diagnosisTime}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into asset_diagnosis_info_his(asset_code, trace_id, diagnosis_result, fault_types, fault_types_name,
+                                             img_url, diagnosis_time)
+        values (#{assetCode}, #{traceId}, #{diagnosisResult}, #{faultTypes}, #{faultTypesName}, #{imgUrl},
+                #{diagnosisTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asset_diagnosis_info_his(asset_code, trace_id, diagnosis_result, fault_types, fault_types_name,
+        img_url, diagnosis_time, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.assetCode}, #{entity.traceId}, #{entity.diagnosisResult}, #{entity.faultTypes},
+            #{entity.faultTypesName}, #{entity.imgUrl}, #{entity.diagnosisTime}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asset_diagnosis_info_his(asset_code, trace_id, diagnosis_result, fault_types, fault_types_name,
+        img_url, diagnosis_time, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.assetCode}, #{entity.traceId}, #{entity.diagnosisResult}, #{entity.faultTypes},
+            #{entity.faultTypesName}, #{entity.imgUrl}, #{entity.diagnosisTime}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        asset_code = values(asset_code) , trace_id = values(trace_id) , diagnosis_result = values(diagnosis_result) ,
+        fault_types = values(fault_types) , fault_types_name = values(fault_types_name) , img_url = values(img_url) ,
+        diagnosis_time = values(diagnosis_time) , create_time = values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update asset_diagnosis_info_his
+        <set>
+            <if test="assetCode != null and assetCode != ''">
+                asset_code = #{assetCode},
+            </if>
+            <if test="traceId != null and traceId != ''">
+                trace_id = #{traceId},
+            </if>
+            <if test="diagnosisResult != null">
+                diagnosis_result = #{diagnosisResult},
+            </if>
+            <if test="faultTypes != null and faultTypes != ''">
+                fault_types = #{faultTypes},
+            </if>
+            <if test="faultTypesName != null and faultTypesName != ''">
+                fault_types_name = #{faultTypesName},
+            </if>
+            <if test="imgUrl != null and imgUrl != ''">
+                img_url = #{imgUrl},
+            </if>
+            <if test="diagnosisTime != null and diagnosisTime != ''">
+                diagnosis_time = #{diagnosisTime},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from asset_diagnosis_info_his
+        where id = #{id}
+    </delete>
+
+</mapper>
+

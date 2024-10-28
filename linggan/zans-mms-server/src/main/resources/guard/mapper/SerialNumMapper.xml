@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.SerialNumMapper" >
+
+    <select id="getTicketIncrement" resultType="java.lang.String">
+        SELECT
+            `AUTO_INCREMENT`
+        FROM
+            INFORMATION_SCHEMA.TABLES
+        WHERE
+            TABLE_NAME = 'ticket'
+          AND TABLE_SCHEMA = ( SELECT DATABASE ( ) )
+        ORDER BY
+            AUTO_INCREMENT DESC
+            LIMIT 1;
+    </select>
+
+    <select id="getPoManagerIncrement" resultType="java.lang.String">
+        SELECT
+            `AUTO_INCREMENT`
+        FROM
+            INFORMATION_SCHEMA.TABLES
+        WHERE
+            TABLE_NAME = 'po_manager'
+          AND TABLE_SCHEMA = ( SELECT DATABASE ( ) )
+        ORDER BY
+            AUTO_INCREMENT DESC
+            LIMIT 1;
+    </select>
+</mapper>

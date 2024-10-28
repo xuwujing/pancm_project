@@ -1,0 +1,1617 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.AssetMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.Asset" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="asset_code" property="assetCode" jdbcType="VARCHAR" />
+    <result column="device_direction" property="deviceDirection" jdbcType="VARCHAR" />
+    <result column="point_id" property="pointId" jdbcType="INTEGER" />
+    <result column="device_type" property="deviceType" jdbcType="VARCHAR" />
+    <result column="device_sub_type" property="deviceSubType" jdbcType="VARCHAR" />
+    <result column="network_ip" property="networkIp" jdbcType="VARCHAR" />
+    <result column="network_mac" property="networkMac" jdbcType="VARCHAR" />
+    <result column="network_mask" property="networkMask" jdbcType="VARCHAR" />
+    <result column="network_geteway" property="networkGeteway" jdbcType="VARCHAR" />
+    <result column="device_sn" property="deviceSn" jdbcType="VARCHAR" />
+    <result column="device_model_des" property="deviceModelDes" jdbcType="VARCHAR" />
+    <result column="device_model_brand" property="deviceModelBrand" jdbcType="VARCHAR" />
+    <result column="device_software_version" property="deviceSoftwareVersion" jdbcType="VARCHAR" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+    <result column="build_year" property="buildYear" jdbcType="VARCHAR" />
+    <result column="build_company" property="buildCompany" jdbcType="VARCHAR" />
+    <result column="build_contact" property="buildContact" jdbcType="VARCHAR" />
+    <result column="build_phone" property="buildPhone" jdbcType="VARCHAR" />
+    <result column="maintain_company" property="maintainCompany" jdbcType="VARCHAR" />
+    <result column="maintain_contact" property="maintainContact" jdbcType="VARCHAR" />
+    <result column="maintain_phone" property="maintainPhone" jdbcType="VARCHAR" />
+    <result column="detect_mode" property="detectMode" jdbcType="VARCHAR" />
+    <result column="maintain_status" property="maintainStatus" jdbcType="VARCHAR" />
+    <result column="device_account" property="deviceAccount" jdbcType="VARCHAR" />
+    <result column="device_pwd" property="devicePwd" jdbcType="VARCHAR" />
+    <result column="online_status" property="onlineStatus" jdbcType="VARCHAR" />
+    <result column="offline_status" property="offlineStatus" jdbcType="VARCHAR" />
+    <result column="install_time" property="installTime" jdbcType="DATE" />
+    <result column="lane_number" property="laneNumber" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+    <resultMap type="com.zans.mms.vo.asset.diagnosis.AssetDiagnosisInfoRespVO" id="AssetDiagnosisInfoMap">
+        <result property="assetCode" column="asset_code" jdbcType="VARCHAR"/>
+        <result property="pointName" column="pointName" jdbcType="VARCHAR"/>
+        <result property="pointCode" column="pointCode" jdbcType="VARCHAR"/>
+        <result property="diagnosisResult" column="diagnosis_result" jdbcType="INTEGER"/>
+        <result property="faultTypes" column="fault_types" jdbcType="VARCHAR"/>
+        <result property="faultTypesName" column="fault_types_name" jdbcType="VARCHAR"/>
+        <result property="imgUrl" column="img_url" jdbcType="VARCHAR"/>
+        <result property="diagnosisTime" column="diagnosis_time" jdbcType="VARCHAR"/>
+        <result property="traceId" column="trace_id" jdbcType="VARCHAR"/>
+        <collection property="assetDiagnosisInfoExVOS" javaType="arraylist" ofType="com.zans.mms.vo.asset.diagnosis.AssetDiagnosisInfoExRespVO">
+            <result property="assetCode" column="asset_code" jdbcType="VARCHAR"/>
+            <result property="faultType" column="fault_type" jdbcType="INTEGER"/>
+            <result property="faultTypeResult" column="fault_type_result" jdbcType="INTEGER"/>
+        </collection>
+    </resultMap>
+
+    <delete id="deleteByUniqueId">
+        delete  from asset where id=#{id}
+    </delete>
+    <select id="getList" resultType="com.zans.mms.vo.asset.AssetResVO">
+     SELECT
+        dp.area_id areaId,
+        dp.point_name pointName,
+        a.device_direction deviceDirection,
+        dp.point_code pointCode,
+        dp.id pointId,
+        a.project_id projectId,
+        a.asset_code assetCode,
+        a.network_ip networkIp,
+        a.maintain_company maintainCompany,
+        a.build_company buildCompany,
+        a.online_status onlineStatus,
+        a.maintain_status maintainStatus,
+        a.id assetId,
+        a.device_model_brand deviceModelBrand,
+        a.install_time installTime,
+        a.device_model_des deviceModelDes,
+        a.lane_number laneNumber,
+        a.device_sub_type deviceSubType,
+        a.project_name projectName,
+        o.org_name  orgName
+    FROM
+        asset a
+        LEFT JOIN device_point dp ON a.point_id = dp.id
+        LEFT JOIN base_org o on o.org_id=a.org_id
+      <where>
+        <if test="pointId != null and pointId !=''">
+            and dp.id = #{pointId}
+        </if>
+        <if test="deviceType != null and deviceType !=''">
+            and a.device_type = #{deviceType}
+        </if>
+        <if test="areaId != null and areaId.size >0">
+          and dp.area_id in
+            <foreach collection="areaId" item="areaid" separator="," open="(" close=")" >
+                #{areaid}
+            </foreach>
+
+        </if>
+        <if test="pointCode != null and pointCode !=''">
+          and dp.point_code like concat('%',#{pointCode},'%')
+        </if>
+        <if test="pointName != null and pointName !=''">
+          and dp.point_name like concat('%',#{pointName},'%')
+        </if>
+
+        <if test="assetCode != null and assetCode !=''">
+          and a.asset_code  like concat('%',#{assetCode},'%')
+        </if>
+        <if test="maintainStatus != null and maintainStatus.size >0">
+          and a.maintain_status in
+            <foreach collection="maintainStatus" item="status" separator="," open="(" close=")" >
+                #{status}
+            </foreach>
+        </if>
+        <if test="networkIp != null and networkIp !=''">
+          and a.network_ip = #{networkIp}
+        </if>
+        <if test="projectName != null and projectName !=''">
+          and a.project_name  like concat('%',#{projectName},'%')
+        </if>
+        <if test="deviceSubType != null and deviceSubType !=''">
+            and a.device_sub_type  like concat('%',#{deviceSubType},'%')
+        </if>
+        <if test="deviceModelBrand == 'unknown'">
+            and (a.device_model_brand ='' or a.device_model_brand is null)
+        </if>
+        <if test="deviceModelBrand !=null and deviceModelBrand !='' and deviceModelBrand !='unknown'">
+            and a.device_model_brand  like concat('%',#{deviceModelBrand},'%')
+        </if>
+        <if test="orgId != null and orgId.size >0">
+              and a.org_id  in
+              <foreach collection="orgId" item="orgid" separator="," open="(" close=")" >
+                  #{orgid}
+              </foreach>
+        </if>
+          <if test="buildCompany != null and buildCompany !=''">
+              <if test="buildCompany!='无建设单位'">
+                  and a.build_company like concat('%',#{buildCompany},'%')
+              </if>
+              <if test="buildCompany=='无建设单位'">
+                  and (a.build_company is null or a.build_company='')
+              </if>
+          </if>
+          <if test="itemList !=null and itemList.size >0">
+              and a.item_classification  in
+              <foreach collection="itemList" item="item" separator="," open="(" close=")" >
+                  #{item}
+              </foreach>
+          </if>
+          <if test="projectIdList != null and projectIdList.size >0">
+              and a.project_id  in
+              <foreach collection="projectIdList" item="projectId" separator="," open="(" close=")" >
+                  #{projectId}
+              </foreach>
+          </if>
+      </where>
+    </select>
+  <select id="getViewById" resultType="com.zans.mms.vo.asset.AssetViewResVO">
+    SELECT
+        area_id areaId,
+        point_name pointName,
+        point_code pointCode,
+        a.point_id pointId,
+        power_way powerWay,
+        power_place powerPlace,
+        x(gis)  as longitude,
+        y(gis) as latitude,
+        a.project_id projectId,
+        project_name projectName,
+        build_year buildYear,
+        a.build_company buildCompany,
+        build_contact buildContact,
+        build_phone buildPhone,
+        maintain_company maintainCompany,
+        maintain_contact maintainContact,
+        maintain_phone maintainPhone,
+        device_direction deviceDirection,
+        device_model_brand deviceModelBrand,
+        device_model_des deviceModelDes,
+        network_ip networkIp,
+        network_mask networkMask,
+        network_geteway networkGeteway,
+        install_time installTime,
+        online_status onlineStatus,
+        maintain_status maintainStatus,
+        remark,
+        a.id assetId
+    FROM
+        asset a
+        LEFT JOIN device_point dp ON a.point_id = dp.id
+        WHERE a.id=#{id}
+  </select>
+    <select id="getListByCondition" resultType="com.zans.mms.model.Asset">
+        select  * from   asset
+        <where>
+            <if test="pointId != null ">
+                and point_id = #{pointId}
+            </if>
+            <if test="assetIds !=null and assetIds.size &gt; 0">
+            and id in
+                <foreach collection="assetIds" item="assetId" open="(" close=")" separator="," index="index">
+                    #{assetId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <select id="getIdByUniqueId" resultType="java.lang.Integer">
+        select id from asset where id=#{assetId}
+    </select>
+
+    <select id="getExistAssetCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from asset where asset_code =#{assetCode}
+    </select>
+
+
+    <delete id="deleteByAssetCode" parameterType="java.lang.String">
+        delete from asset where asset_code = #{assetCode}
+    </delete>
+
+    <insert id="insertAsset" parameterType="com.zans.mms.vo.asset.ExcelAssetVO">
+        insert into asset_import(asset_code,
+                          point_id,
+                          device_direction,
+                          device_type,
+                          device_sub_type,
+                          network_ip,
+                          network_mac,
+                          network_mask,
+                          network_geteway,
+                          device_sn,
+                          device_model_des,
+                          device_model_brand,
+                          device_software_version,
+                          project_name,
+                          build_year,
+                          build_company,
+                          build_contact,
+                          build_phone,
+                          maintain_company,
+                          maintain_contact,
+                          maintain_phone,
+                          detect_mode,
+                          maintain_status,
+                          device_account,
+                          device_pwd,
+                          install_time,
+                          lane_number,
+                          remark,
+                          creator,
+                          org_id,
+                          is_test,
+                          import_id)
+        values (#{assetCode},
+                #{pointId},
+                #{deviceDirection},
+                #{deviceType},
+                #{deviceSubType},
+                #{networkIp},
+                #{networkMac},
+                #{networkMask},
+                #{networkGeteway},
+                #{deviceSn},
+                #{deviceModelDes},
+                #{deviceModelBrand},
+                #{deviceSoftwareVersion},
+                #{projectName},
+                #{buildYear},
+                #{buildCompany},
+                #{buildContact},
+                #{buildPhone},
+                #{maintainCompany},
+                #{maintainContact},
+                #{maintainPhone},
+                #{detectMode},
+                #{maintainStatus},
+                #{deviceAccount},
+                #{devicePwd},
+                #{installTime},
+                #{laneNumber},
+                #{remark},
+                #{creator},
+                #{orgId},
+                #{isTest},
+                #{importId})
+    </insert>
+    <insert id="insertOne">
+        insert into asset(asset_code,
+                                 point_id,
+                                 device_direction,
+                                 device_type,
+                                 device_sub_type,
+                                 network_ip,
+                                 network_mac,
+                                 network_mask,
+                                 network_geteway,
+                                 device_sn,
+                                 device_model_des,
+                                 device_model_brand,
+                                 device_software_version,
+                                 project_name,
+                                 build_year,
+                                 build_company,
+                                 build_contact,
+                                 build_phone,
+                                 maintain_company,
+                                 maintain_contact,
+                                 maintain_phone,
+                                 detect_mode,
+                                 maintain_status,
+                                 device_account,
+                                 device_pwd,
+                                 install_time,
+                                 lane_number,
+                                 remark,
+                                 creator,
+                                 org_id,
+                                 is_test)
+        values (#{assetCode},
+                #{pointId},
+                #{deviceDirection},
+                #{deviceType},
+                #{deviceSubType},
+                #{networkIp},
+                #{networkMac},
+                #{networkMask},
+                #{networkGeteway},
+                #{deviceSn},
+                #{deviceModelDes},
+                #{deviceModelBrand},
+                #{deviceSoftwareVersion},
+                #{projectName},
+                #{buildYear},
+                #{buildCompany},
+                #{buildContact},
+                #{buildPhone},
+                #{maintainCompany},
+                #{maintainContact},
+                #{maintainPhone},
+                #{detectMode},
+                #{maintainStatus},
+                #{deviceAccount},
+                #{devicePwd},
+                #{installTime},
+                #{laneNumber},
+                #{remark},
+                #{creator},
+                #{orgId},
+                #{isTest})
+    </insert>
+
+    <update id="updateExcelAssetVO">
+        update asset
+        <set>
+
+            <if test="pointId!=null and pointId!=''">
+                point_id=#{pointId},
+            </if>
+            <if test="deviceDirection!=null and deviceDirection!=''">
+                device_direction=#{deviceDirection},
+            </if>
+            <if test="deviceType!=null and deviceType!=''">
+                device_type=#{deviceType},
+            </if>
+            <if test="deviceSubType!=null and deviceSubType!=''">
+                device_sub_type=#{deviceSubType},
+            </if>
+            <if test="networkIp !=null and networkIp!=''">
+                network_ip=#{networkIp},
+            </if>
+            <if test="networkMac !=null and networkMac !=''">
+                network_mac=#{networkMac},
+            </if>
+            <if test="networkMask !=null and networkMask !=''">
+                network_mask=#{networkMask},
+            </if>
+            <if test="networkGeteway !=null and networkGeteway!=''">
+                network_geteway=#{networkGeteway},
+            </if>
+            <if test="deviceSn!=null and deviceSn!=''">
+                device_sn=#{deviceSn},
+            </if>
+            <if test="deviceModelDes!=null and deviceModelDes!=''">
+                device_model_des=#{deviceModelDes},
+            </if>
+            <if test="deviceModelBrand!=null and deviceModelBrand!=''">
+                device_model_brand=#{deviceModelBrand},
+            </if>
+            <if test="deviceSoftwareVersion!=null and deviceSoftwareVersion!=''">
+                device_software_version=#{deviceSoftwareVersion},
+            </if>
+            <if test="projectName!=null and projectName!=''">
+                project_name=#{projectName},
+            </if>
+            <if test="buildYear!=null and buildYear!=''">
+                build_year=#{buildYear},
+            </if>
+            <if test="buildCompany!=null and buildCompany!=''">
+                build_company=#{buildCompany},
+            </if>
+            <if test="buildContact!=null and buildContact!=''">
+                build_contact=#{buildContact},
+            </if>
+            <if test="buildPhone!=null and buildPhone!=''">
+                build_phone=#{buildPhone},
+            </if>
+            <if test="maintainCompany!=null and maintainCompany!=''">
+                maintain_company=#{maintainCompany},
+            </if>
+            <if test="maintainContact!=null and maintainContact!=''">
+                maintain_contact=#{maintainContact},
+            </if>
+            <if test="maintainPhone!=null and maintainPhone!=''">
+                maintain_phone=#{maintainPhone},
+            </if>
+            <if test="detectMode!=null and detectMode!=''">
+                detect_mode=#{detectMode},
+            </if>
+            <if test="maintainStatus!=null and maintainStatus!=''">
+                maintain_status=#{maintainStatus},
+            </if>
+            <if test="deviceAccount!=null and deviceAccount!=''">
+                device_account=#{deviceAccount},
+            </if>
+            <if test="devicePwd!=null and devicePwd!=''">
+                device_pwd=#{devicePwd},
+            </if>
+            <if test="installTime!=null and installTime!=''">
+                install_time=#{installTime},
+            </if>
+            <if test="laneNumber!=null and laneNumber!=''">
+                lane_number=#{laneNumber},
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark=#{remark},
+            </if>
+            <if test="orgId!=null and orgId!=''">
+                org_id=#{orgId},
+            </if>
+            <if test="isTest!=null and isTest!=''">
+                is_test=#{isTest},
+            </if>
+            project_id = null
+        </set>
+        where asset_code = #{assetCode}
+    </update>
+
+    <update id="updateByAssetCode" parameterType="com.zans.mms.vo.asset.ExcelAssetVO">
+        update asset_import
+        <set>
+            <if test="assetCode!=null and assetCode!=''">
+                asset_code=#{assetCode},
+            </if>
+            <if test="pointId!=null and pointId!=''">
+                point_id=#{pointId},
+            </if>
+            <if test="deviceDirection!=null and deviceDirection!=''">
+                device_direction=#{deviceDirection},
+            </if>
+            <if test="deviceType!=null and deviceType!=''">
+                device_type=#{deviceType},
+            </if>
+            <if test="deviceSubType!=null and deviceSubType!=''">
+                device_sub_type=#{deviceSubType},
+            </if>
+            <if test="networkIp !=null and networkIp!=''">
+                network_ip=#{networkIp},
+            </if>
+            <if test="networkMac !=null and networkMac !=''">
+                network_mac=#{networkMac},
+            </if>
+            <if test="networkMask !=null and networkMask !=''">
+                network_mask=#{networkMask},
+            </if>
+            <if test="networkGeteway !=null and networkGeteway!=''">
+                network_geteway=#{networkGeteway},
+            </if>
+            <if test="deviceSn!=null and deviceSn!=''">
+                device_sn=#{deviceSn},
+            </if>
+            <if test="deviceModelDes!=null and deviceModelDes!=''">
+                device_model_des=#{deviceModelDes},
+            </if>
+            <if test="deviceModelBrand!=null and deviceModelBrand!=''">
+                device_model_brand=#{deviceModelBrand},
+            </if>
+            <if test="deviceSoftwareVersion!=null and deviceSoftwareVersion!=''">
+                device_software_version=#{deviceSoftwareVersion},
+            </if>
+            <if test="projectName!=null and projectName!=''">
+                project_name=#{projectName},
+            </if>
+            <if test="buildYear!=null and buildYear!=''">
+                build_year=#{buildYear},
+            </if>
+            <if test="buildCompany!=null and buildCompany!=''">
+                build_company=#{buildCompany},
+            </if>
+            <if test="buildContact!=null and buildContact!=''">
+                build_contact=#{buildContact},
+            </if>
+            <if test="buildPhone!=null and buildPhone!=''">
+                build_phone=#{buildPhone},
+            </if>
+            <if test="maintainCompany!=null and maintainCompany!=''">
+                maintain_company=#{maintainCompany},
+            </if>
+            <if test="maintainContact!=null and maintainContact!=''">
+                maintain_contact=#{maintainContact},
+            </if>
+            <if test="maintainPhone!=null and maintainPhone!=''">
+                maintain_phone=#{maintainPhone},
+            </if>
+            <if test="detectMode!=null and detectMode!=''">
+                detect_mode=#{detectMode},
+            </if>
+            <if test="maintainStatus!=null and maintainStatus!=''">
+                maintain_status=#{maintainStatus},
+            </if>
+            <if test="deviceAccount!=null and deviceAccount!=''">
+                device_account=#{deviceAccount},
+            </if>
+            <if test="devicePwd!=null and devicePwd!=''">
+                device_pwd=#{devicePwd},
+            </if>
+            <if test="installTime!=null and installTime!=''">
+                install_time=#{installTime},
+            </if>
+            <if test="laneNumber!=null and laneNumber!=''">
+                lane_number=#{laneNumber},
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark=#{remark},
+            </if>
+            <if test="orgId!=null and orgId!=''">
+                org_id=#{orgId},
+            </if>
+            <if test="isTest!=null and isTest!=''">
+                is_test=#{isTest},
+            </if>
+            operation = '2'
+        </set>
+            where asset_code = #{assetCode}
+    </update>
+
+    <update id="updateByAssetCodeChange" parameterType="com.zans.mms.vo.asset.ExcelAssetVO">
+        update asset_import
+        <set>
+            <if test="assetCodeChange!=null and assetCodeChange!=''">
+                asset_code=#{assetCodeChange},
+            </if>
+            <if test="pointId!=null and pointId!=''">
+                point_id=#{pointId},
+            </if>
+            <if test="deviceDirection!=null and deviceDirection!=''">
+                device_direction=#{deviceDirection},
+            </if>
+            <if test="deviceType!=null and deviceType!=''">
+                device_type=#{deviceType},
+            </if>
+            <if test="deviceSubType!=null and deviceSubType!=''">
+                device_sub_type=#{deviceSubType},
+            </if>
+            <if test="networkIp !=null and networkIp!=''">
+                network_ip=#{networkIp},
+            </if>
+            <if test="networkMac !=null and networkMac !=''">
+                network_mac=#{networkMac},
+            </if>
+            <if test="networkMask !=null and networkMask !=''">
+                network_mask=#{networkMask},
+            </if>
+            <if test="networkGeteway !=null and networkGeteway!=''">
+                network_geteway=#{networkGeteway},
+            </if>
+            <if test="deviceSn!=null and deviceSn!=''">
+                device_sn=#{deviceSn},
+            </if>
+            <if test="deviceModelDes!=null and deviceModelDes!=''">
+                device_model_des=#{deviceModelDes},
+            </if>
+            <if test="deviceModelBrand!=null and deviceModelBrand!=''">
+                device_model_brand=#{deviceModelBrand},
+            </if>
+            <if test="deviceSoftwareVersion!=null and deviceSoftwareVersion!=''">
+                device_software_version=#{deviceSoftwareVersion},
+            </if>
+            <if test="projectName!=null and projectName!=''">
+                project_name=#{projectName},
+            </if>
+            <if test="buildYear!=null and buildYear!=''">
+                build_year=#{buildYear},
+            </if>
+            <if test="buildCompany!=null and buildCompany!=''">
+                build_company=#{buildCompany},
+            </if>
+            <if test="buildContact!=null and buildContact!=''">
+                build_contact=#{buildContact},
+            </if>
+            <if test="buildPhone!=null and buildPhone!=''">
+                build_phone=#{buildPhone},
+            </if>
+            <if test="maintainCompany!=null and maintainCompany!=''">
+                maintain_company=#{maintainCompany},
+            </if>
+            <if test="maintainContact!=null and maintainContact!=''">
+                maintain_contact=#{maintainContact},
+            </if>
+            <if test="maintainPhone!=null and maintainPhone!=''">
+                maintain_phone=#{maintainPhone},
+            </if>
+            <if test="detectMode!=null and detectMode!=''">
+                detect_mode=#{detectMode},
+            </if>
+            <if test="maintainStatus!=null and maintainStatus!=''">
+                maintain_status=#{maintainStatus},
+            </if>
+            <if test="deviceAccount!=null and deviceAccount!=''">
+                device_account=#{deviceAccount},
+            </if>
+            <if test="devicePwd!=null and devicePwd!=''">
+                device_pwd=#{devicePwd},
+            </if>
+            <if test="installTime!=null and installTime!=''">
+                install_time=#{installTime},
+            </if>
+            <if test="laneNumber!=null and laneNumber!=''">
+                lane_number=#{laneNumber},
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark=#{remark},
+            </if>
+            <if test="orgId!=null and orgId!=''">
+                org_id=#{orgId},
+            </if>
+            <if test="isTest!=null and isTest!=''">
+                is_test=#{isTest},
+            </if>
+            operation = '2'
+        </set>
+        where asset_code = #{assetCode}
+    </update>
+    <update id="updateProjectId">
+        UPDATE asset a
+            JOIN sys_constant_item sci ON sci.item_value = a.project_name
+            AND sci.dict_key = 'project_name'
+            SET a.project_id = sci.item_key where a.project_id is null
+    </update>
+    <update id="setDefaultItemClassification">
+        update asset set item_classification = 1 where item_classification is null
+    </update>
+    <update id="synchronousItemClassification">
+        UPDATE asset a
+            JOIN project_mapping p ON a.project_name = p.project_name
+            SET a.item_classification = p.item_id where a.item_classification is null
+    </update>
+    <update id="backupTable">
+        create table ${backupTableName} like asset
+    </update>
+    <update id="synchronousData">
+        INSERT INTO ${backupTableName} SELECT * FROM  asset
+    </update>
+    <update id="updateImportSelective">
+        update asset_import
+        <set>
+            <if test="pointId!=null and pointId!=''">
+                point_id=#{pointId},
+            </if>
+            <if test="deviceDirection!=null and deviceDirection!=''">
+                device_direction=#{deviceDirection},
+            </if>
+            <if test="deviceType!=null and deviceType!=''">
+                device_type=#{deviceType},
+            </if>
+            <if test="deviceSubType!=null and deviceSubType!=''">
+                device_sub_type=#{deviceSubType},
+            </if>
+            <if test="networkIp !=null and networkIp!=''">
+                network_ip=#{networkIp},
+            </if>
+            <if test="networkMac !=null and networkMac !=''">
+                network_mac=#{networkMac},
+            </if>
+            <if test="networkMask !=null and networkMask !=''">
+                network_mask=#{networkMask},
+            </if>
+            <if test="networkGeteway !=null and networkGeteway!=''">
+                network_geteway=#{networkGeteway},
+            </if>
+            <if test="deviceSn!=null and deviceSn!=''">
+                device_sn=#{deviceSn},
+            </if>
+            <if test="deviceModelDes!=null and deviceModelDes!=''">
+                device_model_des=#{deviceModelDes},
+            </if>
+            <if test="deviceModelBrand!=null and deviceModelBrand!=''">
+                device_model_brand=#{deviceModelBrand},
+            </if>
+            <if test="deviceSoftwareVersion!=null and deviceSoftwareVersion!=''">
+                device_software_version=#{deviceSoftwareVersion},
+            </if>
+            <if test="projectName!=null and projectName!=''">
+                project_name=#{projectName},
+            </if>
+            <if test="buildYear!=null and buildYear!=''">
+                build_year=#{buildYear},
+            </if>
+            <if test="buildCompany!=null and buildCompany!=''">
+                build_company=#{buildCompany},
+            </if>
+            <if test="buildContact!=null and buildContact!=''">
+                build_contact=#{buildContact},
+            </if>
+            <if test="buildPhone!=null and buildPhone!=''">
+                build_phone=#{buildPhone},
+            </if>
+            <if test="maintainCompany!=null and maintainCompany!=''">
+                maintain_company=#{maintainCompany},
+            </if>
+            <if test="maintainContact!=null and maintainContact!=''">
+                maintain_contact=#{maintainContact},
+            </if>
+            <if test="maintainPhone!=null and maintainPhone!=''">
+                maintain_phone=#{maintainPhone},
+            </if>
+            <if test="detectMode!=null and detectMode!=''">
+                detect_mode=#{detectMode},
+            </if>
+            <if test="maintainStatus!=null and maintainStatus!=''">
+                maintain_status=#{maintainStatus},
+            </if>
+            <if test="deviceAccount!=null and deviceAccount!=''">
+                device_account=#{deviceAccount},
+            </if>
+            <if test="devicePwd!=null and devicePwd!=''">
+                device_pwd=#{devicePwd},
+            </if>
+            <if test="installTime!=null and installTime!=''">
+                install_time=#{installTime},
+            </if>
+            <if test="laneNumber!=null and laneNumber!=''">
+                lane_number=#{laneNumber},
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark=#{remark},
+            </if>
+            <if test="orgId!=null and orgId!=''">
+                org_id=#{orgId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+
+    <select id="getAssetByCondition" parameterType="com.zans.mms.vo.asset.subset.AssetSubsetDetailAddByConditionReqVO" resultType="java.lang.Long">
+        select a.id from asset a left join device_point d on  a.point_id = d.id
+        <where>
+            <if test="pointName !=null and pointName !=''">
+                and d.point_name=#{pointName}
+            </if>
+            <if test="maintainStatus != null and maintainStatus.size >0">
+                and a.maintain_status  in
+                <foreach collection="maintainStatus" item="status" separator="," open="(" close=")" >
+                    #{status}
+                </foreach>
+            </if>
+            <if test="areaId != null and areaId.size >0">
+                and d.area_id  in
+                <foreach collection="areaId" item="item" separator="," open="(" close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            <if test="pointCode !=null and pointCode !=''">
+                and d.point_code=#{pointCode}
+            </if>
+            <if test="assetCode !=null and assetCode !=''">
+               and a.asset_code =#{assetCode}
+            </if>
+            <if test="deviceType != null and deviceType !=''">
+                and a.device_type = #{deviceType}
+            </if>
+            <if test="itemList !=null and itemList.size >0">
+                and a.item_classification  in
+                <foreach collection="itemList" item="item" separator="," open="(" close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            <if test="buildCompany != null and buildCompany !=''">
+                <if test="buildCompany!='无建设单位'">
+                    and a.build_company like concat('%',#{buildCompany},'%')
+                </if>
+                <if test="buildCompany=='无建设单位'">
+                    and (a.build_company is null or a.build_company='')
+                </if>
+            </if>
+            <if test="projectIdList != null and projectIdList.size >0">
+                and a.project_id  in
+                <foreach collection="projectIdList" item="projectId" separator="," open="(" close=")" >
+                    #{projectId}
+                </foreach>
+            </if>
+            <if test="orgId != null and orgId.size >0">
+                and a.org_id  in
+                <foreach collection="orgId" item="orgid" separator="," open="(" close=")" >
+                    #{orgid}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <select id="chooseAssetList" resultType="com.zans.mms.vo.asset.AssetResVO">
+        SELECT
+        dp.area_id areaId,
+        dp.point_name pointName,
+        a.device_direction deviceDirection,
+        a.project_name as projectName,
+        dp.point_code pointCode,
+        a.asset_code assetCode,
+        a.network_ip networkIp,
+        a.maintain_company maintainCompany,
+        a.build_company buildCompany,
+        a.online_status onlineStatus,
+        a.maintain_status maintainStatus,
+        a.id assetId,
+        a.device_model_brand deviceModelBrand,
+        a.install_time installTime,
+        a.device_model_des deviceModelDes,
+        a.lane_number laneNumber,
+        a.device_sub_type deviceSubType,
+        CASE
+        WHEN asd.subset_id IS NULL THEN
+        0 ELSE 1
+        END checkStatus
+        FROM
+        asset a
+        LEFT JOIN device_point dp ON a.point_id = dp.id
+        LEFT JOIN asset_subset_detail asd ON asd.subset_id = #{subsetId}
+        AND asd.asset_id = a.id
+        <where>
+            a.device_type = #{deviceType}
+            <if test="pointId != null and pointId !=''">
+                and dp.id = #{pointId}
+            </if>
+            <if test="areaId != null and areaId.size>0">
+                and dp.area_id   in
+                <foreach collection="areaId" item="areaid" separator="," open="(" close=")" >
+                    #{areaid}
+                </foreach>
+            </if>
+            <if test="pointCode != null and pointCode !=''">
+                and dp.point_code like concat('%',#{pointCode},'%')
+            </if>
+            <if test="pointName != null and pointName !=''">
+                and dp.point_name like concat('%',#{pointName},'%')
+            </if>
+
+            <if test="assetCode != null and assetCode !=''">
+                and a.asset_code  like concat('%',#{assetCode},'%')
+            </if>
+            <if test="maintainStatus != null and maintainStatus.size>0">
+                and a.maintain_status  in
+                <foreach collection="maintainStatus" item="status" separator="," open="(" close=")" >
+                    #{status}
+                </foreach>
+            </if>
+            <if test="networkIp != null and networkIp !=''">
+                and a.network_ip = #{networkIp}
+            </if>
+            <if test="projectName != null and projectName !=''">
+                and a.project_name  like concat('%',#{projectName},'%')
+            </if>
+            <if test="itemList !=null and itemList.size >0">
+                and a.item_classification  in
+                <foreach collection="itemList" item="item" separator="," open="(" close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            <if test="buildCompany != null and buildCompany !=''">
+                <if test="buildCompany!='无建设单位'">
+                    and a.build_company like concat('%',#{buildCompany},'%')
+                </if>
+                <if test="buildCompany=='无建设单位'">
+                    and (a.build_company is null or a.build_company='')
+                </if>
+            </if>
+            <if test="projectIdList != null and projectIdList.size >0">
+                and a.project_id  in
+                <foreach collection="projectIdList" item="projectId" separator="," open="(" close=")" >
+                    #{projectId}
+                </foreach>
+            </if>
+            <if test="orgId != null and orgId.size >0">
+                and a.org_id  in
+                <foreach collection="orgId" item="orgid" separator="," open="(" close=")" >
+                    #{orgid}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <select id="getIdByCode" resultType="java.lang.String">
+        select id from asset where asset_code = #{assetCode} and device_type = #{deviceType}
+    </select>
+    <select id="getListForMap" resultType="com.zans.mms.vo.asset.AssetForMapResVO">
+        SELECT
+        a.id aId,
+        p.id pId,
+        a.device_type dType,
+        x ( p.gis ) AS longitude,
+        y ( p.gis ) AS latitude,
+        a.online_status onlineStatus
+        FROM
+        asset a
+        LEFT JOIN device_point p ON a.point_id = p.id
+        WHERE
+        y ( p.gis ) &lt; 90
+    </select>
+
+
+
+    <select id="getMonitorList" resultType="com.zans.mms.vo.asset.AssetMonitorResVO">
+        SELECT
+        dp.area_id areaId,
+        dp.point_name pointName,
+        a.device_direction deviceDirection,
+        dp.point_code pointCode,
+        dp.id pointId,
+        a.project_id projectId,
+        a.asset_code assetCode,
+        a.network_ip networkIp,
+        a.maintain_company maintainCompany,
+        a.build_company buildCompany,
+        a.online_status onlineStatus,
+        a.maintain_status maintainStatus,
+        a.id assetId,
+        a.device_model_brand deviceModelBrand,
+        a.install_time installTime,
+        a.device_model_des deviceModelDes,
+        a.lane_number laneNumber,
+        a.device_sub_type deviceSubType,
+        o.org_name  orgName,
+        case when adi.fault_types_name is null then  '未检测'
+        when adi.fault_types_name = '' then  '正常'
+            else  fault_types_name end as faultTypesName
+        FROM
+        asset a
+        LEFT JOIN device_point dp ON a.point_id = dp.id
+        LEFT JOIN asset_diagnosis_info adi on a.asset_code = adi.asset_code
+        LEFT JOIN base_org o on o.org_id = a.org_id
+        <where>
+            <if test="pointId != null and pointId !=''">
+                and dp.id = #{pointId}
+            </if>
+            <if test="deviceType != null and deviceType !=''">
+                and a.device_type = #{deviceType}
+            </if>
+            <if test="areaId != null and areaId.size >0">
+                and dp.area_id in
+                <foreach collection="areaId" item="areaid" separator="," open="(" close=")" >
+                    #{areaid}
+                </foreach>
+
+            </if>
+            <if test="pointCode != null and pointCode !=''">
+                and dp.point_code like concat('%',#{pointCode},'%')
+            </if>
+            <if test="pointName != null and pointName !=''">
+                and dp.point_name like concat('%',#{pointName},'%')
+            </if>
+            <if test="buildCompany != null and buildCompany !=''">
+                <if test="buildCompany!='无建设单位'">
+                    and a.build_company like concat('%',#{buildCompany},'%')
+                </if>
+                <if test="buildCompany=='无建设单位'">
+                    and (a.build_company is null or a.build_company='')
+                </if>
+            </if>
+            <if test="assetCode != null and assetCode !=''">
+                and a.asset_code  like concat('%',#{assetCode},'%')
+            </if>
+            <if test="maintainStatus != null and maintainStatus.size >0">
+                and a.maintain_status in
+                <foreach collection="maintainStatus" item="status" separator="," open="(" close=")" >
+                    #{status}
+                </foreach>
+            </if>
+            <if test="networkIp != null and networkIp !=''">
+                and a.network_ip = #{networkIp}
+            </if>
+            <if test="projectName != null and projectName !=''">
+                and a.project_name  like concat('%',#{projectName},'%')
+            </if>
+            <if test="deviceSubType != null and deviceSubType !=''">
+                and a.device_sub_type  like concat('%',#{deviceSubType},'%')
+            </if>
+            <if test="deviceModelBrand == 'unknown'">
+                and (a.device_model_brand ='' or a.device_model_brand is null)
+            </if>
+            <if test="deviceModelBrand !=null and deviceModelBrand !='' and deviceModelBrand !='unknown'">
+                and a.device_model_brand  like concat('%',#{deviceModelBrand},'%')
+            </if>
+            <if test="orgId != null and orgId.size >0">
+                and a.org_id  in
+                <foreach collection="orgId" item="orgid" separator="," open="(" close=")" >
+                    #{orgid}
+                </foreach>
+            </if>
+            <if test="diagnosisResult !=null and diagnosisResult.size >0">
+                <if test="diagnosisResult.contains(0)">
+
+                     and  adi.diagnosis_result is null or
+                    adi.diagnosis_result in
+                    <foreach collection="diagnosisResult" item="dr" separator="," open="(" close=")" >
+                        #{dr}
+                    </foreach>
+               </if>
+                <if test="!diagnosisResult.contains(0)">
+                    and  adi.diagnosis_result in
+                    <foreach collection="diagnosisResult" item="dr" separator="," open="(" close=")" >
+                        #{dr}
+                    </foreach>
+                </if>
+
+            </if>
+            <if test="buildCompany != null and buildCompany !=''">
+                <if test="buildCompany!='无建设单位'">
+                    and a.build_company like concat('%',#{buildCompany},'%')
+                </if>
+                <if test="buildCompany=='无建设单位'">
+                    and (a.build_company is null or a.build_company='')
+                </if>
+            </if>
+            <if test="itemList !=null and itemList.size >0">
+                and a.item_classification  in
+                <foreach collection="itemList" item="item" separator="," open="(" close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            <if test="projectIdList != null and projectIdList.size >0">
+                and a.project_id  in
+                <foreach collection="projectIdList" item="projectId" separator="," open="(" close=")" >
+                    #{projectId}
+                </foreach>
+            </if>
+        </where>
+
+    </select>
+
+
+    <select id="getDiagnosisView" resultMap="AssetDiagnosisInfoMap">
+        SELECT
+            a.id assetId,
+            a.asset_code,
+            dp.point_name pointName,
+            dp.point_code pointCode,
+            a.point_id pointId,
+            adi.diagnosis_result,
+            adi.diagnosis_time,
+            adi.img_url,
+            adi.trace_id,
+            adie.fault_type,
+            adie.fault_type_result
+        FROM
+            asset a
+                LEFT JOIN device_point dp ON a.point_id = dp.id
+                LEFT JOIN asset_diagnosis_info adi ON a.asset_code = adi.asset_code
+                LEFT JOIN asset_diagnosis_info_ex adie ON adi.trace_id = adie.trace_id
+        WHERE  a.asset_code = #{assetCode}
+    </select>
+
+    <select id="getDiagnosisHisView" resultMap="AssetDiagnosisInfoMap">
+        SELECT
+            a.id assetId,
+            a.asset_code,
+            dp.point_name pointName,
+            dp.point_code pointCode,
+            a.point_id pointId,
+            adi.diagnosis_result,
+            adi.diagnosis_time,
+            adi.img_url,
+            adi.trace_id,
+            adie.fault_type,
+            adie.fault_type_result
+        FROM
+            asset a
+                LEFT JOIN device_point dp ON a.point_id = dp.id
+                LEFT JOIN asset_diagnosis_info_his adi ON a.asset_code = adi.asset_code
+                LEFT JOIN asset_diagnosis_info_ex adie ON adi.trace_id = adie.trace_id
+        WHERE  a.asset_code = #{assetCode} and adi.trace_id = #{traceId}
+    </select>
+
+
+    <select id="getThreeDaysDiagnosisHisList"
+            resultType="com.zans.mms.vo.asset.diagnosis.AssetDiagnosisHisRespVO">
+        SELECT
+          adih.asset_code assetCode,
+            adih.diagnosis_result diagnosisResult,
+            DATE_FORMAT(adih.diagnosis_time,'%Y-%m-%d %H:%i:%S')  diagnosisTime,
+            adih.trace_id traceId
+        FROM
+            asset_diagnosis_info_his adih
+        WHERE
+            adih.asset_code = #{assetCode}
+            AND adih.diagnosis_time >= DATE_SUB( NOW( ), INTERVAL 2 DAY )
+        ORDER BY
+            diagnosis_time desc
+    </select>
+    <select id="getAssetExportData" resultType="com.zans.mms.vo.asset.subset.AssetExportVO" parameterType="com.zans.mms.vo.asset.AssetExportQueryVO">
+        SELECT
+            a.id,
+            a.asset_code,
+            p.point_code,
+            p.point_name,
+            ba.area_name,
+            a.device_direction,
+            dt.type_name deviceType,
+            a.device_sub_type,
+            a.network_ip,
+            a.network_mac,
+            a.network_mask,
+            a.network_geteway,
+            a.device_sn,
+            a.device_model_des,
+            a.device_model_brand,
+            a.device_software_version,
+            a.project_name,
+            a.build_year,
+            a.build_company,
+            a.build_contact,
+            a.build_phone,
+            a.maintain_company,
+            a.maintain_contact,
+            a.maintain_phone,
+            a.detect_mode,
+            a.maintain_status,
+            a.device_account,
+            a.device_pwd,
+            a.online_status,
+            a.offline_status,
+            a.install_time,
+            a.lane_number,
+            a.remark,
+            o.org_name orgName
+        FROM
+            asset a
+                LEFT JOIN base_org o ON o.org_id = a.org_id
+                LEFT JOIN base_device_type dt ON dt.type_id = a.device_type
+                LEFT JOIN device_point p ON p.id = a.point_id
+                LEFT JOIN base_area ba ON ba.area_id=p.area_id
+                LEFT JOIN asset_diagnosis_info adi on a.asset_code = adi.asset_code
+        <where>
+            <if test="pointId != null and pointId !=''">
+                and p.id = #{pointId}
+            </if>
+            <if test="deviceType != null and deviceType !=''">
+                and a.device_type = #{deviceType}
+            </if>
+            <if test="areaId != null and areaId.size >0">
+                and p.area_id in
+                <foreach collection="areaId" item="areaid" separator="," open="(" close=")" >
+                    #{areaid}
+                </foreach>
+
+            </if>
+            <if test="pointCode != null and pointCode !=''">
+                and p.point_code like concat('%',#{pointCode},'%')
+            </if>
+            <if test="pointName != null and pointName !=''">
+                and p.point_name like concat('%',#{pointName},'%')
+            </if>
+
+            <if test="assetCode != null and assetCode !=''">
+                and a.asset_code  like concat('%',#{assetCode},'%')
+            </if>
+            <if test="maintainStatus != null and maintainStatus.size >0">
+                and a.maintain_status in
+                <foreach collection="maintainStatus" item="status" separator="," open="(" close=")" >
+                    #{status}
+                </foreach>
+            </if>
+            <if test="networkIp != null and networkIp !=''">
+                and a.network_ip = #{networkIp}
+            </if>
+            <if test="projectName != null and projectName !=''">
+                and a.project_name  like concat('%',#{projectName},'%')
+            </if>
+            <if test="deviceSubType != null and deviceSubType !=''">
+                and a.device_sub_type  like concat('%',#{deviceSubType},'%')
+            </if>
+            <if test="deviceModelBrand == 'unknown'">
+                and (a.device_model_brand ='' or a.device_model_brand is null)
+            </if>
+            <if test="deviceModelBrand !=null and deviceModelBrand !='' and deviceModelBrand !='unknown'">
+                and a.device_model_brand  like concat('%',#{deviceModelBrand},'%')
+            </if>
+            <if test="orgId != null and orgId.size >0">
+                and a.org_id  in
+                <foreach collection="orgId" item="orgid" separator="," open="(" close=")" >
+                    #{orgid}
+                </foreach>
+            </if>
+            <if test="diagnosisResult != null and diagnosisResult.size>0">
+                <if test="diagnosisResult.contains(0)">
+
+                    and  adi.diagnosis_result is null or
+                    adi.diagnosis_result in
+                    <foreach collection="diagnosisResult" item="dr" separator="," open="(" close=")" >
+                        #{dr}
+                    </foreach>
+                </if>
+                <if test="!diagnosisResult.contains(0)">
+                    and  adi.diagnosis_result in
+                    <foreach collection="diagnosisResult" item="dr" separator="," open="(" close=")" >
+                        #{dr}
+                    </foreach>
+                </if>
+
+            </if>
+        </where>
+    </select>
+    <select id="getExportData" resultType="com.zans.mms.vo.asset.subset.AssetExportVO">
+        SELECT
+            a.id,
+            a.asset_code,
+            p.point_code,
+            p.point_name,
+            a.device_direction,
+            dt.type_name deviceType,
+            a.device_sub_type,
+            a.network_ip,
+            a.network_mac,
+            a.network_mask,
+            a.network_geteway,
+            a.device_sn,
+            a.device_model_des,
+            a.device_model_brand,
+            a.device_software_version,
+            a.project_name,
+            a.build_year,
+            a.build_company,
+            a.build_contact,
+            a.build_phone,
+            a.maintain_company,
+            a.maintain_contact,
+            a.maintain_phone,
+            a.detect_mode,
+            a.maintain_status,
+            a.device_account,
+            a.device_pwd,
+            a.online_status,
+            a.offline_status,
+            a.install_time,
+            a.lane_number,
+            a.remark,
+            o.org_name orgName
+        FROM
+            asset_subset_detail det
+                LEFT JOIN asset a ON a.id = det.asset_id
+                LEFT JOIN base_org o ON o.org_id = a.org_id
+                LEFT JOIN base_device_type dt ON dt.type_id = a.device_type
+                LEFT JOIN device_point p ON p.id = a.point_id
+        <where>
+            det.subset_id = #{subsetId}
+        <if test="deviceType != null and deviceType !=''">
+            and a.device_type = #{deviceType}
+        </if>
+        <if test="areaId != null and areaId.size>0">
+            and p.area_id   in
+            <foreach collection="areaId" item="areaid" separator="," open="(" close=")" >
+                #{areaid}
+            </foreach>
+        </if>
+        <if test="pointCode != null and pointCode !=''">
+            and p.point_code like concat('%',#{pointCode},'%')
+        </if>
+        <if test="pointName != null and pointName !=''">
+            and p.point_name like concat('%',#{pointName},'%')
+        </if>
+
+        <if test="assetCode != null and assetCode !=''">
+            and a.asset_code  like concat('%',#{assetCode},'%')
+        </if>
+        <if test="maintainStatus != null and maintainStatus.size >0">
+            and a.maintain_status  in
+            <foreach collection="maintainStatus" item="status" separator="," open="(" close=")" >
+                #{status}
+            </foreach>
+        </if>
+        <if test="onlineStatus != null and onlineStatus !=''">
+            and a.online_status = #{onlineStatus}
+        </if>
+        <if test="networkIp != null and networkIp !=''">
+            and a.network_ip = #{networkIp}
+        </if>
+        <if test="projectName != null and projectName !=''">
+            and a.project_name  like concat('%',#{projectName},'%')
+        </if>
+        <if test="orgId != null and orgId!=''">
+            and a.org_id = #{orgId}
+        </if>
+        </where>
+    </select>
+
+    <select id="getDiagnosisFlagView" resultMap="AssetDiagnosisInfoMap">
+        SELECT
+        a.id assetId,
+        a.asset_code,
+        dp.point_name pointName,
+        dp.point_code pointCode,
+        a.point_id pointId,
+        adi.diagnosis_result,
+        adi.diagnosis_time,
+        adi.img_url,
+        adi.trace_id,
+        adie.fault_type,
+        adie.fault_type_result
+        FROM
+        asset a
+        LEFT JOIN device_point dp ON a.point_id = dp.id
+        LEFT JOIN asset_diagnosis_flag_info_his adi ON a.asset_code = adi.asset_code
+        LEFT JOIN asset_diagnosis_flag_info_ex adie ON adi.trace_id = adie.trace_id
+        WHERE adi.asset_code = #{assetCode}
+        <if test="traceId != null and traceId !=''">
+            and adi.trace_id = #{traceId}
+        </if>
+    </select>
+    <select id="chooseAssetListCount" resultType="java.lang.Long">
+        SELECT
+            count(*)
+        FROM
+        asset a
+        LEFT JOIN device_point dp ON a.point_id = dp.id
+        LEFT JOIN asset_subset_detail asd ON asd.subset_id = #{subsetId}
+        AND asd.asset_id = a.id
+        <where>
+            a.device_type = #{deviceType}
+            and asd.subset_id IS  NULL
+            <if test="pointId != null and pointId !=''">
+                and dp.id = #{pointId}
+            </if>
+            <if test="areaId != null and areaId.size>0">
+                and dp.area_id   in
+                <foreach collection="areaId" item="areaid" separator="," open="(" close=")" >
+                    #{areaid}
+                </foreach>
+            </if>
+            <if test="pointCode != null and pointCode !=''">
+                and dp.point_code like concat('%',#{pointCode},'%')
+            </if>
+            <if test="pointName != null and pointName !=''">
+                and dp.point_name like concat('%',#{pointName},'%')
+            </if>
+
+            <if test="assetCode != null and assetCode !=''">
+                and a.asset_code  like concat('%',#{assetCode},'%')
+            </if>
+            <if test="maintainStatus != null and maintainStatus.size>0">
+                and a.maintain_status  in
+                <foreach collection="maintainStatus" item="status" separator="," open="(" close=")" >
+                    #{status}
+                </foreach>
+            </if>
+            <if test="networkIp != null and networkIp !=''">
+                and a.network_ip = #{networkIp}
+            </if>
+            <if test="projectName != null and projectName !=''">
+                and a.project_name  like concat('%',#{projectName},'%')
+            </if>
+            <if test="itemList !=null and itemList.size >0">
+                and a.item_classification  in
+                <foreach collection="itemList" item="item" separator="," open="(" close=")" >
+                    #{item}
+                </foreach>
+            </if>
+            <if test="buildCompany != null and buildCompany !=''">
+                <if test="buildCompany!='无建设单位'">
+                    and a.build_company like concat('%',#{buildCompany},'%')
+                </if>
+                <if test="buildCompany=='无建设单位'">
+                    and (a.build_company is null or a.build_company='')
+                </if>
+            </if>
+            <if test="projectIdList != null and projectIdList.size >0">
+                and a.project_id  in
+                <foreach collection="projectIdList" item="projectId" separator="," open="(" close=")" >
+                    #{projectId}
+                </foreach>
+            </if>
+            <if test="orgId != null and orgId.size >0">
+                and a.org_id  in
+                <foreach collection="orgId" item="orgid" separator="," open="(" close=")" >
+                    #{orgid}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <select id="getIdByCodeAndPointId" resultType="java.lang.Long">
+        select id from asset where point_id = #{pointId} and asset_code = #{assetCode} limit 1
+    </select>
+    <select id="getAsset" resultType="java.util.Map">
+        select id,asset_code as assetCode from asset where point_id = #{pointId} and device_type = (select device_type from device_point where id = #{pointId})
+    </select>
+    <select id="getAssetIds" resultType="java.lang.Long">
+        select asset_id from ticket_point_device where ticket_id = #{ticketId} and point_id = #{pointId}
+    </select>
+    <select id="notExistProjectName" resultType="java.lang.String">
+        SELECT DISTINCT
+            project_name
+        FROM
+            asset
+        WHERE
+                project_name NOT IN ( SELECT item_value FROM sys_constant_item WHERE dict_key = 'project_name' )
+    </select>
+    <select id="getOneByCode" resultType="com.zans.mms.vo.asset.ExcelAssetVO">
+        SELECT
+            id,
+            asset_code,
+            point_id,
+            device_direction,
+            device_type,
+            device_sub_type,
+            network_ip,
+            network_mac,
+            network_mask,
+            network_geteway,
+            device_sn,
+            device_model_des,
+            device_model_brand,
+            device_software_version,
+            project_name,
+            build_year,
+            build_company,
+            build_contact,
+            build_phone,
+            maintain_company,
+            maintain_contact,
+            maintain_phone,
+            detect_mode,
+            maintain_status,
+            device_account,
+            device_pwd,
+            online_status,
+            offline_status,
+            install_time,
+            lane_number,
+            remark,
+            creator,
+            create_time,
+            update_time,
+            last_scan_time,
+            is_test,
+            org_id,
+            affiliated_units,
+            project_id,
+            item_classification
+        FROM
+            asset
+        where asset_code = #{assetCode} limit 1
+    </select>
+    <select id="getImportList" resultType="com.zans.mms.vo.asset.ExcelAssetVO">
+        SELECT
+        dp.area_id areaId,
+        dp.point_name pointName,
+        a.device_direction deviceDirection,
+        dp.point_code pointCode,
+        dp.id pointId,
+        a.project_id projectId,
+        a.asset_code assetCode,
+        a.network_ip networkIp,
+        a.maintain_company maintainCompany,
+        a.build_company buildCompany,
+        a.online_status onlineStatus,
+        a.maintain_status maintainStatus,
+        a.id assetId,
+        a.device_model_brand deviceModelBrand,
+        a.install_time installTime,
+        a.device_model_des deviceModelDes,
+        a.lane_number laneNumber,
+        a.device_sub_type deviceSubType,
+        a.project_name projectName,
+        a.org_id orgId
+        FROM
+        asset_import a
+        LEFT JOIN device_point dp ON a.point_id = dp.id
+        LEFT JOIN base_org o on o.org_id=a.org_id
+        <where>
+         <if test="importId != null">
+            and a.import_id = #{importId}
+        </if>
+            <if test="operation !=null">
+                and a.operation = #{operation}
+            </if>
+        <if test="pointId != null and pointId !=''">
+            and dp.id = #{pointId}
+        </if>
+        <if test="deviceType != null and deviceType !=''">
+            and a.device_type = #{deviceType}
+        </if>
+        <if test="areaId != null and areaId.size >0">
+            and dp.area_id in
+            <foreach collection="areaId" item="areaid" separator="," open="(" close=")" >
+                #{areaid}
+            </foreach>
+
+        </if>
+        <if test="pointCode != null and pointCode !=''">
+            and dp.point_code like concat('%',#{pointCode},'%')
+        </if>
+        <if test="pointName != null and pointName !=''">
+            and dp.point_name like concat('%',#{pointName},'%')
+        </if>
+
+        <if test="assetCode != null and assetCode !=''">
+            and a.asset_code  like concat('%',#{assetCode},'%')
+        </if>
+        <if test="maintainStatus != null and maintainStatus.size >0">
+            and a.maintain_status in
+            <foreach collection="maintainStatus" item="status" separator="," open="(" close=")" >
+                #{status}
+            </foreach>
+        </if>
+        <if test="networkIp != null and networkIp !=''">
+            and a.network_ip = #{networkIp}
+        </if>
+        <if test="projectName != null and projectName !=''">
+            and a.project_name  like concat('%',#{projectName},'%')
+        </if>
+        <if test="deviceSubType != null and deviceSubType !=''">
+            and a.device_sub_type  like concat('%',#{deviceSubType},'%')
+        </if>
+        <if test="deviceModelBrand == 'unknown'">
+            and (a.device_model_brand ='' or a.device_model_brand is null)
+        </if>
+        <if test="deviceModelBrand !=null and deviceModelBrand !='' and deviceModelBrand !='unknown'">
+            and a.device_model_brand  like concat('%',#{deviceModelBrand},'%')
+        </if>
+        <if test="orgId != null and orgId.size >0">
+            and a.org_id  in
+            <foreach collection="orgId" item="orgid" separator="," open="(" close=")" >
+                #{orgid}
+            </foreach>
+        </if>
+        <if test="buildCompany != null and buildCompany !=''">
+            <if test="buildCompany!='无建设单位'">
+                and a.build_company like concat('%',#{buildCompany},'%')
+            </if>
+            <if test="buildCompany=='无建设单位'">
+                and (a.build_company is null or a.build_company='')
+            </if>
+        </if>
+        <if test="itemList !=null and itemList.size >0">
+            and a.item_classification  in
+            <foreach collection="itemList" item="item" separator="," open="(" close=")" >
+                #{item}
+            </foreach>
+        </if>
+        <if test="projectIdList != null and projectIdList.size >0">
+            and a.project_id  in
+            <foreach collection="projectIdList" item="projectId" separator="," open="(" close=")" >
+                #{projectId}
+            </foreach>
+        </if>
+        </where>
+    </select>
+    <select id="getByImportId" resultType="com.zans.mms.vo.asset.ExcelAssetVO">
+        SELECT
+            id,
+            asset_code,
+            point_id,
+            device_direction,
+            device_type,
+            device_sub_type,
+            network_ip,
+            network_mac,
+            network_mask,
+            network_geteway,
+            device_sn,
+            device_model_des,
+            device_model_brand,
+            device_software_version,
+            project_name,
+            build_year,
+            build_company,
+            build_contact,
+            build_phone,
+            maintain_company,
+            maintain_contact,
+            maintain_phone,
+            detect_mode,
+            maintain_status,
+            device_account,
+            device_pwd,
+            online_status,
+            offline_status,
+            install_time,
+            lane_number,
+            remark,
+            creator,
+            create_time,
+            update_time,
+            last_scan_time,
+            is_test,
+            org_id,
+            affiliated_units,
+            project_id,
+            item_classification,
+            operation,
+            import_id
+        FROM
+            asset_import
+        where import_id = #{importId}
+    </select>
+
+</mapper>

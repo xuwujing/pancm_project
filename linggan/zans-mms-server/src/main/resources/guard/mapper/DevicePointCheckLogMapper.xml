@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.DevicePointCheckLogMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.DevicePointCheckLog" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="point_id" property="pointId" jdbcType="BIGINT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="prev_gis" property="prevGis" jdbcType="BINARY" />
+    <result column="gis" property="gis" jdbcType="BINARY" />
+  </resultMap>
+    <insert id="insertOne">
+      insert into device_point_check_log (point_id,prev_gis,gis,creator)
+    values (#{pointId},ST_GeomFromText ( CONCAT( 'point(', #{prevLongitude}, ' ', #{prevLatitude}, ')' ) ),ST_GeomFromText ( CONCAT( 'point(', #{longitude}, ' ', #{latitude}, ')' ) ),#{creator})
+    </insert>
+</mapper>

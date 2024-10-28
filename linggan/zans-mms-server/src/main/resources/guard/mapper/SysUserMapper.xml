@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.SysUserDao">
+
+    <resultMap type="com.zans.mms.model.SysUser" id="SysUserMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
+        <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="salt" column="salt" jdbcType="VARCHAR"/>
+        <result property="roleNum" column="role_num" jdbcType="VARCHAR"/>
+        <result property="maintainNum" column="maintain_num" jdbcType="VARCHAR"/>
+        <result property="isAdmin" column="is_admin" jdbcType="INTEGER"/>
+        <result property="enable" column="enable" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+
+        <result property="wechatName" column="wechat_name" jdbcType="VARCHAR"/>
+        <result property="wechatEnable" column="wechat_enable" jdbcType="INTEGER"/>
+        <result property="lastLoginTime" column="last_login_time" jdbcType="TIMESTAMP"/>
+        <result property="wechatLastLoginTime" column="wechat_last_login_time" jdbcType="TIMESTAMP"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap type="com.zans.mms.vo.user.SysUserResp" id="SysUserRespMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
+        <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="salt" column="salt" jdbcType="VARCHAR"/>
+        <result property="roleNum" column="role_num" jdbcType="VARCHAR"/>
+        <result property="maintainNum" column="maintain_num" jdbcType="VARCHAR"/>
+        <result property="isAdmin" column="is_admin" jdbcType="INTEGER"/>
+        <result property="enable" column="enable" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="wechatName" column="wechat_name" jdbcType="VARCHAR"/>
+        <result property="wechatEnable" column="wechat_enable" jdbcType="INTEGER"/>
+        <result property="wechatPushEnable" column="wechat_push_enable" jdbcType="INTEGER"/>
+        <result property="pcEnable" column="pc_enable" jdbcType="INTEGER"/>
+        <result property="lastLoginTime" column="last_login_time" jdbcType="TIMESTAMP"/>
+        <result property="wechatLastLoginTime" column="wechat_last_login_time" jdbcType="TIMESTAMP"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="jurisdictionId" column="jurisdiction_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <!--查询单个-->
+    <select id="queryByIdOrUsername" resultType="com.zans.mms.model.SysUser">
+        select su.id,
+               user_name,
+               nick_name,
+               mobile,
+               account,
+               password,
+               salt,
+               role_num,
+                su.maintain_num,
+               is_admin,
+               enable,
+                su.create_time,
+               wechat_name,
+               wechat_enable,
+               wechat_push_enable,
+               pc_enable,
+               last_login_time,
+               wechat_last_login_time,
+                su.wechat_enable,
+                su.pc_enable,
+               su.wechat_push_enable,
+               su.creator,
+              su.update_time,
+              su.check_gis,
+              su.area_id_str,
+              bo.org_name as maintain_name,
+               su.jurisdiction_id as jurisdictionId
+        from sys_user su
+        left join base_org bo on su.maintain_num = bo.org_id
+        where 1 = 1
+        <if test="id != null">
+            and su.id = #{id}
+        </if>
+        <if test="userName != null and userName != ''">
+            and su.user_name = #{userName}
+        </if>
+
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="SysUserRespMap">
+        select
+        id, user_name, nick_name, mobile, account, password, salt, role_num, maintain_num, is_admin, enable,
+        wechat_name,
+        wechat_enable,
+        pc_enable,
+        wechat_push_enable,
+        last_login_time,
+        wechat_last_login_time,
+        creator,
+        create_time, update_time,jurisdiction_id
+        from sys_user
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name like concat('%',#{userName},'%')
+            </if>
+            <if test="nickName != null and nickName != ''">
+                and nick_name like concat('%',#{nickName},'%')
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and mobile like  concat('%',#{mobile},'%')
+            </if>
+            <if test="account != null and account != ''">
+                and account = #{account}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="salt != null and salt != ''">
+                and salt = #{salt}
+            </if>
+            <if test="roleNum != null and roleNum != ''">
+                and role_num = #{roleNum}
+            </if>
+            <if test="maintainNum != null and maintainNum != ''">
+                and maintain_num = #{maintainNum}
+            </if>
+            <if test="isAdmin != null">
+                and is_admin = #{isAdmin}
+            </if>
+            <if test="enable != null">
+                and enable = #{enable}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="querySysUser" resultType="com.zans.base.vo.SelectVO">
+        select su.nick_name as itemKey, su.mobile as  itemValue
+        from sys_user su
+         left join base_maintain bm on su.maintain_num = bm.maintain_num
+         left join base_maintain_role bmr on su.role_num = bmr.role_num
+        where bm.maintain_type = '03'
+        <if test="maintainNum != null and maintainNum != ''">
+            and bm.maintain_num = #{maintainNum}
+        </if>
+        <if test="areaNum != null and areaNum != ''">
+            and (bm.area_num = #{areaNum} or left(bm.area_num,2) = left(#{areaNum},2))
+        </if>
+    </select>
+    <select id="findUserByName" resultType="com.zans.mms.model.SysUser">
+      select * from sys_user where user_name=#{userName} limit 1
+    </select>
+
+    <select id="queryByMobile" resultType="com.zans.mms.model.SysUser">
+        select su.* from sys_user su
+        where 1=1
+        <if test="nickName != null and nickName != ''">
+            and nick_name like concat('%',#{nickName},'%')
+        </if>
+        <if test="mobile != null and mobile != ''">
+            and mobile = #{mobile}
+        </if>
+        limit 1
+    </select>
+    <select id="findUsernameListByRoleAndMaintainNum" resultType="java.lang.String">
+        SELECT
+            user_name
+        FROM
+            sys_user
+        <where>
+            <if test="roleNum !=null and roleNum !=''">
+                AND role_num = #{roleNum}
+            </if>
+            <if test="allocDepartmentNum !=null and allocDepartmentNum !=''">
+                AND maintain_num = #{allocDepartmentNum}
+            </if>
+        </where>
+
+
+
+    </select>
+    <select id="findUsernameListByRoleList" resultType="java.lang.String">
+        SELECT
+            user_name
+        FROM
+            sys_user
+        WHERE
+            role_num IN
+        <foreach item="role" collection="roleList" separator="," open="(" close=")" index="">
+                   #{role}
+        </foreach>
+        and wechat_push_enable=1
+    </select>
+    <select id="findUsernameListByDeptList" resultType="java.lang.String">
+        SELECT
+        user_name
+        FROM
+        sys_user
+        WHERE
+        maintain_num IN
+        <foreach item="deptName" collection="deptIdList" separator="," open="(" close=")" index="">
+            #{deptName}
+        </foreach>
+    </select>
+    <select id="findUsernameListByDeptListAndRoleList" resultType="java.lang.String">
+        SELECT
+        user_name
+        FROM
+        sys_user
+        WHERE
+        maintain_num IN
+        <foreach item="deptId" collection="deptIdList" separator="," open="(" close=")" index="">
+            #{deptId}
+        </foreach>
+        AND
+        role_num IN
+        <foreach item="role" collection="roleIdList" separator="," open="(" close=")" index="">
+            #{role}
+        </foreach>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_user(user_name, nick_name, mobile, account, password, salt, role_num, maintain_num,
+                                  enable,creator,wechat_enable,wechat_push_enable,pc_enable,jurisdiction_id)
+        values (#{userName}, #{nickName}, #{mobile}, #{account}, #{password}, #{salt}, #{roleNum}, #{maintainNum},
+                 #{enable},#{creator},#{wechatEnable},#{wechatPushEnable},#{pcEnable},#{jurisdictionId})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_user(user_name, nick_name, mobile, account, password, salt, role_num, maintain_num,
+        is_admin, enable, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userName}, #{entity.nickName}, #{entity.mobile}, #{entity.account}, #{entity.password},
+            #{entity.salt}, #{entity.roleNum}, #{entity.maintainNum}, #{entity.isAdmin}, #{entity.enable},
+            #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_user(user_name, nick_name, mobile, account, password, salt, role_num, maintain_num,
+        is_admin, enable, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userName}, #{entity.nickName}, #{entity.mobile}, #{entity.account}, #{entity.password},
+            #{entity.salt}, #{entity.roleNum}, #{entity.maintainNum}, #{entity.isAdmin}, #{entity.enable},
+            #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        user_name = values(user_name) , nick_name = values(nick_name) , mobile = values(mobile) , account =
+        values(account) , password = values(password) , salt = values(salt) , role_num = values(role_num) , maintain_num
+        = values(maintain_num) , is_admin = values(is_admin) , enable = values(enable) , create_time =
+        values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update sys_user
+        <set>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="nickName != null and nickName != ''">
+                nick_name = #{nickName},
+            </if>
+            <if test="mobile != null and mobile != ''">
+                mobile = #{mobile},
+            </if>
+            <if test="account != null and account != ''">
+                account = #{account},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="salt != null and salt != ''">
+                salt = #{salt},
+            </if>
+            <if test="roleNum != null and roleNum != ''">
+                role_num = #{roleNum},
+            </if>
+            <if test="maintainNum != null and maintainNum != ''">
+                maintain_num = #{maintainNum},
+            </if>
+            <if test="isAdmin != null">
+                is_admin = #{isAdmin},
+            </if>
+            <if test="enable != null">
+                enable = #{enable},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+
+            <if test="wechatEnable != null">
+                wechat_enable = #{wechatEnable},
+            </if>
+
+
+            <if test="wechatPushEnable != null">
+                wechat_push_enable = #{wechatPushEnable},
+            </if>
+            <if test="pcEnable != null">
+                pc_enable = #{pcEnable},
+            </if>
+
+            <if test="lastLoginTime != null">
+                last_login_time = #{lastLoginTime},
+            </if>
+            <if test="wechatLastLoginTime != null">
+                wechat_last_login_time = #{wechatLastLoginTime},
+            </if>
+            <if test="updateTime != null and wechatName !=''">
+                wechat_name = #{wechatName},
+            </if>
+            <if test="jurisdictionId !=null and jurisdictionId !=''">
+                jurisdiction_id = #{jurisdictionId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from sys_user
+        where id = #{id}
+    </delete>
+
+
+    <select id="getUserByOpenid" resultType="com.zans.mms.model.SysUser">
+        select su.id,
+               su.user_name,
+               su.nick_name,
+               mobile,
+               account,
+               password,
+               salt,
+               role_num,
+                su.maintain_num,
+               is_admin,
+               enable,
+                su.create_time,
+               wechat_name,
+               wechat_enable,
+               wechat_push_enable,
+               pc_enable,
+               last_login_time,
+               wechat_last_login_time,
+                su.wechat_enable,
+                su.pc_enable,
+               su.wechat_push_enable,
+               su.creator,
+              su.update_time,
+              su.check_gis,
+              su.area_id_str
+        from sys_user su
+        inner join wechat_user_wxbind uw on su.user_name = uw.user_name
+				WHERE uw.wx_openid=#{openid}
+				LIMIT 1
+    </select>
+    <select id="getRepairPersonByAreaId" resultType="com.zans.mms.vo.user.SysUserVO">
+        select su.user_name,su.nick_name,bo.org_name from sys_user su left join base_org bo on bo.org_id = su.maintain_num
+        <where>
+            <if test="area !=null and area !=''">
+              and   su.maintain_num = #{area}
+            </if>
+            and su.role_num='0302'
+        </where>
+
+    </select>
+    <select id="getNames" resultType="java.lang.String">
+        select GROUP_CONCAT(nick_name) from sys_user
+        where user_name in
+        <foreach item="username" collection="usernameList" separator="," open="(" close=")" index="">
+            #{username}
+        </foreach>
+    </select>
+    <select id="getPhone" resultType="java.lang.String">
+        select mobile from sys_user where nick_name = #{nickname} and (role_num ='0301' or role_num = '0201') limit 1
+    </select>
+    <select id="getByOperator" resultType="java.lang.String">
+        select user_name from sys_user where (operator = #{operator}  or operator = '测试') and  wechat_push_enable=1
+    </select>
+
+</mapper>

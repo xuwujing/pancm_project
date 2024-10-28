@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="zans-mms-server" default="zip" basedir=".">
+	<property name="build" value="build" />
+	<property name="target" value="target" />
+	<property name="source" value="src/main/resources"/>
+	<property name="jar_version" value="zans-mms-server_dev_V1.1" />
+	<property name="routine" value="build/${jar_version}/程序包"/>
+
+	<record name="ant.log" loglevel="info" append="no" action="start"/>
+
+	<target name="clean">
+		<delete dir="${target}" />
+		<delete dir="${build}" />
+		<delete dir="${routine}" />
+	</target>
+
+	<target name="create-path" depends="clean">
+		<mkdir dir="${build}" />
+		<mkdir dir="${build}/${jar_version}" />
+	</target>
+
+	<target name="mvn_package" depends="create-path">
+		<exec executable="cmd" failonerror="true">
+			<arg value="git-info.bat"/>
+			<arg line="/c mvn clean package -P dev" />
+		</exec>
+	</target>
+
+	<target name="copyAll" depends="mvn_package">
+		<copy todir="${routine}" file="${target}/zans-mms-server.jar"></copy>
+		<copy todir="${routine}" file="${source}/application-dev.yml"></copy>
+		<copy todir="${routine}" file="${source}/version.txt"></copy>
+        <rename src="${routine}/version.txt" dest="${routine}/zans-mms-server-version.txt"/>
+    </target>
+
+	<!--文件打包-->
+	 <target name="zip" depends="copyAll">
+        <zip destfile="build/${jar_version}.zip" basedir="${build}" excludes=".svn"/>
+    </target>
+
+	<target name="cleanFiles" depends="zip">
+		<delete dir="${build}/${jar_version}" />
+	</target>
+
+</project>
