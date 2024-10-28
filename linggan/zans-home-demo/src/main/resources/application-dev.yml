@@ -1,0 +1,7 @@
+server:
+  port: 9632
+  servlet:
+    context-path: /api
+
+
+
