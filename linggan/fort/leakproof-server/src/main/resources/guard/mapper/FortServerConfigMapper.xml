@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.FortServerConfigDao">
+
+    <resultMap type="com.zans.vo.FortServerConfigVO" id="FortServerConfigMap">
+        <result property="serverId" column="server_id" jdbcType="INTEGER"/>
+        <result property="serverName" column="server_name" jdbcType="VARCHAR"/>
+        <result property="serverIp" column="server_ip" jdbcType="VARCHAR"/>
+        <result property="serverPort" column="server_port" jdbcType="VARCHAR"/>
+        <result property="serverAccount" column="server_account" jdbcType="VARCHAR"/>
+        <result property="serverPwd" column="server_pwd" jdbcType="VARCHAR"/>
+        <result property="serverEnable" column="server_enable" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="FortServerConfigMap">
+        select server_id,
+               server_name,
+               server_ip,
+               server_port,
+               server_account,
+               server_pwd,
+               server_enable,
+               create_time,
+               update_time
+        from fort_server_config
+        where server_id = #{serverId}
+    </select>
+
+    <select id="queryByIp" resultType="com.zans.vo.FortServerConfigVO">
+        select server_id,
+               server_name,
+               server_ip,
+               server_port,
+               server_account,
+               server_pwd,
+               server_enable,
+               create_time,
+               update_time
+        from fort_server_config
+        where server_ip = #{serverIp}
+    </select>
+
+    <!--通过实体查询一条数据-->
+    <select id="findOne" resultMap="FortServerConfigMap">
+        select
+        server_id, server_name, server_ip, server_port, server_account, server_pwd, server_enable, create_time,
+        update_time from fort_server_config
+        <where>
+            <if test="serverId != null">
+                and server_id = #{serverId}
+            </if>
+            <if test="serverName != null and serverName != ''">
+                and server_name = #{serverName}
+            </if>
+            <if test="serverIp != null and serverIp != ''">
+                and server_ip = #{serverIp}
+            </if>
+            <if test="serverPort != null and serverPort != ''">
+                and server_port = #{serverPort}
+            </if>
+            <if test="serverAccount != null and serverAccount != ''">
+                and server_account = #{serverAccount}
+            </if>
+            <if test="serverPwd != null and serverPwd != ''">
+                and server_pwd = #{serverPwd}
+            </if>
+            <if test="serverEnable != null">
+                and server_enable = #{serverEnable}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="FortServerConfigMap">
+        select
+        server_id, server_name, server_ip, server_port, server_account, server_pwd, server_enable, create_time,
+        update_time
+        from fort_server_config
+        <where>
+            <if test="serverId != null">
+                and server_id = #{serverId}
+            </if>
+            <if test="serverName != null and serverName != ''">
+                and server_name = #{serverName}
+            </if>
+            <if test="serverIp != null and serverIp != ''">
+                and server_ip = #{serverIp}
+            </if>
+            <if test="serverPort != null and serverPort != ''">
+                and server_port = #{serverPort}
+            </if>
+            <if test="serverAccount != null and serverAccount != ''">
+                and server_account = #{serverAccount}
+            </if>
+            <if test="serverPwd != null and serverPwd != ''">
+                and server_pwd = #{serverPwd}
+            </if>
+            <if test="serverEnable != null">
+                and server_enable = #{serverEnable}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="serverId" useGeneratedKeys="true">
+        insert into fort_server_config(server_name, server_ip, server_port, server_account, server_pwd, server_enable,
+                                       create_time, update_time)
+        values (#{serverName}, #{serverIp}, #{serverPort}, #{serverAccount}, #{serverPwd}, #{serverEnable},
+                #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="serverId" useGeneratedKeys="true">
+        insert into fort_server_config(server_name, server_ip, server_port, server_account, server_pwd, server_enable,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.serverName}, #{entity.serverIp}, #{entity.serverPort}, #{entity.serverAccount},
+            #{entity.serverPwd}, #{entity.serverEnable}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="serverId" useGeneratedKeys="true">
+        insert into fort_server_config(server_name, server_ip, server_port, server_account, server_pwd, server_enable,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.serverName}, #{entity.serverIp}, #{entity.serverPort}, #{entity.serverAccount},
+            #{entity.serverPwd}, #{entity.serverEnable}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        server_name = values(server_name) , server_ip = values(server_ip) , server_port = values(server_port) ,
+        server_account = values(server_account) , server_pwd = values(server_pwd) , server_enable =
+        values(server_enable) , create_time = values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update fort_server_config
+        <set>
+            <if test="serverName != null and serverName != ''">
+                server_name = #{serverName},
+            </if>
+            <if test="serverIp != null and serverIp != ''">
+                server_ip = #{serverIp},
+            </if>
+            <if test="serverPort != null and serverPort != ''">
+                server_port = #{serverPort},
+            </if>
+            <if test="serverAccount != null and serverAccount != ''">
+                server_account = #{serverAccount},
+            </if>
+            <if test="serverPwd != null and serverPwd != ''">
+                server_pwd = #{serverPwd},
+            </if>
+            <if test="serverEnable != null">
+                server_enable = #{serverEnable},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where server_id = #{serverId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from fort_server_config
+        where server_id = #{serverId}
+    </delete>
+
+    <select id="selectAllServer" resultMap="FortServerConfigMap">
+        select server_id,server_name,server_ip from fort_server_config where server_enable = 1
+    </select>
+
+</mapper>
+

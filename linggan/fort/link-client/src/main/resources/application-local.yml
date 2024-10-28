@@ -1,0 +1,17 @@
+server:
+  servlet:
+    context-path: /api
+  port: 54322
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.FortUserFileExDao">
+
+    <resultMap type="com.zans.model.FortUserFileEx" id="FortUserFileExMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="fileUuid" column="file_uuid" jdbcType="VARCHAR"/>
+        <result property="ip" column="ip" jdbcType="VARCHAR"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="url" column="url" jdbcType="VARCHAR"/>
+        <result property="fileName" column="file_name" jdbcType="VARCHAR"/>
+        <result property="fileType" column="file_type" jdbcType="VARCHAR"/>
+        <result property="fileSize" column="file_size" jdbcType="VARCHAR"/>
+        <result property="fileStatus" column="file_status" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="FortUserFileExMap">
+        select id,
+               file_uuid,
+               ip,
+               user_name,
+               url,
+               file_name,
+               file_type,
+               file_size,
+               file_status,
+               create_time,
+               update_time
+        from fort_user_file_ex
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="FortUserFileExMap">
+        select
+        id, file_uuid, ip, user_name, url, file_name, file_type, file_size, file_status, create_time, update_time
+        from fort_user_file_ex
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="fileUuid != null and fileUuid != ''">
+                and file_uuid = #{fileUuid}
+            </if>
+            <if test="ip != null and ip != ''">
+                and ip = #{ip}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="url != null and url != ''">
+                and url = #{url}
+            </if>
+            <if test="fileName != null and fileName != ''">
+                and file_name = #{fileName}
+            </if>
+            <if test="fileType != null and fileType != ''">
+                and file_type = #{fileType}
+            </if>
+            <if test="fileSize != null and fileSize != ''">
+                and file_size = #{fileSize}
+            </if>
+            <if test="fileStatus != null">
+                and file_status = #{fileStatus}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into fort_user_file_ex(file_uuid, ip, user_name, url, file_name, file_type, file_size, file_status,
+                                      create_time, update_time)
+        values (#{fileUuid}, #{ip}, #{userName}, #{url}, #{fileName}, #{fileType}, #{fileSize}, #{fileStatus},
+                #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into fort_user_file_ex(file_uuid, ip, user_name, url, file_name, file_type, file_size, file_status,
+        create_time, update_time)
+        values
+        <foreach collection="list" item="entity" separator="," index="index">
+            (#{entity.fileUuid}, #{entity.ip}, #{entity.userName}, #{entity.url}, #{entity.fileName},
+            #{entity.fileType}, #{entity.fileSize}, #{entity.fileStatus}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into fort_user_file_ex(file_uuid, ip, user_name, url, file_name, file_type, file_size, file_status,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.fileUuid}, #{entity.ip}, #{entity.userName}, #{entity.url}, #{entity.fileName},
+            #{entity.fileType}, #{entity.fileSize}, #{entity.fileStatus}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        file_uuid = values(file_uuid) , ip = values(ip) , user_name = values(user_name) , url = values(url) , file_name
+        = values(file_name) , file_type = values(file_type) , file_size = values(file_size) , file_status =
+        values(file_status) , create_time = values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update fort_user_file_ex
+        <set>
+            <if test="fileUuid != null and fileUuid != ''">
+                file_uuid = #{fileUuid},
+            </if>
+            <if test="ip != null and ip != ''">
+                ip = #{ip},
+            </if>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="url != null and url != ''">
+                url = #{url},
+            </if>
+            <if test="fileName != null and fileName != ''">
+                file_name = #{fileName},
+            </if>
+            <if test="fileType != null and fileType != ''">
+                file_type = #{fileType},
+            </if>
+            <if test="fileSize != null and fileSize != ''">
+                file_size = #{fileSize},
+            </if>
+            <if test="fileStatus != null">
+                file_status = #{fileStatus},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from fort_user_file_ex
+        where id = #{id}
+    </delete>
+
+</mapper>
+

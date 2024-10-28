@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.dao.FortPlayBackMapper">
+    <resultMap id="BaseResultMap" type="com.zans.model.FortPlayBack">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user" property="user" jdbcType="VARCHAR"/>
+        <result column="server_ip" property="serverIp" jdbcType="VARCHAR"/>
+        <result column="source_ip" property="sourceIp" jdbcType="VARCHAR"/>
+        <result column="file_name" property="fileName" jdbcType="VARCHAR"/>
+        <result column="play_back_url_guac" property="playBackUrlGuac" jdbcType="VARCHAR"/>
+        <result column="play_back_url_m4v" property="playBackUrlM4v" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="file_size" property="fileSize" jdbcType="VARCHAR"/>
+        <result column="video_time" property="videoTime" jdbcType="VARCHAR"/>
+        <result column="end_time" property="endTime" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insertPlayBackInfo">
+        insert into fort_play_back (user, server_ip, source_ip, file_name, play_back_url_guac, play_back_url_m4v,
+                                    status,
+                                    file_size)
+        values (#{user}, #{serverIp}, #{sourceIp}, #{fileName}, #{playBackUrlGuac}, #{playBackUrlM4v}, #{status},
+                #{fileSize});
+    </insert>
+
+    <select id="selectPlayBackInfo" resultMap="BaseResultMap">
+        select id,
+               user,
+               server_ip,
+               source_ip,
+               file_name,
+               play_back_url_guac,
+               play_back_url_m4v,
+               status,
+               file_size,
+               video_time,
+               end_time,
+               DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') as create_time,
+               DATE_FORMAT(update_time, '%Y-%m-%d %H:%i:%s') as update_time
+        from fort_play_back
+        order by id DESC
+    </select>
+
+    <select id="selectNewByIp" resultMap="BaseResultMap">
+        select * from fort_play_back
+        <where>
+            <if test="serverIp != null and serverIp != ''">
+                and server_ip = #{serverIp}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="fileName != null and fileName != ''">
+                and file_name = #{fileName}
+            </if>
+            and file_size = ""
+        </where>
+        order by file_name DESC limit 1
+    </select>
+
+    <select id="selectPlayBack" resultMap="BaseResultMap">
+        select id,
+        user,
+        server_ip,
+        source_ip,
+        file_name,
+        play_back_url_guac,
+        play_back_url_m4v,
+        status,
+        file_size,
+        video_time,
+        end_time,
+        DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') as create_time
+        from fort_play_back
+        <where>
+            <if test="serverIp != null and serverIp != ''">
+                and server_ip LIKE CONCAT('%',CONCAT(#{serverIp}),'%')
+            </if>
+            <if test="user != null and user != ''">
+                and user LIKE CONCAT('%',CONCAT(#{user}),'%')
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and create_time >= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and #{endTime} >= create_time
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+        order by create_time DESC
+    </select>
+
+    <select id="selectTimeQuantum" resultType="com.zans.model.FortPlayBack">
+        select id,
+        user,
+        server_ip,
+        source_ip,
+        file_name,
+        play_back_url_guac,
+        play_back_url_m4v,
+        status,
+        file_size,
+        video_time,
+        end_time,
+        DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') as create_time
+        from fort_play_back
+        <where>
+            and status != 0
+            and video_time != "00:00:00"
+            <if test="serverIp != null and serverIp != ''">
+                and server_ip = #{serverIp}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and create_time >= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and #{endTime} >= create_time
+            </if>
+        </where>
+    </select>
+
+    <select id="check" resultType="com.zans.model.FortPlayBack">
+        select * from fort_play_back
+        <where>
+            <if test="serverIp != null and serverIp != ''">
+                and server_ip = #{serverIp}
+            </if>
+            <if test="startTime != null and endTime != null">
+                and (create_time >= #{startTime} and #{endTime} >= create_time)
+            </if>
+            and status = 0
+        </where>
+    </select>
+
+</mapper>

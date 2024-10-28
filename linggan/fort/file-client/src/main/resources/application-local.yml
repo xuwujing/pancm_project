@@ -1,0 +1,17 @@
+server:
+  servlet:
+    context-path: /api
+  port: 54321
+
+
+
+request:
+  link: http://localhost:54322
+
+
+
+
+
+
+
+

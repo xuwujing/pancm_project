@@ -1,0 +1,85 @@
+server:
+  port: 5663
+  servlet:
+    context-path: /api
+
+spring:
+  datasource:
+    guard:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://192.168.9.52:3306/fort_local?autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+      username: root
+      password: Root@123
+#      driver-class-name: com.mysql.jdbc.Driver
+#      url: jdbc:mysql://192.168.2.20:3306/fort?autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull
+#      username: guard
+#      password: txsqldb@123456
+  redis:
+    # [必须修改] Redis服务器IP, REDIS安装在本机的,使用127.0.0.1
+    host: 192.168.9.51
+    # [必须修改] 端口号
+    port: 6379
+    # [可选] 数据库 DB
+    database: 1
+    # [可选] 访问密码,若你的redis服务器没有设置密码，就不需要用密码去连接
+    password: redis123
+    # [可选] 超时时间
+    timeout: 10000
+  cache:
+    type: caffeine
+    caffeine:
+      spec: initialCapacity=10,maximumSize=200,expireAfterWrite=30s
+
+guacamole:
+  hostname: 192.168.10.32
+  port: 4822
+  videoUrl: /data/guacamole/video
+  pwd: lgwy@2020
+  username: root
+  addr: http://192.168.10.32:8008
+
+#logging:
+#  config: logback.xml
+#  level:
+#    com.zans.dao : debug
+
+security:
+  exclude-path:
+    swagger: /swagger-ui.html, /swagger/**, /swagger-resources/**, /webjars/**, /v2/api-docs, /statics/**, /doc.html
+    base: /login,/logout,/verify_login,/getUser,/begin,/stop,/push/*
+  user-verify: jwt
+  jwt:
+    expire-time: 604800000
+    app-expire-time: 604800000
+
+api:
+  upload:
+    folder: /home/release/file/upload/
+    max-size: 5
+  export:
+    folder: /home/release/file/export/
+  imgUrl:
+    folder: /home/release/img/
+
+expire:
+  time: 6000
+
+video:
+  resolution: 1920x1080,1440x900,1280x800,640x480
+  transcribe: 1
+  decode: 0
+  size: 2
+  playPath: http://192.168.10.32:8008
+  decode_server: http://192.168.10.91:8081/api/decode
+
+sftp:
+  host: 192.168.10.90
+  port: 21
+  username: root
+  password: lgwy@2020
+  video_path: /home/userfile/
+  download:
+    path: http://192.168.10.90:8900/
+
+
+

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.dao.SysConstantMapper">
+    <resultMap id="BaseResultMap" type="com.zans.model.SysConstant">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="constant_key" property="constantKey" jdbcType="VARCHAR"/>
+        <result column="constant_value" property="constantValue" jdbcType="LONGVARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="comment" property="comment" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+    <select id="getDecodeInfo" resultType="com.zans.model.SysConstant">
+        select constant_key, constant_value
+        from sys_constant
+        where left (constant_key, 6) = 'decode' and status = 1
+    </select>
+
+</mapper>

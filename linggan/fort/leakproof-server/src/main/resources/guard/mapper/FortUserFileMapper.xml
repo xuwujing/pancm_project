@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.dao.FortUserFileDao">
+
+    <resultMap type="com.zans.model.FortUserFile" id="FortUserFileMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="url" column="url" jdbcType="VARCHAR"/>
+        <result property="driveName" column="drive_name" jdbcType="VARCHAR"/>
+        <result property="linkName" column="link_name" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="FortUserFileMap">
+        select id,
+               user_name,
+               url,
+               drive_name,
+               link_name,
+               create_time,
+               update_time
+        from fort_user_file
+        where id = #{id}
+    </select>
+
+    <select id="queryByUser" resultType="com.zans.model.FortUserFile">
+        select id,
+               user_name,
+               url,
+               ip,
+               drive_name,
+               link_name,
+               create_time,
+               update_time
+        from fort_user_file
+        where user_name = #{userName}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="FortUserFileMap">
+        select
+        id, user_name, url, drive_name, link_name, create_time, update_time
+        from fort_user_file
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name = #{userName}
+            </if>
+            <if test="url != null and url != ''">
+                and url = #{url}
+            </if>
+            <if test="driveName != null and driveName != ''">
+                and drive_name = #{driveName}
+            </if>
+            <if test="linkName != null and linkName != ''">
+                and link_name = #{linkName}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into fort_user_file(user_name, url, drive_name, link_name, create_time, update_time)
+        values (#{userName}, #{url}, #{driveName}, #{linkName}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into fort_user_file(user_name, url, drive_name, link_name, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userName}, #{entity.url}, #{entity.driveName}, #{entity.linkName}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into fort_user_file(user_name, url, drive_name, link_name, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userName}, #{entity.url}, #{entity.driveName}, #{entity.linkName}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        user_name = values(user_name) , url = values(url) , drive_name = values(drive_name) , link_name =
+        values(link_name) , create_time = values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update fort_user_file
+        <set>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="url != null and url != ''">
+                url = #{url},
+            </if>
+            <if test="driveName != null and driveName != ''">
+                drive_name = #{driveName},
+            </if>
+            <if test="linkName != null and linkName != ''">
+                link_name = #{linkName},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from fort_user_file
+        where id = #{id}
+    </delete>
+
+</mapper>
+

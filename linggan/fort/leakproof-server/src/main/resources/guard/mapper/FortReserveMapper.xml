@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.dao.FortReserveMapper">
+    <resultMap id="BaseResultMap" type="com.zans.model.FortReserve">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="server_ip" property="serverIp" jdbcType="VARCHAR"/>
+        <result column="reserve_id" property="reserveId" jdbcType="VARCHAR"/>
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="reserve_reason" property="reserveReason" jdbcType="INTEGER"/>
+        <result column="proposer" property="proposer" jdbcType="VARCHAR"/>
+        <result column="approver" property="approver" jdbcType="VARCHAR"/>
+        <result column="approve_reason" property="approveReason" jdbcType="VARCHAR"/>
+        <result column="approve_time" property="approveTime" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="selectReserveMap" type="com.zans.vo.FortReserveVO">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="server_ip" property="serverIp" jdbcType="VARCHAR"/>
+        <result column="reserve_id" property="reserveId" jdbcType="VARCHAR"/>
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="reserve_reason" property="reserveReason" jdbcType="INTEGER"/>
+        <result column="proposer" property="proposer" jdbcType="VARCHAR"/>
+        <result column="approver" property="approver" jdbcType="VARCHAR"/>
+        <result column="approve_reason" property="approveReason" jdbcType="VARCHAR"/>
+        <result column="approve_time" property="approveTime" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+        <result column="update_time" property="updateTime" jdbcType="VARCHAR"/>
+        <result column="server_name" property="serverName" jdbcType="VARCHAR"/>
+        <result column="server_application" property="serverApplication" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="selectReserve" resultMap="selectReserveMap">
+        SELECT re.*,
+        sc.server_name,
+        sc.server_application
+        FROM fort_reserve re
+        LEFT JOIN fort_server_config sc on sc.server_ip = re.server_ip
+        <where>
+            <if test="id != null">
+                and re.id = #{id}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and re.end_time >= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and #{endTime} > re.end_time
+            </if>
+        </where>
+        ORDER BY re.start_time DESC
+    </select>
+
+    <select id="sessionAudit" resultMap="selectReserveMap">
+        SELECT re.*,
+        sc.server_name,
+        sc.server_application
+        FROM fort_reserve re
+        LEFT JOIN fort_server_config sc on sc.server_ip = re.server_ip
+        <where>
+            <if test="id != null">
+                and re.id = #{id}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and re.start_time >= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and #{endTime} >= re.end_time
+            </if>
+            <if test="nowTime != null and nowTime != ''">
+                and #{nowTime} >= re.start_time
+            </if>
+            <if test="serverIp != null and serverIp != ''">
+                and re.server_ip LIKE CONCAT('%',CONCAT(#{serverIp}),'%')
+            </if>
+            <if test="proposer != null and proposer != ''">
+                and re.proposer LIKE CONCAT('%',CONCAT(#{proposer}),'%')
+            </if>
+            <if test="status != null and status != 1">
+                and status = #{status}
+            </if>
+            <if test="status != null and status == 1">
+                and status in (1,3,4,5)
+            </if>
+            <if test="serverName != null and serverName != ''">
+                and sc.server_name LIKE CONCAT('%',CONCAT(#{serverName}),'%')
+            </if>
+        </where>
+        ORDER BY re.create_time DESC,start_time DESC
+    </select>
+
+    <select id="replyAuditVideoSql" resultType="com.zans.model.FortPlayBack">
+        select * from fort_play_back
+        <where>
+            <if test="serverIp != null and serverIp != ''">
+                and server_ip LIKE CONCAT('%',CONCAT(#{serverIp}),'%')
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and create_time >= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and #{endTime} >= end_time
+            </if>
+            and status = 2
+        </where>
+    </select>
+
+    <select id="queryNoEmptyAudit" resultType="com.zans.vo.SessionAuditVO">
+        SELECT re.id fortReserveId,
+        GROUP_CONCAT(pb.id) playBackIds,fsc.server_name,fsc.server_application
+        FROM fort_reserve re
+        LEFT JOIN fort_play_back pb on pb.server_ip = re.server_ip
+        LEFT JOIN fort_server_config fsc on fsc.server_ip = re.server_ip
+        <where>
+            <if test="id != null">
+                and re.id = #{id}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and re.start_time >= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and #{endTime} >= re.end_time
+            </if>
+            <if test="nowTime != null and nowTime != ''">
+                and #{nowTime} >= re.start_time
+            </if>
+            <if test="serverName != null and serverName != ''">
+                and fsc.server_name LIKE CONCAT('%',CONCAT(#{serverName}),'%')
+            </if>
+            <if test="proposer != null and proposer != ''">
+                and re.proposer LIKE CONCAT('%',CONCAT(#{proposer}),'%')
+            </if>
+            and pb.create_time >= re.start_time
+            and re.end_time > pb.create_time
+            and pb.status != 0
+            and re.status in (1,4,5)
+        </where>
+        GROUP BY re.id,fsc.server_name,fsc.server_application
+        order by re.create_time DESC
+    </select>
+
+
+    <update id="updateStatus">
+        update fort_reserve
+        set status = #{status}
+        where id = #{id}
+    </update>
+
+    <select id="queryTimeStampCount" resultType="java.lang.Integer">
+        select count(1) as count from fort_reserve
+        <where>
+            <if test="startTime != null and startTime != ''">
+                and start_time >= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and #{endTime} >= end_time
+            </if>
+            <if test="serverIp != null and serverIp != ''">
+                and server_ip = #{serverIp}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryReserveDay" resultType="com.zans.model.FortReserve">
+        select RIGHT(start_time,8) as start_time,RIGHT(end_time,8) as end_time from fort_reserve
+        <where>
+            <if test="serverIp != null and serverIp != ''">
+                and server_ip = #{serverIp}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and start_time >= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and #{endTime} >= end_time
+            </if>
+            and status != 2 and status != 5
+        </where>
+    </select>
+
+    <select id="findFortReserveByIp" resultType="com.zans.model.FortReserve">
+        select * from fort_reserve
+        <where>
+            <if test="serverIp != null and serverIp != ''">
+                and server_ip = #{serverIp}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and (#{startTime} >= start_time and end_time >= #{startTime})
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <select id="queryTimeConflict" resultType="com.zans.vo.FortReserveVO">
+        SELECT fr.*, fsc.server_name as serverName
+        FROM fort_reserve fr
+                 LEFT JOIN fort_server_config fsc on fsc.server_ip = fr.server_ip
+        WHERE proposer = #{proposer}
+          and status != 2 and status != 5 and
+	((#{endTime}
+            > start_time
+          and end_time
+            > #{endTime} )
+           or ( #{startTime}
+            > start_time
+          and end_time
+            > #{startTime} )
+           or (start_time >= #{startTime}
+          and #{endTime} >= end_time))
+    </select>
+
+    <!--    <select id="selectApprove" resultMap="selectReserveMap">-->
+    <!--        SELECT re.*,-->
+    <!--        sc.server_name,-->
+    <!--        sc.server_application-->
+    <!--        FROM fort_reserve re-->
+    <!--        LEFT JOIN fort_server_config sc on sc.server_ip = re.server_ip-->
+    <!--        <where>-->
+    <!--            <if test="status != null and status != 1">-->
+    <!--                and status = #{status}-->
+    <!--            </if>-->
+    <!--            <if test="status != null and status == 1">-->
+    <!--                and status in (1,3,4,5)-->
+    <!--            </if>-->
+    <!--        </where>-->
+    <!--        order by re.update_time DESC-->
+    <!--    </select>-->
+
+    <select id="checkIfSelect" resultType="com.zans.model.FortReserve">
+        select * from fort_reserve
+        <where>
+            <if test="startTime != null and startTime != ''">
+                and (#{startTime} >= start_time and end_time > #{startTime})
+            </if>
+            <if test="serverIp != null and serverIp != ''">
+                and server_ip = #{serverIp}
+            </if>
+            and status not in (2,5)
+        </where>
+        limit 1
+    </select>
+
+    <select id="queryIfReserve" resultType="com.zans.model.FortReserve">
+        select * from fort_reserve
+        <where>
+            <if test="startTime != null and startTime != ''">
+                and start_time >= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and #{endTime} >= end_time
+            </if>
+            <if test="serverIp != null and serverIp != ''">
+                and server_ip = #{serverIp}
+            </if>
+            and status != 2
+        </where>
+    </select>
+
+    <select id="videoStatus" resultType="java.lang.Integer">
+        select count(1) from fort_play_back
+        <where>
+            <if test="serverIp != null and serverIp != ''">
+                and server_ip = #{serverIp}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and create_time >= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and #{endTime} >= end_time
+            </if>
+            and status != 2
+        </where>
+    </select>
+
+    <select id="approve" resultType="java.lang.Integer">
+        update fort_reserve set status = #{status},approver = #{approver},approve_time = #{approveTime} where id = #{id}
+    </select>
+
+    <select id="selectAllReserve" resultType="com.zans.model.FortReserve">
+            select RIGHT(start_time,8) as start_time,RIGHT(end_time,8) as end_time from fort_reserve
+            <where>
+                <if test="serverIp != null and serverIp != ''">
+                    and server_ip = #{serverIp}
+                </if>
+                <if test="startTime != null and startTime != ''">
+                    and start_time >= #{startTime}
+                </if>
+                <if test="endTime != null and endTime != ''">
+                    and #{endTime} >= end_time
+                </if>
+                and status != 2
+            </where>
+    </select>
+    
+    <select id="queryIfExist" resultType="com.zans.model.FortReserve">
+        select * from fort_reserve
+        <where>
+            <if test="serverIp != null and serverIp != ''">
+                and server_ip = #{serverIp}
+            </if>
+            <if test="startTime != null and startTime != ''">
+                and end_time > #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and #{endTime} > end_time
+            </if>
+            and status != 2
+        </where>
+    </select>
+
+</mapper>
