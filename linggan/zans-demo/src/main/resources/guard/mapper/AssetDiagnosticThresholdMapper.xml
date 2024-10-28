@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.guard.AssetDiagnosticThresholdDao">
+
+    <resultMap type="com.zans.mms.vo.asset.diagnosis.AssetDiagnosticThresholdVO" id="AssetDiagnosticThresholdMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="deviceId" column="device_id" jdbcType="VARCHAR"/>
+        <result property="ipaddress" column="ipAddress" jdbcType="VARCHAR"/>
+        <result property="faultType" column="fault_type" jdbcType="INTEGER"/>
+        <result property="faultTypeName" column="fault_type_name" jdbcType="VARCHAR"/>
+        <result property="faultTypeThreshold" column="fault_type_threshold" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="AssetDiagnosticThresholdMap">
+        select id,
+               device_id,
+               ipAddress,
+               fault_type,
+               fault_type_name,
+               fault_type_threshold,
+               create_time,
+               update_time
+        from asset_diagnostic_threshold
+        where id = #{id}
+    </select>
+
+    <!--通过实体查询一条数据-->
+    <select id="findOne" resultMap="AssetDiagnosticThresholdMap">
+        select
+        id, device_id, ipAddress, fault_type, fault_type_name, fault_type_threshold, create_time, update_time from
+        asset_diagnostic_threshold
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="deviceId != null and deviceId != ''">
+                and device_id = #{deviceId}
+            </if>
+            <if test="ipaddress != null and ipaddress != ''">
+                and ipAddress = #{ipaddress}
+            </if>
+            <if test="faultType != null">
+                and fault_type = #{faultType}
+            </if>
+            <if test="faultTypeName != null and faultTypeName != ''">
+                and fault_type_name = #{faultTypeName}
+            </if>
+            <if test="faultTypeThreshold != null">
+                and fault_type_threshold = #{faultTypeThreshold}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="AssetDiagnosticThresholdMap">
+        select
+        id, device_id, ipAddress, fault_type, fault_type_name, fault_type_threshold, create_time, update_time
+        from asset_diagnostic_threshold
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="deviceId != null and deviceId != ''">
+                and device_id = #{deviceId}
+            </if>
+            <if test="ipaddress != null and ipaddress != ''">
+                and ipAddress = #{ipaddress}
+            </if>
+            <if test="faultType != null">
+                and fault_type = #{faultType}
+            </if>
+            <if test="faultTypeName != null and faultTypeName != ''">
+                and fault_type_name = #{faultTypeName}
+            </if>
+            <if test="faultTypeThreshold != null">
+                and fault_type_threshold = #{faultTypeThreshold}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into asset_diagnostic_threshold(device_id, ipAddress, fault_type, fault_type_name, fault_type_threshold,
+                                               create_time, update_time)
+        values (#{deviceId}, #{ipaddress}, #{faultType}, #{faultTypeName}, #{faultTypeThreshold}, #{createTime},
+                #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asset_diagnostic_threshold(device_id, ipAddress, fault_type, fault_type_name, fault_type_threshold)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.deviceId}, #{entity.ipaddress}, #{entity.faultType}, #{entity.faultTypeName},
+            #{entity.faultTypeThreshold})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into asset_diagnostic_threshold(device_id, ipAddress, fault_type, fault_type_name, fault_type_threshold,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.deviceId}, #{entity.ipaddress}, #{entity.faultType}, #{entity.faultTypeName},
+            #{entity.faultTypeThreshold}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        device_id = values(device_id) , ipAddress = values(ipAddress) , fault_type = values(fault_type) ,
+        fault_type_name = values(fault_type_name) , fault_type_threshold = values(fault_type_threshold) , create_time =
+        values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update asset_diagnostic_threshold
+        <set>
+            <if test="deviceId != null and deviceId != ''">
+                device_id = #{deviceId},
+            </if>
+            <if test="ipaddress != null and ipaddress != ''">
+                ipAddress = #{ipaddress},
+            </if>
+            <if test="faultType != null">
+                fault_type = #{faultType},
+            </if>
+            <if test="faultTypeName != null and faultTypeName != ''">
+                fault_type_name = #{faultTypeName},
+            </if>
+            <if test="faultTypeThreshold != null">
+                fault_type_threshold = #{faultTypeThreshold},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from asset_diagnostic_threshold
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteByIp">
+        delete
+        from asset_diagnostic_threshold
+        where ipAddress = #{ipAddress}
+        <if test="deviceId != null and deviceId != ''">
+            and   device_id = #{deviceId}
+        </if>
+    </delete>
+
+</mapper>
+

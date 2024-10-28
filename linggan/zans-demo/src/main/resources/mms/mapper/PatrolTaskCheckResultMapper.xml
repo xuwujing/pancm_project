@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.mms.PatrolTaskCheckResultMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.PatrolTaskCheckResult" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="patrol_task_id" property="patrolTaskId" jdbcType="BIGINT" />
+    <result column="point_id" property="pointId" jdbcType="BIGINT" />
+    <result column="prev_check_result" property="prevCheckResult" jdbcType="VARCHAR" />
+    <result column="check_result" property="checkResult" jdbcType="VARCHAR" />
+    <result column="check_status" property="checkStatus" jdbcType="INTEGER" />
+    <result column="check_time" property="checkTime" jdbcType="TIMESTAMP" />
+    <result column="check_site" property="checkSite" jdbcType="VARCHAR" />
+    <result column="check_user" property="checkUser" jdbcType="VARCHAR" />
+    <result column="adjunct_uuid" property="adjunctUuid" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <insert id="batchInsert">
+    INSERT into  patrol_task_check_result (patrol_task_id,point_id,creator) values
+    <foreach collection="pointIds" item="pointId" separator=",">
+      (#{patrolTaskId},#{pointId},#{creator})
+    </foreach>
+  </insert>
+  <select id="getListByCondition" resultType="com.zans.mms.model.PatrolTaskCheckResult">
+      select * from patrol_task_check_result
+      <where>
+        <if test="patrolTaskId != null">
+          and patrol_task_id =#{patrolTaskId}
+        </if>
+      </where>
+    </select>
+    <select id="searchDevicePoint" resultType="com.zans.mms.vo.patrol.PatrolDevicePointResVO" parameterType="Map">
+        SELECT
+            p.point_id AS pointId,
+            p.point_code AS pointCode,
+            p.point_name AS pointName,
+            p.area_id AS areaId,
+            p.area_name AS areaName,
+            p.device_type AS deviceTypeId,
+            p.device_name AS deviceTypeName,
+            <if test="gisFlag != null and gisFlag==1">
+              p.distance AS distance,
+            </if>
+            x ( p.gis ) AS longitude,
+            y ( p.gis ) AS latitude,
+            r.check_status AS checkStatus,
+            date_format( r.start_time, '%Y-%m-%d' ) AS startDate,
+            date_format( r.end_time, '%Y-%m-%d' ) AS endDate
+        <include refid="searchDevicePointSql"></include>
+
+         <if test="limitFlag != null and limitFlag==1">
+             limit 10
+         </if>
+
+    </select>
+
+    <select id="searchAllDevicePoint" resultType="com.zans.mms.vo.patrol.PatrolAllDevicePointResVO">
+        SELECT
+        p.point_id AS pId,
+        p.device_type AS dType,
+        x ( p.gis ) AS longitude,
+        y ( p.gis ) AS latitude,
+        date_format( r.end_time, '%Y-%m-%d' ) AS endDate,
+        r.check_time AS checkTime,
+        r.check_status AS cheStatus
+        <include refid="searchDevicePointSql"></include>
+
+    </select>
+    <sql id="searchDevicePointSql">
+        FROM (
+        SELECT
+        min( r.check_status ) AS check_status,
+        min( r.check_time ) AS check_time,
+        r.point_id,
+        min(t.end_time ) as end_time,
+        min(t.start_time) as start_time
+        FROM
+        patrol_task_check_result r
+        LEFT JOIN patrol_task t ON t.id = r.patrol_task_id
+        WHERE
+        curDate() &gt;= t.start_time
+        AND curDate() &lt;= t.end_time
+        <if test="orgId != null and orgId !=''">
+            AND t.org_id = #{orgId}
+        </if>
+        <if test="pointId != null and pointId !=''">
+            and r.point_id = #{pointId}
+        </if>
+        GROUP BY
+        r.point_id
+        ) r
+        LEFT JOIN (
+        SELECT
+        t1.id AS point_id,
+        t1.point_name,
+        t1.point_code,
+        t1.gis,
+        t2.area_id,
+        t2.area_name,
+        t3.type_id AS device_type,
+        <if test="gisFlag != null and gisFlag==1">
+            floor( st_distance ( t1.gis,  ${moveGis} ) * 111195 ) AS round_distance,
+            floor( st_distance ( t1.gis,  ${selfGis} ) * 111195 ) AS distance,
+        </if>
+
+        t3.type_name AS device_name
+        FROM
+        device_point t1
+        LEFT JOIN base_area t2 ON t1.area_id = t2.area_id
+        LEFT JOIN base_device_type t3 ON t1.device_type = t3.type_id
+        where 1=1
+        <if test="deviceTypes != null">
+            and t1.device_type in
+            <foreach collection="deviceTypes" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="areaIds != null">
+            and t1.area_id in
+            <foreach collection="areaIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="areaIdStr != null and areaIdStr !=''">
+            and t1.area_id in (${areaIdStr})
+        </if>
+
+        <if test="pointId != null and pointId !=''">
+            and t1.id = #{pointId}
+        </if>
+        ) p ON r.point_id = p.point_id
+        WHERE
+        (p.area_id is not null and p.area_id &lt;&gt; '')
+        and (p.device_type is not null and  p.device_type &lt;&gt; '')
+        <if test="gisFlag != null and gisFlag==1">
+            and p.round_distance &lt;= #{radius}
+        </if>
+        <if test="lastEndTime != null">
+            and date_format(r.end_time,'%Y%m%d') &lt; #{lastEndTime}
+        </if>
+        <if test="remainingDayList != null and remainingDayList.size&gt;0">
+            and
+            <foreach collection="remainingDayList" index="index" item="item" open="(" separator="or" close=")">
+                datediff(date_format(r.end_time,'%Y%m%d'),now()) = #{item}
+                <if test="item==2">
+                   or datediff(date_format(r.end_time,'%Y%m%d'),now()) > #{item}
+                </if>
+            </foreach>
+        </if>
+        <if test="containCompleted !=null and containCompleted ==0">
+            and r.check_status = #{containCompleted}
+        </if>
+        and y(p.gis) &lt; 90
+      <if test="gisFlag != null and gisFlag==1">
+        ORDER BY  p.distance
+      </if>
+    </sql>
+
+    <select id="searchPatrolRefresh" resultType="com.zans.mms.vo.patrol.PatrolPointRefreshVO">
+        SELECT
+        p.point_id AS pointId,
+        p.device_type AS deviceType
+        FROM (
+        SELECT
+        min( r.check_status ) AS check_status,
+        r.point_id,
+        min(r.check_time) as check_time,
+        min(t.end_time ) as end_time,
+        min(t.start_time) as start_time
+        FROM
+        patrol_task_check_result r
+        LEFT JOIN patrol_task t ON t.id = r.patrol_task_id
+        WHERE
+        curDate() &gt;= t.start_time
+        AND curDate() &lt;= t.end_time
+        <if test="orgId != null">
+            AND t.org_id = #{orgId}
+        </if>
+        GROUP BY
+        r.point_id
+        ) r
+        LEFT JOIN (
+        SELECT
+        t1.id AS point_id,
+        t1.point_name,
+        t1.point_code,
+        t1.gis,
+        t2.area_id,
+        t2.area_name,
+        t3.type_id AS device_type,
+        t3.type_name AS device_name
+        FROM
+        device_point t1
+        LEFT JOIN base_area t2 ON t1.area_id = t2.area_id
+        LEFT JOIN base_device_type t3 ON t1.device_type = t3.type_id
+        where 1=1
+        <if test="deviceTypes != null">
+            and t1.device_type in
+            <foreach collection="deviceTypes" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="areaIds != null">
+            and t1.area_id in
+            <foreach collection="areaIds" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        ) p ON r.point_id = p.point_id
+        WHERE
+        (p.area_id is not null and p.area_id &lt;&gt; '')
+        and (p.device_type is not null and  p.device_type &lt;&gt; '')
+        <if test="remainingDayList != null and remainingDayList.size&gt;0">
+            and
+            <foreach collection="remainingDayList" index="index" item="item" open="(" separator="or" close=")">
+                datediff(date_format(r.end_time,'%Y%m%d'),now()) = #{item}
+                <if test="item == 2">
+                    or datediff(date_format(r.end_time,'%Y%m%d'),now()) > #{item}
+                </if>
+            </foreach>
+        </if>
+        and r.check_status = 1
+        AND r.check_time BETWEEN #{lastTime} AND #{nowTime}
+
+    </select>
+
+
+
+
+    <select id="aggTopData" resultType="com.zans.mms.model.PatrolAggData" parameterType="Map">
+        SELECT
+        a.area_id as areaId,
+        a.area_name as areaName,
+        x ( a.gis ) AS longitude,
+        y ( a.gis ) AS latitude,
+        s.today_completed as todayCompleted,
+        s.completed as completed,
+        s.total as total,
+        s.today_completed02 as todayCompleted02,
+        s.completed02 as completed02,
+        s.total02 as total02,
+        s.today_completed03 as todayCompleted03,
+        s.completed03 as completed03,
+        s.total03 as total03,
+        s.today_completed04 as todayCompleted04,
+        s.completed04 as completed04,
+        s.total04 as total04,
+        s.today_completed24 as todayCompleted24,
+        s.completed24 as completed24,
+        s.total24 as total24,
+        s.today_completed17 as todayCompleted17,
+        s.completed17 as completed17,
+        s.total17 as total17
+
+        FROM
+        base_area a
+        <choose>
+            <when test="orgId != null">
+                INNER JOIN
+            </when>
+            <otherwise>
+                LEFT JOIN
+            </otherwise>
+        </choose>
+        (
+        SELECT
+        p.area_id,
+        sum( IF ( ( r.check_status = 1  and TO_DAYS(CURDATE())=TO_DAYS(r.check_time)), 1, 0 )) AS today_completed,-- 今日完成
+        sum(r.check_status ) AS completed,-- 完成
+        count( r.point_id ) AS total,-- 总数
+
+        sum( IF ( ( p.device_type = '02' AND r.check_status = 1 and TO_DAYS(CURDATE())=TO_DAYS(r.check_time)), 1, 0 ) ) AS today_completed02,-- 电警 02
+        sum( IF ( ( p.device_type = '02' AND r.check_status = 1 ), 1, 0 ) ) AS completed02,-- 电警 02
+        sum( p.device_type = '02' ) AS total02,-- 电警 02
+
+        sum( IF ( ( p.device_type = '03' AND r.check_status = 1 and TO_DAYS(CURDATE())=TO_DAYS(r.check_time)), 1, 0 ) ) AS today_completed03,-- 卡口 03
+        sum( IF ( ( p.device_type = '03' AND r.check_status = 1 ), 1, 0 ) ) AS completed03,-- 卡口 03
+        sum( p.device_type = '03' ) AS total03,-- 卡口 03
+
+        sum( IF ( ( p.device_type = '04' AND r.check_status = 1 and TO_DAYS(CURDATE())=TO_DAYS(r.check_time)), 1, 0 ) ) AS today_completed04,-- 电警 04
+        sum( IF ( ( p.device_type = '04' AND r.check_status = 1 ), 1, 0 ) ) AS completed04,-- 监控 04
+        sum( p.device_type = '04' ) AS total04,-- 监控 04
+
+        sum( IF ( ( p.device_type = '24' AND r.check_status = 1 and TO_DAYS(CURDATE())=TO_DAYS(r.check_time)), 1, 0 ) ) AS today_completed24,-- 电警 24
+        sum( IF ( ( p.device_type = '24' AND r.check_status = 1 ), 1, 0 ) ) AS completed24,-- 信号机 24
+        sum( p.device_type = '24' ) AS total24,-- 信号机 24
+
+        sum( IF ( ( p.device_type = '17' AND r.check_status = 1 and TO_DAYS(CURDATE())=TO_DAYS(r.check_time)), 1, 0 ) ) AS today_completed17,-- 诱导屏 17
+        sum( IF ( ( p.device_type = '17' AND r.check_status = 1 ), 1, 0 ) ) AS completed17,-- 诱导屏 17
+        sum( p.device_type = '17' ) AS total17 -- 诱导屏 17
+
+        FROM (
+        SELECT
+        t1.point_id,
+        min( t1.check_status ) AS check_status,
+        max(t1.check_time) as check_time
+        FROM
+        patrol_task_check_result t1
+        LEFT JOIN patrol_task t2 ON t2.id = t1.patrol_task_id
+        WHERE
+        curDate() &gt;= t2.start_time
+        AND curDate() &lt;= t2.end_time
+        <if test="orgId != null">
+            AND t2.org_id = #{orgId}
+        </if>
+        GROUP BY
+        t1.point_id
+        ) r
+        LEFT JOIN device_point p ON p.id = r.point_id
+        GROUP BY
+        p.area_id
+        ) s ON a.area_id = s.area_id
+        WHERE
+        a.enable_status = '启用'
+    </select>
+    <select id="getCheckInfoWithApp" resultType="com.zans.mms.model.PatrolAppCheckInfo">
+        SELECT
+        c.point_id AS pointId,
+        d.point_code as pointCode,
+        d.point_name as pointName,
+        d.device_type as deviceType,
+        d.device_name as deviceName,
+        c.check_result AS checkResult,
+        c.check_status AS checkStatus,
+        DATE_FORMAT(c.check_time,'%Y-%m-%d %H:%i:%S')  checkDate,
+        c.check_site AS checkSite,
+        c.check_user AS checkUser,
+        su.nick_name AS checkNickName,
+        c.check_remark as checkRemark,
+        c.adjunct_uuid AS adjunctUuid,
+        DATE_FORMAT(p.check_time,'%Y-%m-%d %H:%i:%S')  prevCheckDate,
+        p.check_result as prevCheckResult,
+        p.check_status AS prevCheckStatus,
+        p.check_user as prevCheckUser
+        FROM
+        (
+        SELECT
+        r.point_id as point_id,
+        max( r.check_result ) as check_result,
+        max( r.check_status ) as check_status,
+        max( r.check_time ) as check_time ,
+        max( r.check_site ) as check_site,
+        max( r.check_user ) as check_user,
+        max(r.check_remark) as check_remark,
+        max( r.adjunct_uuid ) as adjunct_uuid
+        FROM
+        patrol_task_check_result r
+        LEFT JOIN patrol_task t ON r.patrol_task_id = t.id
+        WHERE
+        r.point_id = #{pointId}
+        AND CURDATE( ) &lt;= t.end_time AND CURDATE( ) &gt;= t.start_time
+        GROUP BY
+        point_id
+        ) c
+        left join
+        (
+        SELECT
+        r.point_id as point_id,
+        max( r.check_time ) as check_time,
+        max( r.check_result ) as check_result,
+        max(r. check_status) as check_status,
+        max( r.check_user ) as check_user
+        FROM
+        patrol_task_check_result r
+        LEFT JOIN patrol_task t ON r.patrol_task_id = t.id
+        WHERE
+        r.point_id = #{pointId}
+        AND t.end_time &lt; CURDATE()
+        GROUP BY
+        point_id
+        ) p
+        on p.point_id = c.point_id
+        LEFT JOIN (
+            SELECT
+                p.id AS point_id,
+                p.point_code,
+                p.point_name,
+                a.type_id AS device_type,
+                a.type_name AS device_name
+            FROM
+                device_point p
+            LEFT JOIN
+                base_device_type a ON p.device_type = a.type_id
+        ) d on d.point_id = c.point_id
+       LEFT JOIN sys_user su  on su.user_name = c.check_user
+    </select>
+
+    <update id="updateClockIn" parameterType="com.zans.mms.model.PatrolClockIn">
+        UPDATE
+            patrol_task_check_result r INNER JOIN
+            patrol_task t  on t.id = r.patrol_task_id
+        SET
+            r.check_result = #{checkResult},
+            r.check_status = 1,
+            r.check_time = #{checkDate},
+            r.check_user = #{checkUser},
+            r.check_gis = ${checkGis},
+            r.check_site = #{checkSite},
+            r.adjunct_uuid = #{adjunctUuid},
+            r.check_remark = #{checkRemark}
+        WHERE
+            r.point_id = #{pointId}
+            AND CURDATE( ) &lt;= t.end_time
+            AND CURDATE( ) &gt;= t.start_time
+    </update>
+
+</mapper>

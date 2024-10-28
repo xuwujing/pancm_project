@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.guard.RadiusEndpointMapper">
+    <delete id="deleteById">
+        update radius_endpoint set delete_status =1 where id=#{id}
+    </delete>
+
+    <delete id="deleteByEndpoint">
+        delete from radius_endpoint where username = #{mac};
+        delete from radius_endpoint_profile where username = #{mac};
+        delete from asset where ip_addr = #{ip};
+        delete from asset_profile where cur_mac_addr = #{mac};
+        delete from radius.radius_endpoint where username = #{mac};
+
+    </delete>
+
+    <select id="findEndPointList" resultType="com.zans.mms.vo.radius.EndPointViewVO">
+        SELECT e.id,e.username,e.pass,e.access_policy,e.create_time,
+        DATE_FORMAT(e.auth_time,'%Y-%m-%d %H:%i:%s') AS auth_time, e.auth_mark,
+        p.cur_nas_ip_address as nas_ip_address,p.cur_nas_port_id as nas_port_id,
+        case when p.cur_ip_addr is null then '' else p.cur_ip_addr end as ip_addr,
+        p.brand_name,p.company,p.alive,p.alive_qz,p.cur_model_des,p.server_os,
+        ar.area_name,
+        d.`type_id` as device_type_id,
+        d.`type_name` AS device_type_name,
+        case when t.point_name is null then tia.point_name else t.point_name end as point_name,
+        case when t.project_name is null then tia.project_name else t.project_name end as project_name,
+        case when t.contractor is null then tia.contractor else t.contractor end as contractor,
+        case when t.contractor_person is null then tia.contractor_person else t.contractor_person end as
+        contractor_person,
+        case when t.contractor_phone is null then tia.contractor_phone else t.contractor_phone end as contractor_phone
+        <include refid="onlineSqlFrom"></include>
+        LEFT JOIN sys_switcher ss ON ss.`sw_host` = p.`cur_nas_ip_address`
+        LEFT JOIN t_area ar ON ss.`area` = ar.`area_id`
+        LEFT JOIN t_device_type d ON p.`cur_device_type` = d.`type_id`
+        LEFT JOIN asset tia ON tia.ip_addr = p.cur_ip_addr
+        LEFT JOIN t_ip_all t ON t.ip_addr = p.cur_ip_addr
+        WHERE e.delete_status = 0
+        <if test="reqVo.accessPolicy != null">
+            and e.access_policy= #{reqVo.accessPolicy}
+        </if>
+        <if test="reqVo.areaId != null ">
+            AND ss.`area` = #{reqVo.areaId}
+        </if>
+        <if test=" reqVo.startDate != null and reqVo.startDate != '' and reqVo.endDate != null and reqVo.endDate != null ">
+            AND e.`create_time` between #{reqVo.startDate} and #{reqVo.endDate}
+        </if>
+        <if test="reqVo.alive !=null">
+            and p.alive = #{reqVo.alive}
+        </if>
+        <if test=" reqVo.deviceType != null ">
+            and p.cur_device_type = #{reqVo.deviceType}
+        </if>
+        <if test=" reqVo.ipAddr != null and reqVo.ipAddr != '' ">
+            and p.cur_ip_addr like concat('%',#{reqVo.ipAddr},'%')
+        </if>
+        <if test=" reqVo.username != null and reqVo.username != '' ">
+            AND e.`pass` like CONCAT('%',#{reqVo.username},'%')
+        </if>
+        <if test=" reqVo.brandName != null and reqVo.brandName != '' ">
+            and p.brand_name like concat('%',#{reqVo.brandName},'%')
+        </if>
+        <if test=" reqVo.company != null and reqVo.company != '' ">
+            and p.company like concat('%',#{reqVo.company},'%')
+        </if>
+        <if test=" reqVo.nasIpAddress != null and reqVo.nasIpAddress != '' ">
+            and p.cur_nas_ip_address like concat('%',#{reqVo.nasIpAddress},'%')
+        </if>
+        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+            order by ${reqVo.orderBy}
+        </if>
+    </select>
+
+
+    <select id="findBlockEndPointList" resultType="com.zans.mms.vo.radius.EndPointViewVO">
+        SELECT e.id,e.username,e.pass,e.access_policy,e.create_time,
+        DATE_FORMAT(e.auth_time,'%Y-%m-%d %H:%i:%s') AS auth_time, e.auth_mark,
+        p.cur_nas_ip_address as nas_ip_address,p.cur_nas_port_id as nas_port_id,
+        p.cur_ip_addr as ip_addr,
+        p.brand_name,p.company,p.cur_model_des,p.server_os,
+        p.alive,p.alive_qz,
+        ar.area_name,
+        d.type_name AS device_type_name,
+        case when t.point_name is null then tia.point_name else t.point_name end as point_name,
+        case when t.project_name is null then tia.project_name else t.project_name end as project_name,
+        case when t.contractor is null then tia.contractor else t.contractor end as contractor,
+        case when t.contractor_person is null then tia.contractor_person else t.contractor_person end as
+        contractor_person,
+        case when t.contractor_phone is null then tia.contractor_phone else t.contractor_phone end as contractor_phone
+        <include refid="refuseFromSql"></include>
+        LEFT JOIN sys_switcher ss ON ss.`sw_host` = p.`cur_nas_ip_address`
+        LEFT JOIN t_area ar ON ss.`area` = ar.`area_id`
+        LEFT JOIN t_device_type d ON p.`cur_device_type` = d.`type_id`
+        LEFT JOIN asset tia ON tia.ip_addr = p.cur_ip_addr
+        LEFT JOIN t_ip_all t ON t.ip_addr = p.cur_ip_addr
+        <include refid="refuseWhereSql"></include>
+
+        <if test="reqVo.areaId != null ">
+            AND ss.`area` = #{reqVo.areaId}
+        </if>
+        <if test=" reqVo.accessPolicy != null ">
+            and e.access_policy = #{reqVo.accessPolicy}
+        </if>
+        <if test=" reqVo.startDate != null and reqVo.startDate != '' and reqVo.endDate != null and reqVo.endDate != null ">
+            and e.auth_time between #{reqVo.startDate} and #{reqVo.endDate}
+        </if>
+        <if test="reqVo.alive !=null">
+            and p.alive = #{reqVo.alive}
+        </if>
+        <if test=" reqVo.deviceType != null ">
+            and p.cur_device_type = #{reqVo.deviceType}
+        </if>
+        <if test=" reqVo.ipAddr != null and reqVo.ipAddr != '' ">
+            and p.cur_ip_addr like concat('%',#{reqVo.ipAddr},'%')
+        </if>
+        <if test=" reqVo.username != null and reqVo.username != '' ">
+            and e.username like concat('%',#{reqVo.username},'%')
+        </if>
+        <if test=" reqVo.brandName != null and reqVo.brandName != '' ">
+            and p.brand_name like concat('%',#{reqVo.brandName},'%')
+        </if>
+        <if test=" reqVo.company != null and reqVo.company != '' ">
+            and p.company like concat('%',#{reqVo.company},'%')
+        </if>
+        <if test=" reqVo.nasIpAddress != null and reqVo.nasIpAddress != '' ">
+            and p.cur_nas_ip_address like concat('%',#{reqVo.nasIpAddress},'%')
+        </if>
+        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+            order by ${reqVo.orderBy}
+        </if>
+
+    </select>
+
+    <!-- 资产列表查询 a=radius_endpoint_profile -->
+    <select id="findAssetsForList" resultType="com.zans.mms.vo.arp.AssetRespVO">
+        select
+        t.id,
+        t.ip_addr,
+        t.project_name,
+        t.point_name,
+        t.create_person,
+        t.insert_time as create_time,
+        t.source,
+        t.maintain_status,
+        t.alive,
+        case when a.cur_area_id is null then t.area_id else a.cur_area_id end as area_id,
+        case when ifnull(a.cur_device_type,0)=0 then t.device_type else a.cur_device_type end as device_type,
+        case when (a.cur_model_des is NULL OR a.cur_model_des = '') then t.device_model_des else a.cur_model_des end as
+        model_des,
+        case when a.cur_mute is null then t.mute else a.cur_mute end as mute,
+        a.cur_mac_addr as mac_addr,
+        t.enable_status
+        from asset t
+        left join asset_profile a ON t.id = a.asset_id
+        where t.delete_status = 0
+        <if test="asset.ip != null and asset.ip !=''">
+            and t.ip_addr like concat('%',#{asset.ip},'%')
+        </if>
+        <if test="asset.area != null">
+            and a.cur_area_id = #{asset.area}
+        </if>
+        <if test="asset.deviceType != null">
+            and a.cur_device_type = #{asset.deviceType}
+        </if>
+        <if test="asset.enableStatus != null">
+            and t.enable_status = #{asset.enableStatus}
+        </if>
+        <if test="asset.alive != null">
+            and t.alive = #{asset.alive}
+        </if>
+        <if test="asset.mute != null">
+            and a.cur_mute = #{asset.mute}
+        </if>
+        <if test="asset.aliveStartDate != null and asset.aliveStartDate !=''">
+            and t.create_time &gt;= #{asset.aliveStartDate}
+        </if>
+        <if test="asset.aliveEndDate != null and asset.aliveEndDate !=''">
+            and t.create_time &lt;= #{asset.aliveEndDate}
+        </if>
+        <if test="asset.startDate != null and asset.startDate !=''">
+            and t.alive_last_time &gt;= #{asset.startDate}
+        </if>
+        <if test="asset.endDate != null and asset.endDate !=''">
+            and t.alive_last_time &lt;= #{asset.endDate}
+        </if>
+        <if test="asset.mac != null and asset.mac !=''">
+            and a.cur_mac_addr like concat('%',#{asset.mac},'%')
+        </if>
+        <if test="asset.company != null and asset.company !=''">
+            and a.cur_company like concat('%',#{asset.company},'%')
+        </if>
+        <if test="asset.project != null and asset.project !=''">
+            and t.project_name like concat('%',#{asset.project},'%')
+        </if>
+        <if test="asset.point != null and asset.point !=''">
+            and t.point_name like concat('%',#{asset.point},'%')
+        </if>
+        <if test="asset.contractor != null and asset.contractor !=''">
+            and t.contractor like concat('%',#{asset.contractor},'%')
+        </if>
+        <if test="asset.maintain != null and asset.maintain !=''">
+            and t.maintain_company like concat('%',#{asset.maintain},'%')
+        </if>
+        <if test="asset.source != null and asset.source == 0">
+            and t.source in (1,2,3)
+        </if>
+        <if test="asset.source != null and asset.source == 1">
+            and t.source = 4
+        </if>
+        <if test="asset.source != null and asset.source == 2">
+            and t.source = 5
+        </if>
+        <if test="asset.maintainStatus != null">
+            and t.maintain_status = #{asset.maintainStatus}
+        </if>
+
+        order by t.update_time desc
+    </select>
+
+    <select id="findEndPointByPass" resultType="com.zans.mms.vo.radius.EndPointViewVO">
+        SELECT e.id,
+               e.username,
+               e.pass,
+               e.access_policy,
+               e.create_time,
+               DATE_FORMAT(e.auth_time, '%Y-%m-%d %H:%i:%s') AS auth_time,
+               e.auth_mark,
+               p.cur_nas_ip_address                          as nas_ip_address,
+               p.cur_nas_port_id                             as nas_port_id,
+               p.cur_ip_addr                                 as ip_addr,
+               p.brand_name,
+               p.company,
+               p.alive,
+               p.alive_qz,
+               p.server_os,
+               p.cur_model_des,
+               p.`alive`,
+               p.`alive_last_time`,
+               p.`open_port`,
+               ar.area_name,
+               d.`type_name`                                 AS device_type_name,
+               d.mute,
+               case
+                   when t.point_name is null then tia.point_name
+                   else t.point_name end                     as point_name,
+               case
+                   when t.project_name is null then tia.project_name
+                   else t.project_name end                   as project_name,
+               case
+                   when t.contractor is null then tia.contractor
+                   else t.contractor end                     as contractor,
+               case
+                   when t.contractor_person is null then tia.contractor_person
+                   else t.contractor_person end              as contractor_person,
+               case
+                   when t.contractor_phone is null then tia.contractor_phone
+                   else t.contractor_phone end               as contractor_phone
+        FROM radius_endpoint e
+                 LEFT JOIN radius_endpoint_profile p ON e.id = p.endpoint_id
+                 LEFT JOIN sys_switcher ss ON ss.`sw_host` = p.`cur_nas_ip_address`
+                 LEFT JOIN t_area ar ON ss.`area` = ar.`area_id`
+                 LEFT JOIN t_device_type d ON p.`cur_device_type` = d.`type_id`
+                 LEFT JOIN asset tia ON tia.ip_addr = p.cur_ip_addr
+                 LEFT JOIN t_ip_all t ON t.ip_addr = p.cur_ip_addr
+        WHERE e.delete_status = 0
+          and (e.pass = #{pass} or e.username = #{pass})
+        limit 1
+    </select>
+
+    <select id="findQzById" resultType="com.zans.mms.vo.radius.QzRespVO">
+        select e.id,
+               e.username,
+               e.pass,
+               e.access_policy,
+               e.create_time,
+               e.remark,
+               e.auth_person,
+               DATE_FORMAT(e.auth_time, '%Y-%m-%d %H:%i:%S') as auth_time,
+               e.auth_mark,
+               p.cur_nas_ip_address                          as nas_ip,
+               p.cur_nas_port_id                             as nas_port_id,
+               p.cur_ip_addr                                 as ip_addr,
+               p.reply_message,
+               p.filter_id,
+               p.cur_vlan                                    as vlan,
+               p.alive,
+               p.alive_arp                                   as alive_qz,
+               e.auth_time                                   as access_time,
+               p.area_id,
+               ar.area_name,
+               p.company,
+               p.brand_name,
+               p.open_port,
+               p.mute,
+               p.alive,
+               p.alive_qz,
+               p.cur_server_os                               as server_os,
+               p.device_type,
+               p.model_level,
+               p.cur_model_des                               as model_des,
+               p.serial_no,
+               p.mac_scan,
+               p.version,
+               case
+                   when t.point_name is null then tia.point_name
+                   else t.point_name end                     as point_name,
+               case
+                   when t.project_name is null then tia.project_name
+                   else t.project_name end                   as project_name,
+               case
+                   when t.contractor is null then tia.contractor
+                   else t.contractor end                     as contractor,
+               case
+                   when t.contractor_person is null then tia.contractor_person
+                   else t.contractor_person end              as contractor_person,
+               case
+                   when t.contractor_phone is null then tia.contractor_phone
+                   else t.contractor_phone end               as contractor_phone
+        from radius_endpoint e
+                 left join radius_endpoint_profile p on e.id = p.endpoint_id
+                 LEFT JOIN sys_switcher ss ON ss.`sw_host` = p.`cur_nas_ip_address`
+                 LEFT JOIN t_area ar ON ss.`area` = ar.`area_id`
+                 LEFT JOIN asset tia ON tia.ip_addr = p.cur_ip_addr
+                 LEFT JOIN t_ip_all t ON t.ip_addr = p.cur_ip_addr
+        where e.id = #{id}
+          AND e.delete_status = 0
+        limit 1
+    </select>
+
+
+    <insert id="saveRadiusEndpointLog">
+        INSERT INTO `radius_endpoint_log`(`username`, `access_policy`, `delete_status`,
+                                          `data_source`)
+        VALUES (#{username}, #{accessPolicy}, #{deleteStatus}, #{dataSource});
+
+    </insert>
+
+
+    <!--阻断-->
+    <sql id="refuseFromSql">
+        FROM radius_endpoint e
+        LEFT JOIN radius_endpoint_profile p on e.id = p.endpoint_id
+    </sql>
+    <sql id="refuseWhereSql">
+        WHERE e.delete_status = 0 and e.access_policy=0
+    </sql>
+
+    <!--在线-->
+    <sql id="onlineSqlFrom">
+        FROM radius_endpoint e
+        LEFT JOIN radius_endpoint_profile p on e.id = p.endpoint_id
+    </sql>
+
+    <select id="findBaseByCurMac" resultType="com.zans.mms.vo.radius.QzViewRespVO">
+        SELECT p.username   as mac,
+               p.ip_addr,
+               p.sw_ip,
+               p.nas_ip_address,
+               p.nas_port_id,
+               p.open_port,
+               ar.area_name,
+               d.`type_name`,
+               p.brand_name as device_brand_name,
+               p.company,
+               p.mute,
+               p.server_os,
+               p.device_type,
+               p.model_des  as device_model_des
+        FROM radius_endpoint e
+                 LEFT JOIN radius_endpoint_profile p ON e.id = p.endpoint_id
+                 LEFT JOIN sys_switcher ss ON ss.`sw_host` = p.`cur_nas_ip_address`
+                 LEFT JOIN t_area ar ON ss.`area` = ar.`area_id`
+                 LEFT JOIN t_device_type d ON p.`device_type` = d.`type_id`
+        WHERE e.delete_status = 0
+          and e.username = #{username}
+        limit 1
+    </select>
+
+    <select id="findCurByCurMac" resultType="com.zans.mms.vo.radius.QzViewRespVO">
+        SELECT p.username           as mac,
+               p.cur_ip_addr        as ip_addr,
+               p.cur_sw_ip          as sw_ip,
+               p.cur_nas_ip_address as nas_ip_address,
+               p.cur_nas_port_id    as nas_port_id,
+               p.cur_open_port      as open_port,
+               ar.area_name,
+               d.`type_name`,
+               p.brand_name         as device_model_brand,
+               p.company,
+               p.cur_mute           as mute,
+               p.cur_server_os      as server_os,
+               p.cur_device_type    as device_type,
+               p.cur_model_des      as device_model_des
+        FROM radius_endpoint e
+                 LEFT JOIN radius_endpoint_profile p ON e.id = p.endpoint_id
+                 LEFT JOIN sys_switcher ss ON ss.`sw_host` = p.`cur_nas_ip_address`
+                 LEFT JOIN t_area ar ON ss.`area` = ar.`area_id`
+                 LEFT JOIN t_device_type d ON p.`cur_device_type` = d.`type_id`
+        WHERE e.delete_status = 0
+          and e.username = #{username}
+        limit 1
+    </select>
+
+    <select id="getPolicy" resultType="com.zans.mms.vo.radius.RadiusPolicyRespVO">
+        SELECT p.username,
+               e.access_policy as accessPolicy
+        FROM radius_endpoint e
+                 LEFT JOIN radius_endpoint_profile p on e.id = p.endpoint_id
+        WHERE e.`pass` like CONCAT('%', #{username}, '%')
+        limit 1
+    </select>
+    <select id="getByEndPointId" resultType="java.lang.String">
+        select cur_ip_addr from radius_endpoint_profile where endpoint_id = #{id}
+    </select>
+    <select id="initData" >
+        TRUNCATE TABLE network_arp;
+        TRUNCATE TABLE network_arp_change;
+        TRUNCATE TABLE network_switcher_mac;
+        TRUNCATE TABLE network_switcher_scan;
+        TRUNCATE TABLE network_switcher_interface;
+
+        TRUNCATE TABLE queue_ip;
+        TRUNCATE TABLE queue_alive;
+        TRUNCATE TABLE queue_consumer_log;
+        UPDATE  queue_consumer set consume_index=0;
+
+        TRUNCATE TABLE radius_endpoint_log;
+        TRUNCATE TABLE radius_sync_job;
+        TRUNCATE TABLE radius_sync_log;
+        DELETE e,p FROM  radius_endpoint  e
+        LEFT join radius_endpoint_profile p  on p.username = e.username
+        WHERE p.ip_addr  not in ('192.168.2.7','192.168.2.9');
+        UPDATE radius_endpoint_profile set cur_ip_addr='192.168.2.7' ,cur_server_os='' ,model_des='DS-IPC-B12V2-I',device_type=4 where ip_addr='192.168.2.7';
+        UPDATE radius_endpoint_profile set cur_ip_addr='192.168.2.9' ,cur_server_os='' ,model_des='DS-IPC-B13HV2-IA',device_type=4 where ip_addr='192.168.2.9';
+        update radius_endpoint set access_policy=1;
+
+        TRUNCATE TABLE alert_rule_original;
+        TRUNCATE TABLE alert_rule_original_detail;
+        TRUNCATE TABLE alert_rule_record;
+        TRUNCATE TABLE alert_ip_clash;
+        TRUNCATE TABLE alert_rule_trigger;
+
+        delete  from asset where ip_addr not in ('192.168.6.14','192.168.6.15','192.168.6.16');
+        delete  from asset_profile where ip_addr not in ('192.168.6.14','192.168.6.15','192.168.6.16');
+
+        TRUNCATE table radius.radacct;
+        TRUNCATE table radius.radius_qz;
+        TRUNCATE table radius.radius_endpoint;
+        TRUNCATE table radius.radpostauth;
+
+        TRUNCATE table guard_job.ops_job_execution;
+        TRUNCATE table guard_job.ops_job_task;
+    </select>
+
+</mapper>

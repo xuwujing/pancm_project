@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.guard.DiagnosticThresholdOverallDao">
+
+    <resultMap type="com.zans.mms.vo.asset.diagnosis.DiagnosticThresholdOverallVO" id="DiagnosticThresholdOverallMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="faultType" column="fault_type" jdbcType="INTEGER"/>
+        <result property="faultTypeName" column="fault_type_name" jdbcType="VARCHAR"/>
+        <result property="faultTypeThreshold" column="fault_type_threshold" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DiagnosticThresholdOverallMap">
+        select id,
+               fault_type,
+               fault_type_name,
+               fault_type_threshold,
+               create_time,
+               update_time
+        from diagnostic_threshold_overall
+        where id = #{id}
+    </select>
+
+    <!--通过实体查询一条数据-->
+    <select id="findOne" resultMap="DiagnosticThresholdOverallMap">
+        select
+        id, fault_type, fault_type_name, fault_type_threshold, create_time, update_time from
+        diagnostic_threshold_overall
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="faultType != null">
+                and fault_type = #{faultType}
+            </if>
+            <if test="faultTypeName != null and faultTypeName != ''">
+                and fault_type_name = #{faultTypeName}
+            </if>
+            <if test="faultTypeThreshold != null">
+                and fault_type_threshold = #{faultTypeThreshold}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DiagnosticThresholdOverallMap">
+        select
+        id, fault_type, fault_type_name, fault_type_threshold, create_time, update_time
+        from diagnostic_threshold_overall
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="faultType != null">
+                and fault_type = #{faultType}
+            </if>
+            <if test="faultTypeName != null and faultTypeName != ''">
+                and fault_type_name = #{faultTypeName}
+            </if>
+            <if test="faultTypeThreshold != null">
+                and fault_type_threshold = #{faultTypeThreshold}
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null and updateTime != ''">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into diagnostic_threshold_overall(fault_type, fault_type_name, fault_type_threshold, create_time,
+                                                 update_time)
+        values (#{faultType}, #{faultTypeName}, #{faultTypeThreshold}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into diagnostic_threshold_overall(fault_type, fault_type_name, fault_type_threshold, create_time,
+        update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.faultType}, #{entity.faultTypeName}, #{entity.faultTypeThreshold}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into diagnostic_threshold_overall(fault_type, fault_type_name, fault_type_threshold, create_time,
+        update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.faultType}, #{entity.faultTypeName}, #{entity.faultTypeThreshold}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        fault_type = values(fault_type) , fault_type_name = values(fault_type_name) , fault_type_threshold =
+        values(fault_type_threshold) , create_time = values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update diagnostic_threshold_overall
+        <set>
+            <if test="faultTypeThreshold != null">
+                fault_type_threshold = #{faultTypeThreshold},
+            </if>
+        </set>
+        where  fault_type = #{faultType}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from diagnostic_threshold_overall
+        where id = #{id}
+    </delete>
+
+</mapper>
+

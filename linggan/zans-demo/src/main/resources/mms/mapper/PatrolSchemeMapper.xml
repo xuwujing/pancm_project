@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.mms.PatrolSchemeMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.PatrolScheme" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="scheme_name" property="schemeName" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="patrol_period" property="patrolPeriod" jdbcType="INTEGER" />
+    <result column="org_id" property="orgId" jdbcType="VARCHAR" />
+    <result column="subset_id" property="subsetId" jdbcType="BIGINT" />
+    <result column="enable_status" property="enableStatus" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <delete id="deleteByUniqueId"></delete>
+    <delete id="deleteById">
+        delete from patrol_scheme where id =#{id}
+    </delete>
+    <select id="getList" resultType="com.zans.mms.vo.patrol.PatrolSchemeResVO">
+ SELECT
+        s.scheme_name schemeName,
+        s.description,
+        patrol_period patrolPeriod,
+        1 pointCount,
+        s.org_id orgId,
+        s.subset_id subsetId,
+        s.creator,
+        DATE_FORMAT(s.update_time,'%Y-%m-%d %H:%i:%S')  updateTime,
+        DATE_FORMAT(s.create_time,'%Y-%m-%d %H:%i:%S')  createTime,
+        s.enable_status enableStatus,
+        s.id,
+		DATE_FORMAT(j.prev_time,'%Y-%m-%d %H:%i:%S') preTime
+    FROM
+        patrol_scheme s
+		LEFT JOIN cron_job j on j.job_type='patrol' and j.relation_id=s.id
+        <where>
+          <if test="schemeName != null and schemeName != ''">
+           and    s.scheme_name like concat('%',#{schemeName},'%')
+          </if>
+         <if test="orgIds!= null and orgIds.size>0">
+              and s.org_id in
+             <foreach collection="orgIds" item="orgId" index="index" separator="," open="(" close=")">
+                 #{orgId}
+             </foreach>
+         </if>
+        </where>
+    </select>
+  <select id="getViewById" resultType="com.zans.mms.vo.patrol.PatrolSchemeDetailResVO"></select>
+</mapper>

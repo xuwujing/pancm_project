@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.mms.BaseFaultTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.BaseFaultType" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="fault_id" property="faultId" jdbcType="VARCHAR" />
+    <result column="fault_name" property="faultName" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <select id="listFaultTypeView" resultType="com.zans.mms.vo.base.BaseFaultTypeVO">
+    SELECT
+    p.device_type as deviceType,
+    a.type_name as deviceName,
+    p.fault_id as faultId,
+    t.fault_name as faultName
+    FROM
+    base_fault_profile p
+    LEFT JOIN base_fault_type t ON p.fault_id = t.fault_id
+    LEFT JOIN base_device_type a ON p.device_type = a.type_id
+    order by device_type,t.sort desc
+  </select>
+
+  <select id="faultList" resultType="com.zans.base.vo.SelectVO">
+    select bo.fault_id as itemKey, bo.fault_name as itemValue  from base_fault_type bo
+  </select>
+
+  <select id="getDefaultFaultType" resultType="com.zans.mms.vo.chart.CountUnit">
+    select REPLACE(UUID(), "-", "") AS id, bft.fault_name   AS count_name,
+           0  AS val
+    FROM   base_fault_type bft
+    where 1=1
+    <if test="list != null  and list.size &gt; 0 ">
+      and  bft.fault_name not in
+      <foreach item="item" collection="list" index="index" open="(" separator="," close=")">
+        #{item}
+      </foreach>
+    </if>
+
+  </select>
+
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.guard.SysVersionInfoDao">
+
+    <resultMap type="com.zans.mms.model.SysVersionInfo" id="BaseMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="projectName" column="project_name" jdbcType="VARCHAR"/>
+        <result property="projectDesc" column="project_desc" jdbcType="VARCHAR"/>
+        <result property="serverIp" column="server_ip" jdbcType="VARCHAR"/>
+        <result property="serverUrl" column="server_url" jdbcType="VARCHAR"/>
+        <result property="verifySuccess" column="verify_success" jdbcType="INTEGER"/>
+        <result property="updateTime" column="update_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <update id="resetVerifySuccess">
+        update sys_version_info set verify_success = 0
+    </update>
+
+    <select id="queryAllInfo" resultMap="BaseMap">
+        SELECT
+            id,
+            project_name,
+            project_desc,
+            server_ip,
+            server_url,
+            verify_success,
+            create_time,
+            DATE_FORMAT( update_time, '%Y-%m-%d %k:%i:%s' ) AS update_time
+        FROM
+            sys_version_info
+        ORDER BY
+            server_ip ASC
+    </select>
+    <select id="findByIpProjectName" resultType="com.zans.mms.model.SysVersionInfo">
+            SELECT
+            id,
+            project_name projectName,
+            project_desc projectDesc,
+            server_ip serverIp,
+            server_url serverUrl,
+            verify_success verifySuccess,
+            service_account serviceAccount,
+            service_password servicePassword,
+            service_port servicePort,
+            create_time createTime,
+            DATE_FORMAT( update_time, '%Y-%m-%d %k:%i:%s' ) AS updateTime
+        FROM
+            sys_version_info
+            where server_ip=#{serverIp} and project_name=#{projectName}
+    </select>
+    <select id="queryAllServerIp" resultType="com.zans.mms.model.SysVersionInfo">
+         SELECT
+            server_ip serverIp,
+            max( service_account ) serviceAccount,
+            max( service_password ) servicePassword,
+            max( service_port )  servicePort
+        FROM
+            sys_version_info
+        GROUP BY
+            server_ip
+    </select>
+
+    <update id="updateVerifySuccess">
+        update sys_version_info set verify_success = #{verifySuccess} ,update_time = now() where id = #{id}
+    </update>
+
+</mapper>

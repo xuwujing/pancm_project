@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.guard.GearDao">
+    <insert id="insert">
+        INSERT INTO gear( `device_id`, `device_name`, `brand`, `area_id`, `monitor_point_type`, `install_address`, `longitude`, `latitude`, `device_local_type`, `network_type`, `area_public_security`, `install_time`, `manage_unit`, `manage_unit_contact`, `video_save_day`, `device_status`, `monitor_point`, `device_img_url`, `device_model`, `point_name`, `ipv4`, `ipv6`, `mac`, `device_type`, `device_function_type`, `light_property`, `camera_coding_format`, `department`, `industry_code`, `device_code`, `net_id`, `creator`)
+         VALUES ( #{deviceId}, #{deviceName}, #{brand}, #{areaId},#{monitorPointType}, #{installAddress}, #{longitude}, #{latitude}, #{deviceLocalType}, #{networkType}, #{areaPublicSecurity}, #{installTime}, #{manageUnit}, #{manageUnitContact},#{videoSaveDay},#{deviceStatus}, #{monitorPoint}, #{deviceImgUrl}, #{deviceModel},#{pointName}, #{ipv4},#{ipv6}, #{mac}, #{deviceType}, #{deviceFunctionType}, #{lightProperty},#{cameraCodingFormat},#{department}, #{industryCode},#{deviceCode}, #{netId}, #{creator});
+    </insert>
+    <update id="update">
+        update gear
+        <set>
+            <if test="deviceId !=null and deviceId !=''">
+                device_id=#{deviceId},
+            </if>
+            <if test="deviceName !=null and deviceName !=''">
+                device_name = #{deviceName},
+            </if>
+            <if test="brand != null">
+                brand = #{brand},
+            </if>
+            <if test="areaId !=null and areaId !=''">
+                area_id = #{areaId},
+            </if>
+            <if test="monitorPointType !=null">
+                monitor_point_type = #{monitorPointType},
+            </if>
+            <if test="installAddress !=null and installAddress !=''">
+                install_address = #{installAddress},
+            </if>
+            <if test="longitude!=null and longitude!=''">
+                longitude = #{longitude},
+            </if>
+            <if test="latitude!=null and latitude!=''">
+                latitude = #{latitude},
+            </if>
+            <if test="deviceLocalType!=null">
+                device_local_type = #{deviceLocalType},
+            </if>
+            <if test="networkType !=null">
+                network_type = #{networkType},
+            </if>
+            <if test="areaPublicSecurity!=null and areaPublicSecurity!=''">
+                area_public_security = #{areaPublicSecurity},
+            </if>
+            <if test="installTime!=null and installTime!=''">
+                install_time = #{installTime},
+            </if>
+            <if test="manageUnit != null and manageUnit !='' ">
+                manage_unit = #{manageUnit},
+            </if>
+            <if test="manageUnitContact !=null and manageUnitContact !=''">
+                manage_unit_contact = #{manageUnitContact},
+            </if>
+            <if test="videoSaveDay!=null">
+                video_save_day = #{videoSaveDay},
+            </if>
+            <if test="deviceStatus !=null">
+                device_status = #{deviceStatus},
+            </if>
+            <if test="monitorPoint!=null">
+                monitor_point = #{monitorPoint},
+            </if>
+            <if test="deviceImgUrl !=null and deviceImgUrl!=''">
+                device_img_url = #{deviceImgUrl},
+            </if>
+            <if test="deviceModel !=null and deviceModel!=''">
+                device_model = #{deviceModel},
+            </if>
+            <if test="pointName !=null and pointName!=''">
+                point_name=#{pointName},
+            </if>
+            <if test="ipv4!=null and ipv4!=''">
+                ipv4=#{ipv4},
+            </if>
+            <if test="ipv6!=null and ipv6!=''">
+                ipv6=#{ipv6},
+            </if>
+            <if test="mac !=null and mac !=''">
+                mac = #{mac},
+            </if>
+            <if test="deviceType!=null">
+                device_type=#{deviceType},
+            </if>
+            <if test="deviceFunctionType!=null">
+                device_function_type=#{deviceFunctionType},
+            </if>
+            <if test="lightProperty!=null">
+                light_property=#{lightProperty},
+            </if>
+            <if test="cameraCodingFormat!=null">
+                camera_coding_format=#{cameraCodingFormat},
+            </if>
+            <if test="department!=null">
+                department=#{department},
+            </if>
+            <if test="industryCode!=null and industryCode!=''">
+                industry_code=#{industryCode},
+            </if>
+            <if test="deviceCode!=null">
+                device_code=#{deviceCode},
+            </if>
+            <if test="netId !=null">
+                net_id=#{netId}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="delete">
+        delete from gear where id = #{id}
+    </delete>
+
+
+    <select id="getList" resultType="com.zans.mms.model.Gear" parameterType="com.zans.mms.vo.gear.GearReqVO">
+        SELECT
+            g.id,
+            g.device_id,
+            g.device_name,
+            g.brand,
+            g.area_id,
+            g.monitor_point_type,
+            g.install_address,
+            g.longitude,
+            g.latitude,
+            g.device_local_type,
+            g.network_type,
+            g.area_public_security,
+            DATE_FORMAT(g.install_time,'%Y-%m-%d %H:%m:%s') as install_time,
+            g.manage_unit,
+            g.manage_unit_contact,
+            g.video_save_day,
+            g.device_status,
+            g.monitor_point,
+            g.device_img_url,
+            g.device_model,
+            g.point_name,
+            g.ipv4,
+            g.ipv6,
+            g.mac,
+            g.device_type,
+            g.device_function_type,
+            g.light_property,
+            g.camera_coding_format,
+            g.department,
+            g.industry_code,
+            g.device_code,
+            g.net_id,
+            g.creator,
+            DATE_FORMAT(g.create_time,'%Y-%m-%d %H:%m:%s') as create_time,
+            g.update_time,
+            if(a.alive is not null,a.alive,2) as alive,
+            if(p.cur_device_type is not null or p.cur_device_type!=0,p.cur_device_type,4) as assetDeviceType
+        FROM
+            gear g left join asset a on a.ip_addr=g.ipv4
+            left join asset_profile p on p.asset_id=a.id
+        <where>
+            <if test="id !=null and id!=''">
+                g.id = #{id}
+            </if>
+            <if test="assetDeviceType!=null and assetDeviceType!=''">
+                and if(p.cur_device_type is not null or p.cur_device_type!=0,p.cur_device_type,4) =#{assetDeviceType}
+            </if>
+            <if test="ip!=null and ip!=''">
+                and g.ipv4 like  concat('%',#{ip},'%')
+            </if>
+            <if test="deviceModel !=null and deviceModel !=''">
+                and g.device_model like concat('%',#{deviceModel},'%')
+            </if>
+            <if test="mac !=null and mac !=''">
+                and g.mac like concat('%',#{mac},'%')
+            </if>
+            <if test="alive !=null and alive !=''">
+                and if(a.alive is not null,a.alive,2) = #{alive}
+            </if>
+        </where>
+    </select>
+</mapper>
+

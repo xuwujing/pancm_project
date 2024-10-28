@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.mms.BaseFaultProfileMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.BaseFaultProfile" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+
+    <result column="fault_id" property="faultId" jdbcType="VARCHAR" />
+    <result column="device_type" property="deviceType" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

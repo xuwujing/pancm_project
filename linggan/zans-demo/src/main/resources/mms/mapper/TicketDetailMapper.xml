@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.mms.TicketDetailDao">
+
+    <resultMap type="com.zans.mms.model.TicketDetail" id="TicketDetailMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="ticketId" column="ticket_id" jdbcType="INTEGER"/>
+        <result property="facilityId" column="facility_id" jdbcType="INTEGER"/>
+        <result property="amount" column="amount" jdbcType="INTEGER"/>
+        <result property="adjAmount" column="adj_amount" jdbcType="INTEGER"/>
+        <result property="predictPrice" column="predict_price" jdbcType="NUMERIC"/>
+        <result property="adjustPrice" column="adjust_price" jdbcType="NUMERIC"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+        <result property="isAdj" column="is_adj" jdbcType="INTEGER"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TicketDetailMap">
+        select id,
+               ticket_id,
+               facility_id,
+               amount,
+               adj_amount,
+               predict_price,
+               adjust_price,
+               type,
+               is_adj,
+               creator,
+               create_time,
+               update_time
+        from ticket_detail
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="TicketDetailMap">
+        select
+        id, ticket_id, facility_id, amount, adj_amount, predict_price, adjust_price, type, is_adj, creator, create_time,
+        update_time
+        from ticket_detail
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="ticketId != null">
+                and ticket_id = #{ticketId}
+            </if>
+            <if test="facilityId != null">
+                and facility_id = #{facilityId}
+            </if>
+            <if test="amount != null">
+                and amount = #{amount}
+            </if>
+            <if test="adjAmount != null">
+                and adj_amount = #{adjAmount}
+            </if>
+            <if test="predictPrice != null">
+                and predict_price = #{predictPrice}
+            </if>
+            <if test="adjustPrice != null">
+                and adjust_price = #{adjustPrice}
+            </if>
+            <if test="type != null">
+                and type = #{type}
+            </if>
+            <if test="isAdj != null">
+                and is_adj = #{isAdj}
+            </if>
+            <if test="creator != null and creator != ''">
+                and creator = #{creator}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryByTicketId" resultType="com.zans.mms.model.TicketDetail">
+        select id,
+               ticket_id,
+               facility_id,
+               amount,
+               adj_amount,
+               predict_price,
+               adjust_price,
+               type,
+               is_adj,
+               creator,
+               create_time,
+               update_time
+        from ticket_detail
+        where ticket_id = #{ticketId}
+        <if test="type != null">
+            and type = #{type}
+        </if>
+        limit 1
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into ticket_detail(ticket_id, facility_id, amount, adj_amount, predict_price, adjust_price, type, is_adj,
+                                  creator, create_time, update_time)
+        values (#{ticketId}, #{facilityId}, #{amount}, #{adjAmount}, #{predictPrice}, #{adjustPrice}, #{type}, #{isAdj},
+                #{creator}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ticket_detail(ticket_id, facility_id, amount, adj_amount, predict_price, adjust_price, type, is_adj,
+        creator)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ticketId}, #{entity.facilityId}, #{entity.amount}, #{entity.adjAmount}, #{entity.predictPrice},
+            #{entity.adjustPrice}, #{entity.type}, #{entity.isAdj}, #{entity.creator})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ticket_detail(ticket_id, facility_id, amount, adj_amount, predict_price, adjust_price, type, is_adj,
+        creator, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ticketId}, #{entity.facilityId}, #{entity.amount}, #{entity.adjAmount}, #{entity.predictPrice},
+            #{entity.adjustPrice}, #{entity.type}, #{entity.isAdj}, #{entity.creator}, #{entity.createTime},
+            #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        ticket_id = values(ticket_id) , facility_id = values(facility_id) , amount = values(amount) , adj_amount =
+        values(adj_amount) , predict_price = values(predict_price) , adjust_price = values(adjust_price) , type =
+        values(type) , is_adj = values(is_adj) , creator = values(creator) , create_time = values(create_time) ,
+        update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update ticket_detail
+        <set>
+            <if test="ticketId != null">
+                ticket_id = #{ticketId},
+            </if>
+            <if test="facilityId != null">
+                facility_id = #{facilityId},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="adjAmount != null">
+                adj_amount = #{adjAmount},
+            </if>
+            <if test="predictPrice != null">
+                predict_price = #{predictPrice},
+            </if>
+            <if test="adjustPrice != null">
+                adjust_price = #{adjustPrice},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="isAdj != null">
+                is_adj = #{isAdj},
+            </if>
+            <if test="creator != null and creator != ''">
+                creator = #{creator},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from ticket_detail
+        where id = #{id}
+    </delete>
+
+
+    <!--通过删除-->
+    <delete id="deleteByTicketId">
+        delete
+        from ticket_detail
+        where ticket_id = #{ticketId}
+        <if test="type != null">
+            and type = #{type}
+        </if>
+    </delete>
+
+</mapper>
+

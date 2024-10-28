@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.guard.AssetMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.Asset" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="asset_code" property="assetCode" jdbcType="VARCHAR" />
+    <result column="device_direction" property="deviceDirection" jdbcType="VARCHAR" />
+    <result column="point_id" property="pointId" jdbcType="INTEGER" />
+    <result column="device_type" property="deviceType" jdbcType="VARCHAR" />
+    <result column="device_sub_type" property="deviceSubType" jdbcType="VARCHAR" />
+    <result column="network_ip" property="networkIp" jdbcType="VARCHAR" />
+    <result column="network_mac" property="networkMac" jdbcType="VARCHAR" />
+    <result column="network_mask" property="networkMask" jdbcType="VARCHAR" />
+    <result column="network_geteway" property="networkGeteway" jdbcType="VARCHAR" />
+    <result column="device_sn" property="deviceSn" jdbcType="VARCHAR" />
+    <result column="device_model_des" property="deviceModelDes" jdbcType="VARCHAR" />
+    <result column="device_model_brand" property="deviceModelBrand" jdbcType="VARCHAR" />
+    <result column="device_software_version" property="deviceSoftwareVersion" jdbcType="VARCHAR" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+    <result column="build_year" property="buildYear" jdbcType="VARCHAR" />
+    <result column="build_company" property="buildCompany" jdbcType="VARCHAR" />
+    <result column="build_contact" property="buildContact" jdbcType="VARCHAR" />
+    <result column="build_phone" property="buildPhone" jdbcType="VARCHAR" />
+    <result column="maintain_company" property="maintainCompany" jdbcType="VARCHAR" />
+    <result column="maintain_contact" property="maintainContact" jdbcType="VARCHAR" />
+    <result column="maintain_phone" property="maintainPhone" jdbcType="VARCHAR" />
+    <result column="detect_mode" property="detectMode" jdbcType="VARCHAR" />
+    <result column="maintain_status" property="maintainStatus" jdbcType="VARCHAR" />
+    <result column="device_account" property="deviceAccount" jdbcType="VARCHAR" />
+    <result column="device_pwd" property="devicePwd" jdbcType="VARCHAR" />
+    <result column="online_status" property="onlineStatus" jdbcType="VARCHAR" />
+    <result column="offline_status" property="offlineStatus" jdbcType="VARCHAR" />
+    <result column="install_time" property="installTime" jdbcType="DATE" />
+    <result column="lane_number" property="laneNumber" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+    <resultMap type="com.zans.mms.vo.asset.diagnosis.AssetDiagnosisInfoRespVO" id="AssetDiagnosisInfoMap">
+        <result property="assetCode" column="asset_code" jdbcType="VARCHAR"/>
+        <result property="pointName" column="pointName" jdbcType="VARCHAR"/>
+        <result property="pointCode" column="pointCode" jdbcType="VARCHAR"/>
+        <result property="diagnosisResult" column="diagnosis_result" jdbcType="INTEGER"/>
+        <result property="faultTypes" column="fault_types" jdbcType="VARCHAR"/>
+        <result property="faultTypesName" column="fault_types_name" jdbcType="VARCHAR"/>
+        <result property="imgUrl" column="img_url" jdbcType="VARCHAR"/>
+        <result property="diagnosisTime" column="diagnosis_time" jdbcType="VARCHAR"/>
+        <result property="ipAddr" column="ip_addr" jdbcType="VARCHAR"/>
+        <result property="deviceTypeName" column="deviceTypeName" jdbcType="VARCHAR"/>
+        <result property="diagnosisTime" column="diagnosisTime" jdbcType="VARCHAR"/>
+        <result property="diagnosisResult" column="diagnosisResult" jdbcType="VARCHAR"/>
+        <result property="faultTypesName" column="faultTypesName" jdbcType="VARCHAR"/>
+        <collection property="assetDiagnosisInfoExVOS" javaType="arraylist" ofType="com.zans.mms.vo.asset.diagnosis.AssetDiagnosisInfoExRespVO">
+            <result property="assetCode" column="asset_code" jdbcType="VARCHAR"/>
+            <result property="faultType" column="fault_type" jdbcType="INTEGER"/>
+            <result property="faultTypeResult" column="fault_type_result" jdbcType="INTEGER"/>
+        </collection>
+    </resultMap>
+
+    <delete id="deleteByUniqueId">
+        delete  from asset where id=#{id}
+    </delete>
+    <select id="getList" resultType="com.zans.mms.vo.asset.AssetResVO">
+     SELECT
+        dp.area_id areaId,
+        dp.point_name pointName,
+        a.device_direction deviceDirection,
+        dp.point_code pointCode,
+        dp.id pointId,
+        a.asset_code assetCode,
+        a.network_ip networkIp,
+        a.maintain_company maintainCompany,
+        a.build_company buildCompany,
+        a.online_status onlineStatus,
+        a.maintain_status maintainStatus,
+        a.id assetId,
+        a.device_model_brand deviceModelBrand,
+        a.install_time installTime,
+        a.device_model_des deviceModelDes,
+        a.lane_number laneNumber,
+        a.device_sub_type deviceSubType
+    FROM
+        asset a
+        LEFT JOIN device_point dp ON a.point_id = dp.id
+      <where>
+        <if test="pointId != null and pointId !=''">
+            and dp.id = #{pointId}
+        </if>
+        <if test="deviceType != null and deviceType !=''">
+            and a.device_type = #{deviceType}
+        </if>
+        <if test="areaId != null and areaId.size >0">
+          and dp.area_id in
+            <foreach collection="areaId" item="areaid" separator="," open="(" close=")" >
+                #{areaid}
+            </foreach>
+
+        </if>
+        <if test="pointCode != null and pointCode !=''">
+          and dp.point_code like concat('%',#{pointCode},'%')
+        </if>
+        <if test="pointName != null and pointName !=''">
+          and dp.point_name like concat('%',#{pointName},'%')
+        </if>
+
+        <if test="assetCode != null and assetCode !=''">
+          and a.asset_code  like concat('%',#{assetCode},'%')
+        </if>
+        <if test="maintainStatus != null and maintainStatus.size >0">
+          and a.maintain_status in
+            <foreach collection="maintainStatus" item="status" separator="," open="(" close=")" >
+                #{status}
+            </foreach>
+        </if>
+        <if test="networkIp != null and networkIp !=''">
+          and a.network_ip = #{networkIp}
+        </if>
+        <if test="projectName != null and projectName !=''">
+          and a.project_name  like concat('%',#{projectName},'%')
+        </if>
+        <if test="deviceSubType != null and deviceSubType !=''">
+            and a.device_sub_type  like concat('%',#{deviceSubType},'%')
+        </if>
+        <if test="deviceModelBrand == 'unknown'">
+            and (a.device_model_brand ='' or a.device_model_brand is null)
+        </if>
+        <if test="deviceModelBrand !=null and deviceModelBrand !='' and deviceModelBrand !='unknown'">
+            and a.device_model_brand  like concat('%',#{deviceModelBrand},'%')
+        </if>
+        <if test="orgId !=null and orgId != ''">
+            and a.org_id = #{orgId}
+        </if>
+      </where>
+    </select>
+  <select id="getViewById" resultType="com.zans.mms.vo.asset.AssetViewResVO">
+    SELECT
+        area_id areaId,
+        point_name pointName,
+        point_code pointCode,
+        a.point_id pointId,
+        power_way powerWay,
+        power_place powerPlace,
+        x(gis)  as longitude,
+        y(gis) as latitude,
+        project_name projectName,
+        build_year buildYear,
+        build_company buildCompany,
+        build_contact buildContact,
+        build_phone buildPhone,
+        maintain_company maintainCompany,
+        maintain_contact maintainContact,
+        maintain_phone maintainPhone,
+        device_direction deviceDirection,
+        device_model_brand deviceModelBrand,
+        device_model_des deviceModelDes,
+        network_ip networkIp,
+        network_mask networkMask,
+        network_geteway networkGeteway,
+        install_time installTime,
+        online_status onlineStatus,
+        maintain_status maintainStatus,
+        remark,
+        a.id assetId
+    FROM
+        asset a
+        LEFT JOIN device_point dp ON a.point_id = dp.id
+        WHERE a.id=#{id}
+  </select>
+    <select id="getListByCondition" resultType="com.zans.mms.model.Asset">
+        select  * from   asset
+        <where>
+            <if test="pointId != null ">
+                and point_id = #{pointId}
+            </if>
+            <if test="assetIds !=null and assetIds.size &gt; 0">
+            and id in
+                <foreach collection="assetIds" item="assetId" open="(" close=")" separator="," index="index">
+                    #{assetId}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <select id="getIdByUniqueId" resultType="java.lang.Integer">
+        select id from asset where id=#{assetId}
+    </select>
+
+    <select id="getExistAssetCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from asset where asset_code =#{assetCode}
+    </select>
+
+
+    <delete id="deleteByAssetCode" parameterType="java.lang.String">
+        delete from asset where asset_code = #{assetCode}
+    </delete>
+
+    <delete id="deleteByMac">
+        update radius_endpoint_profile
+        set alive_last_time = null
+        where  username = #{mac};
+
+    </delete>
+
+    <insert id="insertAsset" parameterType="com.zans.mms.vo.asset.ExcelAssetVO">
+        insert into asset(asset_code,
+                          point_id,
+                          device_direction,
+                          device_type,
+                          device_sub_type,
+                          network_ip,
+                          network_mac,
+                          network_mask,
+                          network_geteway,
+                          device_sn,
+                          device_model_des,
+                          device_model_brand,
+                          device_software_version,
+                          project_name,
+                          build_year,
+                          build_company,
+                          build_contact,
+                          build_phone,
+                          maintain_company,
+                          maintain_contact,
+                          maintain_phone,
+                          detect_mode,
+                          maintain_status,
+                          device_account,
+                          device_pwd,
+                          install_time,
+                          lane_number,
+                          remark,
+                          creator,
+                          create_time,
+                          update_time,
+                          is_test)
+        values (#{assetCode},
+                #{pointId},
+                #{deviceDirection},
+                #{deviceType},
+                #{deviceSubType},
+                #{networkIp},
+                #{networkMac},
+                #{networkMask},
+                #{networkGeteway},
+                #{deviceSn},
+                #{deviceModelDes},
+                #{deviceModelBrand},
+                #{deviceSoftwareVersion},
+                #{projectName},
+                #{buildYear},
+                #{buildCompany},
+                #{buildContact},
+                #{buildPhone},
+                #{maintainCompany},
+                #{maintainContact},
+                #{maintainPhone},
+                #{detectMode},
+                #{maintainStatus},
+                #{deviceAccount},
+                #{devicePwd},
+                #{installTime},
+                #{laneNumber},
+                #{remark},
+                #{creator},
+                #{createTime},
+                #{updateTime},
+                #{isTest})
+    </insert>
+
+    <update id="updateByAssetCode" parameterType="com.zans.mms.vo.asset.ExcelAssetVO">
+        update asset set
+                             asset_code=#{assetCode},
+                             point_id=#{pointId},
+                             device_direction=#{deviceDirection},
+                             device_type=#{deviceType},
+                             device_sub_type=#{deviceSubType},
+                             network_ip=#{networkIp},
+                             network_mac=#{networkMac},
+                             network_mask=#{networkMask},
+                             network_geteway=#{networkGeteway},
+                             device_sn=#{deviceSn},
+                             device_model_des=#{deviceModelDes},
+                             device_model_brand=#{deviceModelBrand},
+                             device_software_version=#{deviceSoftwareVersion},
+                             project_name=#{projectName},
+                             build_year=#{buildYear},
+                             build_company=#{buildCompany},
+                             build_contact=#{buildContact},
+                             build_phone=#{buildPhone},
+                             maintain_company=#{maintainCompany},
+                             maintain_contact=#{maintainContact},
+                             maintain_phone=#{maintainPhone},
+                             detect_mode=#{detectMode},
+                             maintain_status=#{maintainStatus},
+                             device_account=#{deviceAccount},
+                             device_pwd=#{devicePwd},
+                             install_time=#{installTime},
+                             lane_number=#{laneNumber},
+                             remark=#{remark},
+                             update_time=#{updateTime},
+                             is_test=#{isTest}
+            where asset_code = #{assetCode}
+    </update>
+
+    <update id="updateByAssetCodeChange" parameterType="com.zans.mms.vo.asset.ExcelAssetVO">
+        update asset set asset_code=#{assetCodeChange},
+                             point_id=#{pointId},
+                             device_direction=#{deviceDirection},
+                             device_type=#{deviceType},
+                             device_sub_type=#{deviceSubType},
+                             network_ip=#{networkIp},
+                             network_mac=#{networkMac},
+                             network_mask=#{networkMask},
+                             network_geteway=#{networkGeteway},
+                             device_sn=#{deviceSn},
+                             device_model_des=#{deviceModelDes},
+                             device_model_brand=#{deviceModelBrand},
+                             device_software_version=#{deviceSoftwareVersion},
+                             project_name=#{projectName},
+                             build_year=#{buildYear},
+                             build_company=#{buildCompany},
+                             build_contact=#{buildContact},
+                             build_phone=#{buildPhone},
+                             maintain_company=#{maintainCompany},
+                             maintain_contact=#{maintainContact},
+                             maintain_phone=#{maintainPhone},
+                             detect_mode=#{detectMode},
+                             maintain_status=#{maintainStatus},
+                             device_account=#{deviceAccount},
+                             device_pwd=#{devicePwd},
+                             install_time=#{installTime},
+                             lane_number=#{laneNumber},
+                             remark=#{remark},
+                             update_time=#{updateTime},
+                             is_test = #{isTest}
+        where asset_code = #{assetCode}
+    </update>
+
+    <select id="getAssetByCondition" parameterType="com.zans.mms.vo.asset.subset.AssetSubsetDetailAddByConditionReqVO" resultType="java.lang.Long">
+        select a.id from asset a left join device_point d on  a.point_id = d.id
+        <where>
+            <if test="pointName !=null and pointName !=''">
+                and d.point_name=#{pointName}
+            </if>
+            <if test="maintainStatus !=null and maintainStatus !=''">
+                and a.maintain_status=#{maintainStatus}
+            </if>
+            <if test="areaId !=null and areaId !=''">
+                and d.area_id=#{areaId}
+            </if>
+            <if test="pointCode !=null and pointCode !=''">
+                and d.point_code=#{pointCode}
+            </if>
+            <if test="assetCode !=null and assetCode !=''">
+               and a.asset_code =#{assetCode}
+            </if>
+            <if test="deviceType != null and deviceType !=''">
+                and a.device_type = #{deviceType}
+            </if>
+        </where>
+    </select>
+    <select id="chooseAssetList" resultType="com.zans.mms.vo.asset.AssetResVO">
+        SELECT
+        dp.area_id areaId,
+        dp.point_name pointName,
+        a.device_direction deviceDirection,
+        dp.point_code pointCode,
+        a.asset_code assetCode,
+        a.network_ip networkIp,
+        a.maintain_company maintainCompany,
+        a.build_company buildCompany,
+        a.online_status onlineStatus,
+        a.maintain_status maintainStatus,
+        a.id assetId,
+        a.device_model_brand deviceModelBrand,
+        a.install_time installTime,
+        a.device_model_des deviceModelDes,
+        a.lane_number laneNumber,
+        a.device_sub_type deviceSubType,
+        CASE
+        WHEN asd.subset_id IS NULL THEN
+        0 ELSE 1
+        END checkStatus
+        FROM
+        asset a
+        LEFT JOIN device_point dp ON a.point_id = dp.id
+        LEFT JOIN asset_subset_detail asd ON asd.subset_id = #{subsetId}
+        AND asd.asset_id = a.id
+        <where>
+            a.device_type = #{deviceType}
+            <if test="pointId != null and pointId !=''">
+                and dp.id = #{pointId}
+            </if>
+            <if test="areaId != null and areaId !=''">
+                and dp.area_id = #{areaId}
+            </if>
+            <if test="pointCode != null and pointCode !=''">
+                and dp.point_code like concat('%',#{pointCode},'%')
+            </if>
+            <if test="pointName != null and pointName !=''">
+                and dp.point_name like concat('%',#{pointName},'%')
+            </if>
+
+            <if test="assetCode != null and assetCode !=''">
+                and a.asset_code  like concat('%',#{assetCode},'%')
+            </if>
+            <if test="maintainStatus != null and maintainStatus !=''">
+                and a.maintain_status = #{maintainStatus}
+            </if>
+            <if test="networkIp != null and networkIp !=''">
+                and a.network_ip = #{networkIp}
+            </if>
+            <if test="projectName != null and projectName !=''">
+                and a.project_name  like concat('%',#{projectName},'%')
+            </if>
+        </where>
+    </select>
+    <select id="getIdByCode" resultType="java.lang.String">
+        select id from asset where asset_code = #{assetCode} and device_type = #{deviceType}
+    </select>
+    <select id="getListForMap" resultType="com.zans.mms.vo.asset.AssetForMapResVO">
+        SELECT
+        a.id aId,
+        p.id pId,
+        a.device_type dType,
+        x ( p.gis ) AS longitude,
+        y ( p.gis ) AS latitude,
+        a.online_status onlineStatus
+        FROM
+        asset a
+        LEFT JOIN device_point p ON a.point_id = p.id
+        WHERE
+        y ( p.gis ) &lt; 90
+    </select>
+
+
+
+    <select id="getMonitorList" resultType="com.zans.mms.vo.asset.AssetMonitorResVO">
+        SELECT
+        a.ip_addr ipAddr,
+        adi.asset_code as assetCode,
+        adi.trace_id as traceId,
+        ap.cur_device_type as deviceType,
+        adi.fault_types as  faultTypes,
+        (select tt.type_name from t_device_type tt where tt.type_id = ap.cur_device_type ) as deviceTypeName,
+        adi.diagnosis_time as diagnosisTime,
+        adi.diagnosis_result as diagnosisResult,
+        case when adi.fault_types_name is null then  '未检测'
+        when adi.fault_types_name = '' then  '正常'
+        else  fault_types_name end as faultTypesName
+        FROM
+        asset a
+        left join asset_profile ap on a.ip_addr = ap.ip_addr
+        LEFT JOIN asset_diagnosis_info adi on a.ip_addr = adi.ipAddress
+        <where>
+              a.alive = 1 and   ap.cur_device_type in (2,3,4,98)
+            <if test="ipAddr != null and ipAddr !=''">
+                and a.ip_addr  like concat('%',#{ipAddr},'%')
+            </if>
+            <if test="diagnosisResult !=null and diagnosisResult >-1">
+                 <if test="diagnosisResult = 0 ">
+                     and  adi.diagnosis_result is null
+                 </if>
+                <if test="diagnosisResult > 0 ">
+                    and adi.diagnosis_result = #{diagnosisResult}
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getDiagnosisView" resultMap="AssetDiagnosisInfoMap">
+        SELECT
+            a.ip_addr ,
+            (select tt.type_name from t_device_type tt where tt.type_id = ap.cur_device_type ) as deviceTypeName,
+            adi.diagnosis_time as diagnosisTime,
+            adi.diagnosis_result as diagnosisResult,
+            case when adi.fault_types_name is null then  '未检测'
+                 when adi.fault_types_name = '' then  '正常'
+                 else  fault_types_name end as faultTypesName,
+            adi.asset_code,
+            adi.diagnosis_result,
+            adi.diagnosis_time,
+            adi.img_url,
+            adie.asset_code,
+            adie.fault_type,
+            adie.fault_type_result
+        FROM
+            asset a
+                left join asset_profile ap on a.ip_addr = ap.ip_addr
+                LEFT JOIN asset_diagnosis_info adi on a.ip_addr = adi.ipAddress
+                LEFT JOIN asset_diagnosis_info_ex adie ON adi.trace_id = adie.trace_id
+        WHERE  a.ip_addr = #{ip}
+    </select>
+
+    <select id="getDiagnosisHisView" resultMap="AssetDiagnosisInfoMap">
+        SELECT
+            a.id assetId,
+            adi.asset_code,
+            adi.diagnosis_result,
+            adi.diagnosis_time,
+            adi.img_url,
+            adie.fault_type,
+            adie.fault_type_result
+        FROM
+            asset a
+        left join asset_profile ap on a.ip_addr = ap.ip_addr
+            LEFT JOIN asset_diagnosis_info_his adi on a.ip_addr = adi.ipAddress
+                LEFT JOIN asset_diagnosis_info_ex adie ON adi.trace_id = adie.trace_id
+        WHERE  adi.ipAddress = #{ip} and adi.trace_id = #{traceId}
+    </select>
+
+    <select id="getThreeDaysDiagnosisHisList"
+            resultType="com.zans.mms.vo.asset.diagnosis.AssetDiagnosisHisRespVO">
+        SELECT
+            adih.asset_code assetCode,
+            adih.diagnosis_result diagnosisResult,
+            DATE_FORMAT(adih.diagnosis_time,'%Y-%m-%d %H:%i:%S')  diagnosisTime,
+            adih.trace_id traceId
+        FROM
+            asset_diagnosis_info_his adih
+        WHERE
+            adih.ipAddress = #{ip}
+        ORDER BY
+            diagnosis_time desc
+    </select>
+
+    <select id="findByIpAddr" resultType="com.zans.mms.model.Asset">
+        select * from asset where ip_addr = #{ipAddr} limit 1
+    </select>
+    <select id="getSwitchMacInterface" resultType="com.zans.mms.vo.asset.SwitcherMacInterfaceResVO">
+        SELECT
+            e.id,
+            p.username  mac,
+            p.cur_ip_addr ipAddr,
+            dt.type_id deviceType,
+            dt.type_name deviceTypeName,
+            p.cur_model_des modelDes,
+            e.access_policy  accessPolicy,
+            p.cur_nas_port_id nasPortId,
+            p.alive,
+            p.alive_qz
+        FROM
+            radius_endpoint_profile p
+                inner JOIN radius_endpoint e ON  p.username = e.username
+                LEFT JOIN t_device_type dt ON dt.type_id = p.cur_device_type
+        WHERE 1=1 and p.alive_last_time is not null
+       --     (p.alive = 1 or p.alive_qz = 1) and e.access_policy!=0
+        limit  4
+    </select>
+
+    <select id="getSwitchMacInterfaceByPort" resultType="com.zans.mms.vo.asset.SwitcherMacInterfaceResVO">
+        SELECT
+            e.id,
+            p.username  mac,
+            p.cur_ip_addr ipAddr,
+            dt.type_id deviceType,
+            dt.type_name deviceTypeName,
+            p.cur_model_des modelDes,
+            e.access_policy  accessPolicy,
+            p.cur_nas_port_id nasPortId,
+            p.alive,
+            p.alive_qz
+        FROM
+            radius_endpoint_profile p
+                inner JOIN radius_endpoint e ON  p.username = e.username
+                LEFT JOIN t_device_type dt ON dt.type_id = p.cur_device_type
+        WHERE p.alive_last_time is not null and
+              p.cur_nas_port_id  like concat('%',#{portId},'%') order by p.alive_last_time desc limit 1
+    </select>
+
+    <select id="getSwitchMacInterfaceByPortDown" resultType="com.zans.mms.vo.asset.SwitcherMacInterfaceResVO">
+        SELECT
+            e.id,
+            p.username  mac,
+            p.cur_ip_addr ipAddr,
+            dt.type_id deviceType,
+            dt.type_name deviceTypeName,
+            p.cur_model_des modelDes,
+            e.access_policy  accessPolicy,
+            p.cur_nas_port_id nasPortId,
+            p.alive,
+            p.alive_qz
+        FROM
+            radius_endpoint_profile p
+                inner JOIN radius_endpoint e ON  p.username = e.username
+                LEFT JOIN t_device_type dt ON dt.type_id = p.cur_device_type
+        WHERE
+            p.cur_nas_port_id  like concat('%',#{portId},'%') order by p.alive_last_time desc limit 1
+    </select>
+
+</mapper>

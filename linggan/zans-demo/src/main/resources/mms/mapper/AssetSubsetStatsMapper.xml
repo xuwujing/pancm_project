@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.mms.AssetSubsetStatsMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.AssetSubsetStats" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="asset_subset_id" property="assetSubsetId" jdbcType="INTEGER" />
+    <result column="subset_total" property="subsetTotal" jdbcType="INTEGER" />
+    <result column="online_number" property="onlineNumber" jdbcType="INTEGER" />
+    <result column="fault_number" property="faultNumber" jdbcType="INTEGER" />
+    <result column="disable_number" property="disableNumber" jdbcType="INTEGER" />
+    <result column="normal_number" property="normalNumber" jdbcType="INTEGER" />
+    <result column="online_rate" property="onlineRate" jdbcType="DECIMAL" />
+    <result column="stats_time" property="statsTime" jdbcType="TIMESTAMP" />
+    <result column="exec_id" property="execId" jdbcType="BIGINT" />
+  </resultMap>
+    <select id="getLastRecordBySubsetId" resultType="com.zans.mms.model.AssetSubsetStats">
+      SELECT * from asset_subset_stats WHERE asset_subset_id=#{subsetId}  ORDER BY id desc LIMIT 1
+    </select>
+    <select id="getTwoWeekData" resultType="com.zans.mms.vo.asset.stats.AssetSubsetStatsResVO">
+        SELECT
+            au.subset_name  subsetName,
+            SUBSTRING(au.subset_name,1,2) areaName,
+            s.id,
+            s.asset_subset_id assetSubsetId,
+            s.subset_total subsetTotal,
+            s.online_number onlineNumber,
+            s.disable_number disableNumber,
+            s.normal_number  normalNumber,
+            s.online_rate onlineRate,
+            DATE_FORMAT(s.stats_time, '%Y-%m-%d' )  statsTime,
+            WEEKDAY( s.stats_time ) + 1 AS weekDay
+        FROM
+            asset_subset_stats s
+            INNER JOIN asset_subset au ON au.id = s.asset_subset_id
+        WHERE
+            1=1
+           <if test="weekDay!=null and weekDay ==1">
+            and  stats_time &gt; date_sub(curdate(),INTERVAL WEEKDAY(curdate()) + 0 DAY)
+           </if>
+           <if test="weekDay!=null and weekDay ==2">
+            and  stats_time &gt; date_sub(curdate(),INTERVAL WEEKDAY(curdate()) + 7 DAY)
+            and  stats_time &lt; date_sub(curdate(),INTERVAL WEEKDAY(curdate()) + 0 DAY)
+           </if>
+
+
+        ORDER BY
+            asset_subset_id,
+            stats_time ,
+            online_rate DESC
+
+    </select>
+</mapper>

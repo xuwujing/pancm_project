@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.mms.StatsIpAliveMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.StatsIpAlive" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="ip_addr" property="ipAddr" jdbcType="VARCHAR" />
+    <result column="node_id" property="nodeId" jdbcType="VARCHAR" />
+    <result column="alive" property="alive" jdbcType="VARCHAR" />
+    <result column="cost" property="cost" jdbcType="INTEGER" />
+    <result column="packet_send" property="packetSend" jdbcType="INTEGER" />
+    <result column="packet_rev" property="packetRev" jdbcType="INTEGER" />
+    <result column="packet_loss" property="packetLoss" jdbcType="INTEGER" />
+    <result column="packet_time" property="packetTime" jdbcType="INTEGER" />
+    <result column="rtt_min" property="rttMin" jdbcType="DECIMAL" />
+    <result column="rtt_avg" property="rttAvg" jdbcType="DECIMAL" />
+    <result column="rtt_max" property="rttMax" jdbcType="DECIMAL" />
+    <result column="rtt_mdev" property="rttMdev" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="exec_id" property="execId" jdbcType="BIGINT" />
+  </resultMap>
+</mapper>

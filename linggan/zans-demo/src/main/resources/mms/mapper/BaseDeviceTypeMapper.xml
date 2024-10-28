@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.mms.BaseDeviceTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.BaseDeviceType" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="type_id" property="typeId" jdbcType="VARCHAR" />
+    <result column="type_name" property="typeName" jdbcType="VARCHAR" />
+    <result column="type_alias" property="typeAlias" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="enable_status" property="enableStatus" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <select id="findDeviceTypeToSelect" resultType="com.zans.base.vo.SelectVO">
+        select type_id as item_key, type_name as item_value from base_device_type where enable_status='启用'
+        order by sort
+    </select>
+  <select id="getTypeIdByName" resultType="java.lang.String">
+    select type_id from base_device_type where enable_status='启用' and (type_name=#{name} or type_alias=#{name})
+  </select>
+</mapper>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.guard.RadiusEndpointProfileMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.RadiusEndpointProfile" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="endpoint_id" property="endpointId" jdbcType="INTEGER" />
+    <result column="username" property="username" jdbcType="VARCHAR" />
+    <result column="pass" property="pass" jdbcType="VARCHAR" />
+    <result column="ip_addr" property="ipAddr" jdbcType="VARCHAR" />
+    <result column="alive" property="alive" jdbcType="INTEGER" />
+    <result column="alive_not_node" property="aliveNotNode" jdbcType="VARCHAR" />
+    <result column="alive_last_time" property="aliveLastTime" jdbcType="TIMESTAMP" />
+    <result column="alive_qz" property="aliveQz" jdbcType="INTEGER" />
+    <result column="alive_qz_last_time" property="aliveQzLastTime" jdbcType="TIMESTAMP" />
+    <result column="sw_ip" property="swIp" jdbcType="VARCHAR" />
+    <result column="area_id" property="areaId" jdbcType="INTEGER" />
+    <result column="nas_ip_address" property="nasIpAddress" jdbcType="VARCHAR" />
+    <result column="nas_port_id" property="nasPortId" jdbcType="VARCHAR" />
+    <result column="reply_message" property="replyMessage" jdbcType="VARCHAR" />
+    <result column="filter_id" property="filterId" jdbcType="VARCHAR" />
+    <result column="acct_session_id" property="acctSessionId" jdbcType="VARCHAR" />
+    <result column="acct_update_time" property="acctUpdateTime" jdbcType="TIMESTAMP" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="open_port" property="openPort" jdbcType="VARCHAR" />
+    <result column="mute" property="mute" jdbcType="INTEGER" />
+    <result column="server_os" property="serverOs" jdbcType="VARCHAR" />
+    <result column="device_type" property="deviceType" jdbcType="INTEGER" />
+    <result column="model_level" property="modelLevel" jdbcType="INTEGER" />
+    <result column="model_des" property="modelDes" jdbcType="VARCHAR" />
+    <result column="serial_no" property="serialNo" jdbcType="VARCHAR" />
+    <result column="version" property="version" jdbcType="VARCHAR" />
+    <result column="mac_scan" property="macScan" jdbcType="VARCHAR" />
+    <result column="cur_ip_addr" property="curIpAddr" jdbcType="VARCHAR" />
+    <result column="cur_sw_ip" property="curSwIp" jdbcType="VARCHAR" />
+    <result column="cur_area_id" property="curAreaId" jdbcType="INTEGER" />
+    <result column="cur_nas_ip_address" property="curNasIpAddress" jdbcType="VARCHAR" />
+    <result column="cur_nas_port_id" property="curNasPortId" jdbcType="VARCHAR" />
+    <result column="cur_open_port" property="curOpenPort" jdbcType="VARCHAR" />
+    <result column="cur_mute" property="curMute" jdbcType="INTEGER" />
+    <result column="cur_device_type" property="curDeviceType" jdbcType="INTEGER" />
+    <result column="cur_model_des" property="curModelDes" jdbcType="VARCHAR" />
+    <result column="check_last_time" property="checkLastTime" jdbcType="TIMESTAMP" />
+    <result column="source" property="source" jdbcType="BIT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="open_port_all" property="openPortAll" jdbcType="LONGVARCHAR" />
+    <result column="cur_server_os" property="curServerOs" jdbcType="VARBINARY" />
+  </resultMap>
+
+
+  <select id="findIpEndpointAliveNum" resultType="com.zans.mms.vo.arp.AssetRespVO">
+    SELECT cur_ip_addr as ip_addr,count(endpoint_id) as cur_alive_device_num from radius_endpoint_profile where alive = 1 and cur_ip_addr in 
+    <foreach collection="ipList" index="index" item="item" open="(" separator="," close=")">
+         #{item}       
+    </foreach>
+    group by cur_ip_addr
+</select>
+</mapper>

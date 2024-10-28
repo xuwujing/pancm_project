@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.mms.CronJobMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.CronJob" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="job_name" property="jobName" jdbcType="VARCHAR" />
+    <result column="job_type" property="jobType" jdbcType="VARCHAR" />
+    <result column="relation_id" property="relationId" jdbcType="BIGINT" />
+    <result column="prev_time" property="prevTime" jdbcType="TIMESTAMP" />
+    <result column="next_time" property="nextTime" jdbcType="TIMESTAMP" />
+    <result column="enable_status" property="enableStatus" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <update id="updateNextTime">
+    update cron_job set  next_time=date_add(prev_time, interval #{period} day)
+    where job_type=#{jobType} and  relation_id=#{relationId}
+  </update>
+  <delete id="deleteByTypeAndId">
+    delete from cron_job where job_type=#{jobType} and relation_id=#{relationId}
+  </delete>
+    <select id="getListByCondition" resultType="com.zans.mms.model.CronJob">
+      select * from cron_job
+      <where>
+        <if test="jobType != null and jobType !=''">
+          and job_type = #{jobType}
+        </if>
+        <if test="enableStatus != null and enableStatus !=''">
+          and enable_status = #{enableStatus}
+        </if>
+      </where>
+    </select>
+</mapper>

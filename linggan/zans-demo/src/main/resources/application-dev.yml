@@ -1,0 +1,130 @@
+server:
+  servlet:
+    context-path: /api/zans-demo
+    session:
+      timeout: PT30M
+  max-http-header-size: 1048576000
+  port: 36988
+  ssl:
+    enabled: false
+  undertow:
+    io-threads: 4
+    worker-threads: 32
+    max-http-post-size: 0
+
+
+spring:
+  http:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
+  cache:
+    type: caffeine
+    caffeine:
+      spec: initialCapacity=10,maximumSize=200,expireAfterWrite=30s
+  devtools:
+    restart:
+      enabled: true
+  datasource:
+    guard:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://192.168.6.14:3306/guard_scan_demo?useSSL=false&autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true
+      username: guard
+      password: txsqldb@123456
+    mms:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://192.168.6.14:3306/mms_demo?useSSL=false&autoReconnect=true&failOverReadOnly=false&characterEncoding=utf-8&useUnicode=true&zeroDateTimeBehavior=convertToNull
+      username: guard
+      password: txsqldb@123456
+
+
+  # REDIS数据库配置
+  redis:
+    # [必须修改] Redis服务器IP, REDIS安装在本机的,使用127.0.0.1
+    host: 192.168.6.14
+    # [必须修改] 端口号
+    port: 16379
+    # [可选] 数据库 DB
+    database: 3
+    # [可选] 访问密码,若你的redis服务器没有设置密码，就不需要用密码去连接
+    #password: redis123
+    password: ly0Cfp7priY^@6si9nq1
+    # [可选] 超时时间
+    timeout: 10000
+
+security:
+  exclude-path:
+    swagger: /swagger-ui.html, /swagger/**, /swagger-resources/**, /webjars/**, /v2/api-docs, /statics/**, /doc.html
+    base: /login, /logout, /verify_login, /appVerify/list,/appVerify/**,/app/login, /app/logout, /app/verify_login,/app/loginByWxCode,/app/loginByWxPhone, /error, /favicon.ico,  /hello,/version
+    api: /home/**,  /base/**, /app/**,/app/base/**
+  user-verify: jwt
+  jwt:
+    expire-time: 60000000
+    app-expire-time: 6000000000
+
+api:
+  upload:
+    folder: /home/release/file/upload/
+    max-size: 5
+  export:
+    folder: /home/release/file/export/
+  imgUrl:
+    folder: /home/release/img/
+
+
+mms:
+  request:
+    enable: true
+
+request:
+  wechat:
+    url: https://27.17.0.121:10000/wxpush_api
+  qrcode:
+    url: http://192.168.6.14:32100/api/qrCodeInfo/produce
+  diagnostic:
+    url: http://192.168.6.15:9999/api/play/diagnostic
+    imgUrl: http://192.168.6.15:8888/diagnosis
+  mms:
+    url: https://mms-demo.lgwangyu.com:9800/api/mms-demo/demoKit/generateDemoData
+  ocr:
+    url: http://192.168.6.15:21014/diagnosis/ocr/img
+
+
+file:
+  img:
+    retentionDays: 60
+
+
+logging:
+  level:
+    com.zans.mms.dao: info
+
+mock-api:
+  mock-dir: ./mock
+
+patrol:
+  task: 1
+
+snmp:
+  version: 2
+  listen-address: udp:0.0.0.0/162
+  thread-pool-size: 1
+  dd-oid: 1.3.6.1.6.3.1.1.4.1.0
+  dd-oid-val: 1.3.6.1.4.1.31648.3.16.11
+  interface-down-val: 1.3.6.1.6.3.1.1.5.3
+
+syslog:
+  listen:
+    protocol: udp
+    port: 514
+  filter:
+    keyword: Interface GigabitEthernet0/0/
+    ip: 192.168.6.3
+  time:
+    offWait: 1
+    onlineWait: 2
+    onlineWaitCount: 20

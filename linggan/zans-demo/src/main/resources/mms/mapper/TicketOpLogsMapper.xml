@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.mms.TicketOpLogsDao">
+
+    <resultMap type="com.zans.mms.vo.ticket.TicketOpLogsRespVO" id="TicketOpLogsMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="ticketId" column="ticket_id" jdbcType="INTEGER"/>
+        <result property="opCode" column="op_code" jdbcType="VARCHAR"/>
+        <result property="opApproveStatus" column="op_approve_status" jdbcType="INTEGER"/>
+        <result property="opType" column="op_type" jdbcType="INTEGER"/>
+        <result property="msg" column="msg" jdbcType="VARCHAR"/>
+        <result property="adjunctId" column="adjunct_id" jdbcType="VARCHAR"/>
+        <result property="opPlatform" column="op_platform" jdbcType="VARCHAR"/>
+        <result property="mobileImei" column="mobile_imei" jdbcType="VARCHAR"/>
+        <result property="isClockIn" column="is_clock_in" jdbcType="VARCHAR"/>
+        <result property="maintenanceStatus" column="maintenance_status" jdbcType="VARCHAR"/>
+        <result property="operGpsaddr" column="oper_gpsaddr" jdbcType="VARCHAR"/>
+        <result property="gis" column="gis" jdbcType="VARCHAR"/>
+        <result property="opIpaddr" column="op_ipaddr" jdbcType="VARCHAR"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="roleNum" column="role_num" jdbcType="VARCHAR"/>
+        <result property="maintainNum" column="maintain_num" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <collection property="adjunctList" javaType="arraylist" ofType="com.zans.mms.model.BaseVfs">
+            <result column="adjId" property="id"></result>
+            <result column="raw_file_path" property="rawFilePath"></result>
+            <result column="thumbnail_file_path" property="thumbnailFilePath"></result>
+            <result column="content_type" property="contentType"></result>
+        </collection>
+    </resultMap>
+
+
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TicketOpLogsMap">
+        select id,
+               ticket_id,
+               op_code,
+               op_approve_status,
+               op_type,
+               msg,
+               adjunct_id,
+               op_platform,
+               mobile_imei,
+               oper_gpsaddr,
+               gis,
+               op_ipaddr,
+               creator,
+               create_time,
+               update_time
+        from ticket_op_logs
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="TicketOpLogsMap">
+        select
+        id, ticket_id, op_code, op_approve_status, op_type, msg, adjunct_id, op_platform, mobile_imei, oper_gpsaddr,
+        gis, op_ipaddr, creator, create_time, update_time
+        from ticket_op_logs
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="ticketId != null">
+                and ticket_id = #{ticketId}
+            </if>
+            <if test="opCode != null and opCode != ''">
+                and op_code = #{opCode}
+            </if>
+            <if test="opApproveStatus != null">
+                and op_approve_status = #{opApproveStatus}
+            </if>
+            <if test="opType != null">
+                and op_type = #{opType}
+            </if>
+            <if test="msg != null and msg != ''">
+                and msg = #{msg}
+            </if>
+            <if test="adjunctId != null and adjunctId != ''">
+                and adjunct_id = #{adjunctId}
+            </if>
+            <if test="opPlatform != null and opPlatform != ''">
+                and op_platform = #{opPlatform}
+            </if>
+            <if test="mobileImei != null and mobileImei != ''">
+                and mobile_imei = #{mobileImei}
+            </if>
+            <if test="operGpsaddr != null and operGpsaddr != ''">
+                and oper_gpsaddr = #{operGpsaddr}
+            </if>
+            <if test="gis != null">
+                and gis = #{gis}
+            </if>
+            <if test="opIpaddr != null and opIpaddr != ''">
+                and op_ipaddr = #{opIpaddr}
+            </if>
+            <if test="creator != null and creator != ''">
+                and creator = #{creator}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into ticket_op_logs(ticket_id, op_code,  op_type, msg, adjunct_id, op_platform,
+                                    gis, op_ipaddr,maintenance_status, is_clock_in,oper_gpsaddr, creator)
+        values (#{ticketId}, #{opCode},  #{opType}, #{msg}, #{adjunctId}, #{opPlatform},
+                 geomfromtext(#{gis}), #{opIpaddr},#{maintenanceStatus}, #{isClockIn},  #{operGpsaddr},  #{creator})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ticket_op_logs(ticket_id, op_code, op_approve_status, op_type, msg, adjunct_id, op_platform,
+        mobile_imei, oper_gpsaddr, gis, op_ipaddr, creator, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ticketId}, #{entity.opCode}, #{entity.opApproveStatus}, #{entity.opType}, #{entity.msg},
+            #{entity.adjunctId}, #{entity.opPlatform}, #{entity.mobileImei}, #{entity.operGpsaddr}, #{entity.gis},
+            #{entity.opIpaddr}, #{entity.creator}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ticket_op_logs(ticket_id, op_code, op_approve_status, op_type, msg, adjunct_id, op_platform,
+        mobile_imei, oper_gpsaddr, gis, op_ipaddr, creator, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ticketId}, #{entity.opCode}, #{entity.opApproveStatus}, #{entity.opType}, #{entity.msg},
+            #{entity.adjunctId}, #{entity.opPlatform}, #{entity.mobileImei}, #{entity.operGpsaddr}, #{entity.gis},
+            #{entity.opIpaddr}, #{entity.creator}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        ticket_id = values(ticket_id) , op_code = values(op_code) , op_approve_status = values(op_approve_status) ,
+        op_type = values(op_type) , msg = values(msg) , adjunct_id = values(adjunct_id) , op_platform =
+        values(op_platform) , mobile_imei = values(mobile_imei) , oper_gpsaddr = values(oper_gpsaddr) , gis =
+        values(gis) , op_ipaddr = values(op_ipaddr) , creator = values(creator) , create_time = values(create_time) ,
+        update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update ticket_op_logs
+        <set>
+            <if test="ticketId != null">
+                ticket_id = #{ticketId},
+            </if>
+            <if test="opCode != null and opCode != ''">
+                op_code = #{opCode},
+            </if>
+            <if test="opApproveStatus != null">
+                op_approve_status = #{opApproveStatus},
+            </if>
+            <if test="opType != null">
+                op_type = #{opType},
+            </if>
+            <if test="msg != null and msg != ''">
+                msg = #{msg},
+            </if>
+            <if test="adjunctId != null and adjunctId != ''">
+                adjunct_id = #{adjunctId},
+            </if>
+            <if test="opPlatform != null and opPlatform != ''">
+                op_platform = #{opPlatform},
+            </if>
+            <if test="mobileImei != null and mobileImei != ''">
+                mobile_imei = #{mobileImei},
+            </if>
+            <if test="operGpsaddr != null and operGpsaddr != ''">
+                oper_gpsaddr = #{operGpsaddr},
+            </if>
+            <if test="gis != null">
+                gis = #{gis},
+            </if>
+            <if test="opIpaddr != null and opIpaddr != ''">
+                op_ipaddr = #{opIpaddr},
+            </if>
+            <if test="creator != null and creator != ''">
+                creator = #{creator},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from ticket_op_logs
+        where id = #{id}
+    </delete>
+
+
+    <select id="queryTicketOpLogs" resultMap="TicketOpLogsMap">
+        SELECT
+        bv.id as adjId,
+        bv.content_type,
+        bv.raw_file_path,
+        bv.thumbnail_file_path,
+        su.maintain_num,su.role_num,
+        tp.id,tp.adjunct_id,
+        tp.ticket_id,tp.op_code,tp.msg,
+        tp.is_clock_in,tp.oper_gpsaddr,tp.maintenance_status,
+        DATE_FORMAT(tp.update_time,'%Y-%m-%d %H:%i:%s') AS update_time,
+        su.nick_name as creator,
+        tp.op_ipaddr,
+        tp.op_platform
+        FROM ticket_op_logs tp
+        LEFT JOIN base_vfs bv ON tp.adjunct_id = bv.adjunct_id
+        left join sys_user su  on tp.creator = su.user_name
+        where tp.ticket_id = #{ticketId}
+        <if test="type != null and type > 0">
+            and tp.op_type = #{type}
+        </if>
+        order by tp.update_time desc
+
+    </select>
+
+</mapper>
+

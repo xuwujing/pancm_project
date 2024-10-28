@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.mms.WechatConfigDao">
+
+    <resultMap type="com.zans.mms.model.WechatConfig" id="WechatConfigMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="mdAppid" column="md_appid" jdbcType="VARCHAR"/>
+        <result property="mdSecret" column="md_secret" jdbcType="VARCHAR"/>
+        <result property="mdAppname" column="md_appname" jdbcType="VARCHAR"/>
+        <result property="mpAppid" column="mp_appid" jdbcType="VARCHAR"/>
+        <result property="mpSecret" column="mp_secret" jdbcType="VARCHAR"/>
+        <result property="mpAppname" column="mp_appname" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="WechatConfigMap">
+        select id,
+               md_appid,
+               md_secret,
+               md_appname,
+               mp_appid,
+               mp_secret,
+               mp_appname,
+               create_time,
+               update_time
+        from wechat_config
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="WechatConfigMap">
+        select
+        id, md_appid, md_secret, md_appname, mp_appid, mp_secret, mp_appname, create_time, update_time
+        from wechat_config
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="mdAppid != null and mdAppid != ''">
+                and md_appid = #{mdAppid}
+            </if>
+            <if test="mdSecret != null and mdSecret != ''">
+                and md_secret = #{mdSecret}
+            </if>
+            <if test="mdAppname != null and mdAppname != ''">
+                and md_appname = #{mdAppname}
+            </if>
+            <if test="mpAppid != null and mpAppid != ''">
+                and mp_appid = #{mpAppid}
+            </if>
+            <if test="mpSecret != null and mpSecret != ''">
+                and mp_secret = #{mpSecret}
+            </if>
+            <if test="mpAppname != null and mpAppname != ''">
+                and mp_appname = #{mpAppname}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into wechat_config(md_appid, md_secret, md_appname, mp_appid, mp_secret, mp_appname, create_time,
+                                  update_time)
+        values (#{mdAppid}, #{mdSecret}, #{mdAppname}, #{mpAppid}, #{mpSecret}, #{mpAppname}, #{createTime},
+                #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into wechat_config(md_appid, md_secret, md_appname, mp_appid, mp_secret, mp_appname, create_time,
+        update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.mdAppid}, #{entity.mdSecret}, #{entity.mdAppname}, #{entity.mpAppid}, #{entity.mpSecret},
+            #{entity.mpAppname}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into wechat_config(md_appid, md_secret, md_appname, mp_appid, mp_secret, mp_appname, create_time,
+        update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.mdAppid}, #{entity.mdSecret}, #{entity.mdAppname}, #{entity.mpAppid}, #{entity.mpSecret},
+            #{entity.mpAppname}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        md_appid = values(md_appid) , md_secret = values(md_secret) , md_appname = values(md_appname) , mp_appid =
+        values(mp_appid) , mp_secret = values(mp_secret) , mp_appname = values(mp_appname) , create_time =
+        values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update wechat_config
+        <set>
+            <if test="mdAppid != null and mdAppid != ''">
+                md_appid = #{mdAppid},
+            </if>
+            <if test="mdSecret != null and mdSecret != ''">
+                md_secret = #{mdSecret},
+            </if>
+            <if test="mdAppname != null and mdAppname != ''">
+                md_appname = #{mdAppname},
+            </if>
+            <if test="mpAppid != null and mpAppid != ''">
+                mp_appid = #{mpAppid},
+            </if>
+            <if test="mpSecret != null and mpSecret != ''">
+                mp_secret = #{mpSecret},
+            </if>
+            <if test="mpAppname != null and mpAppname != ''">
+                mp_appname = #{mpAppname},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from wechat_config
+        where id = #{id}
+    </delete>
+
+</mapper>
+

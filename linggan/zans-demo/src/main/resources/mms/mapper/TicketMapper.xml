@@ -1,0 +1,902 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.mms.TicketDao">
+
+    <resultMap type="com.zans.mms.vo.ticket.TicketSearchRespVO" id="TicketMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="ticketCode" column="ticket_code" jdbcType="VARCHAR"/>
+        <result property="ticketType" column="ticket_type" jdbcType="INTEGER"/>
+        <result property="areaId" column="area_id" jdbcType="VARCHAR"/>
+        <result property="deviceType" column="device_type" jdbcType="VARCHAR"/>
+        <result property="issueType" column="issue_type" jdbcType="INTEGER"/>
+        <result property="issueLevel" column="issue_level" jdbcType="INTEGER"/>
+        <result property="issueSource" column="issue_source" jdbcType="INTEGER"/>
+        <result property="applyContact" column="apply_contact" jdbcType="VARCHAR"/>
+        <result property="applyPhone" column="apply_phone" jdbcType="VARCHAR"/>
+        <result property="dutyContact" column="duty_contact" jdbcType="VARCHAR"/>
+        <result property="occurredTime" column="occurred_time"/>
+        <result property="predictCost" column="predict_cost" jdbcType="NUMERIC"/>
+        <result property="acceptPredictCost" column="accept_predict_cost" jdbcType="NUMERIC"/>
+        <result property="acceptAdjustCost" column="accept_adjust_cost" jdbcType="NUMERIC"/>
+        <result property="allocDepartmentNum" column="alloc_department_num" jdbcType="VARCHAR"/>
+        <result property="predictArriveTime" column="predict_arrive_time" jdbcType="TIMESTAMP"/>
+        <result property="predictCompleteTime" column="predict_complete_time" jdbcType="TIMESTAMP"/>
+        <result property="practicalArriveTime" column="practical_arrive_time" jdbcType="TIMESTAMP"/>
+        <result property="practicalCompleteTime" column="practical_complete_time" jdbcType="TIMESTAMP"/>
+        <result property="practicalIssueType" column="practical_issue_type" jdbcType="INTEGER"/>
+        <result property="adjunctId" column="adjunct_id" jdbcType="VARCHAR"/>
+        <result property="acceptAdjunctId" column="accept_adjunct_id" jdbcType="VARCHAR"/>
+        <result property="ticketStatus" column="ticket_status" jdbcType="INTEGER"/>
+        <result property="dispatchStatus" column="dispatch_status" jdbcType="INTEGER"/>
+        <result property="acceptStatus" column="accept_status" jdbcType="INTEGER"/>
+        <result property="maintenanceStatus" column="maintenance_status" jdbcType="INTEGER"/>
+        <result property="isClockIn" column="isClockIn" jdbcType="INTEGER"/>
+        <result property="editStatus" column="edit_status" jdbcType="INTEGER"/>
+        <result property="isCost" column="is_cost" jdbcType="INTEGER"/>
+        <result property="predictComplete" column="predict_complete" jdbcType="INTEGER"/>
+        <result property="predictArrive" column="predict_arrive" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="pointName" column="point_name" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <collection property="adjunctList" javaType="arraylist" ofType="com.zans.mms.model.BaseVfs">
+            <result column="adjId" property="id"></result>
+            <result column="raw_file_path" property="rawFilePath"></result>
+            <result column="thumbnail_file_path" property="thumbnailFilePath"></result>
+            <result column="content_type" property="contentType"></result>
+        </collection>
+    </resultMap>
+
+    <resultMap type="com.zans.mms.vo.ticket.TicketDispatchViewRespVO" id="TicketDispatchViewMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="ticketCode" column="ticket_code" jdbcType="VARCHAR"/>
+        <result property="ticketType" column="ticket_type" jdbcType="INTEGER"/>
+        <result property="areaId" column="area_id" jdbcType="VARCHAR"/>
+        <result property="deviceType" column="device_type" jdbcType="VARCHAR"/>
+        <result property="issueType" column="issue_type" jdbcType="INTEGER"/>
+        <result property="issueLevel" column="issue_level" jdbcType="INTEGER"/>
+        <result property="issueSource" column="issue_source" jdbcType="INTEGER"/>
+        <result property="applyContact" column="apply_contact" jdbcType="VARCHAR"/>
+        <result property="applyPhone" column="apply_phone" jdbcType="VARCHAR"/>
+        <result property="dutyContact" column="duty_contact" jdbcType="VARCHAR"/>
+        <result property="predictCost" column="predict_cost" jdbcType="NUMERIC"/>
+        <result property="acceptAdjustCost" column="accept_adjust_cost" jdbcType="NUMERIC"/>
+        <result property="allocDepartmentNum" column="alloc_department_num" jdbcType="VARCHAR"/>
+        <result property="maintenanceStatus" column="maintenance_status" jdbcType="VARCHAR"/>
+        <result property="ticketStatus" column="ticket_status" jdbcType="INTEGER"/>
+        <result property="dispatchStatus" column="dispatch_status" jdbcType="INTEGER"/>
+        <result property="acceptStatus" column="accept_status" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="pointName" column="point_name" jdbcType="VARCHAR"/>
+        <collection property="baseMfRespVOList" javaType="arraylist" ofType="com.zans.mms.vo.ticket.TicketBaseMfRespVO">
+            <result property="id" column="fid" ></result>
+            <result property="deviceCode" column="device_code" ></result>
+            <result property="deviceName" column="device_name" ></result>
+            <result property="devicePrice" column="device_price" ></result>
+            <result property="deviceModel" column="device_model" ></result>
+            <result property="deviceSpec" column="device_spec" ></result>
+            <result property="deviceBrand" column="device_brand" ></result>
+            <result property="amount" column="amount" ></result>
+            <result property="predictPrice" column="predict_price" ></result>
+        </collection>
+    </resultMap>
+
+
+    <resultMap type="com.zans.mms.vo.ticket.TicketAcceptViewRespVO" id="TicketAcceptViewMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="ticketCode" column="ticket_code" jdbcType="VARCHAR"/>
+        <result property="ticketType" column="ticket_type" jdbcType="INTEGER"/>
+        <result property="areaId" column="area_id" jdbcType="VARCHAR"/>
+        <result property="deviceType" column="device_type" jdbcType="VARCHAR"/>
+        <result property="issueType" column="issue_type" jdbcType="INTEGER"/>
+        <result property="issueLevel" column="issue_level" jdbcType="INTEGER"/>
+        <result property="issueSource" column="issue_source" jdbcType="INTEGER"/>
+        <result property="applyContact" column="apply_contact" jdbcType="VARCHAR"/>
+        <result property="applyPhone" column="apply_phone" jdbcType="VARCHAR"/>
+        <result property="dutyContact" column="duty_contact" jdbcType="VARCHAR"/>
+        <result property="predictCost" column="predict_cost" jdbcType="NUMERIC"/>
+        <result property="acceptPredictCost" column="accept_predict_cost" jdbcType="NUMERIC"/>
+        <result property="acceptAdjustCost" column="accept_adjust_cost" jdbcType="NUMERIC"/>
+        <result property="allocDepartmentNum" column="alloc_department_num" jdbcType="VARCHAR"/>
+        <result property="ticketStatus" column="ticket_status" jdbcType="INTEGER"/>
+        <result property="dispatchStatus" column="dispatch_status" jdbcType="INTEGER"/>
+        <result property="acceptStatus" column="accept_status" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="pointName" column="point_name" jdbcType="VARCHAR"/>
+        <result property="acceptAdjunctId" column="accept_adjunct_id" jdbcType="VARCHAR"/>
+        <collection property="baseMfRespVOList" javaType="arraylist" ofType="com.zans.mms.vo.ticket.TicketBaseMfRespVO">
+            <result property="id" column="fid" ></result>
+            <result property="deviceCode" column="device_code" ></result>
+            <result property="deviceName" column="device_name" ></result>
+            <result property="devicePrice" column="device_price" ></result>
+            <result property="deviceModel" column="device_model" ></result>
+            <result property="deviceSpec" column="device_spec" ></result>
+            <result property="amount" column="amount" ></result>
+            <result property="adjAmount" column="adj_amount" ></result>
+            <result property="predictPrice" column="predict_price" ></result>
+            <result property="adjustPrice" column="adjust_price" ></result>
+        </collection>
+        <collection property="adjunctList" javaType="arraylist" ofType="com.zans.mms.model.BaseVfs">
+            <result column="adjId" property="id"></result>
+            <result column="raw_file_path" property="rawFilePath"></result>
+            <result column="thumbnail_file_path" property="thumbnailFilePath"></result>
+            <result column="content_type" property="contentType"></result>
+        </collection>
+    </resultMap>
+
+
+
+
+
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TicketMap">
+        select t.id,
+               ticket_code,
+               ticket_type,
+               area_id,
+               device_type,
+               issue_type,
+               issue_level,
+               issue_source,
+               duty_contact,
+               apply_contact,
+               apply_phone,
+               occurred_time,
+               predict_cost,
+               accept_predict_cost,
+               accept_adjust_cost,
+               alloc_department_num,
+               predict_arrive,
+               predict_complete,
+               DATE_FORMAT(t.predict_arrive_time,'%Y-%m-%d %H:%i:%s') AS predict_arrive_time,
+               DATE_FORMAT(t.predict_complete_time,'%Y-%m-%d %H:%i:%s') AS predict_complete_time,
+               DATE_FORMAT(t.practical_arrive_time,'%Y-%m-%d %H:%i:%s') AS practical_arrive_time,
+               DATE_FORMAT(t.practical_complete_time,'%Y-%m-%d %H:%i:%s') AS practical_complete_time,
+               DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%s') AS create_time,
+               practical_issue_type,
+               t.adjunct_id,
+               accept_adjunct_id,
+               ticket_status,
+               dispatch_status,
+               accept_status,
+               maintenance_status,
+               case when  practical_arrive_time is null then 0 else  1 end as isClockIn,
+               edit_status,
+               is_cost,
+               remark,
+               t.creator,
+               bv.id as adjId,
+               bv.raw_file_path,
+               bv.thumbnail_file_path,
+               bv.content_type
+        from ticket t
+       LEFT JOIN base_vfs bv ON t.adjunct_id = bv.adjunct_id
+        where t.id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="TicketMap">
+        select
+        t.id, ticket_code, ticket_type, t.area_id, t.device_type, issue_type, issue_level, issue_source,
+        DATE_FORMAT(t.predict_arrive_time,'%Y-%m-%d %H:%i:%s') AS predict_arrive_time,
+        DATE_FORMAT(t.predict_complete_time,'%Y-%m-%d %H:%i:%s') AS predict_complete_time,
+        DATE_FORMAT(t.practical_arrive_time,'%Y-%m-%d %H:%i:%s') AS practical_arrive_time,
+        DATE_FORMAT(t.practical_complete_time,'%Y-%m-%d %H:%i:%s') AS practical_complete_time,
+        remark, t.creator,t.alloc_department_num,t.is_cost,t.predict_cost,t.accept_predict_cost,t.accept_adjust_cost,
+        DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%s') AS create_time,
+        case when t.edit_status = 0 then  19 else  ticket_status end as ticket_status,
+        (select point_id from ticket_point tp where t.id = tp.ticket_id  order by id asc   limit 1 ) as point_id,
+        (select dp.point_name from device_point dp where point_id = dp.id  ) as point_name
+        from ticket t
+        <where>
+            <if test="id != null">
+                and t.id = #{id}
+            </if>
+            <if test="ticketCode != null and ticketCode != ''">
+                and ticket_code  like  CONCAT('%',#{ticketCode},'%')
+            </if>
+            <if test="ticketType != null">
+                and ticket_type = #{ticketType}
+            </if>
+            <if test="areaId != null and areaId.size > 0">
+                and t.area_id in
+                <foreach collection="areaId" item="areaid" separator="," open="(" close=")" >
+                     #{areaid}
+                </foreach>
+            </if>
+            <if test="deviceType != null and deviceType != ''">
+                and t.device_type = #{deviceType}
+            </if>
+            <if test="issueType != null and issueType.size >0">
+                and issue_type in
+                <foreach collection="issueType" item="issuetype" separator="," open="(" close=")" >
+                    #{issuetype}
+                </foreach>
+            </if>
+            <if test="allocDepartmentNum != null and allocDepartmentNum != ''">
+                and t.alloc_department_num = #{allocDepartmentNum}
+            </if>
+            <if test="editStatus != null">
+                <if test=" editStatus == 1 and creator != null">
+                    and edit_status = #{editStatus}  and t.creator = #{creator}
+                </if>
+                <if test=" editStatus == 20">
+                    and edit_status = #{editStatus}
+                </if>
+
+            </if>
+            <if test="ticketStatus != null and ticketStatus >-1">
+                <if test=" ticketStatus != 19">
+                   and ticket_status = #{ticketStatus}
+                </if>
+            </if>
+
+            <if test="startDate !=null and startDate != '' and  endDate !=null and  endDate !=''">
+                and t.create_time between #{startDate} and #{endDate}
+            </if>
+            <if test="permSql !=null and permSql !=''">
+                ${permSql}
+            </if>
+
+        </where>
+        order by create_time desc
+    </select>
+
+
+    <select id="queryAppAll" resultType="com.zans.mms.vo.ticket.TicketSearchRespVO">
+        select
+        t.id, ticket_code, ticket_type, t.area_id, t.device_type, issue_type, issue_level, issue_source,
+        DATE_FORMAT(t.predict_arrive_time,'%Y-%m-%d %H:%i:%s') AS predict_arrive_time,
+        DATE_FORMAT(t.predict_complete_time,'%Y-%m-%d %H:%i:%s') AS predict_complete_time,
+        DATE_FORMAT(t.practical_arrive_time,'%Y-%m-%d %H:%i:%s') AS practical_arrive_time,
+        DATE_FORMAT(t.practical_complete_time,'%Y-%m-%d %H:%i:%s') AS practical_complete_time,
+        remark, t.creator,
+        DATE_FORMAT(t.create_time,'%Y-%m-%d %H:%i:%s') AS create_time,
+        TIMESTAMPDIFF(HOUR, NOW(), t.predict_complete_time) AS remainingTime,
+        t.ticket_status,t.maintenance_status,t.accept_status,t.dispatch_status,
+        case when  practical_arrive_time is null then 0 else  1 end as isClockIn,
+        (select point_id from ticket_point tp where t.id = tp.ticket_id  order by id asc   limit 1 ) as point_id,
+        (select dp.point_name   from device_point dp where point_id = dp.id  ) as point_name,
+        (select floor(st_distance (gis, point(#{longitude},#{latitude})) * 111195)  as dist   from device_point dp where point_id = dp.id  ) as distance
+        from ticket t
+        <where>
+            and t.edit_status = 20
+            <if test="searchLike != null and searchLike != ''">
+                and (t.ticket_code like   CONCAT('%',#{searchLike},'%')  )
+            </if>
+            <if test="ticketType != null">
+                and ticket_type = #{ticketType}
+            </if>
+            <if test="areaId != null and areaId != ''">
+                and t.area_id = #{areaId}
+            </if>
+            <if test="maintenanceStatus != null and maintenanceStatus >-1">
+                    and maintenance_status = #{maintenanceStatus}
+            </if>
+
+            <if test="ticketStatus != null and ticketStatus >-1">
+                    and ticket_status = #{ticketStatus}
+            </if>
+
+            <if test="deviceType != null and deviceType != ''">
+                and t.device_type = #{deviceType}
+            </if>
+
+            <if test="issueType != null">
+                and issue_type = #{issueType}
+            </if>
+
+            <if test="startDate !=null and startDate != '' and  endDate !=null and  endDate !=''">
+                and t.create_time between #{startDate} and #{endDate}
+            </if>
+
+            <if test="permSql !=null and permSql !=''">
+                ${permSql}
+            </if>
+
+
+        </where>
+        order by  ${sortName}   ${sortOrder}
+    </select>
+
+
+    <select id="queryTicketsDispatchViewById" resultMap="TicketDispatchViewMap">
+        select
+               t.id,
+               t.ticket_code,
+               t.ticket_type,
+               t.device_type,
+               t.area_id,
+               t.issue_type,
+               t.issue_level,
+               t.issue_source,
+               t.apply_contact,
+               t.apply_phone,
+               t.duty_contact,
+               t.predict_cost,
+               t.accept_adjust_cost,
+               t.alloc_department_num,
+               t.maintenance_status,
+               t.ticket_status,
+               t.dispatch_status,
+               t.accept_status,
+               t.remark,
+               (select point_id from ticket_point tp where t.id = tp.ticket_id  order by id asc   limit 1 ) as point_id,
+               (select dp.point_name   from device_point dp where point_id = dp.id  ) as point_name,
+               bmf.id as fid,
+               bmf.device_code,
+               bmf.device_name,
+               bmf.device_model,
+               bmf.device_spec,
+               bmf.device_price,
+               bmf.device_brand,
+               td.amount,
+               td.predict_price
+        from ticket t
+        left join ticket_detail td on t.id = td.ticket_id
+        left join base_maintaion_facility bmf on td.facility_id = bmf.id
+        where t.id = #{ticketId}
+    </select>
+
+
+    <select id="queryTicketsAcceptViewById" resultMap="TicketAcceptViewMap">
+        select
+            t.id,
+            t.ticket_code,
+            t.ticket_type,
+            t.device_type,
+            t.area_id,
+            t.issue_type,
+            t.issue_level,
+            t.issue_source,
+            t.apply_contact,
+            t.duty_contact,
+            t.apply_phone,
+            t.predict_cost,
+            t.accept_predict_cost,
+            t.accept_adjust_cost,
+            t.alloc_department_num,
+            t.ticket_status,
+            t.dispatch_status,
+            t.accept_status,
+            t.remark,
+            t.accept_adjunct_id,
+            (select point_id from ticket_point tp where t.id = tp.ticket_id  order by id asc   limit 1 ) as point_id,
+            (select dp.point_name   from device_point dp where point_id = dp.id  ) as point_name,
+            bmf.id as fid,
+            bmf.device_code,
+            bmf.device_name,
+            bmf.device_model,
+            bmf.device_spec,
+            bmf.device_price,
+            td.amount,
+            td.adj_amount,
+            td.predict_price,
+            td.adjust_price,
+            bv.id as adjId,
+            bv.raw_file_path,
+            bv.thumbnail_file_path,
+            bv.content_type
+        from ticket t
+                 left join ticket_detail td on t.id = td.ticket_id
+                 left join base_maintaion_facility bmf on td.facility_id = bmf.id
+                 LEFT JOIN base_vfs bv ON t.accept_adjunct_id = bv.adjunct_id
+        where t.id = #{ticketId}
+    </select>
+
+
+    <select id="queryTicketById" resultType="com.zans.mms.vo.ticket.TicketBaseMfRespVO">
+        select
+        bmf.id,
+        bmf.device_code,
+        bmf.device_name,
+        bmf.device_model,
+        bmf.device_spec,
+        bmf.device_price,
+        bmf.device_brand,
+        td.is_adj,
+        td.amount,
+        td.adj_amount,
+        td.predict_price,
+        td.adjust_price
+        from  ticket_detail td
+        left join base_maintaion_facility bmf on td.facility_id = bmf.id
+        where td.ticket_id = #{ticketId}
+        <if test="type != null">
+            and td.type = #{type}
+        </if>
+    </select>
+
+    <select id="queryDraftByUser" resultType="java.lang.Integer">
+        select count(1) as count from ticket t
+        where t.edit_status =1 and  t.creator = #{user}
+    </select>
+
+
+    <insert id="create" keyProperty="id" useGeneratedKeys="true">
+        insert into ticket(ticket_code, creator)
+        values (#{ticketCode},#{creator})
+    </insert>
+
+    <insert id="appSave" keyProperty="id" useGeneratedKeys="true">
+        insert into ticket(ticket_code, ticket_type, area_id, device_type, issue_type, issue_source,
+                           ticket_status, edit_status,apply_contact,apply_phone,
+                           adjunct_id,is_cost, remark, creator)
+        values (#{ticketCode}, #{ticketType}, #{areaId}, #{deviceType}, #{issueType},#{issueSource},
+                #{ticketStatus}, #{editStatus},#{applyContact},#{applyPhone},
+                #{adjunctId}, #{isCost}, #{remark},#{creator})
+
+    </insert>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into ticket(ticket_code, ticket_type, area_id, device_type, issue_type, issue_level,issue_source,
+                           ticket_status, dispatch_status,accept_status,
+                              apply_contact, apply_phone, occurred_time, alloc_department_num, predict_arrive_time, predict_complete_time,
+                           predict_arrive, predict_complete, adjunct_id,is_cost, remark, creator)
+        values (#{ticketCode}, #{ticketType}, #{areaId}, #{deviceType}, #{issueType}, #{issueLevel}, #{issueSource},
+                #{ticketStatus}, #{dispatchStatus}, #{acceptStatus},
+                #{applyContact}, #{applyPhone}, #{occurredTime},  #{allocDepartmentNum}, #{predictArriveTime}, #{predictCompleteTime},
+                #{predictArrive}, #{predictComplete}, #{adjunctId}, #{isCost}, #{remark},#{creator})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ticket(ticket_code, ticket_type, area_id, device_type, issue_type, issue_level,
+        issue_source,    apply_contact, apply_phone, occurred_time, predict_cost, accept_predict_cost,
+        accept_adjust_cost, alloc_department_num, predict_arrive_time, predict_complete_time, practical_arrive_time,
+        practical_complete_time, practical_issue_type, adjunct_id, accept_adjunct_id, ticket_status, dispatch_status,
+        accept_status, is_cost, remark, creator, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ticketCode}, #{entity.ticketType}, #{entity.areaId}, #{entity.deviceType}, #{entity.issueType},
+            #{entity.issueLevel}, #{entity.issueSource},  #{entity.applyContact},
+            #{entity.applyPhone}, #{entity.occurredTime}, #{entity.predictCost}, #{entity.acceptPredictCost},
+            #{entity.acceptAdjustCost}, #{entity.allocDepartmentNum}, #{entity.predictArriveTime},
+            #{entity.predictCompleteTime}, #{entity.practicalArriveTime}, #{entity.practicalCompleteTime},
+            #{entity.practicalIssueType}, #{entity.adjunctId}, #{entity.acceptAdjunctId}, #{entity.ticketStatus},
+            #{entity.dispatchStatus}, #{entity.acceptStatus}, #{entity.isCost}, #{entity.remark}, #{entity.creator},
+            #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into ticket(ticket_code, ticket_type, area_id, device_type, issue_type, issue_level,
+        issue_source,    apply_contact, apply_phone, occurred_time, predict_cost, accept_predict_cost,
+        accept_adjust_cost, alloc_department_num, predict_arrive_time, predict_complete_time, practical_arrive_time,
+        practical_complete_time, practical_issue_type, adjunct_id, accept_adjunct_id, ticket_status, dispatch_status,
+        accept_status, is_cost, remark, creator, create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.ticketCode}, #{entity.ticketType}, #{entity.areaId}, #{entity.deviceType}, #{entity.issueType},
+            #{entity.issueLevel}, #{entity.issueSource},  #{entity.applyContact},
+            #{entity.applyPhone}, #{entity.occurredTime}, #{entity.predictCost}, #{entity.acceptPredictCost},
+            #{entity.acceptAdjustCost}, #{entity.allocDepartmentNum}, #{entity.predictArriveTime},
+            #{entity.predictCompleteTime}, #{entity.practicalArriveTime}, #{entity.practicalCompleteTime},
+            #{entity.practicalIssueType}, #{entity.adjunctId}, #{entity.acceptAdjunctId}, #{entity.ticketStatus},
+            #{entity.dispatchStatus}, #{entity.acceptStatus}, #{entity.isCost}, #{entity.remark}, #{entity.creator},
+            #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        ticket_code = values(ticket_code) , ticket_type = values(ticket_type) , area_id = values(area_id) , device_type
+        = values(device_type) , issue_type = values(issue_type) , issue_level = values(issue_level) , issue_source =
+        values(issue_source) , apply_contact = values(apply_contact) , apply_phone
+        = values(apply_phone) , occurred_time = values(occurred_time) , predict_cost = values(predict_cost) ,
+        accept_predict_cost = values(accept_predict_cost) , accept_adjust_cost = values(accept_adjust_cost) ,
+        alloc_department_num = values(alloc_department_num) , predict_arrive_time = values(predict_arrive_time) ,
+        predict_complete_time = values(predict_complete_time) , practical_arrive_time = values(practical_arrive_time) ,
+        practical_complete_time = values(practical_complete_time) , practical_issue_type = values(practical_issue_type)
+        , adjunct_id = values(adjunct_id) , accept_adjunct_id = values(accept_adjunct_id) , ticket_status =
+        values(ticket_status) , dispatch_status = values(dispatch_status) , accept_status = values(accept_status) ,
+        is_cost = values(is_cost) , remark = values(remark) , creator = values(creator) , create_time =
+        values(create_time) , update_time = values(update_time)
+    </insert>
+
+
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update ticket
+        <set>
+            <if test="ticketCode != null and ticketCode != ''">
+                ticket_code = #{ticketCode},
+            </if>
+            <if test="ticketType != null">
+                ticket_type = #{ticketType},
+            </if>
+            <if test="areaId != null and areaId != ''">
+                area_id = #{areaId},
+            </if>
+            <if test="deviceType != null and deviceType != ''">
+                device_type = #{deviceType},
+            </if>
+            <if test="issueType != null">
+                issue_type = #{issueType},
+            </if>
+            <if test="issueLevel != null">
+                issue_level = #{issueLevel},
+            </if>
+            <if test="issueSource != null">
+                issue_source = #{issueSource},
+            </if>
+            <if test="applyContact != null and applyContact != ''">
+                apply_contact = #{applyContact},
+            </if>
+
+            <if test="dutyContact != null and dutyContact != ''">
+                duty_contact = #{dutyContact},
+            </if>
+            <if test="applyPhone != null and applyPhone != ''">
+                apply_phone = #{applyPhone},
+            </if>
+            <if test="occurredTime != null">
+                occurred_time = #{occurredTime},
+            </if>
+            <if test="predictArrive != null">
+                predict_arrive = #{predictArrive},
+            </if>
+            <if test="predictComplete != null">
+                predict_complete = #{predictComplete},
+            </if>
+
+            <if test="predictCost != null">
+                predict_cost = #{predictCost},
+            </if>
+            <if test="acceptPredictCost != null">
+                accept_predict_cost = #{acceptPredictCost},
+            </if>
+            <if test="acceptAdjustCost != null">
+                accept_adjust_cost = #{acceptAdjustCost},
+            </if>
+            <if test="allocDepartmentNum != null and allocDepartmentNum != ''">
+                alloc_department_num = #{allocDepartmentNum},
+            </if>
+            <if test="predictArriveTime != null">
+                predict_arrive_time = #{predictArriveTime},
+            </if>
+            <if test="predictCompleteTime != null">
+                predict_complete_time = #{predictCompleteTime},
+            </if>
+            <if test="practicalArriveTime != null">
+                practical_arrive_time = #{practicalArriveTime},
+            </if>
+            <if test="practicalCompleteTime != null">
+                practical_complete_time = #{practicalCompleteTime},
+            </if>
+            <if test="practicalIssueType != null">
+                practical_issue_type = #{practicalIssueType},
+            </if>
+            <if test="adjunctId != null and adjunctId != ''">
+                adjunct_id = #{adjunctId},
+            </if>
+            <if test="acceptAdjunctId != null and acceptAdjunctId != ''">
+                accept_adjunct_id = #{acceptAdjunctId},
+            </if>
+            <if test="ticketStatus != null">
+                ticket_status = #{ticketStatus},
+            </if>
+            <if test="dispatchStatus != null">
+                dispatch_status = #{dispatchStatus},
+            </if>
+            <if test="acceptStatus != null">
+                accept_status = #{acceptStatus},
+            </if>
+            <if test="maintenanceStatus != null">
+                maintenance_status = #{maintenanceStatus},
+            </if>
+            <if test="editStatus != null">
+                edit_status = #{editStatus},
+            </if>
+            <if test="isCost != null">
+                is_cost = #{isCost},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from ticket
+        where id = #{id}
+    </delete>
+
+
+    <select id="getPcTicketTotal" resultType="com.zans.mms.vo.chart.CircleUnit">
+        SELECT COUNT(1) AS val,'total' AS NAME ,'总数' AS chineName
+        FROM ticket t
+        WHERE  t.`edit_status` = 20  and  t.ticket_status >0
+        <if test="dataPerm != null  and dataPerm == 2">
+            and (t.alloc_department_num = #{orgId} )
+        </if>
+
+        UNION ALL
+        SELECT COUNT(1) AS val,'suc' AS NAME ,'已完成' AS chineName
+        FROM ticket t
+        WHERE t.ticket_status = 20 and t.`edit_status` = 20
+        <if test="dataPerm != null  and dataPerm == 2">
+            and (t.alloc_department_num = #{orgId} )
+        </if>
+        UNION ALL
+        SELECT sum(t.accept_adjust_cost) AS val,'adjustCost' AS NAME ,'总金额' AS chineName
+        FROM ticket t
+        where   t.ticket_status = 20 and t.`edit_status` = 20
+        <if test="dataPerm != null  and dataPerm == 2">
+            and (t.alloc_department_num = #{orgId} )
+        </if>
+
+    </select>
+
+    <select id="getAppTicketTotal" resultType="com.zans.mms.vo.chart.CircleUnit">
+        SELECT COUNT(1) AS val,'upcoming' AS NAME ,'待办' AS chineName
+        FROM ticket t
+        WHERE t.`maintenance_status` != 20 and t.`edit_status` = 20 and  t.ticket_status >0
+        <if test="dataPerm != null  and dataPerm == 2">
+            and (t.alloc_department_num = #{orgId} )
+        </if>
+        UNION ALL
+        SELECT COUNT(1) AS val,'unClockIn' AS NAME ,'待打卡' AS chineName
+        FROM ticket t
+        WHERE t.`maintenance_status` = 0 and t.`edit_status` = 20 and  t.ticket_status >0
+        <if test="dataPerm != null  and dataPerm == 2">
+            and (t.alloc_department_num = #{orgId} )
+        </if>
+        UNION ALL
+        SELECT COUNT(1) AS val,'nearExpired' AS NAME ,'接近超时' AS chineName
+        FROM ticket t
+        WHERE  TIMESTAMPDIFF(HOUR, NOW(), t.predict_complete_time) <![CDATA[<=]]> 1
+        and   TIMESTAMPDIFF(HOUR, NOW(), t.predict_complete_time) >= 0  and  t.ticket_status >0
+        <if test="dataPerm != null  and dataPerm == 2">
+            and (t.alloc_department_num = #{orgId} )
+        </if>
+    </select>
+
+
+    <resultMap type="com.zans.mms.vo.ticket.TicketsDispatchPdfVO" id="TicketsDispatchPdfVOMap">
+        <result property="ticketCode" column="ticket_code" jdbcType="VARCHAR"/>
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="areaName" column="area_name" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="deviceTypeName" column="type_name" jdbcType="VARCHAR"/>
+        <result property="issueSource" column="issue_source" jdbcType="VARCHAR"/>
+        <result property="dutyContact" column="duty_contact" jdbcType="VARCHAR"/>
+        <result property="predictCost" column="predict_cost" jdbcType="VARCHAR"/>
+        <result property="adjustCost" column="accept_adjust_cost" jdbcType="VARCHAR"/>
+        <result property="orgName" column="org_name" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="pointName" column="point_name" jdbcType="VARCHAR"/>
+        <collection property="baseMfPdfRespVOList" javaType="arraylist" ofType="com.zans.mms.vo.ticket.TicketBaseMfRespVO">
+            <result property="id" column="fid" ></result>
+            <result property="deviceCode" column="device_code" ></result>
+            <result property="deviceName" column="device_name" ></result>
+            <result property="devicePrice" column="device_price" ></result>
+            <result property="deviceModel" column="device_model" ></result>
+            <result property="deviceSpec" column="device_spec" ></result>
+            <result property="deviceBrand" column="device_brand" ></result>
+            <result property="amount" column="amount" ></result>
+            <result property="predictPrice" column="predict_price" ></result>
+        </collection>
+    </resultMap>
+
+    <select id="queryTicketsDispatchPdfByCode" resultMap="TicketsDispatchPdfVOMap">
+      select
+               t.id,
+               t.ticket_code,
+			   DATE_FORMAT(t.create_time,'%Y-%m-%d')  create_time,
+			   bdt.type_name,
+			   ba.area_name,
+               t.duty_contact,
+               t.predict_cost,
+               t.accept_adjust_cost,
+			   bo.org_name,
+               t.remark,
+               (select point_id from ticket_point tp where t.id = tp.ticket_id  order by id asc   limit 1 ) as point_id,
+               (select dp.point_name   from device_point dp where point_id = dp.id  ) as point_name,
+               bmf.id as fid,
+               bmf.device_code,
+               bmf.device_name,
+               bmf.device_model,
+               bmf.device_spec,
+               bmf.device_price,  -- 综合单价
+               bmf.device_brand,
+               td.amount,
+               td.predict_price -- 预算金额
+        from ticket t
+        left join ticket_detail td on t.id = td.ticket_id
+        left join base_maintaion_facility bmf on td.facility_id = bmf.id
+				left join base_device_type bdt on bdt.type_id=t.device_type
+				left join base_area ba on ba.area_id = t.area_id
+				LEFT JOIN base_org bo on bo.org_id = t.alloc_department_num
+				LEFT JOIN sys_constant_item sci on sci.dict_key='issue_source' and sci.item_key=t.issue_source
+        where t.ticket_code = #{ticketCode}
+    </select>
+
+    <select id="statisticsByFaultType" resultType="com.zans.mms.vo.ticket.TicketByFaultTypeVO">
+        SELECT
+            a.fault_name as faultName,
+            a.totalCount,
+            b.monthCount
+        FROM
+            (
+                SELECT
+                    type.fault_name,
+                    count( * ) AS totalCount
+                FROM
+                    ticket t
+                        LEFT JOIN base_fault_type type ON t.issue_type = type.fault_id
+                WHERE
+                    edit_status = 20
+                GROUP BY
+                    type.fault_name
+            ) a
+                LEFT JOIN (
+                SELECT
+                    type.fault_name,
+                    count( * ) AS monthCount
+                FROM
+                    ticket t
+                        LEFT JOIN base_fault_type type ON t.issue_type = type.fault_id
+                WHERE
+                    edit_status = 20
+                  AND t.create_time >= ( SELECT DATE_SUB( CURDATE( ), INTERVAL 1 MONTH ) )
+                GROUP BY
+                    type.fault_name
+            ) b ON a.fault_name = b.fault_name
+    </select>
+    <select id="ticketStatistics" resultType="com.zans.mms.vo.ticket.TicketCountVO">
+        SELECT
+            a.org_name AS orgName,
+            a.totalCount,
+            b.monthCount,
+            c.completeCount,
+            d.arriveTimeCount,
+            e.completeTimeCount,
+            f.notCompleteCount,
+            g.overTimeCount
+        FROM
+            (
+                SELECT
+                    org_name,
+                    count( * ) AS totalCount
+                FROM
+                    ticket t
+                        LEFT JOIN base_org org ON t.alloc_department_num = org.org_id
+                WHERE
+                    edit_status = 20
+                  AND org_name IS NOT NULL
+                GROUP BY
+                    org_name
+            ) a
+                LEFT JOIN (
+                SELECT
+                    org_name,
+                    count( * ) AS monthCount
+                FROM
+                    ticket t
+                        LEFT JOIN base_org org ON t.alloc_department_num = org.org_id
+                WHERE
+                    edit_status = 20
+                  AND org_name IS NOT NULL
+                  AND t.create_time >= ( SELECT DATE_SUB( CURDATE( ), INTERVAL 1 MONTH ) )
+                GROUP BY
+                    org_name
+            ) b ON a.org_name = b.org_name
+                LEFT JOIN (
+                SELECT
+                    org_name,
+                    count( * ) AS completeCount
+                FROM
+                    ticket t
+                        LEFT JOIN base_org org ON t.alloc_department_num = org.org_id
+                WHERE
+                    ticket_status = 20
+                  AND edit_status = 20
+                GROUP BY
+                    org_name
+            ) c ON a.org_name = c.org_name
+                LEFT JOIN (
+                SELECT
+                    org_name,
+                    count( * ) AS arriveTimeCount
+                FROM
+                    ticket t
+                        LEFT JOIN base_org org ON t.alloc_department_num = org.org_id
+                WHERE
+                    edit_status = 20
+                  AND practical_arrive_time > predict_arrive_time
+                GROUP BY
+                    org_name
+            ) d ON a.org_name = d.org_name
+                LEFT JOIN (
+                SELECT
+                    org_name,
+                    count( * ) AS completeTimeCount
+                FROM
+                    ticket t
+                        LEFT JOIN base_org org ON t.alloc_department_num = org.org_id
+                WHERE
+                    edit_status = 20
+                  AND practical_complete_time > predict_complete_time
+                GROUP BY
+                    org_name
+            ) e ON a.org_name = e.org_name
+                LEFT JOIN (
+                SELECT
+                    org_name,
+                    count( * ) AS notCompleteCount
+                FROM
+                    ticket t
+                        LEFT JOIN base_org org ON t.alloc_department_num = org.org_id
+                WHERE
+                    edit_status = 20
+                  AND ticket_status != 20
+	AND org_name IS NOT NULL
+                GROUP BY
+                    org_name
+            ) f ON a.org_name = f.org_name
+                LEFT JOIN (
+                SELECT
+                    org_name,
+                    count( * ) AS overTimeCount
+                FROM
+                    ticket t
+                        LEFT JOIN base_org org ON t.alloc_department_num = org.org_id
+                WHERE
+                    edit_status = 20
+                  AND ticket_status != 20
+	AND t.create_time >= now( ) - INTERVAL 3 DAY
+	AND org_name IS NOT NULL
+                GROUP BY
+                    org_name
+            ) g ON a.org_name = g.org_name
+    </select>
+
+
+
+
+
+    <select id="getPcFaultType" resultType="com.zans.mms.vo.chart.CountUnit">
+        SELECT REPLACE(UUID(), "-", "") AS id,
+               bft.fault_name     AS count_name,
+               COUNT(1)  AS val
+        FROM  ticket t
+        LEFT JOIN base_fault_type bft ON t.issue_type = bft.fault_id
+        WHERE t.edit_status = 20 and  t.ticket_status >0
+        GROUP BY bft.fault_id
+        ORDER BY val desc
+    </select>
+
+    <select id="getPcTicketSource" resultType="com.zans.mms.vo.chart.CountUnit">
+        SELECT REPLACE(UUID(), "-", "") AS id,
+               (SELECT  sci.item_value  FROM sys_constant_item sci WHERE  sci.dict_key='issue_source' AND sci.`item_key` = t.issue_source)   AS count_name,
+               COUNT(1)  AS val
+        FROM ticket t
+        WHERE t.edit_status = 20 AND t.ticket_status >0
+        GROUP BY t.issue_source
+        order by val desc
+    </select>
+
+
+    <select id="getPcMaintainFacility" resultType="com.zans.mms.vo.chart.CircleUnit">
+        SELECT  org.org_name   AS chineName,
+               COUNT(1)  AS val
+        FROM ticket t
+        LEFT JOIN base_org org ON t.alloc_department_num = org.org_id
+        WHERE t.edit_status = 20 and t.ticket_status >0
+        GROUP BY org.org_id
+        ORDER BY val desc
+    </select>
+
+
+</mapper>
+

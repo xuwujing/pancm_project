@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.mms.AssetSubsetMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.AssetSubset" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="subset_name" property="subsetName" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="device_type" property="deviceType" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+    <delete id="deleteByUniqueId">
+        delete from asset_subset where id=#{id}
+    </delete>
+    <select id="getList" resultType="com.zans.mms.vo.asset.subset.AssetSubsetResVO">
+        SELECT
+        a.id subsetId,
+        a.subset_name subsetName,
+        a.sort,
+        a.remark,
+        a.device_type deviceType,
+        s.nick_name creator
+        FROM
+        asset_subset a LEFT JOIN sys_user s on a.creator=s.user_name
+      <where>
+        <if test="subsetName != null and subsetName != ''">
+          and a.subset_name like concat('%',#{subsetName},'%')
+        </if>
+        <if test="remark != null and remark != ''">
+          and a.remark like concat('%',#{remark},'%')
+        </if>
+        <if test="deviceType != null and deviceType.size >0">
+            and a.device_type in
+            <foreach collection="deviceType" item="type" separator="," open="(" close=")" >
+                #{type}
+            </foreach>
+        </if>
+      </where>
+    </select>
+    <select id="getIdByUniqueId" resultType="java.lang.Integer">
+        select id from  asset_subset where id=#{subsetId}
+    </select>
+    <select id="findByName" resultType="java.lang.Integer">
+        select count(*) from asset_subset where subset_name=#{subsetName}
+        <if test="subsetId != null ">
+            and  id != #{subsetId}
+        </if>
+    </select>
+    <select id="getIdBySubsetName" resultType="java.lang.String" parameterType="java.lang.String">
+        select id from asset_subset where subset_name = #{subsetName}
+    </select>
+    <select id="getIdBySubsetNameAndDeviceType" resultType="java.lang.String">
+        select id from asset_subset where subset_name = #{subsetName} and device_type = #{deviceType}
+    </select>
+    <select id="getSubsetNameList" resultType="java.lang.String" parameterType="com.zans.mms.vo.asset.subset.AssetSubsetLineChartReqVO">
+        SELECT DISTINCT
+            ( subset.subset_name )
+        FROM
+            asset_subset_stats stats
+                LEFT JOIN asset_subset subset ON stats.asset_subset_id = subset.id
+        WHERE
+            device_type = #{deviceType} and  date(stats.stats_time)= #{selectDate}
+
+        ORDER BY
+            subset_name
+
+    </select>
+    <select id="getLineChartData" resultType="com.zans.mms.vo.asset.subset.AssetSubsetLineChartVO">
+        SELECT
+            subset.subset_name,
+            stats.online_rate,
+            stats.stats_time
+        FROM
+            asset_subset_stats stats
+                LEFT JOIN asset_subset subset ON stats.asset_subset_id = subset.id
+        WHERE
+            device_type = #{deviceType}
+          AND date( stats_time ) = #{selectDate}
+        ORDER BY
+            subset_name
+    </select>
+    <select id="getAssetSubsetOnlineData" resultType="com.zans.mms.vo.asset.subset.AssetSubsetOnlineRateVO">
+        SELECT
+            asset_subset_id as subsetId,
+            online_rate as onlineRate,
+            stats_time as statsTime,
+            subset.subset_name as subsetName
+        FROM
+            asset_subset_stats stats
+                LEFT JOIN asset_subset subset ON subset.id = stats.asset_subset_id
+        WHERE
+            stats_time = ( SELECT stats_time FROM asset_subset_stats WHERE stats_type != 2 ORDER BY id DESC LIMIT 0, 1 )
+    </select>
+    <select id="getOnlineRateList" resultType="com.zans.mms.vo.asset.subset.AssetSubsetOnlineRateVO">
+        SELECT
+        online_rate,
+        stats_time
+        FROM
+        asset_subset_stats
+        WHERE
+        stats_time &lt;= now( ) AND stats_time &gt; date_sub( now( ), INTERVAL 24 HOUR )
+        AND asset_subset_id = #{subsetId}
+        and stats_type != 2
+        ORDER BY
+        stats_time ASC
+    </select>
+    <select id="getSubsetNameById" resultType="java.lang.String">
+        SELECT
+            subset_name
+        FROM
+            asset_subset
+        WHERE
+            id = #{subsetId}
+    </select>
+    <select id="getOnlineRateListBySubsetIdAndDate"
+            resultType="com.zans.mms.vo.asset.subset.AssetSubsetOnlineRateVO">
+        SELECT
+        online_rate,
+        stats_time
+        FROM
+        asset_subset_stats
+        WHERE
+        stats_time &lt; DATE_ADD( CURDATE( ), INTERVAL 24 HOUR ) AND stats_time &gt;= DATE_FORMAT( CURDATE( ), '%Y-%m-%d %H:%i:%s' )
+        AND asset_subset_id = #{subsetId}
+        ORDER BY
+        stats_time ASC
+    </select>
+    <select id="getHistoryOnlineRateListBySubsetId"
+            resultType="com.zans.mms.vo.asset.subset.AssetSubsetOnlineRateVO">
+         SELECT
+            max( t.online_rate ) online_rate,
+            t.stats_time
+        FROM
+            (
+        SELECT
+            online_rate,
+            DATE_FORMAT( stats_time, '%Y-%m-%d' ) stats_time
+        FROM
+            asset_subset_stats
+        WHERE
+            stats_time >= ( DATE_FORMAT( DATE_SUB( NOW( ), INTERVAL 15 DAY ), '%Y-%m-%d' ) )
+            AND asset_subset_id = #{subsetId}
+            ) t
+        GROUP BY
+            t.stats_time
+    </select>
+    <select id="getSelectList" resultType="com.zans.base.vo.SelectVO">
+        select id as itemKey, subset_name as itemValue from  asset_subset
+    </select>
+
+
+    <insert id="insertAssetSubset" parameterType="com.zans.mms.model.AssetSubsetDetail">
+        insert into asset_subset (subset_name,sort,device_type,remark,creator,create_time,update_time)
+        values (#{subsetName},#{sort},#{deviceType},#{remark},#{creator},#{createTime},#{updateTime})
+    </insert>
+</mapper>

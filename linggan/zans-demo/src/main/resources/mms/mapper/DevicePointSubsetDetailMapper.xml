@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.mms.DevicePointSubsetDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.DevicePointSubsetDetail" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="subset_id" property="subsetId" jdbcType="BIGINT" />
+    <result column="point_id" property="pointId" jdbcType="BIGINT" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+    <delete id="removeAsset">
+      delete from device_point_subset_detail where subset_id=#{subsetId} and point_id=#{pointId}
+    </delete>
+    <delete id="deleteBySubsetId">
+        delete from device_point_subset_detail where subset_id=#{subsetId}
+    </delete>
+    <delete id="deleteByPointId" parameterType="java.lang.Long">
+        delete from device_point_subset_detail where point_id = #{id}
+    </delete>
+    <delete id="deleteDetailBySubsetId" parameterType="java.lang.Long">
+        delete from device_point_subset_detail where subset_id = #{subsetId}
+    </delete>
+    <delete id="deleteByPointIds">
+        delete from device_point_subset_detail where point_id in
+        <foreach collection="pointIds" item="pointId" open="(" close=")" separator="," index="index">
+            #{pointId}
+        </foreach>
+    </delete>
+    <select id="groupList" resultType="com.zans.mms.vo.devicepoint.DevicePointResVO">
+      SELECT
+          dp.id pointId,
+          dp.area_id areaId,
+          dp.point_name pointName,
+          dp.point_code pointCode,
+          dp.device_type deviceType,
+          x(dp.gis)  as longitude,
+          y(dp.gis)  as latitude
+      FROM
+          device_point_subset_detail dpsd
+          LEFT JOIN device_point dp ON dpsd.point_id = dp.id
+      <where>
+        dpsd.subset_id=#{subsetId}
+        <if test="areaId != null and areaId !=''">
+          and dp.area_id = #{areaId}
+        </if>
+        <if test="pointCode != null and pointCode !=''">
+          and dp.point_code like concat('%',#{pointCode},'%')
+        </if>
+        <if test="pointName != null and pointName !=''">
+          and dp.point_name like concat('%',#{pointName},'%')
+        </if>
+      </where>
+    </select>
+    <select id="getPointIdsBySubsetId" resultType="java.lang.Long">
+        SELECT point_id from  device_point_subset_detail WHERE subset_id=#{subsetId}
+    </select>
+    <select id="getCountBySubsetId" resultType="java.lang.Integer">
+        select count(1) from device_point_subset_detail WHERE subset_id=#{subsetId}
+    </select>
+    <select id="getCountGroupByStatus" resultType="com.zans.mms.vo.devicepoint.subset.StatusCount">
+        SELECT
+            a.maintain_status maintainStatus,
+            count( 1 ) countNum
+        FROM
+            asset a
+            LEFT JOIN device_point_subset_detail d ON a.point_id = d.point_id
+        WHERE
+            d.subset_id = #{subsetId}
+        GROUP BY
+            a.maintain_status
+    </select>
+    <select id="getPointList" resultType="com.zans.mms.vo.devicepoint.DevicePointResVO">
+       SELECT
+       	dp.id pointId,
+       	dp.area_id areaId,
+       	dp.point_name pointName,
+       	dp.point_code pointCode,
+       	dp.device_type deviceType,
+        x(dp.gis) as longitude,
+        y(dp.gis) as latitude,
+       	dd.subset_id,
+        CASE
+        WHEN dd.subset_id is null THEN
+        0 ELSE 1
+        END  checkStatus
+        FROM
+       	device_point dp
+       	LEFT JOIN device_point_subset_detail dd ON dd.subset_id = #{subsetId}
+       	AND dd.point_id = dp.id
+
+        <where>
+            <if test="areaId != null and areaId.size >0">
+                and dp.area_id  in
+                <foreach collection="areaId" item="areaid" separator="," open="(" close=")" >
+                    #{areaid}
+                </foreach>
+            </if>
+            <if test="pointCode != null and pointCode !=''">
+                and dp.point_code like concat('%',#{pointCode},'%')
+            </if>
+            <if test="pointName != null and pointName !=''">
+                and dp.point_name like concat('%',#{pointName},'%')
+            </if>
+            <if test="deviceType != null and deviceType.size >0">
+                and dp.device_type in
+                <foreach collection="deviceType" item="type" separator="," open="(" close=")" >
+                    #{type}
+                </foreach>
+            </if>
+            <if test="orgId != null and orgId != ''">
+                and dp.org_id =#{orgId}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="getPointIdBySubsetId" parameterType="java.lang.Long" resultType="java.lang.Long">
+        select point_id from device_point_subset_detail
+         where 1= 1
+         <if test="subsetId != null">
+           and  subset_id = #{subsetId}
+         </if>
+
+    </select>
+    <select id="selectBySubsetIdAndPointId" resultType="java.lang.String" parameterType="com.zans.mms.model.DevicePointSubsetDetail">
+        select id from device_point_subset_detail where subset_id = #{subsetId} and point_id = #{pointId}
+    </select>
+    <select id="selectExportData" resultType="com.zans.mms.vo.devicepoint.subset.DevicePointSubsetExportVO">
+        select subset.subset_name as subsetName,point.point_name as pointName,area.area_name as areaName,x(point.gis) as longitude,y(point.gis) as latitude,
+               point.point_code as pointCode,type.type_name as deviceType  from device_point_subset_detail detail
+            left join device_point_subset subset on detail.subset_id=subset.id
+            left JOIN device_point point on detail.point_id=point.id
+            left join base_area area on area.area_id=point.area_id
+            left join base_device_type type on point.device_type=type.type_id
+    </select>
+    <select id="getCountByPointId" resultType="java.lang.Integer">
+        select count(1) from device_point_subset_detail where point_id=#{pointId}
+    </select>
+    <select id="getExportDataBySubsetId" resultType="com.zans.mms.model.DevicePoint">
+        SELECT
+            point.id,
+            point.point_code,
+            point.point_name,
+            area.area_name as area_id,
+            point.road_type,
+            type.type_name as device_type,
+            point.power_way,
+            point.network_linkway,
+            x ( point.gis ) AS longitude,
+            y ( point.gis ) AS latitude,
+            point.affiliated_units
+        FROM
+            device_point point
+                LEFT JOIN base_area area ON point.area_id = area.area_id
+                LEFT JOIN base_device_type type ON type.type_id = point.device_type
+        WHERE
+                id IN ( SELECT point_id FROM device_point_subset_detail WHERE subset_id = #{subsetId} )
+    </select>
+</mapper>

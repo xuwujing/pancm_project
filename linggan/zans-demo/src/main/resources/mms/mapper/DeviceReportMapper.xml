@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zans.mms.dao.mms.DeviceReportDao">
+
+    <resultMap type="com.zans.mms.vo.devicereport.DeviceReportSearchRespVO" id="DeviceReportMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="areaId" column="area_id" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="deviceType" column="device_type" jdbcType="VARCHAR"/>
+        <result property="reportStatus" column="report_status" jdbcType="INTEGER"/>
+        <result property="adjunctId" column="adjunct_id" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="longitude" column="longitude"/>
+        <result property="latitude" column="latitude"/>
+        <result property="buildCompany" column="build_company"/>
+        <result property="buildContact" column="build_contact"/>
+        <result property="buildPhone" column="build_phone"/>
+        <result property="buildYear" column="build_year"/>
+        <result property="maintainCompany" column="maintain_company"/>
+        <result property="maintainContact" column="maintain_contact"/>
+        <result property="maintainPhone" column="maintain_phone"/>
+        <result property="deviceStatus" column="device_status"/>
+        <result property="enableIllegal" column="enable_illegal"/>
+        <result property="remainingTime" column="remainingTime"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="DeviceReportMap">
+        select dr.id,
+               area_id,
+               address,
+               device_type,
+               report_status,
+               dr.adjunct_id,
+               remark,
+               creator,
+               dr.build_company,dr.build_contact,dr.build_phone,dr.build_year,
+               dr.maintain_company,dr.maintain_contact,dr.maintain_phone,
+               dr.device_status,dr.enable_illegal,
+               DATE_FORMAT(dr.create_time,'%Y-%m-%d %H:%i:%s') AS create_time,
+               DATE_FORMAT(dr.update_time,'%Y-%m-%d %H:%i:%s') AS update_time,
+               bv.id as adjId,
+               bv.content_type,
+               bv.raw_file_path,
+               bv.thumbnail_file_path
+        from device_report dr
+                 LEFT JOIN base_vfs bv ON dr.adjunct_id = bv.adjunct_id
+        where id = #{id}
+    </select>
+
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="DeviceReportMap">
+        select
+        dr.id, area_id, address, device_type, report_status, dr.adjunct_id, remark,
+        dr.build_company,dr.build_contact,dr.build_phone,dr.build_year,
+        dr.maintain_company,dr.maintain_contact,dr.maintain_phone,
+        dr.device_status,dr.enable_illegal,
+        dr.creator,
+        DATE_FORMAT(dr.create_time,'%Y-%m-%d %H:%i:%s') AS create_time,
+        DATE_FORMAT(dr.update_time,'%Y-%m-%d %H:%i:%s') AS update_time,
+        x(gis) as longitude,y(gis) as latitude,
+        TIMESTAMPDIFF(HOUR, dr.create_time, NOW()) AS remainingTime
+        from device_report dr
+        <where>
+            <if test="searchLike != null and searchLike != ''">
+                and (dr.address like   CONCAT('%',#{searchLike},'%')  )
+            </if>
+            <if test="areaId != null and areaId.size >0">
+                and area_id in
+                <foreach collection="areaId" item="areaid" separator="," open="(" close=")" >
+                    #{areaid}
+                </foreach>
+            </if>
+            <if test="address != null and address != ''">
+                and dr.address like   CONCAT('%',#{address},'%')
+            </if>
+            <if test="deviceType != null and deviceType != ''">
+                and device_type = #{deviceType}
+            </if>
+            <if test="reportStatus != null">
+                and report_status = #{reportStatus}
+            </if>
+
+
+            <if test="dataPerm != null and dataPerm == 3">
+                and creator = #{creator}
+            </if>
+
+
+            <if test="startDate !=null and startDate != '' and  endDate !=null and  endDate !=''">
+                and dr.create_time between #{startDate} and #{endDate}
+            </if>
+        </where>
+        order by dr.create_time desc
+    </select>
+
+    <select id="queryAppAll" resultType="com.zans.mms.vo.devicereport.DeviceReportSearchRespVO">
+        select
+        dr.id, area_id, address, device_type, report_status, dr.adjunct_id, remark,
+        dr.build_company,dr.build_contact,dr.build_phone,dr.build_year,
+        dr.maintain_company,dr.maintain_contact,dr.maintain_phone,
+        dr.device_status,dr.enable_illegal,
+        dr.creator,
+        DATE_FORMAT(dr.create_time,'%Y-%m-%d %H:%i:%s') AS create_time,
+        DATE_FORMAT(dr.update_time,'%Y-%m-%d %H:%i:%s') AS update_time,
+        x(gis) as longitude,y(gis) as latitude,
+        TIMESTAMPDIFF(HOUR, dr.create_time, NOW()) AS remainingTime
+        from device_report dr
+        <where>
+            <if test="searchLike != null and searchLike != ''">
+                and (dr.address like   CONCAT('%',#{searchLike},'%')  )
+            </if>
+            <if test="areaId != null and areaId != ''">
+                and area_id = #{areaId}
+            </if>
+            <if test="address != null and address != ''">
+                and dr.address like   CONCAT('%',#{address},'%')
+            </if>
+            <if test="deviceType != null and deviceType != ''">
+                and device_type = #{deviceType}
+            </if>
+            <if test="reportStatus != null">
+                and report_status = #{reportStatus}
+            </if>
+            <if test="dataPerm != null and dataPerm == 3">
+                and creator = #{creator}
+            </if>
+            <if test="startDate !=null and startDate != '' and  endDate !=null and  endDate !=''">
+                and dr.create_time between #{startDate} and #{endDate}
+            </if>
+        </where>
+        order by dr.create_time desc
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into device_report(area_id, address, device_type, adjunct_id,
+                                  build_year,build_company,build_contact,build_phone,
+                                  maintain_company,maintain_contact,maintain_phone,device_status,enable_illegal,
+                                  remark, gis, creator)
+        values (#{areaId}, #{address}, #{deviceType}, #{adjunctId},
+                #{buildYear}, #{buildCompany}, #{buildContact}, #{buildPhone},
+                #{maintainCompany}, #{maintainContact}, #{maintainPhone}, #{deviceStatus},#{enableIllegal},
+                #{remark}, geomfromtext(#{gis}), #{creator})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into device_report(area_id, address, device_type, report_status, adjunct_id, remark, creator,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.areaId}, #{entity.address}, #{entity.deviceType}, #{entity.reportStatus}, #{entity.adjunctId},
+            #{entity.remark}, #{entity.creator}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into device_report(area_id, address, device_type, report_status, adjunct_id, remark, creator,
+        create_time, update_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.areaId}, #{entity.address}, #{entity.deviceType}, #{entity.reportStatus}, #{entity.adjunctId},
+            #{entity.remark}, #{entity.creator}, #{entity.createTime}, #{entity.updateTime})
+        </foreach>
+        on duplicate key update
+        area_id = values(area_id) , address = values(address) , device_type = values(device_type) , report_status =
+        values(report_status) , adjunct_id = values(adjunct_id) , remark = values(remark) , creator = values(creator) ,
+        create_time = values(create_time) , update_time = values(update_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update device_report
+        <set>
+            <if test="areaId != null and areaId != ''">
+                area_id = #{areaId},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="deviceType != null and deviceType != ''">
+                device_type = #{deviceType},
+            </if>
+            <if test="reportStatus != null">
+                report_status = #{reportStatus},
+            </if>
+            <if test="adjunctId != null and adjunctId != ''">
+                adjunct_id = #{adjunctId},
+            </if>
+            <if test="buildYear != null and buildYear != ''">
+                build_year = #{buildYear},
+            </if>
+            <if test="buildCompany != null and buildCompany != ''">
+                build_company = #{buildCompany},
+            </if>
+            <if test="buildContact != null and buildContact != ''">
+                build_contact = #{buildContact},
+            </if>
+            <if test="buildPhone != null and buildPhone != ''">
+                build_phone = #{buildPhone},
+            </if>
+            <if test="maintainCompany != null and maintainCompany != ''">
+                maintain_company = #{maintainCompany},
+            </if>
+            <if test="maintainContact != null and maintainContact != ''">
+                maintain_contact = #{maintainContact},
+            </if>
+            <if test="maintainPhone != null and maintainPhone != ''">
+                maintain_phone = #{maintainPhone},
+            </if>
+            <if test="deviceStatus != null">
+                device_status = #{deviceStatus},
+            </if>
+            <if test="enableIllegal != null">
+                enable_illegal = #{enableIllegal},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="gis != null">
+                gis = geomfromtext(#{gis}),
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from device_report
+        where id = #{id}
+    </delete>
+
+</mapper>
+

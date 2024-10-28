@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.guard.RadiusAcctMapper">
+
+
+    <select id="findLatestAcctByMac" resultType="com.zans.mms.vo.radius.AcctRespVO">
+        select a.*, b.name as nas_name from radius_acct a
+                                                left join radius_nas b on a.nas_ip_address=b.nas_ip
+        where a.username=#{mac} order by a.acct_start_time desc limit 1
+    </select>
+</mapper>

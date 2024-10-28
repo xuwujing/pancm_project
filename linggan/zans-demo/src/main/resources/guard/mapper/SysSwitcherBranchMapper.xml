@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.guard.SysSwitcherBranchMapper">
+
+    <select id="findSwitchList" resultType="com.zans.mms.vo.switcher.SwitchBranchResVO">
+        SELECT s.id,s.area_id,s.region,s.sw_type,s.brand,s.ip_addr,s.lon,s.lat,s.sw_account,s.sw_password,s.community,s.acceptance,s.accept_date,s.accept_idea,s.cons_batch,
+        case when a.point_name is null then s.point_name else  a.point_name end  as point_name,
+        case when st.model is null then  s.model  else  st.model end  as model,
+        t.area_name,r.region_name,p.project_name,a.alive ,a.enable_status,a.device_model_brand as brand_name,
+        st.id as sw_id,st.sys_name,st.scan_mac_alive,st.interface_phy_down as scanInterfaceCount ,st.interface_phy_down_used as scanMacAll,
+        scan.offline_type
+        FROM sys_switcher_branch s
+        LEFT JOIN sys_switcher st ON st.sw_host = s.ip_addr
+        LEFT JOIN t_area t ON s.area_id = t.area_id
+        LEFT JOIN sys_region r ON r.region_id = s.region
+        LEFT JOIN sys_project p ON p.id=s.project_id
+        LEFT JOIN asset a ON a.ip_addr=s.ip_addr
+        LEFT JOIN (
+        SELECT sa.sw_ip,sa.alive,sa.offline_type  from (
+        SELECT MAX(id) AS id, sw_ip FROM network_switcher_scan GROUP BY sw_ip ORDER BY id desc
+        )AS sb
+        left JOIN network_switcher_scan AS sa ON sa.id = sb.id
+        ) AS scan ON scan.sw_ip = s.ip_addr
+        WHERE 1=1
+        <if test="reqVo.ipAddr != null and reqVo.ipAddr != ''">
+            and s.ip_addr like CONCAT('%',#{reqVo.ipAddr},'%')
+        </if>
+        <if test="reqVo.areaId != null">
+            and s.area_id = #{reqVo.areaId}
+        </if>
+        <if test="reqVo.online != null">
+             <if test="reqVo.online == 1">
+                  and a.alive = #{reqVo.online}
+             </if>
+            <if test="reqVo.online == 0">
+                and a.alive = 2 and scan.offline_type = 0
+            </if>
+            <if test="reqVo.online == 2">
+                and a.alive = 2 and scan.offline_type = 1
+            </if>
+        </if>
+        <if test="reqVo.region != null">
+            and s.region = #{reqVo.region}
+        </if>
+        <if test="reqVo.swType != null">
+            and s.sw_type = #{reqVo.swType}
+        </if>
+        <if test="reqVo.acceptance != null">
+            and s.acceptance = #{reqVo.acceptance}
+        </if>
+        <if test="reqVo.status != null">
+            and a.enable_status = #{reqVo.status}
+        </if>
+        <if test="reqVo.dateRange != null and reqVo.dateRange.size &gt; 0">
+            and s.accept_date &gt;= #{reqVo.dateRange[0]} and s.accept_date &lt;#{reqVo.dateRange[1]}
+        </if>
+        <choose>
+            <when test="reqVo.interfaceRange != null and reqVo.interfaceRange.size &gt; 1">
+                and st.scan_mac_alive &gt;= #{reqVo.interfaceRange[0]} and st.scan_mac_alive &lt;#{reqVo.interfaceRange[1]}
+            </when>
+            <when test="reqVo.interfaceRange != null and reqVo.interfaceRange.size &gt; 0">
+                and st.scan_mac_alive &gt;= #{reqVo.interfaceRange[0]}
+            </when>
+        </choose>
+
+        <if test="reqVo.pointName != null and reqVo.pointName != '' ">
+            and s.point_name like CONCAT('%',#{reqVo.pointName},'%')
+        </if>
+        <if test="reqVo.projectName != null and reqVo.projectName != '' ">
+            and p.project_name like CONCAT('%',#{reqVo.projectName},'%')
+        </if>
+        <if test="reqVo.consBatch != null  ">
+            and s.cons_batch = #{reqVo.consBatch}
+        </if>
+        <if test="reqVo.orderBy != null and reqVo.orderBy !=''">
+            order by ${reqVo.orderBy}
+        </if>
+    </select>
+
+</mapper>

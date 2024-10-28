@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.guard.AlertRuleMapper">
+
+    <insert id="insertRecord">
+        insert into alert_rule_record(rule_id, business_id, keyword_value)
+        values (#{ruleId}, #{businessId}, #{keywordValue})
+    </insert>
+
+    <insert id="insertOriginal">
+
+    </insert>
+
+    <insert id="saveAlertData">
+        INSERT INTO alert_rule_original (
+              `rule_id`,
+              `business_id`,
+              `notice_info`,
+              `keyword_value`,
+              `username`,
+              `ip_addr`
+            )
+            values
+              (
+                  #{ruleId},
+                  #{businessId},
+                  #{msg},
+                  #{ipAddr},
+                  #{mac},
+                  #{ipAddr}
+              ) ;
+
+    </insert>
+
+
+    <select id="getRecordByKeywordValues" resultType="java.lang.String">
+        SELECT DISTINCT(keyword_value) FROM alert_rule_record where keyword_value in
+        <foreach item="item" index="index" collection="kvs" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="getRecordByIp" resultType="java.lang.String">
+        SELECT DISTINCT(ip_addr) FROM alert_rule_original WHERE rule_id != 10 and ip_addr IN
+        <foreach item="item" index="index" collection="kvs" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <select id="getAlertRecordType" resultType="com.zans.mms.vo.alert.AlertReportDisRespVO">
+        SELECT
+            c.id as typeId,
+            c.name AS name,
+            COUNT(1) AS value
+        FROM
+            alert_rule_record a
+            LEFT JOIN alert_rule b ON a.`rule_id` = b.`id`
+            LEFT JOIN alert_type c ON b.alert_type = c.id
+            LEFT JOIN alert_index d ON b.alert_index = d.id
+            LEFT JOIN alert_rule_original ao on ao.business_id = a.business_id
+        WHERE  a.rule_id != 10 and ao.deal_status = 0
+        GROUP BY c.id
+    </select>
+
+    <select id="getAlertRecordType2" resultType="com.zans.mms.vo.alert.AlertReportDisRespVO">
+
+        SELECT  '总数' AS NAME,COUNT(1) AS VALUE
+        FROM alert_rule_record a
+            LEFT JOIN alert_rule_original ao on ao.business_id = a.business_id
+        WHERE a.rule_id != 10 and ao.deal_status = 0
+        UNION ALL
+        SELECT
+            c.name AS NAME,
+            COUNT(1) AS VALUE
+        FROM
+            alert_rule_record a
+            LEFT JOIN alert_rule b ON a.`rule_id` = b.`id`
+            LEFT JOIN alert_type c ON b.alert_type = c.id
+            LEFT JOIN alert_rule_original ao on ao.business_id = a.business_id
+        WHERE  a.rule_id != 10 AND c.`id` =1 and ao.deal_status = 0
+        UNION ALL
+        SELECT
+            c.name AS NAME,
+            COUNT(1) AS VALUE
+        FROM
+            alert_rule_record a
+            LEFT JOIN alert_rule b ON a.`rule_id` = b.`id`
+            LEFT JOIN alert_type c ON b.alert_type = c.id
+            LEFT JOIN alert_rule_original ao on ao.business_id = a.business_id
+        WHERE  a.rule_id != 10 AND c.`id` =2 and ao.deal_status = 0
+        UNION ALL
+        SELECT
+            c.name AS NAME,
+            COUNT(1) AS VALUE
+        FROM
+            alert_rule_record a
+            LEFT JOIN alert_rule b ON a.`rule_id` = b.`id`
+            LEFT JOIN alert_type c ON b.alert_type = c.id
+            LEFT JOIN alert_rule_original ao on ao.business_id = a.business_id
+        WHERE  a.rule_id != 10 AND c.`id` =3 and ao.deal_status = 0
+    </select>
+
+    <select id="getAlertRecord" resultType="com.zans.mms.vo.alert.AlertRecordRespVO">
+        SELECT
+        ao.id,
+        ao.business_id as businessId,
+        ao.`notice_info` AS noticeInfo,
+        ao.`notice_status` AS noticeStatus ,
+        ao.`deal_status` AS dealStatus ,
+        ao.`keyword_value` AS keywordValue ,
+        ao.`dispose_status` AS disposeStatus ,
+        ao.notice_remark,
+        (SELECT item_value FROM sys_constant_item WHERE dict_key = 'dispose_status' AND item_key = ao.`dispose_status`)
+        AS disposeName,
+        DATE_FORMAT(ao.update_time,'%Y-%m-%d %H:%i:%S') AS noticeTime,
+        b.`alert_level` AS alertLevel,
+        b.`strategy_name` AS strategyName,
+        b.action,
+        b.template_id AS templateId,
+        b.id as ruleId,
+        c.id AS typeId,
+        c.name AS typeName,
+        d.`id` AS indexId,
+        d.name AS indexName,
+        ao.ip_addr AS ipAddr,
+        ao.username,
+        ao.area_name as areaName,
+        ao.device_type_name as deviceTypeName ,
+        (case when ao.point_name is  null then '点位缺失'
+        when ao.point_name = '' then '点位缺失'
+        else ao.point_name end) as point_name,
+        ar.nas_ip_address as  nasIpAddress,
+        ar.nas_port_id as nasPortId
+        FROM
+        alert_rule_original ao
+        LEFT JOIN alert_rule b ON ao.`rule_id` = b.`id`
+        LEFT JOIN alert_type c ON b.alert_type = c.id
+        LEFT JOIN alert_index d ON b.alert_index = d.id
+        LEFT JOIN alert_rule_original_detail ar ON ao.`business_id` = ar.`business_id`
+        WHERE 1=1 and ao.`deal_status`  <![CDATA[<]]> 2
+        <if test="id != null ">
+            and ao.id =#{id}
+        </if>
+
+        <if test="noticeInfo != null and noticeInfo != ''">
+            and ao.notice_info like CONCAT('%',#{noticeInfo},'%')
+        </if>
+
+        <if test="ipAddr != null and ipAddr != '' ">
+            AND ao.`ip_addr` like CONCAT('%',#{ipAddr},'%')
+        </if>
+
+        <if test="username != null and username != '' ">
+            AND ao.username like CONCAT('%',#{username},'%')
+        </if>
+
+        <if test="indexId != null ">
+            and d.id = #{indexId}
+        </if>
+
+        <if test="indexName != null and indexName != ''">
+            and d.name like CONCAT('%',#{indexName},'%')
+        </if>
+
+        <if test="alertLevel != null ">
+            and b.alert_level =#{alertLevel}
+        </if>
+
+        <if test="dealStatus != null ">
+            and ao.deal_status = #{dealStatus}
+        </if>
+
+        <if test="strategyName != null and strategyName != ''">
+            and b.strategy_name like CONCAT('%',#{strategyName},'%')
+        </if>
+
+        <if test="typeName != null and typeName != ''">
+            and c.name = #{typeName}
+        </if>
+
+        <if test="typeId != null">
+            and c.id = #{typeId}
+        </if>
+
+        <if test="keywordValue != null and keywordValue != ''">
+            and ao.keyword_value = #{keywordValue}
+        </if>
+
+
+        <if test="areaName != null and areaName != ''">
+            AND ao.area_name= #{areaName}
+        </if>
+
+        <if test="deviceTypeName != null and deviceTypeName != '' ">
+            AND ao.`device_type_name` = #{deviceTypeName}
+        </if>
+        <if test="noticeTime !=null and noticeTime!=4 and noticeTime!=5">
+            AND ao.create_time &gt;= NOW() - interval #{noticeTime} hour
+        </if>
+        <if test="noticeTime !=null and noticeTime==4">
+            AND ao.create_time between CURDATE() and  CURDATE()-interval 1 month
+        </if>
+        <if test="noticeTime !=null and noticeTime==5">
+            AND ao.create_time &lt;= NOW() - interval 1 month
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and ao.create_time <![CDATA[>=]]> #{startTime}
+        </if>
+
+        <if test="endTime != null and endTime != ''">
+            and ao.create_time <![CDATA[<=]]> #{endTime}
+        </if>
+
+        <if test="pointName != null and pointName != '' ">
+            and ao.point_name like concat('%',#{pointName},'%')
+        </if>
+
+
+
+        order by ao.update_time desc
+    </select>
+
+
+    <select id="getAlertRecord2" resultType="com.zans.mms.vo.alert.AlertRecordRespVO">
+        SELECT
+        ao.id,
+        ao.business_id as businessId,
+        ao.`notice_info` AS noticeInfo,
+        ao.`notice_status` AS noticeStatus ,
+        ao.`deal_status` AS dealStatus ,
+        ao.`keyword_value` AS keywordValue ,
+        ao.`dispose_status` AS disposeStatus ,
+        ao.notice_remark,
+        (SELECT item_value FROM sys_constant_item WHERE dict_key = 'dispose_status' AND item_key = ao.`dispose_status`)
+        AS disposeName,
+        DATE_FORMAT(ao.update_time,'%Y-%m-%d %H:%i:%S') AS noticeTime,
+        b.`alert_level` AS alertLevel,
+        b.`strategy_name` AS strategyName,
+        b.action,
+        b.template_id AS templateId,
+        b.id as ruleId,
+        c.id AS typeId,
+        c.name AS typeName,
+        d.`id` AS indexId,
+        d.name AS indexName,
+        ao.ip_addr AS ipAddr,
+        ao.username,
+        ao.area_name AS areaName,
+        ao.device_type_name as deviceTypeName,
+        (case when ao.point_name is  null then '点位缺失'
+        when ao.point_name = '' then '点位缺失'
+        else ao.point_name end) as point_name,
+        ar.nas_ip_address as  nasIpAddress,
+        ar.nas_port_id as nasPortId
+        FROM
+        alert_rule_original ao
+        LEFT JOIN alert_rule b ON ao.`rule_id` = b.`id`
+        LEFT JOIN alert_type c ON b.alert_type = c.id
+        LEFT JOIN alert_index d ON b.alert_index = d.id
+        LEFT JOIN alert_rule_original_detail ar ON ao.`business_id` = ar.`business_id`
+        WHERE 1=1 and ao.`deal_status`  <![CDATA[<]]> 2
+        <if test="id != null ">
+            and ao.id =#{id}
+        </if>
+
+        <if test="noticeInfo != null and noticeInfo != ''">
+            and ao.notice_info like CONCAT('%',#{noticeInfo},'%')
+        </if>
+
+        <if test="ipAddr != null and ipAddr != '' ">
+            AND ao.`ip_addr` like CONCAT('%',#{ipAddr},'%')
+        </if>
+
+        <if test="username != null and username != '' ">
+            AND ao.username like CONCAT('%',#{username},'%')
+        </if>
+
+        <if test="indexId != null ">
+            and d.id = #{indexId}
+        </if>
+
+        <if test="indexName != null and indexName != ''">
+            and d.name like CONCAT('%',#{indexName},'%')
+        </if>
+
+        <if test="alertLevel != null ">
+            and b.alert_level =#{alertLevel}
+        </if>
+
+        <if test="dealStatus != null ">
+            and ao.deal_status = #{dealStatus}
+        </if>
+
+        <if test="strategyName != null and strategyName != ''">
+            and b.strategy_name like CONCAT('%',#{strategyName},'%')
+        </if>
+
+        <if test="typeName != null and typeName != ''">
+            and c.name = #{typeName}
+        </if>
+
+        <if test="typeId != null">
+            and c.id = #{typeId}
+        </if>
+
+        <if test="keywordValue != null and keywordValue != ''">
+            and ao.keyword_value = #{keywordValue}
+        </if>
+        <if test="noticeTime !=null and noticeTime!=4 and noticeTime!=5">
+            AND ao.create_time &gt;= NOW() - interval #{noticeTime} hour
+        </if>
+        <if test="noticeTime !=null and noticeTime==4">
+            AND ao.create_time between CURDATE() and  CURDATE()-interval 1 month
+        </if>
+        <if test="noticeTime !=null and noticeTime==5">
+            AND ao.create_time &lt;= NOW() - interval 1 month
+        </if>
+
+        <if test="areaName != null and areaName != ''">
+            AND ao.area_name= #{areaName}
+        </if>
+
+        <if test="deviceTypeName != null and deviceTypeName != '' ">
+            AND ao.`device_type_name` = #{deviceTypeName}
+        </if>
+
+        <if test="startTime != null and startTime != ''">
+            and ao.create_time <![CDATA[>=]]> #{startTime}
+        </if>
+
+        <if test="endTime != null and endTime != ''">
+            and ao.create_time <![CDATA[<=]]> #{endTime}
+        </if>
+
+        <if test=" pointName != null and pointName != '' ">
+            and ao.point_name like concat('%',#{pointName},'%')
+        </if>
+
+        order by ao.update_time desc
+
+    </select>
+
+    <select id="getRecordByMac" resultType="com.zans.mms.vo.alert.AlertRecordRespVO">
+        SELECT username,nas_ip_address, ar.area_name AS areaName,
+               '交换机' AS deviceTypeName,
+               ast.point_name  AS pointName
+        FROM (SELECT username,nas_ip_address FROM radius_acct WHERE username = #{mac} LIMIT 1) t
+                 LEFT JOIN sys_switcher ss ON t.nas_ip_address = ss.sw_host
+                 LEFT JOIN t_area ar ON ss.`area` = ar.`area_id`
+                 LEFT JOIN  asset ast ON ast.ip_addr= ss.sw_host
+    </select>
+
+    <update id="batchUpdateByIds">
+        update  alert_rule_record set is_read = 1 where keyword_value in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateIsRead">
+        update  alert_rule_original  set is_read = 1 where id =#{id}
+    </update>
+
+    <select id="getAlertType" resultType="com.zans.mms.vo.alert.AlertTypeRespVO">
+        SELECT
+            c.id,
+            c.`desc`,
+            c.`status`,
+            c.id as typeId,
+            c.name AS typeName,
+            c.`create_user` as createUser,
+            DATE_FORMAT(c.`create_time`,'%Y-%m-%d %H:%i:%S') as createTime
+        FROM
+            alert_type c
+        order by c.create_time desc
+    </select>
+
+
+    <select id="getAlertIndex2" resultType="com.zans.mms.vo.alert.AlertIndexRespVO">
+        SELECT
+        d.id as indexId,
+        d.`name` as indexName
+        FROM
+        alert_index d left join alert_type c on d.`alert_type` = c.`id`
+        WHERE d.status = 1
+        <if test="typeId != null ">
+            and c.id = #{typeId}
+        </if>
+        order by d.create_time desc
+    </select>
+
+    <select id="getAlertRecordOriginalView" resultType="com.zans.mms.vo.alert.AlertRecordRespVO">
+        SELECT
+            a.id,
+            a.business_id as businessId,
+            a.`notice_info` AS noticeInfo,
+            a.notice_remark,
+            a.`deal_status` AS dealStatus ,
+            (CASE WHEN a.`deal_status` = 0 THEN '未处理'
+                  WHEN a.`deal_status` = 1 THEN '已处理'
+                  WHEN a.`deal_status` = 2 THEN '自动处理'
+                  ELSE '未知' END) AS  dealStatusName ,
+            a.`keyword_value` AS keywordValue ,
+            a.choose_mac_type AS chooseMacType,
+            b.id as ruleId,
+            b.`alert_level` AS alertLevel,
+            b.`strategy_name` AS strategyName,
+            b.action,
+            b.alert_keyword AS keyword,
+            b.alert_action AS alertAction,
+            b.template_id AS templateId,
+            c.id AS typeId,
+            c.name AS typeName,
+            d.`id` AS indexId,
+            d.name AS indexName,
+            DATE_FORMAT(a.`create_time`,'%Y-%m-%d %H:%i:%S') AS noticeTime,
+            a.notice_remark AS authMark
+        FROM
+            alert_rule_original a
+                LEFT JOIN alert_rule_original_detail ar ON a.`business_id` = ar.`business_id`
+                LEFT JOIN alert_rule b ON a.`rule_id` = b.`id`
+                LEFT JOIN alert_type c ON b.alert_type = c.id
+                LEFT JOIN alert_index d ON b.alert_index = d.id
+        WHERE a.id =#{id}
+    </select>
+
+
+    <select id="getAlertRecordView2" resultType="com.zans.mms.vo.alert.AlertRecordRespVO">
+        SELECT
+            a.id,
+            a.business_id as businessId,
+            a.`notice_info` AS noticeInfo,
+            a.notice_remark,
+            a.`deal_status` AS dealStatus ,
+            (CASE WHEN a.`deal_status` = 0 THEN '未处理'
+                  WHEN a.`deal_status` = 1 THEN '已处理'
+                  WHEN a.`deal_status` = 2 THEN '自动处理'
+                  ELSE '未知' END) AS  dealStatusName ,
+            a.`keyword_value` AS keywordValue ,
+            a.`dispose_status` AS disposeStatus ,
+            (SELECT item_value FROM sys_constant_item WHERE dict_key = 'dispose_status' AND item_key = a.`dispose_status`)
+                AS disposeName,
+            DATE_FORMAT(a.`create_time`,'%Y-%m-%d %H:%i:%S') AS noticeTime,
+            b.id as ruleId,
+            b.`alert_level` AS alertLevel,
+            b.`strategy_name` AS strategyName,
+            b.action,
+            b.template_id AS templateId,
+            c.id AS typeId,
+            c.name AS typeName,
+            d.`id` AS indexId,
+            d.name AS indexName,
+            ar.area_name AS areaName,
+            '交换机' AS deviceTypeName,
+            case when ast.point_name is null then s.point_name else  ast.point_name end  as point_name
+        FROM
+            alert_rule_original a
+                LEFT JOIN alert_rule b ON a.`rule_id` = b.`id`
+                LEFT JOIN alert_type c ON b.alert_type = c.id
+                LEFT JOIN alert_index d ON b.alert_index = d.id
+                LEFT JOIN sys_switcher ss ON ss.`sw_host` = a.`keyword_value`
+                LEFT JOIN t_area ar ON ss.`area` = ar.`area_id`
+                LEFT JOIN sys_switcher_branch s ON ss.sw_host = s.ip_addr
+                LEFT JOIN asset ast ON ast.ip_addr=s.ip_addr
+        WHERE  a.`rule_id` != 10
+        and a.id =#{id}
+    </select>
+
+    <select id="getAlertRecordOriginalDetailView" resultType="com.zans.mms.vo.alert.AlertDetailRespVO">
+        SELECT
+            ar.`area_name` AS areaName,
+            ar.`device_type_name` AS deviceTypeName,
+            ar.`username`,
+            ar.`ip_addr` as ipAddr,
+            ar.`brand_name` AS brandName,
+            ar.`model_des` AS modelDes,
+            ar.`nas_ip_address` AS nasIpAddress,
+            ar.`nas_port_id` AS nasPortId,
+            ar.`sw_type_name` AS swTypeName,
+            ar.`sw_point_name` AS swPointName,
+            ar.`sw_point_name` AS pointName,
+            ar.`vlan`
+        FROM
+            alert_rule_original_detail ar
+        WHERE ar.`business_id` =#{business_id}
+    </select>
+
+    <select id="getAlertIpClash" resultType="com.zans.mms.vo.alert.AlertIpClashRespVO">
+        SELECT aic.business_id AS businessId,aic.`nas_ip_address` AS nasIpAddress,aic.`nas_port_id` AS nasPortId,
+               aic.`alive_last_time` AS aliveLastTime,aic.`username` FROM alert_ip_clash aic
+        WHERE  aic.`business_id` = #{businessId}
+        order by seq asc
+    </select>
+
+    <select id="getAlertLoop" resultType="com.zans.mms.vo.alert.AlertLoopRespVO">
+        SELECT
+            al.list_port AS port,
+            al.port AS port2,
+            al.status,
+            p.cur_ip_addr AS ipAddr,
+            al.mac AS username,
+            (case when tia.point_name is  null then '点位缺失'
+                  when tia.point_name = '' then '点位缺失'
+                  else tia.point_name end) as point_name
+        FROM  alert_loop al  LEFT JOIN alert_rule_original aro ON aro.keyword_value = al.ip
+                             LEFT JOIN radius_endpoint_profile p ON al.mac = p.pass
+                             LEFT JOIN sys_switcher ss ON ss.`sw_host` = p.`cur_nas_ip_address`
+                             LEFT JOIN t_area ar ON ss.`area` = ar.`area_id`
+                             LEFT JOIN t_device_type t ON p.`cur_device_type` = t.`type_id`
+                             LEFT JOIN asset tia ON tia.ip_addr = p.cur_ip_addr
+                             LEFT JOIN t_ip_all ti ON ti.ip_addr = p.cur_ip_addr
+        WHERE al.ip = #{ip}
+    </select>
+
+    <select id="getAlertLastRecord" resultType="com.zans.mms.vo.alert.AlertRecordRespVO">
+        select  * from alert_rule_original ao where ao.is_read = 0 order by id limit 1
+    </select>
+
+    <select id="getAlertRecordData" resultType="com.zans.mms.vo.alert.AlertRecordRespVO">
+        select     ao.`notice_info` AS noticeInfo,
+               ao.id,
+                   DATE_FORMAT(ao.`create_time`,'%Y-%m-%d %H:%i:%S') AS noticeTime
+               from alert_rule_original ao  order by id desc limit 10
+    </select>
+
+
+</mapper>

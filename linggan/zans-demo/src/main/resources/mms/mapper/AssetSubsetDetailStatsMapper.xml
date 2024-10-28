@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.mms.AssetSubsetDetailStatsMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.AssetSubsetDetailStats" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="asset_subset_id" property="assetSubsetId" jdbcType="INTEGER" />
+    <result column="asset_subset_stats_id" property="assetSubsetStatsId" jdbcType="INTEGER" />
+    <result column="network_ip" property="networkIp" jdbcType="VARCHAR" />
+    <result column="maintain_status" property="maintainStatus" jdbcType="VARCHAR" />
+    <result column="online_status" property="onlineStatus" jdbcType="VARCHAR" />
+    <result column="last_scan_time" property="lastScanTime" jdbcType="TIMESTAMP" />
+    <result column="point_id" property="pointId" jdbcType="BIGINT" />
+    <result column="stats_time" property="statsTime" jdbcType="TIMESTAMP" />
+    <result column="exec_id" property="execId" jdbcType="BIGINT" />
+  </resultMap>
+</mapper>

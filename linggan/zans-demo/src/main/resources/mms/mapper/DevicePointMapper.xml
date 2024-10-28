@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zans.mms.dao.mms.DevicePointMapper" >
+  <resultMap id="BaseResultMap" type="com.zans.mms.model.DevicePoint" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="point_type" property="pointType" jdbcType="INTEGER" />
+    <result column="point_code" property="pointCode" jdbcType="VARCHAR" />
+    <result column="point_name" property="pointName" jdbcType="VARCHAR" />
+    <result column="road_type" property="roadType" jdbcType="VARCHAR" />
+    <result column="area_id" property="areaId" jdbcType="VARCHAR" />
+    <result column="device_type" property="deviceType" jdbcType="VARCHAR" />
+    <result column="power_way" property="powerWay" jdbcType="VARCHAR" />
+    <result column="power_place" property="powerPlace" jdbcType="VARCHAR" />
+    <result column="network_linkway" property="networkLinkway" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="DECIMAL" />
+    <result column="latitude" property="latitude" jdbcType="DECIMAL" />
+    <result column="map_source" property="mapSource" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+    <delete id="deleteByUniqueId">
+        delete  from device_point where id=#{id}
+    </delete>
+    <select id="getList" resultType="com.zans.mms.vo.devicepoint.DevicePointResVO">
+    SELECT
+        id pointId,
+        area_id areaId,
+        point_name pointName,
+        point_code pointCode,
+        device_type deviceType,
+        x(gis)  as longitude,
+        y(gis)  as latitude
+    FROM
+        device_point
+        <where>
+            point_type=1
+          <if test="pointIds !=null and pointIds.size &gt; 0">
+              and id not in
+              <foreach item="item" collection="pointIds" index="index" open="(" separator="," close=")">
+                  #{item}
+              </foreach>
+          </if>
+            <if test="areaId != null and areaId.size >0">
+                and area_id  in
+                <foreach collection="areaId" item="areaid" separator="," open="(" close=")" >
+                    #{areaid}
+                </foreach>
+            </if>
+          <if test="pointCode != null and pointCode !=''">
+            and point_code like   CONCAT('%',#{pointCode},'%')
+          </if>
+          <if test="pointName != null and pointName !=''">
+            and point_name like   CONCAT('%',#{pointName},'%')
+          </if>
+            <if test="deviceType != null and deviceType.size >0">
+                and device_type in
+                <foreach collection="deviceType" item="type" separator="," open="(" close=")" >
+                    #{type}
+                </foreach>
+            </if>
+        </where>
+  </select>
+    <select id="getViewById" resultType="com.zans.mms.vo.devicepoint.DevicePointDetailResVO">
+        SELECT
+            area_id areaId,
+            point_name pointName,
+            point_code pointCode,
+            power_way powerWay,
+            power_place powerPlace,
+            device_type deviceType,
+            x(gis)  as longitude,
+            y(gis)  as latitude,
+            road_type roadType
+        FROM
+            device_point
+        WHERE
+            id = #{id}
+    </select>
+    <select id="getIdByUniqueId" resultType="java.lang.Integer">
+        select id from  device_point where point_id=#{pointId}
+    </select>
+
+    <insert id="insertDevicePoint" parameterType="com.zans.mms.vo.devicepoint.ExcelDevicePointVO">
+        insert into device_point (point_code,point_name,road_type,area_id,device_type,power_way,network_linkway,map_source,point_type,gis,creator,create_time,update_time,is_test)
+            values (#{pointCode},#{pointName},#{roadType},#{areaId},#{deviceType},#{powerWay},#{networkLinkway},#{mapSource},#{pointType},ST_GeomFromText ( CONCAT( 'point(', #{longitude}, ' ', #{latitude}, ')' ) ),#{creator},#{createTime},#{updateTime},#{isTest})
+    </insert>
+    <insert id="insertOne">
+        insert into device_point (point_code,point_name,road_type,area_id,device_type,power_way,network_linkway,map_source,point_type,gis,creator,create_time,update_time)
+            values (#{pointCode},#{pointName},#{roadType},#{areaId},#{deviceType},#{powerWay},#{networkLinkway},#{mapSource},#{pointType},ST_GeomFromText ( CONCAT( 'point(', #{longitude}, ' ', #{latitude}, ')' ) ),#{creator},#{createTime},#{updateTime})
+    </insert>
+
+    <insert id="saveDevicePoint"  keyProperty="id" useGeneratedKeys="true">
+        insert into device_point (point_name,area_id,device_type,point_type,gis,creator)
+        values (#{pointName},#{areaId},#{deviceType},#{pointType},geomfromtext(#{gis}),#{creator})
+    </insert>
+
+    <select id="getByCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from device_point where point_code= #{pointCode}
+    </select>
+
+    <update id="updateByPointCode" parameterType="com.zans.mms.vo.devicepoint.ExcelDevicePointVO">
+        update device_point set point_code = #{pointCode} ,point_name = #{pointName},road_type=#{roadType},area_id=#{areaId},device_type=#{deviceType},
+                                    power_way=#{powerWay},network_linkway=#{networkLinkway},map_source=#{mapSource},
+                                    point_type=#{pointType},gis= ST_GeomFromText ( CONCAT( 'point(', #{longitude}, ' ', #{latitude}, ')' ) ),
+                                    area_name=#{areaName},update_time=#{updateTime},is_test=#{isTest} where point_code=#{pointCode}
+    </update>
+
+    <delete id="deleteByPointCode" parameterType="java.lang.String">
+        delete from device_point where point_code = #{pointCode}
+    </delete>
+
+    <select id="getIdByCode" parameterType="java.lang.String" resultType="java.lang.Long">
+        select id from device_point where point_code= #{pointCode}
+    </select>
+
+    <update id="updateByPointCodeChange" parameterType="com.zans.mms.vo.devicepoint.ExcelDevicePointVO">
+        update device_point set point_code = #{pointCodeChange} ,point_name = #{pointName},road_type=#{roadType},area_id=#{areaId},device_type=#{deviceType},
+                                    power_way=#{powerWay},network_linkway=#{networkLinkway},map_source=#{mapSource},
+                                    point_type=#{pointType},gis= ST_GeomFromText ( CONCAT( 'point(', #{longitude}, ' ', #{latitude}, ')' ) ),
+                                    area_name=#{areaName},update_time=#{updateTime},is_test=#{isTest} where point_code=#{pointCode}
+    </update>
+    <update id="updateDevicePoint" parameterType="com.zans.mms.model.DevicePoint">
+        update device_point
+        <set>
+            <if test="pointCode !=null and pointCode !=''">
+                point_code = #{pointCode},
+            </if>
+            <if test="pointName !=null and pointName !=''">
+                point_name = #{pointName},
+            </if>
+            <if test="roadType !=null and roadType !=''">
+                road_type=#{roadType},
+            </if>
+            <if test="areaId !=null and areaId !=''">
+                area_id=#{areaId},
+            </if>
+            <if test="deviceType !=null and deviceType !=''">
+                device_type=#{deviceType},
+            </if>
+            <if test="powerWay !=null and powerWay !=''">
+                power_way=#{powerWay},
+            </if>
+            <if test="networkLinkway !=null and networkLinkway!=''">
+                network_linkway=#{networkLinkway},
+            </if>
+            <if test="mapSource !=null and mapSource !=''">
+                map_source=#{mapSource},
+            </if>
+            <if test="pointType !=null and pointType !=''">
+                point_type=#{pointType},
+            </if>
+            <if test="longitude !=null and longitude !='' and latitude !=null and latitude !=''">
+                gis= ST_GeomFromText ( CONCAT( 'point(', #{longitude}, ' ', #{latitude}, ')' ) ),
+            </if>
+        </set>
+            where id=#{id}
+    </update>
+
+
+    <select id="getPointIdByCondition" parameterType="com.zans.mms.vo.devicepoint.subset.PointSubsetDetailAddByConditionReqVO" resultType="java.lang.Long">
+        select id from device_point
+        <where>
+            <if test="pointName != null and pointName !=''">
+                and point_name = #{pointName}
+            </if>
+            <if test="areaId !=null and areaId !=''">
+                and area_id = #{areaId}
+            </if>
+            <if test="pointCode !=null and pointCode !=''">
+                and point_code = #{pointCode}
+            </if>
+            <if test="deviceType !=null and deviceType !=''">
+                and device_type = #{deviceType}
+            </if>
+        </where>
+    </select>
+</mapper>

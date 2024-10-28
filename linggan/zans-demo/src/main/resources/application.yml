@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: '@spring.profiles.active@'
+  application:
+    name: zans-demo
+
+
+
+swagger:
+  enable: true
+
