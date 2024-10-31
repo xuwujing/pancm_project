@@ -33,7 +33,7 @@ public class LogAspect {
      * @Title: logExecution
      * @Description: 切入点表达式
      */
-    @Pointcut("@annotation(com.baj.calendar.biz.annotation.LogAnnotation)")
+    @Pointcut("@annotation(com.pancm.test.annotation.LogAnnotation)")
     public void ponitcut() {
     }
 
