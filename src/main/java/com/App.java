@@ -54,7 +54,6 @@ public class App {
         //给a数组赋值
         a[0] = "ajkj";
         a[1] = "sahsja";
-
         //声明一个App类型的变量nb
         App nb = new App();
         //调用nb的add方法，添加字符串
