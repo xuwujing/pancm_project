@@ -1,16 +1,21 @@
 package com.pancm.test.aspect;
 
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import com.github.pagehelper.StringUtil;
+import com.pancm.test.annotation.LogAnnotation;
 import com.pancm.util.HttpServletRequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Method;
 import java.util.UUID;
 
 
@@ -43,7 +48,7 @@ public class LogAspect {
      * @Description: 前置通知处理方法
      */
     @Before("ponitcut()")
-    public void before(JoinPoint joinPoint) {
+    public void before(JoinPoint joinPoint) throws NoSuchMethodException {
         //生成唯一ID并存储到ThreadLocal
         String uniqueId = UUID.randomUUID().toString().replaceAll("-", "");
         requestId.set(uniqueId);
@@ -53,6 +58,30 @@ public class LogAspect {
         String methodName = joinPoint.getSignature().getName();
         String path = className.getName().concat("#").concat(methodName);
         log.info("{}|正常请求,请求IP:{},请求人:{},请求路径:{},\n请求内容:{}", uniqueId, HttpServletRequestUtil.getClientIp(), "", path, joinPoint.getArgs());
+        Class<?>[] argClass = ((MethodSignature) joinPoint.getSignature()).getParameterTypes();
+        Method method = className.getMethod(methodName, argClass);
+        LogAnnotation annotation = method.getAnnotation(LogAnnotation.class);
+        String businessNo = annotation.businessNo();
+        if (StringUtil.isNotEmpty(businessNo)) {
+            try {
+                //非JSON获取
+                int businessNoIndex = annotation.businessNoIndex();
+                if (businessNoIndex > -1) {
+                    String businessNoValue = String.valueOf(joinPoint.getArgs()[businessNoIndex]);
+                } else {
+                    //JSON获取,只取第一条
+                    for (Object arg : joinPoint.getArgs()) {
+                        JSONObject jsonObject = (JSONObject)  JSON.toJSON(arg);
+                        if (jsonObject.containsKey(businessNo)) {
+                            String businessNoValue = jsonObject.getString(businessNo);
+                            break;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                log.error("业务编号获取异常", e);
+            }
+        }
 
     }
 

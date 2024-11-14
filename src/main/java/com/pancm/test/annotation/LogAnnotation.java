@@ -15,7 +15,13 @@ import java.lang.annotation.*;
 @Documented
 public @interface LogAnnotation {
 
-	
+	/**
+	 * 业务主键
+	 * @return
+	 */
+	String businessNo() default "";
+
+	int businessNoIndex() default -1;
 
 	boolean log() default true;
 }
