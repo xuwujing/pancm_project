@@ -80,8 +80,6 @@ public class EsAggregationSearchTest {
             maxGroupSearch();
             sumGroupSearch();
             topSearch();
-            groupbySearch();
-
         } catch (Exception e) {
             e.printStackTrace();
         }finally {
